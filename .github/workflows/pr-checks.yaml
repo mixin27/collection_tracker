@@ -1,0 +1,68 @@
+name: PR Checks
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  # ========================================
+  # Job 1: Danger Checks
+  # ========================================
+  danger:
+    name: Danger Checks
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📚 Checkout repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: ⚠️ Run Danger
+        uses: danger/danger-js@11.2.3
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  # ========================================
+  # Job 2: Check Code Size
+  # ========================================
+  code-size:
+    name: Check Code Size
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📚 Checkout repository
+        uses: actions/checkout@v6
+
+      - name: 📏 Check for large files
+        run: |
+          find . -type f -size +500k ! -path "*/.*" ! -path "*/build/*" -exec ls -lh {} \; | awk '{print $9, $5}'
+
+          if [ -n "$(find . -type f -size +1M ! -path "*/.*" ! -path "*/build/*")" ]; then
+            echo "⚠️ Warning: Found files larger than 1MB"
+          fi
+
+  # ========================================
+  # Job 3: Check Dependencies
+  # ========================================
+  dependencies:
+    name: Check Dependencies
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📚 Checkout repository
+        uses: actions/checkout@v6
+
+      - name: 🐦 Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.38.x'
+          channel: 'stable'
+
+      - name: 📦 Get dependencies
+        run: dart pub get
+
+      - name: 🔍 Check for outdated dependencies
+        run: |
+          cd apps/mobile
+          flutter pub outdated

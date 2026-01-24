@@ -1,0 +1,175 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+# Cancel previous runs if a new one is triggered
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # ========================================
+  # Job 1: Analyze Code
+  # ========================================
+  analyze:
+    name: Analyze
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: 📚 Checkout repository
+        uses: actions/checkout@v6
+
+      - name: 🐦 Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.38.x'
+          channel: 'stable'
+          cache: true
+
+      - name: 📦 Get dependencies
+        run: dart pub get
+
+      - name: 🔍 Analyze packages
+        run: |
+          chmod +x scripts/analyze_all.sh
+          ./scripts/analyze_all.sh
+
+      - name: 📝 Check formatting
+        run: dart format --set-exit-if-changed .
+
+  # ========================================
+  # Job 2: Run Tests
+  # ========================================
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: 📚 Checkout repository
+        uses: actions/checkout@v6
+
+      - name: 🐦 Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.38.x'
+          channel: 'stable'
+          cache: true
+
+      - name: 📦 Get dependencies
+        run: dart pub get
+
+      - name: 🔨 Generate code
+        run: |
+          chmod +x scripts/build_all.sh
+          ./scripts/build_all.sh
+
+      - name: 🧪 Run tests
+        run: |
+          chmod +x scripts/test_all.sh
+          ./scripts/test_all.sh
+
+      - name: 📊 Generate coverage
+        run: |
+          cd apps/mobile
+          flutter test --coverage
+
+      - name: 📤 Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          files: apps/mobile/coverage/lcov.info
+          flags: unittests
+          name: codecov-umbrella
+          fail_ci_if_error: false
+
+  # ========================================
+  # Job 3: Build Android
+  # ========================================
+  build-android:
+    name: Build Android
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    needs: [analyze, test]
+
+    steps:
+      - name: 📚 Checkout repository
+        uses: actions/checkout@v6
+
+      - name: ☕ Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+          cache: 'gradle'
+
+      - name: 🐦 Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.38.x'
+          channel: 'stable'
+          cache: true
+
+      - name: 📦 Get dependencies
+        run: dart pub get
+
+      - name: 🔨 Generate code
+        run: |
+          chmod +x scripts/build_all.sh
+          ./scripts/build_all.sh
+
+      - name: 🏗️ Build APK
+        run: |
+          cd apps/mobile
+          flutter build apk --release
+
+      - name: 📤 Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-apk
+          path: apps/mobile/build/app/outputs/flutter-apk/app-release.apk
+          retention-days: 7
+
+  # ========================================
+  # Job 4: Build iOS
+  # ========================================
+  build-ios:
+    name: Build iOS
+    runs-on: macos-latest
+    timeout-minutes: 40
+    needs: [analyze, test]
+
+    steps:
+      - name: 📚 Checkout repository
+        uses: actions/checkout@v6
+
+      - name: 🐦 Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.38.x'
+          channel: 'stable'
+          cache: true
+
+      - name: 📦 Get dependencies
+        run: dart pub get
+
+      - name: 🔨 Generate code
+        run: |
+          chmod +x scripts/build_all.sh
+          ./scripts/build_all.sh
+
+      - name: 🏗️ Build iOS (no codesign)
+        run: |
+          cd apps/mobile
+          flutter build ios --release --no-codesign
+
+      - name: 📤 Upload iOS build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-build
+          path: apps/mobile/build/ios/iphoneos/
+          retention-days: 7
