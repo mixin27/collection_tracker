@@ -44,6 +44,11 @@ jobs:
       - name: 📦 Get dependencies
         run: dart pub get
 
+      - name: 🔨 Generate code
+        run: |
+          chmod +x scripts/build_all.sh
+          ./scripts/build_all.sh
+
       - name: 🔍 Analyze packages
         run: |
           chmod +x scripts/analyze_all.sh
