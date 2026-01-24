@@ -1,0 +1,29 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo "🔍 Running pre-commit checks..."
+
+# Format code
+echo "Formatting code..."
+dart format .
+
+# Run analysis
+echo "Running analysis..."
+./scripts/analyze_all.sh
+
+if [ $? -ne 0 ]; then
+    echo "❌ Analysis failed. Please fix issues before committing."
+    exit 1
+fi
+
+# Run tests
+echo "Running tests..."
+./scripts/test_all.sh
+
+if [ $? -ne 0 ]; then
+    echo "❌ Tests failed. Please fix issues before committing."
+    exit 1
+fi
+
+echo "✅ Pre-commit checks passed!"
+exit 0

@@ -1,0 +1,54 @@
+{
+  "folders": [
+    {
+      "name": "Root",
+      "path": "."
+    },
+    {
+      "name": "Mobile App",
+      "path": "apps/mobile"
+    },
+    {
+      "name": "Core Domain",
+      "path": "packages/core/domain"
+    },
+    {
+      "name": "Core Data",
+      "path": "packages/core/data"
+    },
+    {
+      "name": "Common UI",
+      "path": "packages/common/ui"
+    },
+    {
+      "name": "Common Utils",
+      "path": "packages/common/utils"
+    },
+    {
+      "name": "Database Integration",
+      "path": "packages/integrations/database"
+    },
+    {
+      "name": "Metadata API",
+      "path": "packages/integrations/metadata_api"
+    }
+  ],
+  "settings": {
+    "dart.lineLength": 80,
+    "editor.formatOnSave": true,
+    // "editor.codeActionsOnSave": {
+    //   "source.fixAll": true
+    // },
+    "dart.analysisExcludedFolders": [
+      "**/build/**",
+      "**/.dart_tool/**"
+    ]
+  },
+  "extensions": {
+    "recommendations": [
+      "dart-code.dart-code",
+      "dart-code.flutter",
+      "usernamehw.errorlens"
+    ]
+  }
+}

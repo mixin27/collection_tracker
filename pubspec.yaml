@@ -1,0 +1,28 @@
+name: collection_tracker_workspace
+description: A workspace for the Collection Tracker app
+version: 1.0.0
+publish_to: 'none'
+
+environment:
+  sdk: ^3.10.4
+
+dev_dependencies:
+  husky: ^0.1.7
+
+# Workspace configuration
+workspace:
+  # apps
+  - apps/mobile
+
+  # packages
+  - packages/core/data
+  - packages/core/domain
+  - packages/common/ui
+  - packages/common/utils
+  - packages/integrations/analytics
+  - packages/integrations/barcode_scanner
+  - packages/integrations/database
+  - packages/integrations/logger
+  - packages/integrations/metadata_api
+  - packages/integrations/payment
+  - packages/integrations/storage
