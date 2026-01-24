@@ -3,8 +3,18 @@ name: CI
 on:
   push:
     branches: [ main, develop ]
+    paths-ignore:
+      - '**.md'
+      - 'LICENSE'
+      - 'screenshots/**'
+      - '.gitignore'
   pull_request:
     branches: [ main, develop ]
+    paths-ignore:
+      - '**.md'
+      - 'LICENSE'
+      - 'screenshots/**'
+      - '.gitignore'
 
 # Cancel previous runs if a new one is triggered
 concurrency:
@@ -79,13 +89,13 @@ jobs:
           cd apps/mobile
           flutter test --coverage
 
-      - name: 📤 Upload coverage to Codecov
-        uses: codecov/codecov-action@v3
-        with:
-          files: apps/mobile/coverage/lcov.info
-          flags: unittests
-          name: codecov-umbrella
-          fail_ci_if_error: false
+      # - name: 📤 Upload coverage to Codecov
+      #   uses: codecov/codecov-action@v3
+      #   with:
+      #     files: apps/mobile/coverage/lcov.info
+      #     flags: unittests
+      #     name: codecov-umbrella
+      #     fail_ci_if_error: false
 
   # ========================================
   # Job 3: Build Android
