@@ -1,0 +1,31 @@
+import 'package:collection_tracker/core/router/app_router.dart';
+import 'package:collection_tracker/l10n/l10n.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:ui/ui.dart';
+
+class CollectionTrackerApp extends ConsumerWidget {
+  const CollectionTrackerApp({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final router = ref.watch(appRouterProvider);
+
+    return MaterialApp.router(
+      debugShowCheckedModeBanner: false,
+      title: 'Collection Tracker',
+
+      // Theme
+      theme: AppTheme.light(),
+      darkTheme: AppTheme.dark(),
+      themeMode: ThemeMode.system,
+
+      // Localizations
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
+
+      // Routing and navigation
+      routerConfig: router,
+    );
+  }
+}
