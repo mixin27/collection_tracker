@@ -1,1 +1,10 @@
 include: package:flutter_lints/flutter.yaml
+
+analyzer:
+  exclude:
+    - docs/*
+    - '**/*.g.dart'
+    - '**/*.gr.dart'
+    - '**/*.freezed.dart'
+    - assets/**/*.gen.dart
+    - packages/**/*.gen.dart

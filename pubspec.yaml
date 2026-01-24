@@ -8,6 +8,7 @@ environment:
 
 dev_dependencies:
   husky: ^0.1.7
+  commitlint_cli: ^0.8.1
 
 # Workspace configuration
 workspace:
