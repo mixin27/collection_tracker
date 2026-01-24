@@ -8,3 +8,34 @@ analyzer:
     - '**/*.freezed.dart'
     - assets/**/*.gen.dart
     - packages/**/*.gen.dart
+
+linter:
+  rules:
+    # Error rules
+    avoid_print: true
+    avoid_returning_null_for_future: true
+    cancel_subscriptions: true
+    close_sinks: true
+    valid_regexps: true
+
+    # Style rules
+    prefer_const_constructors: true
+    prefer_const_declarations: true
+    prefer_const_literals_to_create_immutables: true
+    prefer_final_fields: true
+    prefer_final_locals: true
+    prefer_single_quotes: true
+    require_trailing_commas: true
+
+    # Pub rules
+    sort_pub_dependencies: true
+
+    # Documentation
+    public_member_api_docs: false
+
+    # Best practices
+    always_declare_return_types: true
+    avoid_unnecessary_containers: true
+    sized_box_for_whitespace: true
+    use_key_in_widget_constructors: true
+    prefer_relative_imports: true
