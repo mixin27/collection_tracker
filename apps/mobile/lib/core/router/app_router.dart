@@ -2,7 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import '../../features/collections/presentation/views/collection_detail_screen.dart';
 import '../../features/collections/presentation/views/collections_screen.dart';
+import '../../features/collections/presentation/views/create_collection_screen.dart';
+import '../../features/items/presentation/views/add_item_screen.dart';
+import '../../features/items/presentation/views/item_detail_screen.dart';
+import '../../features/items/presentation/views/items_screen.dart';
 import '../../features/scanner/presentation/views/scanner_screen.dart';
 import '../../features/settings/presentation/views/settings_screen.dart';
 import 'app_shell.dart';
@@ -27,37 +32,37 @@ GoRouter appRouter(Ref ref) {
                 name: 'collections',
                 builder: (_, _) => const CollectionsScreen(),
                 routes: [
-                  // GoRoute(
-                  //   path: 'create',
-                  //   name: 'create-collection',
-                  //   builder: (context, state) => const CreateCollectionScreen(),
-                  // ),
-                  // GoRoute(
-                  //   path: ':id',
-                  //   name: 'collection-detail',
-                  //   builder: (context, state) {
-                  //     final id = state.pathParameters['id']!;
-                  //     return CollectionDetailScreen(collectionId: id);
-                  //   },
-                  //   routes: [
-                  //     GoRoute(
-                  //       path: 'items',
-                  //       name: 'items',
-                  //       builder: (context, state) {
-                  //         final id = state.pathParameters['id']!;
-                  //         return ItemsScreen(collectionId: id);
-                  //       },
-                  //     ),
-                  //     GoRoute(
-                  //       path: 'add-item',
-                  //       name: 'add-item',
-                  //       builder: (context, state) {
-                  //         final id = state.pathParameters['id']!;
-                  //         return AddItemScreen(collectionId: id);
-                  //       },
-                  //     ),
-                  //   ],
-                  // ),
+                  GoRoute(
+                    path: 'create',
+                    name: 'create-collection',
+                    builder: (context, state) => const CreateCollectionScreen(),
+                  ),
+                  GoRoute(
+                    path: ':id',
+                    name: 'collection-detail',
+                    builder: (context, state) {
+                      final id = state.pathParameters['id']!;
+                      return CollectionDetailScreen(collectionId: id);
+                    },
+                    routes: [
+                      GoRoute(
+                        path: 'items',
+                        name: 'items',
+                        builder: (context, state) {
+                          final id = state.pathParameters['id']!;
+                          return ItemsScreen(collectionId: id);
+                        },
+                      ),
+                      GoRoute(
+                        path: 'add-item',
+                        name: 'add-item',
+                        builder: (context, state) {
+                          final id = state.pathParameters['id']!;
+                          return AddItemScreen(collectionId: id);
+                        },
+                      ),
+                    ],
+                  ),
                 ],
               ),
             ],
@@ -74,14 +79,15 @@ GoRouter appRouter(Ref ref) {
         ],
       ),
 
-      // GoRoute(
-      //   path: '/items/:id',
-      //   name: 'item-detail',
-      //   builder: (context, state) {
-      //     final id = state.pathParameters['id']!;
-      //     return ItemDetailScreen(itemId: id);
-      //   },
-      // ),
+      GoRoute(
+        path: '/items/:id',
+        name: 'item-detail',
+        builder: (context, state) {
+          final id = state.pathParameters['id']!;
+          return ItemDetailScreen(itemId: id);
+        },
+      ),
+
       GoRoute(
         path: '/scanner',
         name: 'scanner',

@@ -23,10 +23,7 @@ class AppDatabase extends _$AppDatabase {
         await customStatement(
           'CREATE INDEX idx_collections_name ON collections(name);',
         );
-        await customStatement('CREATE INDEX idx_items_name ON items(name);');
-        await customStatement(
-          'CREATE INDEX idx_items_collection_id ON items(collection_id);',
-        );
+        await customStatement('CREATE INDEX idx_items_name ON items(title);');
       },
       onUpgrade: (Migrator m, int from, int to) async {
         // Handle migrations here in future versions
