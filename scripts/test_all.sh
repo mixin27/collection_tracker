@@ -21,7 +21,7 @@ run_tests() {
 
                 TOTAL_TESTS=$((TOTAL_TESTS + 1))
 
-                if [[ "$package_path" == *"apps/mobile"* ]]; then
+                if grep -q "sdk: flutter" pubspec.yaml; then
                     flutter test
                 else
                     dart test
