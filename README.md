@@ -5,6 +5,7 @@ A beautiful, feature-rich Flutter application for organizing and managing your c
 ![Flutter](https://img.shields.io/badge/Flutter-3.38.7-02569B?logo=flutter)
 ![Dart](https://img.shields.io/badge/Dart-3.10.4-0175C2?logo=dart)
 ![License](https://img.shields.io/badge/license-MIT-green)
+[![CI](https://github.com/mixin27/collection_tracker/actions/workflows/ci.yaml/badge.svg)](https://github.com/mixin27/collection_tracker/actions/workflows/ci.yaml)
 
 ## 📱 Features
 
