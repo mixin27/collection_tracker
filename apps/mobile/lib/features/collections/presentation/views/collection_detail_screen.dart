@@ -29,7 +29,7 @@ class CollectionDetailScreen extends ConsumerWidget {
               IconButton(
                 icon: const Icon(Icons.edit),
                 onPressed: () {
-                  // todo(mixin27): Navigate to edit collection
+                  context.push('/collections/${collection.id}/edit');
                 },
               ),
             ],

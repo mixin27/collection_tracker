@@ -5,7 +5,9 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../../features/collections/presentation/views/collection_detail_screen.dart';
 import '../../features/collections/presentation/views/collections_screen.dart';
 import '../../features/collections/presentation/views/create_collection_screen.dart';
+import '../../features/collections/presentation/views/edit_collection_screen.dart';
 import '../../features/items/presentation/views/add_item_screen.dart';
+import '../../features/items/presentation/views/edit_item_screen.dart';
 import '../../features/items/presentation/views/item_detail_screen.dart';
 import '../../features/items/presentation/views/items_screen.dart';
 import '../../features/scanner/presentation/views/scanner_screen.dart';
@@ -45,6 +47,14 @@ GoRouter appRouter(Ref ref) {
                       return CollectionDetailScreen(collectionId: id);
                     },
                     routes: [
+                      GoRoute(
+                        path: 'edit',
+                        name: 'edit-collection',
+                        builder: (context, state) {
+                          final id = state.pathParameters['id']!;
+                          return EditCollectionScreen(collectionId: id);
+                        },
+                      ),
                       GoRoute(
                         path: 'items',
                         name: 'items',
@@ -86,6 +96,16 @@ GoRouter appRouter(Ref ref) {
           final id = state.pathParameters['id']!;
           return ItemDetailScreen(itemId: id);
         },
+        routes: [
+          GoRoute(
+            path: 'edit',
+            name: 'edit-item',
+            builder: (context, state) {
+              final id = state.pathParameters['id']!;
+              return EditItemScreen(itemId: id);
+            },
+          ),
+        ],
       ),
 
       GoRoute(

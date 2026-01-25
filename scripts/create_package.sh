@@ -35,6 +35,8 @@ environment:
   flutter: ">=1.17.0"
 
 dependencies:
+  flutter:
+    sdk: flutter
   # Add your dependencies here
 
 dev_dependencies:

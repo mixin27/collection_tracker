@@ -39,16 +39,15 @@ dependencies:
     path: ../../packages/common/utils
   database:
     path: ../../packages/integrations/database
+  barcode_scanner:
+    path: ../../packages/integrations/barcode_scanner
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^6.0.0
-  build_runner:
+  build_runner: ^2.10.5
   riverpod_generator: ^4.0.2
-
-dependency_overrides:
-  analyzer: ^9.0.0
 
 flutter:
   uses-material-design: true

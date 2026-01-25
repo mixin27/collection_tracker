@@ -44,6 +44,11 @@ jobs:
       - name: 📦 Get dependencies
         run: dart pub get
 
+      - name: 🔨 Generate code
+        run: |
+          chmod +x scripts/build_all.sh
+          ./scripts/build_all.sh
+
       - name: 🔍 Analyze packages
         run: |
           chmod +x scripts/analyze_all.sh
@@ -84,10 +89,11 @@ jobs:
           chmod +x scripts/test_all.sh
           ./scripts/test_all.sh
 
-      - name: 📊 Generate coverage
-        run: |
-          cd apps/mobile
-          flutter test --coverage
+      # - name: 📊 Generate coverage
+      #   run: |
+      #     sudo apt-get update && sudo apt-get install -y lcov
+      #     chmod +x scripts/coverage.sh
+      #     ./scripts/coverage.sh
 
       # - name: 📤 Upload coverage to Codecov
       #   uses: codecov/codecov-action@v3

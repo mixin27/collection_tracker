@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../view_models/items_view_model.dart';
 
@@ -40,7 +41,7 @@ class ItemDetailScreen extends ConsumerWidget {
               IconButton(
                 icon: const Icon(Icons.edit),
                 onPressed: () {
-                  // todo(mixin27): Navigate to edit
+                  context.push('/items/${item.id}/edit');
                 },
               ),
             ],
