@@ -13,6 +13,7 @@ import '../../features/items/presentation/views/items_screen.dart';
 import '../../features/scanner/presentation/views/scanner_screen.dart';
 import '../../features/search/presentation/views/search_screen.dart';
 import '../../features/settings/presentation/views/settings_screen.dart';
+import '../../features/statistics/presentation/views/statistics_screen.dart';
 import 'app_shell.dart';
 import 'routes.dart';
 
@@ -116,7 +117,6 @@ GoRouter appRouter(Ref ref) {
           ),
         ],
       ),
-
       GoRoute(
         path: '/scanner',
         name: 'scanner',
@@ -124,6 +124,11 @@ GoRouter appRouter(Ref ref) {
           final collectionId = state.uri.queryParameters['collectionId'];
           return ScannerScreen(collectionId: collectionId);
         },
+      ),
+      GoRoute(
+        path: '/statistics',
+        name: 'statistics',
+        builder: (context, state) => const StatisticsScreen(),
       ),
     ],
     // Error handling

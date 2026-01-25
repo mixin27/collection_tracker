@@ -19,6 +19,10 @@ class CollectionsScreen extends ConsumerWidget {
         title: const Text('My Collections'),
         actions: [
           IconButton(
+            icon: const Icon(Icons.bar_chart),
+            onPressed: () => context.push('/statistics'),
+          ),
+          IconButton(
             icon: const Icon(Icons.settings),
             onPressed: () => context.go('/settings'),
           ),
