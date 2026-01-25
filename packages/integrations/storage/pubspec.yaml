@@ -15,6 +15,9 @@ dependencies:
   path_provider: ^2.1.5
   path: ^1.9.1
   image: ^4.7.2
+  file_picker: ^10.3.8
+  share_plus: ^12.0.1
+  permission_handler: ^12.0.1
 
 dev_dependencies:
   flutter_test:
