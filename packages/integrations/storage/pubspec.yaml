@@ -1,5 +1,5 @@
 name: storage
-description: "A new Flutter package project."
+description: "File and image storage integration."
 version: 1.0.0
 publish_to: none
 resolution: workspace
@@ -11,6 +11,10 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  image_picker: ^1.2.1
+  path_provider: ^2.1.5
+  path: ^1.9.1
+  image: ^4.7.2
 
 dev_dependencies:
   flutter_test:

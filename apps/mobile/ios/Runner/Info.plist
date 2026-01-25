@@ -45,7 +45,12 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+
+    <!-- Camera permission for barcode scanning and taking photos -->
     <key>NSCameraUsageDescription</key>
     <string>This app needs camera access to scan barcodes for adding items to your collection</string>
+    <!-- Photo library permission for image upload -->
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>This app needs photo library access to add images to your items</string>
 </dict>
 </plist>

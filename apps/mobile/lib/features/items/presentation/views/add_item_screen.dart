@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:storage/storage.dart';
+import 'package:ui/ui.dart';
 
 import '../view_models/items_view_model.dart';
 
@@ -18,7 +20,11 @@ class _AddItemScreenState extends ConsumerState<AddItemScreen> {
   final _titleController = TextEditingController();
   final _barcodeController = TextEditingController();
   final _descriptionController = TextEditingController();
+
+  final _imageStorageService = ImageStorageService();
+
   bool _isLoading = false;
+  String? _imagePath;
 
   @override
   void dispose() {
@@ -37,6 +43,36 @@ class _AddItemScreenState extends ConsumerState<AddItemScreen> {
         child: ListView(
           padding: const EdgeInsets.all(16),
           children: [
+            // Image picker
+            Center(
+              child: ImagePickerWidget(
+                imagePath: _imagePath,
+                onPickFromGallery: () async {
+                  final path = await _imageStorageService
+                      .pickImageFromGallery();
+                  if (path != null && mounted) {
+                    setState(() {
+                      _imagePath = path;
+                    });
+                  }
+                },
+                onPickFromCamera: () async {
+                  final path = await _imageStorageService.pickImageFromCamera();
+                  if (path != null && mounted) {
+                    setState(() {
+                      _imagePath = path;
+                    });
+                  }
+                },
+                onRemove: () {
+                  setState(() {
+                    _imagePath = null;
+                  });
+                },
+              ),
+            ),
+            const SizedBox(height: 24),
+
             // Title field
             TextFormField(
               controller: _titleController,
@@ -131,6 +167,7 @@ class _AddItemScreenState extends ConsumerState<AddItemScreen> {
           description: _descriptionController.text.trim().isEmpty
               ? null
               : _descriptionController.text.trim(),
+          coverImagePath: _imagePath,
         ).future,
       );
 

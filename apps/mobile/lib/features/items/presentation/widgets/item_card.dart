@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
@@ -36,24 +38,7 @@ class ItemCard extends StatelessWidget {
                   color: theme.colorScheme.surfaceContainerHighest,
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: item.coverImageUrl != null
-                    ? ClipRRect(
-                        borderRadius: BorderRadius.circular(8),
-                        child: CachedNetworkImage(
-                          imageUrl: item.coverImageUrl!,
-                          fit: BoxFit.cover,
-                          placeholder: (context, url) =>
-                              const Center(child: CircularProgressIndicator()),
-                          errorWidget: (context, url, error) => Icon(
-                            Icons.image_not_supported,
-                            color: theme.colorScheme.onSurfaceVariant,
-                          ),
-                        ),
-                      )
-                    : Icon(
-                        Icons.image_not_supported,
-                        color: theme.colorScheme.onSurfaceVariant,
-                      ),
+                child: _buildImage(theme),
               ),
               const SizedBox(width: 12),
               // Content
@@ -118,6 +103,44 @@ class ItemCard extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Widget _buildImage(ThemeData theme) {
+    // Priority: local image > network image > placeholder
+    if (item.coverImagePath != null) {
+      return ClipRRect(
+        borderRadius: BorderRadius.circular(8),
+        child: Image.file(
+          File(item.coverImagePath!),
+          fit: BoxFit.cover,
+          errorBuilder: (context, error, stackTrace) {
+            return Icon(
+              Icons.image_not_supported,
+              color: theme.colorScheme.onSurfaceVariant,
+            );
+          },
+        ),
+      );
+    } else if (item.coverImageUrl != null) {
+      return ClipRRect(
+        borderRadius: BorderRadius.circular(8),
+        child: CachedNetworkImage(
+          imageUrl: item.coverImageUrl!,
+          fit: BoxFit.cover,
+          placeholder: (context, url) =>
+              const Center(child: CircularProgressIndicator()),
+          errorWidget: (context, url, error) => Icon(
+            Icons.image_not_supported,
+            color: theme.colorScheme.onSurfaceVariant,
+          ),
+        ),
+      );
+    } else {
+      return Icon(
+        Icons.image_not_supported,
+        color: theme.colorScheme.onSurfaceVariant,
+      );
+    }
   }
 
   void _showMenu(BuildContext context) {
