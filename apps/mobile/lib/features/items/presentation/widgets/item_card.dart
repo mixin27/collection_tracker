@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class ItemCard extends StatelessWidget {
   final Item item;
@@ -131,7 +132,7 @@ class ItemCard extends StatelessWidget {
               title: const Text('Edit'),
               onTap: () {
                 Navigator.pop(context);
-                // todo(mixin27): Navigate to edit
+                context.push('/items/${item.id}/edit');
               },
             ),
             ListTile(

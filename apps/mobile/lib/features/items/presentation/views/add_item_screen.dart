@@ -64,10 +64,16 @@ class _AddItemScreenState extends ConsumerState<AddItemScreen> {
                 prefixIcon: const Icon(Icons.qr_code),
                 suffixIcon: IconButton(
                   icon: const Icon(Icons.camera_alt),
-                  onPressed: () {
-                    context.push(
+                  onPressed: () async {
+                    final barcode = await context.push<String>(
                       '/scanner?collectionId=${widget.collectionId}',
                     );
+
+                    if (barcode != null && mounted) {
+                      setState(() {
+                        _barcodeController.text = barcode;
+                      });
+                    }
                   },
                 ),
               ),
