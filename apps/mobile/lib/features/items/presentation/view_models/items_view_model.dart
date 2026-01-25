@@ -19,6 +19,7 @@ Future<void> createItem(
   String? barcode,
   String? description,
   String? coverImageUrl,
+  String? coverImagePath,
 }) async {
   final repository = ref.read(itemRepositoryProvider);
 
@@ -29,6 +30,7 @@ Future<void> createItem(
     barcode: barcode,
     description: description,
     coverImageUrl: coverImageUrl,
+    coverImagePath: coverImagePath,
     createdAt: DateTime.now(),
     updatedAt: DateTime.now(),
   );

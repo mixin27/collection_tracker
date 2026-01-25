@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -49,7 +51,23 @@ class ItemDetailScreen extends ConsumerWidget {
           body: ListView(
             children: [
               // Cover Image
-              if (item.coverImageUrl != null)
+              if (item.coverImagePath != null)
+                SizedBox(
+                  height: 300,
+                  child: Image.file(
+                    File(item.coverImagePath!),
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) => Container(
+                      color: theme.colorScheme.surfaceContainerHighest,
+                      child: Icon(
+                        Icons.image_not_supported,
+                        size: 80,
+                        color: theme.colorScheme.onSurfaceVariant,
+                      ),
+                    ),
+                  ),
+                )
+              else if (item.coverImageUrl != null)
                 SizedBox(
                   height: 300,
                   child: CachedNetworkImage(

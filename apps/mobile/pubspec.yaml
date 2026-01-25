@@ -41,6 +41,8 @@ dependencies:
     path: ../../packages/integrations/database
   barcode_scanner:
     path: ../../packages/integrations/barcode_scanner
+  storage:
+    path: ../../packages/integrations/storage
 
 dev_dependencies:
   flutter_test:
