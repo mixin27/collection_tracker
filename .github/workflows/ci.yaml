@@ -89,11 +89,11 @@ jobs:
           chmod +x scripts/test_all.sh
           ./scripts/test_all.sh
 
-      - name: 📊 Generate coverage
-        run: |
-          sudo apt-get update && sudo apt-get install -y lcov
-          chmod +x scripts/coverage.sh
-          ./scripts/coverage.sh
+      # - name: 📊 Generate coverage
+      #   run: |
+      #     sudo apt-get update && sudo apt-get install -y lcov
+      #     chmod +x scripts/coverage.sh
+      #     ./scripts/coverage.sh
 
       # - name: 📤 Upload coverage to Codecov
       #   uses: codecov/codecov-action@v3

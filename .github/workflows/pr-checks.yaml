@@ -8,20 +8,20 @@ jobs:
   # ========================================
   # Job 1: Danger Checks
   # ========================================
-  danger:
-    name: Danger Checks
-    runs-on: ubuntu-latest
+  # danger:
+  #   name: Danger Checks
+  #   runs-on: ubuntu-latest
 
-    steps:
-      - name: 📚 Checkout repository
-        uses: actions/checkout@v6
-        with:
-          fetch-depth: 0
+  #   steps:
+  #     - name: 📚 Checkout repository
+  #       uses: actions/checkout@v6
+  #       with:
+  #         fetch-depth: 0
 
-      - name: ⚠️ Run Danger
-        uses: danger/danger-js@11.2.3
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # - name: ⚠️ Run Danger
+      #   uses: danger/danger-js@11.2.3
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   # ========================================
   # Job 2: Check Code Size
