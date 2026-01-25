@@ -14,15 +14,22 @@ run_tests() {
 
     if [ -d "$package_path" ]; then
         if [ -d "$package_path/test" ]; then
-            echo "Testing $package_name..."
-            cd "$package_path"
+            # Check if there are actually any *_test.dart files
+            if find "$package_path/test" -name "*_test.dart" -print -quit | grep -q .; then
+                echo "Testing $package_name..."
+                cd "$package_path"
 
-            TOTAL_TESTS=$((TOTAL_TESTS + 1))
+                TOTAL_TESTS=$((TOTAL_TESTS + 1))
 
-            if [[ "$package_path" == *"apps/mobile"* ]]; then
-                flutter test
+                if [[ "$package_path" == *"apps/mobile"* ]]; then
+                    flutter test
+                else
+                    dart test
+                fi
             else
-                dart test
+                echo "⊘ No test files found in $package_name/test, skipping..."
+                 # Don't increment TOTAL_TESTS because we didn't run anything
+                 # Treat as success (or at least not failure)
             fi
 
             if [ $? -ne 0 ]; then
