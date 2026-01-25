@@ -69,12 +69,12 @@ class ScaffoldWithNavigationBar extends StatelessWidget {
         ],
         onDestinationSelected: onDestinationSelected,
       ),
-      floatingActionButton: FloatingActionButton(
-        heroTag: 'home-scanner-fab',
-        onPressed: () => context.push('/scanner'),
-        child: const Icon(Icons.qr_code_scanner),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      // floatingActionButton: FloatingActionButton(
+      //   heroTag: 'home-scanner-fab',
+      //   onPressed: () => context.push('/scanner'),
+      //   child: const Icon(Icons.qr_code_scanner),
+      // ),
+      // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
 }
@@ -127,10 +127,11 @@ class ScaffoldWithNavigationRail extends StatelessWidget {
                     style: Theme.of(context).textTheme.bodyLarge,
                   ),
                 ],
+                // Can be used for primary action
                 // FloatingActionButton(
-                //   elevation: 0,
-                //   onPressed: () {}, // Can be used for a primary action
-                //   child: const Icon(Icons.add),
+                //   heroTag: 'home-scanner-fab',
+                //   onPressed: () => context.push('/scanner'),
+                //   child: const Icon(Icons.qr_code_scanner),
                 // ),
                 const SizedBox(height: 16),
               ],
@@ -152,11 +153,6 @@ class ScaffoldWithNavigationRail extends StatelessWidget {
           // This is the main content.
           Expanded(child: body),
         ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        heroTag: 'home-scanner-fab',
-        onPressed: () => context.push('/scanner'),
-        child: const Icon(Icons.qr_code_scanner),
       ),
     );
   }

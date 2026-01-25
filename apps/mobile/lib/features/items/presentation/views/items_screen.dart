@@ -22,7 +22,7 @@ class ItemsScreen extends ConsumerWidget {
           IconButton(
             icon: const Icon(Icons.search),
             onPressed: () {
-              // todo(mixin27): Implement search
+              context.push('/collections/$collectionId/search');
             },
           ),
         ],

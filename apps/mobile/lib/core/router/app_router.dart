@@ -11,6 +11,7 @@ import '../../features/items/presentation/views/edit_item_screen.dart';
 import '../../features/items/presentation/views/item_detail_screen.dart';
 import '../../features/items/presentation/views/items_screen.dart';
 import '../../features/scanner/presentation/views/scanner_screen.dart';
+import '../../features/search/presentation/views/search_screen.dart';
 import '../../features/settings/presentation/views/settings_screen.dart';
 import 'app_shell.dart';
 import 'routes.dart';
@@ -61,6 +62,14 @@ GoRouter appRouter(Ref ref) {
                         builder: (context, state) {
                           final id = state.pathParameters['id']!;
                           return ItemsScreen(collectionId: id);
+                        },
+                      ),
+                      GoRoute(
+                        path: 'search',
+                        name: 'search',
+                        builder: (context, state) {
+                          final id = state.pathParameters['id']!;
+                          return SearchScreen(collectionId: id);
                         },
                       ),
                       GoRoute(
