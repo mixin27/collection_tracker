@@ -1,3 +1,4 @@
+import 'package:collection_tracker/core/providers/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -10,6 +11,7 @@ import '../../features/items/presentation/views/add_item_screen.dart';
 import '../../features/items/presentation/views/edit_item_screen.dart';
 import '../../features/items/presentation/views/item_detail_screen.dart';
 import '../../features/items/presentation/views/items_screen.dart';
+import '../../features/onboarding/presentation/views/onboarding_screen.dart';
 import '../../features/scanner/presentation/views/scanner_screen.dart';
 import '../../features/search/presentation/views/search_screen.dart';
 import '../../features/settings/presentation/views/settings_screen.dart';
@@ -21,9 +23,18 @@ part 'app_router.g.dart';
 
 @riverpod
 GoRouter appRouter(Ref ref) {
+  final onboardingComplete = ref.watch(onboardingCompleteProvider);
+
   return GoRouter(
-    initialLocation: '/collections',
+    initialLocation: onboardingComplete
+        ? Routes.collections
+        : Routes.onboarding,
     routes: [
+      GoRoute(
+        path: Routes.onboarding,
+        name: 'onboarding',
+        builder: (context, state) => const OnboardingScreen(),
+      ),
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) {
           return AppShell(navigationShell: navigationShell);
@@ -118,7 +129,7 @@ GoRouter appRouter(Ref ref) {
         ],
       ),
       GoRoute(
-        path: '/scanner',
+        path: Routes.scanner,
         name: 'scanner',
         builder: (context, state) {
           final collectionId = state.uri.queryParameters['collectionId'];
@@ -126,7 +137,7 @@ GoRouter appRouter(Ref ref) {
         },
       ),
       GoRoute(
-        path: '/statistics',
+        path: Routes.statistics,
         name: 'statistics',
         builder: (context, state) => const StatisticsScreen(),
       ),
