@@ -4,7 +4,7 @@ import 'package:drift/drift.dart';
 
 part 'item_dao.g.dart';
 
-@DriftAccessor(tables: [Items])
+@DriftAccessor(tables: [Items, Collections])
 class ItemDao extends DatabaseAccessor<AppDatabase> with _$ItemDaoMixin {
   ItemDao(super.db);
 
@@ -88,7 +88,27 @@ class ItemDao extends DatabaseAccessor<AppDatabase> with _$ItemDaoMixin {
 
   // Insert item
   Future<int> insertItem(ItemsCompanion item) {
-    return into(items).insert(item);
+    return transaction(() async {
+      final id = await into(items).insert(item);
+      final collectionId = item.collectionId.value;
+
+      final collection = await (select(
+        collections,
+      )..where((tbl) => tbl.id.equals(collectionId))).getSingleOrNull();
+
+      if (collection != null) {
+        await (update(
+          collections,
+        )..where((tbl) => tbl.id.equals(collectionId))).write(
+          CollectionsCompanion(
+            itemCount: Value(collection.itemCount + 1),
+            updatedAt: Value(DateTime.now()),
+          ),
+        );
+      }
+
+      return id;
+    });
   }
 
   // Update item
@@ -100,7 +120,33 @@ class ItemDao extends DatabaseAccessor<AppDatabase> with _$ItemDaoMixin {
 
   // Delete item
   Future<int> deleteItem(String id) {
-    return (delete(items)..where((tbl) => tbl.id.equals(id))).go();
+    return transaction(() async {
+      final item = await getItemById(id);
+      if (item == null) return 0;
+
+      final deletedCount = await (delete(
+        items,
+      )..where((tbl) => tbl.id.equals(id))).go();
+
+      if (deletedCount > 0) {
+        final collection = await (select(
+          collections,
+        )..where((tbl) => tbl.id.equals(item.collectionId))).getSingleOrNull();
+
+        if (collection != null) {
+          await (update(
+            collections,
+          )..where((tbl) => tbl.id.equals(item.collectionId))).write(
+            CollectionsCompanion(
+              itemCount: Value((collection.itemCount - 1).clamp(0, 99999999)),
+              updatedAt: Value(DateTime.now()),
+            ),
+          );
+        }
+      }
+
+      return deletedCount;
+    });
   }
 
   // Toggle favorite

@@ -23,33 +23,14 @@ class _EditItemScreenState extends ConsumerState<EditItemScreen> {
   final _locationController = TextEditingController();
   final _quantityController = TextEditingController();
 
-  bool _isLoading = true;
   bool _isSaving = false;
+  bool _isInitialized = false;
   Item? _item;
   ItemCondition? _selectedCondition;
 
   @override
   void initState() {
     super.initState();
-    _loadItem();
-  }
-
-  Future<void> _loadItem() async {
-    final item = await ref.read(itemDetailProvider(widget.itemId).future);
-
-    if (item != null && mounted) {
-      setState(() {
-        _item = item;
-        _titleController.text = item.title;
-        _barcodeController.text = item.barcode ?? '';
-        _descriptionController.text = item.description ?? '';
-        _notesController.text = item.notes ?? '';
-        _locationController.text = item.location ?? '';
-        _quantityController.text = item.quantity.toString();
-        _selectedCondition = item.condition;
-        _isLoading = false;
-      });
-    }
   }
 
   @override
@@ -65,158 +46,177 @@ class _EditItemScreenState extends ConsumerState<EditItemScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if (_isLoading) {
-      return Scaffold(
-        appBar: AppBar(title: const Text('Edit Item')),
-        body: const Center(child: CircularProgressIndicator()),
-      );
-    }
+    final itemAsync = ref.watch(itemDetailProvider(widget.itemId));
 
-    if (_item == null) {
-      return Scaffold(
-        appBar: AppBar(title: const Text('Edit Item')),
-        body: const Center(child: Text('Item not found')),
-      );
-    }
+    return itemAsync.when(
+      data: (item) {
+        if (item == null) {
+          return Scaffold(
+            appBar: AppBar(title: const Text('Edit Item')),
+            body: const Center(child: Text('Item not found')),
+          );
+        }
 
-    return Scaffold(
-      appBar: AppBar(title: const Text('Edit Item')),
-      body: Form(
-        key: _formKey,
-        child: ListView(
-          padding: const EdgeInsets.all(16),
-          children: [
-            // Title field
-            TextFormField(
-              controller: _titleController,
-              decoration: const InputDecoration(
-                labelText: 'Title',
-                prefixIcon: Icon(Icons.title),
-              ),
-              textCapitalization: TextCapitalization.words,
-              validator: (value) {
-                if (value == null || value.trim().isEmpty) {
-                  return 'Please enter a title';
-                }
-                return null;
-              },
-            ),
-            const SizedBox(height: 16),
+        if (!_isInitialized) {
+          _item = item;
+          _titleController.text = item.title;
+          _barcodeController.text = item.barcode ?? '';
+          _descriptionController.text = item.description ?? '';
+          _notesController.text = item.notes ?? '';
+          _locationController.text = item.location ?? '';
+          _quantityController.text = item.quantity.toString();
+          _selectedCondition = item.condition;
+          _isInitialized = true;
+        }
 
-            // Barcode field
-            TextFormField(
-              controller: _barcodeController,
-              decoration: InputDecoration(
-                labelText: 'Barcode (optional)',
-                prefixIcon: const Icon(Icons.qr_code),
-                suffixIcon: IconButton(
-                  icon: const Icon(Icons.camera_alt),
-                  onPressed: () async {
-                    final barcode = await context.push<String>('/scanner');
-
-                    if (barcode != null && mounted) {
-                      setState(() {
-                        _barcodeController.text = barcode;
-                      });
+        return Scaffold(
+          appBar: AppBar(title: const Text('Edit Item')),
+          body: Form(
+            key: _formKey,
+            child: ListView(
+              padding: const EdgeInsets.all(16),
+              children: [
+                // Title field
+                TextFormField(
+                  controller: _titleController,
+                  decoration: const InputDecoration(
+                    labelText: 'Title',
+                    prefixIcon: Icon(Icons.title),
+                  ),
+                  textCapitalization: TextCapitalization.words,
+                  validator: (value) {
+                    if (value == null || value.trim().isEmpty) {
+                      return 'Please enter a title';
                     }
+                    return null;
                   },
                 ),
-              ),
-              keyboardType: TextInputType.number,
-            ),
-            const SizedBox(height: 16),
+                const SizedBox(height: 16),
 
-            // Description field
-            TextFormField(
-              controller: _descriptionController,
-              decoration: const InputDecoration(
-                labelText: 'Description (optional)',
-                prefixIcon: Icon(Icons.description),
-              ),
-              maxLines: 3,
-              textCapitalization: TextCapitalization.sentences,
-            ),
-            const SizedBox(height: 16),
+                // Barcode field
+                TextFormField(
+                  controller: _barcodeController,
+                  decoration: InputDecoration(
+                    labelText: 'Barcode (optional)',
+                    prefixIcon: const Icon(Icons.qr_code),
+                    suffixIcon: IconButton(
+                      icon: const Icon(Icons.camera_alt),
+                      onPressed: () async {
+                        final barcode = await context.push<String>('/scanner');
 
-            // Condition selector
-            DropdownButtonFormField<ItemCondition>(
-              initialValue: _selectedCondition,
-              decoration: const InputDecoration(
-                labelText: 'Condition (optional)',
-                prefixIcon: Icon(Icons.star),
-              ),
-              items: ItemCondition.values.map((condition) {
-                return DropdownMenuItem(
-                  value: condition,
-                  child: Text(condition.name.toUpperCase()),
-                );
-              }).toList(),
-              onChanged: (value) {
-                setState(() {
-                  _selectedCondition = value;
-                });
-              },
-            ),
-            const SizedBox(height: 16),
+                        if (barcode != null && mounted) {
+                          setState(() {
+                            _barcodeController.text = barcode;
+                          });
+                        }
+                      },
+                    ),
+                  ),
+                  keyboardType: TextInputType.number,
+                ),
+                const SizedBox(height: 16),
 
-            // Quantity field
-            TextFormField(
-              controller: _quantityController,
-              decoration: const InputDecoration(
-                labelText: 'Quantity',
-                prefixIcon: Icon(Icons.numbers),
-              ),
-              keyboardType: TextInputType.number,
-              validator: (value) {
-                if (value == null || value.trim().isEmpty) {
-                  return 'Please enter quantity';
-                }
-                final quantity = int.tryParse(value);
-                if (quantity == null || quantity < 1) {
-                  return 'Please enter a valid quantity';
-                }
-                return null;
-              },
-            ),
-            const SizedBox(height: 16),
+                // Description field
+                TextFormField(
+                  controller: _descriptionController,
+                  decoration: const InputDecoration(
+                    labelText: 'Description (optional)',
+                    prefixIcon: Icon(Icons.description),
+                  ),
+                  maxLines: 3,
+                  textCapitalization: TextCapitalization.sentences,
+                ),
+                const SizedBox(height: 16),
 
-            // Location field
-            TextFormField(
-              controller: _locationController,
-              decoration: const InputDecoration(
-                labelText: 'Location (optional)',
-                hintText: 'e.g., Shelf A, Box 3',
-                prefixIcon: Icon(Icons.location_on),
-              ),
-              textCapitalization: TextCapitalization.words,
-            ),
-            const SizedBox(height: 16),
+                // Condition selector
+                DropdownButtonFormField<ItemCondition>(
+                  initialValue: _selectedCondition,
+                  decoration: const InputDecoration(
+                    labelText: 'Condition (optional)',
+                    prefixIcon: Icon(Icons.star),
+                  ),
+                  items: ItemCondition.values.map((condition) {
+                    return DropdownMenuItem(
+                      value: condition,
+                      child: Text(condition.name.toUpperCase()),
+                    );
+                  }).toList(),
+                  onChanged: (value) {
+                    setState(() {
+                      _selectedCondition = value;
+                    });
+                  },
+                ),
+                const SizedBox(height: 16),
 
-            // Notes field
-            TextFormField(
-              controller: _notesController,
-              decoration: const InputDecoration(
-                labelText: 'Notes (optional)',
-                prefixIcon: Icon(Icons.note),
-              ),
-              maxLines: 3,
-              textCapitalization: TextCapitalization.sentences,
-            ),
-            const SizedBox(height: 24),
+                // Quantity field
+                TextFormField(
+                  controller: _quantityController,
+                  decoration: const InputDecoration(
+                    labelText: 'Quantity',
+                    prefixIcon: Icon(Icons.numbers),
+                  ),
+                  keyboardType: TextInputType.number,
+                  validator: (value) {
+                    if (value == null || value.trim().isEmpty) {
+                      return 'Please enter quantity';
+                    }
+                    final quantity = int.tryParse(value);
+                    if (quantity == null || quantity < 1) {
+                      return 'Please enter a valid quantity';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 16),
 
-            // Save button
-            FilledButton(
-              onPressed: _isSaving ? null : _handleSave,
-              child: _isSaving
-                  ? const SizedBox(
-                      height: 20,
-                      width: 20,
-                      child: CircularProgressIndicator(strokeWidth: 2),
-                    )
-                  : const Text('Save Changes'),
+                // Location field
+                TextFormField(
+                  controller: _locationController,
+                  decoration: const InputDecoration(
+                    labelText: 'Location (optional)',
+                    hintText: 'e.g., Shelf A, Box 3',
+                    prefixIcon: Icon(Icons.location_on),
+                  ),
+                  textCapitalization: TextCapitalization.words,
+                ),
+                const SizedBox(height: 16),
+
+                // Notes field
+                TextFormField(
+                  controller: _notesController,
+                  decoration: const InputDecoration(
+                    labelText: 'Notes (optional)',
+                    prefixIcon: Icon(Icons.note),
+                  ),
+                  maxLines: 3,
+                  textCapitalization: TextCapitalization.sentences,
+                ),
+                const SizedBox(height: 24),
+
+                // Save button
+                FilledButton(
+                  onPressed: _isSaving ? null : _handleSave,
+                  child: _isSaving
+                      ? const SizedBox(
+                          height: 20,
+                          width: 20,
+                          child: CircularProgressIndicator(strokeWidth: 2),
+                        )
+                      : const Text('Save Changes'),
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+        );
+      },
+      loading: () => Scaffold(
+        appBar: AppBar(title: const Text('Edit Item')),
+        body: const Center(child: CircularProgressIndicator()),
+      ),
+      error: (error, stack) => Scaffold(
+        appBar: AppBar(title: const Text('Edit Item')),
+        body: Center(child: Text('Error: $error')),
       ),
     );
   }

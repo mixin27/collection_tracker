@@ -48,9 +48,7 @@ class CollectionsViewModel extends _$CollectionsViewModel {
 }
 
 @riverpod
-Future<Collection?> collectionDetail(Ref ref, String id) async {
+Stream<Collection?> collectionDetail(Ref ref, String id) {
   final repository = ref.watch(collectionRepositoryProvider);
-  final result = await repository.getCollectionById(id);
-
-  return result.fold((exception) => null, (collection) => collection);
+  return repository.watchCollectionById(id);
 }

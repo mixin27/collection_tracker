@@ -15,6 +15,7 @@ abstract class ItemRepository {
   Future<Either<AppException, void>> deleteItem(String id);
 
   Stream<List<Item>> watchItems(String collectionId);
+  Stream<Item?> watchItemById(String id);
 
   Future<Either<AppException, List<Item>>> searchItems({
     required String collectionId,

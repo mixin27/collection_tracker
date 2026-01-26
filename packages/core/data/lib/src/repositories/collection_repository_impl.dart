@@ -112,6 +112,13 @@ class CollectionRepositoryImpl implements CollectionRepository {
     );
   }
 
+  @override
+  Stream<Collection?> watchCollectionById(String id) {
+    return _dao
+        .watchCollectionById(id)
+        .map((data) => data != null ? _mapToEntity(data) : null);
+  }
+
   Collection _mapToEntity(CollectionData data) {
     return Collection(
       id: data.id,

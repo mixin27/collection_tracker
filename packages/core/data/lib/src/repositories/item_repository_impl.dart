@@ -126,6 +126,13 @@ class ItemRepositoryImpl implements ItemRepository {
   }
 
   @override
+  Stream<Item?> watchItemById(String id) {
+    return _dao
+        .watchItemById(id)
+        .map((data) => data != null ? _mapToEntity(data) : null);
+  }
+
+  @override
   Future<Either<AppException, List<Item>>> searchItems({
     required String collectionId,
     required String query,
