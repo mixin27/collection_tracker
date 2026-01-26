@@ -1,9 +1,11 @@
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 class ImagePickerWidget extends StatelessWidget {
   final String? imagePath;
+  final String? imageUrl;
   final VoidCallback onPickFromGallery;
   final VoidCallback onPickFromCamera;
   final VoidCallback? onRemove;
@@ -11,6 +13,7 @@ class ImagePickerWidget extends StatelessWidget {
 
   const ImagePickerWidget({
     this.imagePath,
+    this.imageUrl,
     required this.onPickFromGallery,
     required this.onPickFromCamera,
     this.onRemove,
@@ -34,20 +37,11 @@ class ImagePickerWidget extends StatelessWidget {
               borderRadius: BorderRadius.circular(12),
               border: Border.all(color: theme.colorScheme.outline, width: 2),
             ),
-            child: imagePath != null
-                ? ClipRRect(
-                    borderRadius: BorderRadius.circular(10),
-                    child: Image.file(File(imagePath!), fit: BoxFit.cover),
-                  )
-                : Icon(
-                    Icons.add_photo_alternate,
-                    size: 48,
-                    color: theme.colorScheme.onSurfaceVariant,
-                  ),
+            child: _buildImage(theme),
           ),
         ),
         const SizedBox(height: 8),
-        if (imagePath != null && onRemove != null)
+        if ((imagePath != null || imageUrl != null) && onRemove != null)
           TextButton.icon(
             onPressed: onRemove,
             icon: const Icon(Icons.delete, size: 18),
@@ -61,6 +55,36 @@ class ImagePickerWidget extends StatelessWidget {
           ),
       ],
     );
+  }
+
+  Widget _buildImage(ThemeData theme) {
+    if (imagePath != null) {
+      return ClipRRect(
+        borderRadius: BorderRadius.circular(10),
+        child: Image.file(File(imagePath!), fit: BoxFit.cover),
+      );
+    } else if (imageUrl != null) {
+      return ClipRRect(
+        borderRadius: BorderRadius.circular(10),
+        child: CachedNetworkImage(
+          imageUrl: imageUrl!,
+          fit: BoxFit.cover,
+          placeholder: (context, url) =>
+              const Center(child: CircularProgressIndicator(strokeWidth: 2)),
+          errorWidget: (context, url, error) => Icon(
+            Icons.image_not_supported,
+            size: 48,
+            color: theme.colorScheme.onSurfaceVariant,
+          ),
+        ),
+      );
+    } else {
+      return Icon(
+        Icons.add_photo_alternate,
+        size: 48,
+        color: theme.colorScheme.onSurfaceVariant,
+      );
+    }
   }
 
   Future<void> _showImageSourceDialog(BuildContext context) async {

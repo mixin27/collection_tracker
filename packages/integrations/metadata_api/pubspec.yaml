@@ -1,5 +1,5 @@
 name: metadata_api
-description: "A new Flutter package project."
+description: "Metadata API integration for fetching book, game, and movie data."
 version: 1.0.0
 publish_to: none
 resolution: workspace
@@ -11,8 +11,18 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  dio: ^5.9.0
+  fpdart: ^1.2.0
+  freezed_annotation: ^3.1.0
+  json_annotation: ^4.9.0
+
+  domain:
+    path: ../../core/domain
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^6.0.0
+  build_runner: ^2.10.5
+  freezed: ^3.2.4
+  json_serializable: ^6.11.4
