@@ -16,7 +16,14 @@ class IGDBClient {
   IGDBClient({required String clientId, required String accessToken, Dio? dio})
     : _clientId = clientId,
       _accessToken = accessToken,
-      _dio = dio ?? _createDefaultDio(clientId, accessToken);
+      _dio = dio != null
+          ? _applyBaseUrl(dio)
+          : _createDefaultDio(clientId, accessToken);
+
+  static Dio _applyBaseUrl(Dio dio) {
+    dio.options.baseUrl = _baseUrl;
+    return dio;
+  }
 
   static const _baseUrl = 'https://api.igdb.com/v4';
 

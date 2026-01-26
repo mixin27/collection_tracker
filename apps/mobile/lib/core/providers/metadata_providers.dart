@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:dio/dio.dart';
 import 'package:metadata_api/metadata_api.dart';
+import 'package:storage/storage.dart';
 
 part 'metadata_providers.g.dart';
 
@@ -29,6 +30,11 @@ Dio metadataDio(Ref ref) {
     ]);
 }
 
+@riverpod
+SecureStorageService secureStorageService(Ref ref) {
+  return SecureStorageService();
+}
+
 // ============================================================
 // API Keys Providers
 // These should be loaded from secure storage or environment
@@ -45,21 +51,42 @@ Future<String> igdbClientId(Ref ref) async {
 }
 
 @riverpod
-Future<String> igdbAccessToken(Ref ref) async {
-  // todo(mixin27): Load from secure storage or fetch fresh token
-  // You might want to cache this and refresh when expired
-  final clientId = await ref.watch(igdbClientIdProvider.future);
+Future<String?> igdbAccessToken(Ref ref) async {
+  final secureStorage = ref.watch(secureStorageServiceProvider);
+  final clientIdFuture = ref.watch(igdbClientIdProvider.future);
+  final dio = ref.watch(metadataDioProvider);
+
+  final clientId = await clientIdFuture;
   final clientSecret = AppEnv.igdbClientSecret;
+
+  if (clientId.isEmpty || clientSecret.isEmpty) {
+    return null;
+  }
+
+  const tokenKey = 'igdb_access_token';
+
+  // Try to load cached token
+  final cachedToken = await secureStorage.read(tokenKey);
+  if (cachedToken != null) {
+    return cachedToken;
+  }
 
   final result = await IGDBAuth.getAccessToken(
     clientId: clientId,
     clientSecret: clientSecret,
-    dio: ref.watch(metadataDioProvider),
+    dio: dio,
   );
 
   return result.fold(
-    (exception) => throw Exception('Failed to get IGDB access token'),
-    (token) => token,
+    (exception) {
+      debugPrint('IGDB Auth Error: $exception');
+      return null;
+    },
+    (token) async {
+      // Cache the new token
+      await secureStorage.write(tokenKey, token);
+      return token;
+    },
   );
 }
 
@@ -81,18 +108,29 @@ GoogleBooksClient googleBooksClient(Ref ref) {
 }
 
 @riverpod
-Future<IGDBClient> igdbClient(Ref ref) async {
-  final clientId = await ref.watch(igdbClientIdProvider.future);
-  final accessToken = await ref.watch(igdbAccessTokenProvider.future);
+Future<IGDBClient?> igdbClient(Ref ref) async {
+  final clientIdFuture = ref.watch(igdbClientIdProvider.future);
+  final accessTokenFuture = ref.watch(igdbAccessTokenProvider.future);
   final dio = ref.watch(metadataDioProvider);
+
+  final clientId = await clientIdFuture;
+  final accessToken = await accessTokenFuture;
+
+  if (clientId.isEmpty || accessToken == null) {
+    return null;
+  }
 
   return IGDBClient(clientId: clientId, accessToken: accessToken, dio: dio);
 }
 
 @riverpod
-TMDBClient tmdbClient(Ref ref) {
+TMDBClient? tmdbClient(Ref ref) {
   final apiKey = ref.watch(tmdbApiKeyProvider);
   final dio = ref.watch(metadataDioProvider);
+
+  if (apiKey.isEmpty) {
+    return null;
+  }
 
   return TMDBClient(apiKey: apiKey, dio: dio);
 }
@@ -110,16 +148,18 @@ class MetadataService extends _$MetadataService {
 
   GoogleBooksClient get booksClient => ref.read(googleBooksClientProvider);
 
-  Future<IGDBClient> get gamesClient => ref.read(igdbClientProvider.future);
+  Future<IGDBClient?> get gamesClient => ref.read(igdbClientProvider.future);
 
-  TMDBClient get moviesClient => ref.read(tmdbClientProvider);
+  TMDBClient? get moviesClient => ref.read(tmdbClientProvider);
 }
 
 @riverpod
 Future<UnifiedMetadataService> unifiedMetadataService(Ref ref) async {
   final booksClient = ref.watch(googleBooksClientProvider);
-  final gamesClient = await ref.watch(igdbClientProvider.future);
+  final igdbClientFuture = ref.watch(igdbClientProvider.future);
   final moviesClient = ref.watch(tmdbClientProvider);
+
+  final gamesClient = await igdbClientFuture;
 
   return UnifiedMetadataService(
     booksClient: booksClient,

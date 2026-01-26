@@ -3,6 +3,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:storage/storage.dart';
 import 'package:ui/ui.dart';
+import 'package:collection_tracker/core/providers/metadata_providers.dart';
+import 'package:collection_tracker/features/collections/presentation/view_models/collections_view_model.dart';
+import 'package:metadata_api/metadata_api.dart';
+import 'metadata_search_delegate.dart';
 
 import '../view_models/items_view_model.dart';
 
@@ -24,7 +28,9 @@ class _AddItemScreenState extends ConsumerState<AddItemScreen> {
   final _imageStorageService = ImageStorageService();
 
   bool _isLoading = false;
+  bool _isFetchingMetadata = false;
   String? _imagePath;
+  String? _coverImageUrl;
 
   @override
   void dispose() {
@@ -47,12 +53,14 @@ class _AddItemScreenState extends ConsumerState<AddItemScreen> {
             Center(
               child: ImagePickerWidget(
                 imagePath: _imagePath,
+                imageUrl: _coverImageUrl,
                 onPickFromGallery: () async {
                   final path = await _imageStorageService
                       .pickImageFromGallery();
                   if (path != null && mounted) {
                     setState(() {
                       _imagePath = path;
+                      _coverImageUrl = null;
                     });
                   }
                 },
@@ -61,12 +69,14 @@ class _AddItemScreenState extends ConsumerState<AddItemScreen> {
                   if (path != null && mounted) {
                     setState(() {
                       _imagePath = path;
+                      _coverImageUrl = null;
                     });
                   }
                 },
                 onRemove: () {
                   setState(() {
                     _imagePath = null;
+                    _coverImageUrl = null;
                   });
                 },
               ),
@@ -76,10 +86,14 @@ class _AddItemScreenState extends ConsumerState<AddItemScreen> {
             // Title field
             TextFormField(
               controller: _titleController,
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 labelText: 'Title',
                 hintText: 'e.g., The Lord of the Rings',
-                prefixIcon: Icon(Icons.title),
+                prefixIcon: const Icon(Icons.title),
+                suffixIcon: IconButton(
+                  icon: const Icon(Icons.search),
+                  onPressed: () => _showMetadataSearch(context),
+                ),
               ),
               textCapitalization: TextCapitalization.words,
               validator: (value) {
@@ -106,15 +120,40 @@ class _AddItemScreenState extends ConsumerState<AddItemScreen> {
                     );
 
                     if (barcode != null && mounted) {
-                      setState(() {
-                        _barcodeController.text = barcode;
-                      });
+                      _barcodeController.text = barcode;
+                      _fetchMetadata(barcode);
                     }
                   },
                 ),
               ),
-              keyboardType: TextInputType.number,
+              keyboardType: TextInputType.text,
+              onFieldSubmitted: (value) {
+                if (value.trim().isNotEmpty) {
+                  _fetchMetadata(value.trim());
+                }
+              },
             ),
+            if (_isFetchingMetadata)
+              const Padding(
+                padding: EdgeInsets.only(top: 8.0),
+                child: Center(
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      SizedBox(
+                        width: 16,
+                        height: 16,
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      ),
+                      SizedBox(width: 8),
+                      Text(
+                        'Fetching metadata...',
+                        style: TextStyle(fontSize: 12),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
             const SizedBox(height: 16),
 
             // Description field
@@ -147,6 +186,87 @@ class _AddItemScreenState extends ConsumerState<AddItemScreen> {
     );
   }
 
+  Future<void> _showMetadataSearch(BuildContext context) async {
+    final collectionAsync = ref.read(
+      collectionDetailProvider(widget.collectionId),
+    );
+    final collection = collectionAsync.asData?.value;
+    if (collection == null) return;
+
+    final result = await showSearch<MetadataBase?>(
+      context: context,
+      delegate: MetadataSearchDelegate(
+        ref: ref,
+        collectionType: collection.type,
+      ),
+      query: _titleController.text,
+    );
+
+    if (result != null && mounted) {
+      setState(() {
+        _titleController.text = result.title;
+        if (_descriptionController.text.isEmpty) {
+          _descriptionController.text = result.description ?? '';
+        }
+        _coverImageUrl = result.thumbnailUrl;
+      });
+    }
+  }
+
+  Future<void> _fetchMetadata(String barcode) async {
+    final collectionAsync = ref.read(
+      collectionDetailProvider(widget.collectionId),
+    );
+
+    final collection = collectionAsync.value;
+    if (collection == null) return;
+
+    setState(() {
+      _isFetchingMetadata = true;
+    });
+
+    try {
+      final matcher = await ref.read(smartMetadataMatcherProvider.future);
+      final result = await matcher.findBestMatch(
+        barcode: barcode,
+        primaryType: collection.type,
+      );
+
+      result.fold(
+        (exception) => null, // Ignore errors for now
+        (match) {
+          if (match.metadata != null && mounted) {
+            final metadata = match.metadata!;
+            setState(() {
+              if (_titleController.text.isEmpty) {
+                _titleController.text = metadata.title;
+              }
+              if (_descriptionController.text.isEmpty) {
+                _descriptionController.text = metadata.description ?? '';
+              }
+              _coverImageUrl = metadata.thumbnailUrl;
+            });
+
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('Matched ${match.source} metadata'),
+                duration: const Duration(seconds: 2),
+              ),
+            );
+          }
+        },
+      );
+    } catch (e) {
+      debugPrint('Metadata fetch error: $e');
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isFetchingMetadata = false;
+        });
+      }
+    }
+  }
+
   Future<void> _handleAdd() async {
     if (!_formKey.currentState!.validate()) {
       return;
@@ -167,6 +287,7 @@ class _AddItemScreenState extends ConsumerState<AddItemScreen> {
           description: _descriptionController.text.trim().isEmpty
               ? null
               : _descriptionController.text.trim(),
+          coverImageUrl: _coverImageUrl,
           coverImagePath: _imagePath,
         ).future,
       );

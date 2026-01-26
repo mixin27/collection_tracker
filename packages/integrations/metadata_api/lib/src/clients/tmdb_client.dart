@@ -11,7 +11,15 @@ import '../pagination/paginated_response.dart';
 class TMDBClient {
   TMDBClient({required String apiKey, Dio? dio})
     : _apiKey = apiKey,
-      _dio = dio ?? _createDefaultDio(apiKey);
+      _dio = dio != null
+          ? _applyBaseUrl(dio, apiKey)
+          : _createDefaultDio(apiKey);
+
+  static Dio _applyBaseUrl(Dio dio, String apiKey) {
+    dio.options.baseUrl = _baseUrl;
+    dio.options.headers['Authorization'] = 'Bearer $apiKey';
+    return dio;
+  }
 
   static const _baseUrl = 'https://api.themoviedb.org/3';
 

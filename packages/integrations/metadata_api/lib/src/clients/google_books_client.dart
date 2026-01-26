@@ -10,8 +10,13 @@ import '../pagination/paginated_response.dart';
 /// API Documentation: https://developers.google.com/books/docs/v1/using
 class GoogleBooksClient {
   GoogleBooksClient({Dio? dio, String? apiKey})
-    : _dio = dio ?? _createDefaultDio(),
+    : _dio = dio != null ? _applyBaseUrl(dio) : _createDefaultDio(),
       _apiKey = apiKey;
+
+  static Dio _applyBaseUrl(Dio dio) {
+    dio.options.baseUrl = _baseUrl;
+    return dio;
+  }
 
   static const _baseUrl = 'https://www.googleapis.com/books/v1';
 
