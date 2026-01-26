@@ -29,3 +29,5 @@ pubspec.lock
 *.log
 
 /internal/
+
+.env

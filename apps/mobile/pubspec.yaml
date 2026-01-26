@@ -19,6 +19,9 @@ dependencies:
   flutter_riverpod: ^3.2.0
   riverpod_annotation: ^4.0.1
 
+  # HTTP
+  dio: ^5.9.0
+
   # UI
   flutter_animate: ^4.5.2
   shimmer: ^3.0.0
@@ -44,6 +47,10 @@ dependencies:
     path: ../../packages/integrations/barcode_scanner
   storage:
     path: ../../packages/integrations/storage
+  metadata_api:
+    path: ../../packages/integrations/metadata_api
+  common_env:
+    path: ../../packages/common/env
 
 dev_dependencies:
   flutter_test:
