@@ -6,16 +6,20 @@ import 'package:metadata_api/metadata_api.dart';
 /// based on collection type and barcode/search query
 class UnifiedMetadataService {
   UnifiedMetadataService({
-    GoogleBooksClient? booksClient,
-    IGDBClient? gamesClient,
-    TMDBClient? moviesClient,
-  }) : _booksClient = booksClient,
-       _gamesClient = gamesClient,
-       _moviesClient = moviesClient;
+    required GoogleBooksClient? Function() booksClient,
+    required Future<IGDBClient?> Function() gamesClient,
+    required TMDBClient? Function() moviesClient,
+  }) : _booksClientGetter = booksClient,
+       _gamesClientGetter = gamesClient,
+       _moviesClientGetter = moviesClient;
 
-  final GoogleBooksClient? _booksClient;
-  final IGDBClient? _gamesClient;
-  final TMDBClient? _moviesClient;
+  final GoogleBooksClient? Function() _booksClientGetter;
+  final Future<IGDBClient?> Function() _gamesClientGetter;
+  final TMDBClient? Function() _moviesClientGetter;
+
+  GoogleBooksClient? get _booksClient => _booksClientGetter();
+  Future<IGDBClient?> get _gamesClient => _gamesClientGetter();
+  TMDBClient? get _moviesClient => _moviesClientGetter();
 
   /// Fetch metadata by barcode based on collection type
   ///
@@ -30,15 +34,19 @@ class UnifiedMetadataService {
         return _fetchBookByBarcode(barcode);
 
       case CollectionType.game:
-        if (_gamesClient == null) return const Right(null);
-        // IGDB doesn't support direct barcode lookup
-        // You might need a barcode-to-game database or UPC lookup service
-        return const Right(null);
+        final gamesClient = await _gamesClient;
+        if (gamesClient == null) return const Right(null);
+        // IGDB doesn't support direct barcode lookup, fallback to name search
+        return _searchGames(barcode, 1).then(
+          (result) => result.map((items) => items.isEmpty ? null : items.first),
+        );
 
       case CollectionType.movie:
-        // TMDB doesn't support direct barcode lookup
-        // You might need a UPC-to-movie database
-        return const Right(null);
+        if (_moviesClient == null) return const Right(null);
+        // TMDB doesn't support direct barcode lookup, fallback to name search
+        return _searchMovies(barcode, 1).then(
+          (result) => result.map((items) => items.isEmpty ? null : items.first),
+        );
 
       case CollectionType.comic:
       case CollectionType.music:
@@ -59,7 +67,8 @@ class UnifiedMetadataService {
         return _searchBooks(query, limit);
 
       case CollectionType.game:
-        if (_gamesClient == null) return const Right([]);
+        final gamesClient = await _gamesClient;
+        if (gamesClient == null) return const Right([]);
         return _searchGames(query, limit);
 
       case CollectionType.movie:
@@ -85,17 +94,18 @@ class UnifiedMetadataService {
             AppException.business(message: 'Google Books client not available'),
           );
         }
-        return (await _booksClient.getBookById(
+        return (await _booksClient!.getBookById(
           id,
         )).map((book) => book as MetadataBase);
 
       case CollectionType.game:
-        if (_gamesClient == null) {
+        final gamesClient = await _gamesClient;
+        if (gamesClient == null) {
           return Left(
             AppException.business(message: 'IGDB client not available'),
           );
         }
-        return (await _gamesClient.getGameById(
+        return (await gamesClient.getGameById(
           id,
         )).map((game) => game as MetadataBase);
 
@@ -105,7 +115,7 @@ class UnifiedMetadataService {
             AppException.business(message: 'TMDB client not available'),
           );
         }
-        return (await _moviesClient.getMovieById(
+        return (await _moviesClient!.getMovieById(
           id,
         )).map((movie) => movie as MetadataBase);
 
@@ -157,7 +167,8 @@ class UnifiedMetadataService {
     String query,
     int limit,
   ) async {
-    final result = await _gamesClient!.searchGames(
+    final gamesClient = await _gamesClient;
+    final result = await gamesClient!.searchGames(
       query: query,
       pageSize: limit,
     );

@@ -155,16 +155,10 @@ class MetadataService extends _$MetadataService {
 
 @riverpod
 Future<UnifiedMetadataService> unifiedMetadataService(Ref ref) async {
-  final booksClient = ref.watch(googleBooksClientProvider);
-  final igdbClientFuture = ref.watch(igdbClientProvider.future);
-  final moviesClient = ref.watch(tmdbClientProvider);
-
-  final gamesClient = await igdbClientFuture;
-
   return UnifiedMetadataService(
-    booksClient: booksClient,
-    gamesClient: gamesClient,
-    moviesClient: moviesClient,
+    booksClient: () => ref.read(googleBooksClientProvider),
+    gamesClient: () => ref.read(igdbClientProvider.future),
+    moviesClient: () => ref.read(tmdbClientProvider),
   );
 }
 
