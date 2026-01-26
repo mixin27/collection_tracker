@@ -13,4 +13,5 @@ abstract class CollectionRepository {
   );
   Future<Either<AppException, void>> deleteCollection(String id);
   Stream<List<Collection>> watchCollections();
+  Stream<Collection?> watchCollectionById(String id);
 }

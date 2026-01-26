@@ -60,9 +60,7 @@ Future<void> deleteItem(Ref ref, String id) async {
 }
 
 @riverpod
-Future<Item?> itemDetail(Ref ref, String itemId) async {
+Stream<Item?> itemDetail(Ref ref, String itemId) {
   final repository = ref.watch(itemRepositoryProvider);
-  final result = await repository.getItemById(itemId);
-
-  return result.fold((exception) => null, (item) => item);
+  return repository.watchItemById(itemId);
 }

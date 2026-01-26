@@ -20,30 +20,13 @@ class _EditCollectionScreenState extends ConsumerState<EditCollectionScreen> {
   final _nameController = TextEditingController();
   final _descriptionController = TextEditingController();
   CollectionType? _selectedType;
-  bool _isLoading = true;
   bool _isSaving = false;
+  bool _isInitialized = false;
   Collection? _collection;
 
   @override
   void initState() {
     super.initState();
-    _loadCollection();
-  }
-
-  Future<void> _loadCollection() async {
-    final collection = await ref.read(
-      collectionDetailProvider(widget.collectionId).future,
-    );
-
-    if (collection != null && mounted) {
-      setState(() {
-        _collection = collection;
-        _nameController.text = collection.name;
-        _descriptionController.text = collection.description ?? '';
-        _selectedType = collection.type;
-        _isLoading = false;
-      });
-    }
   }
 
   @override
@@ -55,101 +38,118 @@ class _EditCollectionScreenState extends ConsumerState<EditCollectionScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if (_isLoading) {
-      return Scaffold(
+    final collectionAsync = ref.watch(
+      collectionDetailProvider(widget.collectionId),
+    );
+
+    return collectionAsync.when(
+      data: (collection) {
+        if (collection == null) {
+          return Scaffold(
+            appBar: AppBar(title: const Text('Edit Collection')),
+            body: const Center(child: Text('Collection not found')),
+          );
+        }
+
+        if (!_isInitialized) {
+          _collection = collection;
+          _nameController.text = collection.name;
+          _descriptionController.text = collection.description ?? '';
+          _selectedType = collection.type;
+          _isInitialized = true;
+        }
+
+        final theme = Theme.of(context);
+
+        return Scaffold(
+          appBar: AppBar(title: const Text('Edit Collection')),
+          body: Form(
+            key: _formKey,
+            child: ListView(
+              padding: const EdgeInsets.all(16),
+              children: [
+                // Name field
+                TextFormField(
+                  controller: _nameController,
+                  decoration: const InputDecoration(
+                    labelText: 'Collection Name',
+                    prefixIcon: Icon(Icons.title),
+                  ),
+                  textCapitalization: TextCapitalization.words,
+                  validator: (value) {
+                    if (value == null || value.trim().isEmpty) {
+                      return 'Please enter a collection name';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 16),
+
+                // Type selector
+                Text('Collection Type', style: theme.textTheme.titleSmall),
+                const SizedBox(height: 8),
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: CollectionType.values.map((type) {
+                    final isSelected = _selectedType == type;
+                    return FilterChip(
+                      selected: isSelected,
+                      label: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(_getIconForType(type), size: 18),
+                          const SizedBox(width: 4),
+                          Text(_getNameForType(type)),
+                        ],
+                      ),
+                      onSelected: (selected) {
+                        if (selected) {
+                          setState(() {
+                            _selectedType = type;
+                          });
+                        }
+                      },
+                    );
+                  }).toList(),
+                ),
+                const SizedBox(height: 16),
+
+                // Description field
+                TextFormField(
+                  controller: _descriptionController,
+                  decoration: const InputDecoration(
+                    labelText: 'Description (optional)',
+                    prefixIcon: Icon(Icons.description),
+                  ),
+                  maxLines: 3,
+                  textCapitalization: TextCapitalization.sentences,
+                ),
+                const SizedBox(height: 24),
+
+                // Save button
+                FilledButton(
+                  onPressed: _isSaving ? null : _handleSave,
+                  child: _isSaving
+                      ? const SizedBox(
+                          height: 20,
+                          width: 20,
+                          child: CircularProgressIndicator(strokeWidth: 2),
+                        )
+                      : const Text('Save Changes'),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+      loading: () => Scaffold(
         appBar: AppBar(title: const Text('Edit Collection')),
         body: const Center(child: CircularProgressIndicator()),
-      );
-    }
-
-    if (_collection == null) {
-      return Scaffold(
+      ),
+      error: (error, stack) => Scaffold(
         appBar: AppBar(title: const Text('Edit Collection')),
-        body: const Center(child: Text('Collection not found')),
-      );
-    }
-
-    final theme = Theme.of(context);
-
-    return Scaffold(
-      appBar: AppBar(title: const Text('Edit Collection')),
-      body: Form(
-        key: _formKey,
-        child: ListView(
-          padding: const EdgeInsets.all(16),
-          children: [
-            // Name field
-            TextFormField(
-              controller: _nameController,
-              decoration: const InputDecoration(
-                labelText: 'Collection Name',
-                prefixIcon: Icon(Icons.title),
-              ),
-              textCapitalization: TextCapitalization.words,
-              validator: (value) {
-                if (value == null || value.trim().isEmpty) {
-                  return 'Please enter a collection name';
-                }
-                return null;
-              },
-            ),
-            const SizedBox(height: 16),
-
-            // Type selector
-            Text('Collection Type', style: theme.textTheme.titleSmall),
-            const SizedBox(height: 8),
-            Wrap(
-              spacing: 8,
-              runSpacing: 8,
-              children: CollectionType.values.map((type) {
-                final isSelected = _selectedType == type;
-                return FilterChip(
-                  selected: isSelected,
-                  label: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(_getIconForType(type), size: 18),
-                      const SizedBox(width: 4),
-                      Text(_getNameForType(type)),
-                    ],
-                  ),
-                  onSelected: (selected) {
-                    if (selected) {
-                      setState(() {
-                        _selectedType = type;
-                      });
-                    }
-                  },
-                );
-              }).toList(),
-            ),
-            const SizedBox(height: 16),
-
-            // Description field
-            TextFormField(
-              controller: _descriptionController,
-              decoration: const InputDecoration(
-                labelText: 'Description (optional)',
-                prefixIcon: Icon(Icons.description),
-              ),
-              maxLines: 3,
-              textCapitalization: TextCapitalization.sentences,
-            ),
-            const SizedBox(height: 24),
-
-            // Save button
-            FilledButton(
-              onPressed: _isSaving ? null : _handleSave,
-              child: _isSaving
-                  ? const SizedBox(
-                      height: 20,
-                      width: 20,
-                      child: CircularProgressIndicator(strokeWidth: 2),
-                    )
-                  : const Text('Save Changes'),
-            ),
-          ],
-        ),
+        body: Center(child: Text('Error: $error')),
       ),
     );
   }
