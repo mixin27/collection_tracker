@@ -1,3 +1,4 @@
+import 'package:app_analytics/app_analytics.dart';
 import 'package:app_logger/app_logger.dart';
 import 'package:collection_tracker/app.dart';
 import 'package:flutter/foundation.dart';
@@ -30,6 +31,31 @@ void main() async {
   final prefs = PrefsStorageService.instance;
   final onboardingComplete =
       await prefs.get<bool>('onboarding_complete') ?? false;
+
+  // Configure analytics
+  final config = AnalyticsConfig(
+    environment: AnalyticsEnvironment.development,
+    enableLogging: true,
+    providers: [
+      ConsoleAnalyticsProvider(prettyPrint: true),
+      // GoogleAnalytics4Provider(
+      //   measurementId: 'G-XXXXXXXXXX', // Replace with valid ID
+      //   apiSecret: 'YOUR_API_SECRET', // Optional, for Measurement Protocol
+      // ),
+    ],
+    middleware: [
+      // ConsentMiddleware(), // Check consent first
+      QueueMiddleware(), // Queue offline events
+      PIIFilterMiddleware(), // Remove PII
+      ValidationMiddleware(), // Validate events
+      EnrichmentMiddleware(), // Add common properties
+    ],
+    autoTrackScreenViews: true,
+    requireConsent: false,
+  );
+
+  // Initialize
+  await AnalyticsService.initialize(config);
 
   runApp(
     ProviderScope(

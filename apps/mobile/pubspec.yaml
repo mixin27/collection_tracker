@@ -52,6 +52,8 @@ dependencies:
     path: ../../packages/common/env
   app_logger:
     path: ../../packages/integrations/logger
+  app_analytics:
+    path: ../../packages/integrations/analytics
 
 dev_dependencies:
   flutter_test:
@@ -61,6 +63,8 @@ dev_dependencies:
   riverpod_generator: ^4.0.2
 
 flutter:
+  config:
+    enable-swift-package-manager: true
   uses-material-design: true
   generate: true
   assets:
