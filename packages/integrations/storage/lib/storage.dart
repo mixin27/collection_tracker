@@ -1,4 +1,8 @@
+export 'src/exceptions/storage_exception.dart';
+
 export 'src/export_import_service.dart';
 export 'src/image_storage_service.dart';
 export 'src/secure_storage_service.dart';
+export 'src/prefs_storage_service.dart';
+
 export 'package:image_picker/image_picker.dart';

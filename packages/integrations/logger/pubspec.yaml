@@ -1,5 +1,5 @@
-name: logger
-description: "A new Flutter package project."
+name: app_logger
+description: "A structured logging package for Flutter applications with console, file, and remote logging capabilities"
 version: 1.0.0
 publish_to: none
 resolution: workspace
@@ -11,6 +11,10 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  intl: ^0.20.2
+  logger: ^2.6.2
+  http: ^1.6.0
+  path_provider: ^2.1.5
 
 dev_dependencies:
   flutter_test:

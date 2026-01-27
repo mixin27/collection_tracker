@@ -32,7 +32,7 @@ Dio metadataDio(Ref ref) {
 
 @riverpod
 SecureStorageService secureStorageService(Ref ref) {
-  return SecureStorageService();
+  return SecureStorageService.instance;
 }
 
 // ============================================================
@@ -66,7 +66,7 @@ Future<String?> igdbAccessToken(Ref ref) async {
   const tokenKey = 'igdb_access_token';
 
   // Try to load cached token
-  final cachedToken = await secureStorage.read(tokenKey);
+  final cachedToken = await secureStorage.get<String>(tokenKey);
   if (cachedToken != null) {
     return cachedToken;
   }
@@ -84,7 +84,7 @@ Future<String?> igdbAccessToken(Ref ref) async {
     },
     (token) async {
       // Cache the new token
-      await secureStorage.write(tokenKey, token);
+      await secureStorage.save<String>(tokenKey, token);
       return token;
     },
   );
