@@ -3,8 +3,9 @@ import 'package:collection_tracker/app.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+export 'package:storage/storage.dart';
 import 'package:collection_tracker/core/observers/riverpod_logger.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:storage/storage.dart';
 
 import 'core/providers/providers.dart';
 
@@ -22,9 +23,13 @@ void main() async {
     ),
   );
 
+  // Initialize PrefsStorageService
+  await PrefsStorageService.instance.init();
+
   // Check onboarding status
-  final prefs = await SharedPreferences.getInstance();
-  final onboardingComplete = prefs.getBool('onboarding_complete') ?? false;
+  final prefs = PrefsStorageService.instance;
+  final onboardingComplete =
+      await prefs.get<bool>('onboarding_complete') ?? false;
 
   runApp(
     ProviderScope(

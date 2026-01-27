@@ -30,7 +30,6 @@ dependencies:
   # Utilities
   intl: ^0.20.2
   uuid: ^4.5.2
-  shared_preferences: ^2.5.4
 
   # Local workspace packages
   domain:
