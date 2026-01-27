@@ -21,6 +21,7 @@ void main() {
         environment: AnalyticsEnvironment.development,
         providers: [mockProvider],
         enableLogging: true,
+        requireConsent: false,
       );
     });
 

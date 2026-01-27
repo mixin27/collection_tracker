@@ -17,6 +17,22 @@ class PIIFilterMiddleware implements AnalyticsMiddleware {
     r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
   );
 
+  final RegExp _phoneRegex = RegExp(
+    r'^\+?(\d[\d-. ]+)?(\([\d-. ]+\))?[\d-. ]+\d$',
+  );
+
+  final RegExp _creditCardRegex = RegExp(r'\b(?:\d[ -]*?){13,16}\b');
+
+  final RegExp _ssnRegex = RegExp(r'\b\d{3}-\d{2}-\d{4}\b');
+
+  final RegExp _ipv4Regex = RegExp(r'\b(?:\d{1,3}\.){3}\d{1,3}\b');
+
+  final RegExp _ipv6Regex = RegExp(r'([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}');
+
+  final RegExp _dateRegex = RegExp(
+    r'^\d{4}-\d{2}-\d{2}$|^\d{1,2}/\d{1,2}/\d{4}$',
+  );
+
   @override
   int get priority => 85; // Run before most middleware
 
@@ -60,11 +76,35 @@ class PIIFilterMiddleware implements AnalyticsMiddleware {
       return true;
     }
 
-    // Add more PII detection logic here
-    // - Phone numbers
-    // - Credit cards
-    // - SSN
-    // etc.
+    // Check if value looks like a phone number (min 7 digits)
+    // Avoid short numbers/integers being flagged
+    if (value.length >= 7 &&
+        value.length <= 15 &&
+        _phoneRegex.hasMatch(value) &&
+        // Ensure it has at least 7 digits
+        value.replaceAll(RegExp(r'[^0-9]'), '').length >= 7) {
+      return true;
+    }
+
+    // Check credit card
+    if (_creditCardRegex.hasMatch(value)) {
+      return true;
+    }
+
+    // Check SSN
+    if (_ssnRegex.hasMatch(value)) {
+      return true;
+    }
+
+    // Check IP
+    if (_ipv4Regex.hasMatch(value) || _ipv6Regex.hasMatch(value)) {
+      return true;
+    }
+
+    // Check Date
+    if (_dateRegex.hasMatch(value)) {
+      return true;
+    }
 
     return false;
   }
