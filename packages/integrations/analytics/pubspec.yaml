@@ -1,5 +1,5 @@
-name: analytics
-description: "A new Flutter package project."
+name: app_analytics
+description: "Reusable analytics package with multi-SDK support and extensibility"
 version: 1.0.0
 publish_to: none
 resolution: workspace
@@ -11,8 +11,29 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  fpdart: ^1.2.0
+  freezed_annotation: ^3.1.0
+  json_annotation: ^4.9.0
+
+  # Async utilities
+  async: ^2.13.0
+  shared_preferences: ^2.5.4
+  package_info_plus: ^9.0.0
+  connectivity_plus: ^7.0.0
+
+  # Analytics
+  firebase_analytics: ^12.1.1
+  mixpanel_flutter: ^2.4.4
+  amplitude_flutter: ^4.3.10
+  segment_analytics: ^1.1.11
+
+  http: ^1.6.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^6.0.0
+  build_runner: ^2.10.5
+  freezed: ^3.2.4
+  json_serializable: ^6.11.4
+  mockito: ^5.6.3

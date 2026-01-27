@@ -2,6 +2,7 @@ import 'package:collection_tracker/core/providers/providers.dart';
 import 'package:domain/domain.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:uuid/uuid.dart';
+import 'package:app_analytics/app_analytics.dart';
 
 part 'items_view_model.g.dart';
 
@@ -37,7 +38,18 @@ Future<void> createItem(
 
   final result = await repository.createItem(item);
 
-  result.fold((exception) => throw exception, (_) => null);
+  result.fold((exception) => throw exception, (_) async {
+    await AnalyticsService.instance.track(
+      AnalyticsEvent.custom(
+        name: 'item_added',
+        properties: {
+          'item_id': item.id,
+          'collection_id': collectionId,
+          'title': title,
+        },
+      ),
+    );
+  });
 }
 
 @riverpod
@@ -56,7 +68,11 @@ Future<void> deleteItem(Ref ref, String id) async {
   final repository = ref.read(itemRepositoryProvider);
   final result = await repository.deleteItem(id);
 
-  result.fold((exception) => throw exception, (_) => null);
+  result.fold((exception) => throw exception, (_) async {
+    await AnalyticsService.instance.track(
+      AnalyticsEvent.custom(name: 'item_deleted', properties: {'item_id': id}),
+    );
+  });
 }
 
 @riverpod

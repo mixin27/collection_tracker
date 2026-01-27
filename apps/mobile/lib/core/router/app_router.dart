@@ -17,6 +17,7 @@ import '../../features/search/presentation/views/search_screen.dart';
 import '../../features/settings/presentation/views/settings_screen.dart';
 import '../../features/statistics/presentation/views/statistics_screen.dart';
 import 'app_shell.dart';
+import 'package:collection_tracker/core/observers/analytics_observer.dart';
 import 'routes.dart';
 
 part 'app_router.g.dart';
@@ -26,6 +27,7 @@ GoRouter appRouter(Ref ref) {
   final onboardingComplete = ref.watch(onboardingCompleteProvider);
 
   return GoRouter(
+    observers: [AnalyticsObserver()],
     initialLocation: onboardingComplete
         ? Routes.collections
         : Routes.onboarding,

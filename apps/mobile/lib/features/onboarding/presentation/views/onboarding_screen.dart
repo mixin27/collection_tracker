@@ -1,3 +1,4 @@
+import 'package:app_analytics/app_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:storage/storage.dart';
@@ -60,6 +61,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   Future<void> _completeOnboarding() async {
     final prefs = PrefsStorageService.instance;
     await prefs.save<bool>('onboarding_complete', true);
+
+    AnalyticsService.instance.track(
+      AnalyticsEvent.custom(name: 'onboarding_completed'),
+    );
 
     if (mounted) {
       context.go('/collections');

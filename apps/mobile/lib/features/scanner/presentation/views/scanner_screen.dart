@@ -1,3 +1,4 @@
+import 'package:app_analytics/app_analytics.dart';
 import 'package:barcode_scanner/barcode_scanner.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -64,6 +65,16 @@ class _ScannerScreenState extends ConsumerState<ScannerScreen> {
     setState(() {
       _hasScanned = true;
     });
+
+    AnalyticsService.instance.track(
+      AnalyticsEvent.custom(
+        name: 'scan_performed',
+        properties: {
+          'barcode': barcode.rawValue,
+          'format': barcode.format.name,
+        },
+      ),
+    );
 
     // Return the scanned barcode
     context.pop(barcode.rawValue);

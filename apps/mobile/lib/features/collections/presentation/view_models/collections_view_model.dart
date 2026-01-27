@@ -2,6 +2,7 @@ import 'package:collection_tracker/core/providers/providers.dart';
 import 'package:domain/domain.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:uuid/uuid.dart';
+import 'package:app_analytics/app_analytics.dart';
 
 part 'collections_view_model.g.dart';
 
@@ -31,6 +32,16 @@ class CollectionsViewModel extends _$CollectionsViewModel {
     );
 
     await repository.createCollection(collection);
+
+    await AnalyticsService.instance.track(
+      AnalyticsEvent.custom(
+        name: 'collection_created',
+        properties: {
+          'collection_id': collection.id,
+          'collection_type': collection.type.name,
+        },
+      ),
+    );
   }
 
   Future<void> updateCollection(Collection collection) async {
@@ -44,6 +55,13 @@ class CollectionsViewModel extends _$CollectionsViewModel {
   Future<void> deleteCollection(String id) async {
     final repository = ref.read(collectionRepositoryProvider);
     await repository.deleteCollection(id);
+
+    await AnalyticsService.instance.track(
+      AnalyticsEvent.custom(
+        name: 'collection_deleted',
+        properties: {'collection_id': id},
+      ),
+    );
   }
 }
 
