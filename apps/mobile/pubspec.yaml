@@ -51,6 +51,8 @@ dependencies:
     path: ../../packages/integrations/metadata_api
   common_env:
     path: ../../packages/common/env
+  app_logger:
+    path: ../../packages/integrations/logger
 
 dev_dependencies:
   flutter_test:
