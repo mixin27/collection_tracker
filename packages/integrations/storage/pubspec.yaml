@@ -15,7 +15,7 @@ dependencies:
   path_provider: ^2.1.5
   path: ^1.9.1
   image: ^4.7.2
-  file_picker: ^10.3.9
+  file_picker: 10.3.7 # upgrade to latest after android plugin fixed
   share_plus: ^12.0.1
   permission_handler: ^12.0.1
   flutter_secure_storage: ^10.0.0
