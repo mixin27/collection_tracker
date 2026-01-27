@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:file_picker/file_picker.dart';
+import 'package:file_picker/file_picker.dart' as fp;
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -112,8 +112,8 @@ class ExportImportService {
   // Import from JSON
   Future<Map<String, dynamic>> importFromJson() async {
     try {
-      final result = await FilePicker.platform.pickFiles(
-        type: FileType.custom,
+      final result = await fp.FilePicker.platform.pickFiles(
+        type: fp.FileType.custom,
         allowedExtensions: ['json'],
       );
 
@@ -134,8 +134,8 @@ class ExportImportService {
   // Import from CSV
   Future<List<Map<String, dynamic>>> importFromCsv() async {
     try {
-      final result = await FilePicker.platform.pickFiles(
-        type: FileType.custom,
+      final result = await fp.FilePicker.platform.pickFiles(
+        type: fp.FileType.custom,
         allowedExtensions: ['csv'],
       );
 
