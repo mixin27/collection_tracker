@@ -112,7 +112,7 @@ class ExportImportService {
   // Import from JSON
   Future<Map<String, dynamic>> importFromJson() async {
     try {
-      final result = await fp.FilePicker.platform.pickFiles(
+      final result = await fp.FilePicker.pickFiles(
         type: fp.FileType.custom,
         allowedExtensions: ['json'],
       );
@@ -134,7 +134,7 @@ class ExportImportService {
   // Import from CSV
   Future<List<Map<String, dynamic>>> importFromCsv() async {
     try {
-      final result = await fp.FilePicker.platform.pickFiles(
+      final result = await fp.FilePicker.pickFiles(
         type: fp.FileType.custom,
         allowedExtensions: ['csv'],
       );
