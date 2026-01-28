@@ -1,6 +1,8 @@
+import 'package:collection_tracker/core/providers/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:storage/storage.dart';
+import 'package:ui/ui.dart';
 
 import '../view_models/export_import_view_model.dart';
 
@@ -17,10 +19,11 @@ class SettingsScreen extends ConsumerWidget {
           ListTile(
             leading: const Icon(Icons.palette),
             title: const Text('Theme'),
-            subtitle: const Text('System default'),
-            onTap: () {
-              // todo(mixin27): Implement theme selector
-            },
+            subtitle: Text(
+              '${ref.watch(themeSettingsProvider.select((s) => s.mode.name.toUpperCase()))} - '
+              '${ref.watch(themeSettingsProvider.select((s) => s.variant.label))}',
+            ),
+            onTap: () => _showThemeSelector(context, ref),
           ),
           ListTile(
             leading: const Icon(Icons.language),
@@ -206,6 +209,128 @@ class SettingsScreen extends ConsumerWidget {
         );
       }
     }
+  }
+
+  Future<void> _showThemeSelector(BuildContext context, WidgetRef ref) async {
+    await showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return Consumer(
+          builder: (context, ref, _) {
+            final s = ref.watch(themeSettingsProvider);
+            return SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 24),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 24),
+                      child: Text(
+                        'Theme Mode',
+                        style: Theme.of(context).textTheme.titleMedium,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: ThemeMode.values.map((mode) {
+                        final isSelected = s.mode == mode;
+                        return ChoiceChip(
+                          label: Text(mode.name.toUpperCase()),
+                          selected: isSelected,
+                          onSelected: (selected) {
+                            if (selected) {
+                              ref
+                                  .read(themeSettingsProvider.notifier)
+                                  .setThemeMode(mode);
+                            }
+                          },
+                        );
+                      }).toList(),
+                    ),
+                    const SizedBox(height: 24),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 24),
+                      child: Text(
+                        'Color Variant',
+                        style: Theme.of(context).textTheme.titleMedium,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    SizedBox(
+                      height: 56,
+                      child: ListView.separated(
+                        scrollDirection: Axis.horizontal,
+                        padding: const EdgeInsets.symmetric(horizontal: 24),
+                        itemCount: AppThemeVariant.values.length,
+                        separatorBuilder: (context, index) =>
+                            const SizedBox(width: 16),
+                        itemBuilder: (context, index) {
+                          final variant = AppThemeVariant.values[index];
+                          final isSelected = s.variant == variant;
+                          return GestureDetector(
+                            onTap: () {
+                              ref
+                                  .read(themeSettingsProvider.notifier)
+                                  .setThemeVariant(variant);
+                            },
+                            child: Container(
+                              width: 48,
+                              height: 48,
+                              decoration: BoxDecoration(
+                                color: variant.color,
+                                shape: BoxShape.circle,
+                                border: isSelected
+                                    ? Border.all(
+                                        color: Theme.of(
+                                          context,
+                                        ).colorScheme.primary,
+                                        width: 3,
+                                      )
+                                    : null,
+                                boxShadow: isSelected
+                                    ? [
+                                        BoxShadow(
+                                          color: variant.color.withValues(
+                                            alpha: 0.4,
+                                          ),
+                                          blurRadius: 8,
+                                          spreadRadius: 2,
+                                        ),
+                                      ]
+                                    : null,
+                              ),
+                              child: isSelected
+                                  ? const Icon(Icons.check, color: Colors.white)
+                                  : null,
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    SwitchListTile(
+                      title: const Text('Amoled Mode (Pure Black)'),
+                      subtitle: const Text(
+                        'Reduces battery consumption on OLED screens',
+                      ),
+                      value: s.amoled,
+                      onChanged: (value) {
+                        ref
+                            .read(themeSettingsProvider.notifier)
+                            .setAmoled(value);
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
   }
 }
 

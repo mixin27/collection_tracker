@@ -127,54 +127,7 @@ class PrefsStorageService {
         return null;
       }
 
-      final typeMarker = prefs.getString('${key}_type');
-
-      switch (T) {
-        case const (String):
-          return prefs.getString(key) as T?;
-        case const (int):
-          return prefs.getInt(key) as T?;
-        case const (double):
-          return prefs.getDouble(key) as T?;
-        case const (bool):
-          return prefs.getBool(key) as T?;
-        default:
-          // Handle complex types
-          if (T.toString().startsWith('List<String>')) {
-            return prefs.getStringList(key) as T?;
-          } else if (T.toString().startsWith('List<int>') ||
-              typeMarker == 'List<int>') {
-            final stringList = prefs.getStringList(key);
-            if (stringList == null) return null;
-            return stringList.map(int.parse).toList() as T?;
-          } else if (typeMarker == 'List') {
-            final jsonString = prefs.getString(key);
-            if (jsonString == null) return null;
-            return jsonDecode(jsonString) as T?;
-          } else if (typeMarker == 'Map' || T.toString().contains('Map')) {
-            final jsonString = prefs.getString(key);
-            if (jsonString == null) return null;
-            return jsonDecode(jsonString) as T?;
-          } else if (typeMarker == 'Object') {
-            final jsonString = prefs.getString(key);
-            if (jsonString == null) return null;
-            return jsonDecode(jsonString) as T?;
-          }
-
-          // Try to get as string and decode
-          final jsonString = prefs.getString(key);
-          if (jsonString == null) return null;
-
-          try {
-            return jsonDecode(jsonString) as T?;
-          } catch (e) {
-            throw SerializationException(
-              'Cannot deserialize value to type $T',
-              key: key,
-              originalError: e,
-            );
-          }
-      }
+      return _readFromPrefs<T>(prefs, key);
     } catch (e) {
       if (e is StorageException) rethrow;
       throw StorageException(
@@ -182,6 +135,69 @@ class PrefsStorageService {
         key: key,
         originalError: e,
       );
+    }
+  }
+
+  /// Retrieve a value synchronously (only works if init() was called and completed)
+  T? readSync<T>(String key) {
+    if (_prefs == null) {
+      throw StorageException(
+        'PrefsStorageService is not initialized. Call init() first.',
+        key: key,
+      );
+    }
+
+    return _readFromPrefs<T>(_prefs!, key);
+  }
+
+  T? _readFromPrefs<T>(SharedPreferences prefs, String key) {
+    final typeMarker = prefs.getString('${key}_type');
+
+    switch (T) {
+      case const (String):
+        return prefs.getString(key) as T?;
+      case const (int):
+        return prefs.getInt(key) as T?;
+      case const (double):
+        return prefs.getDouble(key) as T?;
+      case const (bool):
+        return prefs.getBool(key) as T?;
+      default:
+        // Handle complex types
+        if (T.toString().startsWith('List<String>')) {
+          return prefs.getStringList(key) as T?;
+        } else if (T.toString().startsWith('List<int>') ||
+            typeMarker == 'List<int>') {
+          final stringList = prefs.getStringList(key);
+          if (stringList == null) return null;
+          return stringList.map(int.parse).toList() as T?;
+        } else if (typeMarker == 'List') {
+          final jsonString = prefs.getString(key);
+          if (jsonString == null) return null;
+          return jsonDecode(jsonString) as T?;
+        } else if (typeMarker == 'Map' || T.toString().contains('Map')) {
+          final jsonString = prefs.getString(key);
+          if (jsonString == null) return null;
+          return jsonDecode(jsonString) as T?;
+        } else if (typeMarker == 'Object') {
+          final jsonString = prefs.getString(key);
+          if (jsonString == null) return null;
+          return jsonDecode(jsonString) as T?;
+        }
+
+        // Try to get as string and decode
+        final jsonString = prefs.getString(key);
+        if (jsonString == null) return null;
+
+        try {
+          return jsonDecode(jsonString) as T?;
+        } catch (e) {
+          throw SerializationException(
+            'Cannot deserialize value to type $T',
+            key: key,
+            originalError: e,
+          );
+        }
     }
   }
 
