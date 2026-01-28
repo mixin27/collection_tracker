@@ -11,7 +11,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase([QueryExecutor? executor]) : super(executor ?? _openConnection());
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 2;
 
   @override
   MigrationStrategy get migration {
@@ -26,11 +26,9 @@ class AppDatabase extends _$AppDatabase {
         await customStatement('CREATE INDEX idx_items_name ON items(title);');
       },
       onUpgrade: (Migrator m, int from, int to) async {
-        // Handle migrations here in future versions
-        // Example:
-        // if (from < 2) {
-        //   await m.addColumn(books, books.newColumn);
-        // }
+        if (from < 2) {
+          await m.addColumn(items, items.sortOrder);
+        }
       },
       beforeOpen: (details) async {
         await customStatement('PRAGMA foreign_keys = ON');

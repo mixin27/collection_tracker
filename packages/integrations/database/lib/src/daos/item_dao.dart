@@ -150,6 +150,17 @@ class ItemDao extends DatabaseAccessor<AppDatabase> with _$ItemDaoMixin {
   }
 
   // Toggle favorite
+  // Toggle favorite
+  Future<void> reorderItems(List<String> itemIds) {
+    return transaction(() async {
+      for (var i = 0; i < itemIds.length; i++) {
+        await (update(items)..where((tbl) => tbl.id.equals(itemIds[i]))).write(
+          ItemsCompanion(sortOrder: Value(i), updatedAt: Value(DateTime.now())),
+        );
+      }
+    });
+  }
+
   Future<void> toggleFavorite(String id, bool isFavorite) async {
     await (update(items)..where((tbl) => tbl.id.equals(id))).write(
       ItemsCompanion(

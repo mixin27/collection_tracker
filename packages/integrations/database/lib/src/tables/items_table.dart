@@ -20,6 +20,7 @@ class Items extends Table {
   RealColumn get currentValue => real().nullable()();
   TextColumn get location => text().nullable()();
   BoolColumn get isFavorite => boolean().withDefault(const Constant(false))();
+  IntColumn get sortOrder => integer().withDefault(const Constant(0))();
   IntColumn get quantity => integer().withDefault(const Constant(1))();
   DateTimeColumn get createdAt => dateTime()();
   DateTimeColumn get updatedAt => dateTime()();
