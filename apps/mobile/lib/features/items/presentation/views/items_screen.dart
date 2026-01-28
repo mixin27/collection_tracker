@@ -6,37 +6,88 @@ import 'package:go_router/go_router.dart';
 
 import '../view_models/items_view_model.dart';
 import '../../../../core/providers/providers.dart';
+import '../providers/items_filter_provider.dart';
 import '../widgets/item_card.dart';
 import '../widgets/item_grid_card.dart';
+import '../widgets/item_filter_sheet.dart';
 
-class ItemsScreen extends ConsumerWidget {
+class ItemsScreen extends ConsumerStatefulWidget {
   final String collectionId;
 
   const ItemsScreen({required this.collectionId, super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final itemsAsync = ref.watch(itemsListProvider(collectionId));
+  ConsumerState<ItemsScreen> createState() => _ItemsScreenState();
+}
+
+class _ItemsScreenState extends ConsumerState<ItemsScreen> {
+  final _searchController = TextEditingController();
+  bool _isSearching = false;
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final itemsAsync = ref.watch(
+      filteredItemsListProvider(widget.collectionId),
+    );
     final viewMode = ref.watch(itemsViewModeProvider);
+    final filter = ref.watch(itemFilterProvider);
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Items'),
+        title: _isSearching
+            ? TextField(
+                controller: _searchController,
+                autofocus: true,
+                decoration: const InputDecoration(
+                  hintText: 'Search items...',
+                  border: InputBorder.none,
+                ),
+                onChanged: (value) {
+                  ref.read(itemFilterProvider.notifier).setSearchQuery(value);
+                },
+              )
+            : const Text('Items'),
         actions: [
-          IconButton(
-            icon: Icon(
-              viewMode == ItemsViewMode.list
-                  ? Icons.grid_view
-                  : Icons.view_list,
+          if (!_isSearching) ...[
+            IconButton(
+              icon: Icon(
+                viewMode == ItemsViewMode.list
+                    ? Icons.grid_view
+                    : Icons.view_list,
+              ),
+              onPressed: () {
+                ref.read(itemsViewModeProvider.notifier).toggle();
+              },
             ),
-            onPressed: () {
-              ref.read(itemsViewModeProvider.notifier).toggle();
-            },
-          ),
+            IconButton(
+              icon: Badge(
+                isLabelVisible:
+                    filter.conditions.isNotEmpty ||
+                    filter.showOnlyFavorites ||
+                    filter.sortBy != ItemSortBy.createdAt,
+                child: const Icon(Icons.filter_list),
+              ),
+              onPressed: () => _showFilterSheet(context),
+            ),
+          ],
           IconButton(
-            icon: const Icon(Icons.search),
+            icon: Icon(_isSearching ? Icons.close : Icons.search),
             onPressed: () {
-              context.push('/collections/$collectionId/search');
+              setState(() {
+                if (_isSearching) {
+                  _isSearching = false;
+                  _searchController.clear();
+                  ref.read(itemFilterProvider.notifier).setSearchQuery('');
+                } else {
+                  _isSearching = true;
+                }
+              });
             },
           ),
         ],
@@ -52,7 +103,11 @@ class ItemsScreen extends ConsumerWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Icon(
-                      Icons.inventory_2_outlined,
+                      _isSearching ||
+                              filter.conditions.isNotEmpty ||
+                              filter.showOnlyFavorites
+                          ? Icons.search_off
+                          : Icons.inventory_2_outlined,
                       size: 80,
                       color: Theme.of(
                         context,
@@ -60,18 +115,34 @@ class ItemsScreen extends ConsumerWidget {
                     ),
                     const SizedBox(height: 16),
                     Text(
-                      'No items yet',
+                      items.isEmpty &&
+                              (_isSearching ||
+                                  filter.conditions.isNotEmpty ||
+                                  filter.showOnlyFavorites)
+                          ? 'No matches found'
+                          : 'No items yet',
                       style: Theme.of(context).textTheme.headlineSmall,
                     ),
                     const SizedBox(height: 8),
-                    const Text('Add your first item to get started'),
-                    const SizedBox(height: 24),
-                    FilledButton.icon(
-                      onPressed: () =>
-                          context.push('/collections/$collectionId/add-item'),
-                      icon: const Icon(Icons.add),
-                      label: const Text('Add Item'),
+                    Text(
+                      _isSearching ||
+                              filter.conditions.isNotEmpty ||
+                              filter.showOnlyFavorites
+                          ? 'Try adjusting your filters'
+                          : 'Add your first item to get started',
                     ),
+                    if (!_isSearching &&
+                        filter.conditions.isEmpty &&
+                        !filter.showOnlyFavorites) ...[
+                      const SizedBox(height: 24),
+                      FilledButton.icon(
+                        onPressed: () => context.push(
+                          '/collections/${widget.collectionId}/add-item',
+                        ),
+                        icon: const Icon(Icons.add),
+                        label: const Text('Add Item'),
+                      ),
+                    ],
                   ],
                 ),
               );
@@ -144,7 +215,9 @@ class ItemsScreen extends ConsumerWidget {
                 const SizedBox(height: 16),
                 ElevatedButton(
                   onPressed: () {
-                    ref.invalidate(itemsListProvider(collectionId));
+                    ref.invalidate(
+                      filteredItemsListProvider(widget.collectionId),
+                    );
                   },
                   child: const Text('Retry'),
                 ),
@@ -154,9 +227,18 @@ class ItemsScreen extends ConsumerWidget {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => context.push('/collections/$collectionId/add-item'),
+        onPressed: () =>
+            context.push('/collections/${widget.collectionId}/add-item'),
         child: const Icon(Icons.add),
       ),
+    );
+  }
+
+  void _showFilterSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (context) => const ItemFilterSheet(),
     );
   }
 
