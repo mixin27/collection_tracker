@@ -24,6 +24,7 @@ abstract class Item with _$Item {
     String? location,
     @Default(false) bool isFavorite,
     @Default(1) int quantity,
+    @Default(0) int sortOrder,
     @Default([]) List<String> tags,
     required DateTime createdAt,
     required DateTime updatedAt,

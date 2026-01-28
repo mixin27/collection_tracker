@@ -154,6 +154,21 @@ class ItemRepositoryImpl implements ItemRepository {
     }
   }
 
+  @override
+  Future<Either<AppException, void>> reorderItems(List<String> itemIds) async {
+    try {
+      await _dao.reorderItems(itemIds);
+      return const Right(null);
+    } catch (e, stack) {
+      return Left(
+        AppException.database(
+          message: 'Failed to reorder items',
+          stackTrace: stack,
+        ),
+      );
+    }
+  }
+
   Item _mapToEntity(ItemData data) {
     return Item(
       id: data.id,
@@ -179,6 +194,7 @@ class ItemRepositoryImpl implements ItemRepository {
       location: data.location,
       isFavorite: data.isFavorite,
       quantity: data.quantity,
+      sortOrder: data.sortOrder,
       tags: [], // Tags will be implemented later
       createdAt: data.createdAt,
       updatedAt: data.updatedAt,
@@ -205,6 +221,7 @@ class ItemRepositoryImpl implements ItemRepository {
       location: Value(entity.location),
       isFavorite: Value(entity.isFavorite),
       quantity: Value(entity.quantity),
+      sortOrder: Value(entity.sortOrder),
       createdAt: Value(entity.createdAt),
       updatedAt: Value(entity.updatedAt),
     );
