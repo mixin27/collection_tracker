@@ -5,7 +5,9 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:go_router/go_router.dart';
 
 import '../view_models/items_view_model.dart';
+import '../../../../core/providers/providers.dart';
 import '../widgets/item_card.dart';
+import '../widgets/item_grid_card.dart';
 
 class ItemsScreen extends ConsumerWidget {
   final String collectionId;
@@ -15,11 +17,22 @@ class ItemsScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final itemsAsync = ref.watch(itemsListProvider(collectionId));
+    final viewMode = ref.watch(itemsViewModeProvider);
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('Items'),
         actions: [
+          IconButton(
+            icon: Icon(
+              viewMode == ItemsViewMode.list
+                  ? Icons.grid_view
+                  : Icons.view_list,
+            ),
+            onPressed: () {
+              ref.read(itemsViewModeProvider.notifier).toggle();
+            },
+          ),
           IconButton(
             icon: const Icon(Icons.search),
             onPressed: () {
@@ -64,27 +77,57 @@ class ItemsScreen extends ConsumerWidget {
               );
             }
 
-            return ListView.builder(
-              key: const ValueKey('list'),
-              padding: const EdgeInsets.all(16),
-              itemCount: items.length,
-              itemBuilder: (context, index) {
-                final item = items[index];
-                return ItemCard(
-                      item: item,
-                      onTap: () => context.push('/items/${item.id}'),
-                      onDelete: () => _showDeleteDialog(context, ref, item),
-                    )
-                    .animate(delay: (index * 50).ms)
-                    .fadeIn(duration: 400.ms, curve: Curves.easeOut)
-                    .slideY(
-                      begin: 0.1,
-                      end: 0,
-                      duration: 400.ms,
-                      curve: Curves.easeOut,
-                    );
-              },
-            );
+            if (viewMode == ItemsViewMode.list) {
+              return ListView.builder(
+                key: const ValueKey('list'),
+                padding: const EdgeInsets.all(16),
+                itemCount: items.length,
+                itemBuilder: (context, index) {
+                  final item = items[index];
+                  return ItemCard(
+                        item: item,
+                        onTap: () => context.push('/items/${item.id}'),
+                        onDelete: () => _showDeleteDialog(context, ref, item),
+                      )
+                      .animate(delay: (index * 50).ms)
+                      .fadeIn(duration: 400.ms, curve: Curves.easeOut)
+                      .slideY(
+                        begin: 0.1,
+                        end: 0,
+                        duration: 400.ms,
+                        curve: Curves.easeOut,
+                      );
+                },
+              );
+            } else {
+              return GridView.builder(
+                key: const ValueKey('grid'),
+                padding: const EdgeInsets.all(16),
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  childAspectRatio: 0.75,
+                  crossAxisSpacing: 12,
+                  mainAxisSpacing: 12,
+                ),
+                itemCount: items.length,
+                itemBuilder: (context, index) {
+                  final item = items[index];
+                  return ItemGridCard(
+                        item: item,
+                        onTap: () => context.push('/items/${item.id}'),
+                        onDelete: () => _showDeleteDialog(context, ref, item),
+                      )
+                      .animate(delay: (index * 50).ms)
+                      .fadeIn(duration: 400.ms, curve: Curves.easeOut)
+                      .scale(
+                        begin: const Offset(0.9, 0.9),
+                        end: const Offset(1, 1),
+                        duration: 400.ms,
+                        curve: Curves.easeOut,
+                      );
+                },
+              );
+            }
           },
           loading: () => const Center(
             key: ValueKey('loading'),
