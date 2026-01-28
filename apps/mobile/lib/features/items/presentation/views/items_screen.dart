@@ -23,6 +23,7 @@ class ItemsScreen extends ConsumerStatefulWidget {
 class _ItemsScreenState extends ConsumerState<ItemsScreen> {
   final _searchController = TextEditingController();
   bool _isSearching = false;
+  List<Item>? _optimisticItems; // For smooth reordering without flashing
 
   @override
   void dispose() {
@@ -37,6 +38,39 @@ class _ItemsScreenState extends ConsumerState<ItemsScreen> {
     );
     final viewMode = ref.watch(itemsViewModeProvider);
     final filter = ref.watch(itemFilterProvider);
+
+    // Use optimistic items if available, otherwise use stream data
+    // Clear optimistic items when stream data matches the expected order
+    final displayItemsAsync = itemsAsync.when(
+      data: (streamItems) {
+        if (_optimisticItems != null) {
+          // Check if stream data matches our optimistic order
+          final idsMatch =
+              streamItems.length == _optimisticItems!.length &&
+              streamItems.asMap().entries.every((entry) {
+                final index = entry.key;
+                final streamItem = entry.value;
+                return streamItem.id == _optimisticItems![index].id;
+              });
+
+          if (idsMatch) {
+            // Stream data matches, clear optimistic state
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              if (mounted) {
+                setState(() {
+                  _optimisticItems = null;
+                });
+              }
+            });
+          }
+          // Keep showing optimistic items until stream matches
+          return AsyncValue.data(_optimisticItems!);
+        }
+        return AsyncValue.data(streamItems);
+      },
+      loading: () => itemsAsync,
+      error: (e, s) => itemsAsync,
+    );
 
     return Scaffold(
       appBar: AppBar(
@@ -94,7 +128,7 @@ class _ItemsScreenState extends ConsumerState<ItemsScreen> {
       ),
       body: AnimatedSwitcher(
         duration: 300.ms,
-        child: itemsAsync.when(
+        child: displayItemsAsync.when(
           data: (items) {
             if (items.isEmpty) {
               return Center(
@@ -156,7 +190,7 @@ class _ItemsScreenState extends ConsumerState<ItemsScreen> {
                   key: const ValueKey('list'),
                   padding: const EdgeInsets.all(16),
                   itemCount: items.length,
-                  onReorder: (oldIndex, newIndex) async {
+                  onReorder: (oldIndex, newIndex) {
                     if (oldIndex < newIndex) {
                       newIndex -= 1;
                     }
@@ -164,8 +198,14 @@ class _ItemsScreenState extends ConsumerState<ItemsScreen> {
                     final item = reorderedItems.removeAt(oldIndex);
                     reorderedItems.insert(newIndex, item);
 
+                    // Optimistically update UI immediately
+                    setState(() {
+                      _optimisticItems = reorderedItems;
+                    });
+
+                    // Persist to database in background
                     final itemIds = reorderedItems.map((e) => e.id).toList();
-                    await ref.read(reorderItemsProvider(itemIds).future);
+                    ref.read(reorderItemsProvider(itemIds).future);
                   },
                   itemBuilder: (context, index) {
                     final item = items[index];
