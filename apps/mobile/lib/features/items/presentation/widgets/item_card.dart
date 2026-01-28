@@ -31,14 +31,17 @@ class ItemCard extends StatelessWidget {
           child: Row(
             children: [
               // Cover Image
-              Container(
-                width: 60,
-                height: 80,
-                decoration: BoxDecoration(
-                  color: theme.colorScheme.surfaceContainerHighest,
-                  borderRadius: BorderRadius.circular(8),
+              Hero(
+                tag: 'item_${item.id}',
+                child: Container(
+                  width: 60,
+                  height: 80,
+                  decoration: BoxDecoration(
+                    color: theme.colorScheme.surfaceContainerHighest,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: _buildImage(theme),
                 ),
-                child: _buildImage(theme),
               ),
               const SizedBox(width: 12),
               // Content

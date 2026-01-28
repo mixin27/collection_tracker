@@ -52,47 +52,59 @@ class ItemDetailScreen extends ConsumerWidget {
             children: [
               // Cover Image
               if (item.coverImagePath != null)
-                SizedBox(
-                  height: 300,
-                  child: Image.file(
-                    File(item.coverImagePath!),
-                    fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) => Container(
-                      color: theme.colorScheme.surfaceContainerHighest,
-                      child: Icon(
-                        Icons.image_not_supported,
-                        size: 80,
-                        color: theme.colorScheme.onSurfaceVariant,
+                Hero(
+                  tag: 'item_${item.id}',
+                  child: SizedBox(
+                    height: 300,
+                    width: double.infinity,
+                    child: Image.file(
+                      File(item.coverImagePath!),
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) => Container(
+                        color: theme.colorScheme.surfaceContainerHighest,
+                        child: Icon(
+                          Icons.image_not_supported,
+                          size: 80,
+                          color: theme.colorScheme.onSurfaceVariant,
+                        ),
                       ),
                     ),
                   ),
                 )
               else if (item.coverImageUrl != null)
-                SizedBox(
-                  height: 300,
-                  child: CachedNetworkImage(
-                    imageUrl: item.coverImageUrl!,
-                    fit: BoxFit.cover,
-                    placeholder: (context, url) =>
-                        const Center(child: CircularProgressIndicator()),
-                    errorWidget: (context, url, error) => Container(
-                      color: theme.colorScheme.surfaceContainerHighest,
-                      child: Icon(
-                        Icons.image_not_supported,
-                        size: 80,
-                        color: theme.colorScheme.onSurfaceVariant,
+                Hero(
+                  tag: 'item_${item.id}',
+                  child: SizedBox(
+                    height: 300,
+                    width: double.infinity,
+                    child: CachedNetworkImage(
+                      imageUrl: item.coverImageUrl!,
+                      fit: BoxFit.cover,
+                      placeholder: (context, url) =>
+                          const Center(child: CircularProgressIndicator()),
+                      errorWidget: (context, url, error) => Container(
+                        color: theme.colorScheme.surfaceContainerHighest,
+                        child: Icon(
+                          Icons.image_not_supported,
+                          size: 80,
+                          color: theme.colorScheme.onSurfaceVariant,
+                        ),
                       ),
                     ),
                   ),
                 )
               else
-                Container(
-                  height: 200,
-                  color: theme.colorScheme.surfaceContainerHighest,
-                  child: Icon(
-                    Icons.image_not_supported,
-                    size: 80,
-                    color: theme.colorScheme.onSurfaceVariant,
+                Hero(
+                  tag: 'item_${item.id}',
+                  child: Container(
+                    height: 200,
+                    width: double.infinity,
+                    color: theme.colorScheme.surfaceContainerHighest,
+                    child: Icon(
+                      Icons.image_not_supported,
+                      size: 80,
+                      color: theme.colorScheme.onSurfaceVariant,
+                    ),
                   ),
                 ),
 

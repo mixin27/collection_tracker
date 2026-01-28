@@ -1,6 +1,7 @@
 import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:go_router/go_router.dart';
 
 import '../view_models/items_view_model.dart';
@@ -27,68 +28,85 @@ class ItemsScreen extends ConsumerWidget {
           ),
         ],
       ),
-      body: itemsAsync.when(
-        data: (items) {
-          if (items.isEmpty) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.inventory_2_outlined,
-                    size: 80,
-                    color: Theme.of(
-                      context,
-                    ).colorScheme.primary.withValues(alpha: 0.3),
-                  ),
-                  const SizedBox(height: 16),
-                  Text(
-                    'No items yet',
-                    style: Theme.of(context).textTheme.headlineSmall,
-                  ),
-                  const SizedBox(height: 8),
-                  const Text('Add your first item to get started'),
-                  const SizedBox(height: 24),
-                  FilledButton.icon(
-                    onPressed: () =>
-                        context.push('/collections/$collectionId/add-item'),
-                    icon: const Icon(Icons.add),
-                    label: const Text('Add Item'),
-                  ),
-                ],
-              ),
-            );
-          }
-
-          return ListView.builder(
-            padding: const EdgeInsets.all(16),
-            itemCount: items.length,
-            itemBuilder: (context, index) {
-              final item = items[index];
-              return ItemCard(
-                item: item,
-                onTap: () => context.push('/items/${item.id}'),
-                onDelete: () => _showDeleteDialog(context, ref, item),
+      body: AnimatedSwitcher(
+        duration: 300.ms,
+        child: itemsAsync.when(
+          data: (items) {
+            if (items.isEmpty) {
+              return Center(
+                key: const ValueKey('empty'),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.inventory_2_outlined,
+                      size: 80,
+                      color: Theme.of(
+                        context,
+                      ).colorScheme.primary.withValues(alpha: 0.3),
+                    ),
+                    const SizedBox(height: 16),
+                    Text(
+                      'No items yet',
+                      style: Theme.of(context).textTheme.headlineSmall,
+                    ),
+                    const SizedBox(height: 8),
+                    const Text('Add your first item to get started'),
+                    const SizedBox(height: 24),
+                    FilledButton.icon(
+                      onPressed: () =>
+                          context.push('/collections/$collectionId/add-item'),
+                      icon: const Icon(Icons.add),
+                      label: const Text('Add Item'),
+                    ),
+                  ],
+                ),
               );
-            },
-          );
-        },
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (error, stack) => Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Icon(Icons.error_outline, size: 64, color: Colors.red),
-              const SizedBox(height: 16),
-              Text('Error loading items: $error'),
-              const SizedBox(height: 16),
-              ElevatedButton(
-                onPressed: () {
-                  ref.invalidate(itemsListProvider(collectionId));
-                },
-                child: const Text('Retry'),
-              ),
-            ],
+            }
+
+            return ListView.builder(
+              key: const ValueKey('list'),
+              padding: const EdgeInsets.all(16),
+              itemCount: items.length,
+              itemBuilder: (context, index) {
+                final item = items[index];
+                return ItemCard(
+                      item: item,
+                      onTap: () => context.push('/items/${item.id}'),
+                      onDelete: () => _showDeleteDialog(context, ref, item),
+                    )
+                    .animate(delay: (index * 50).ms)
+                    .fadeIn(duration: 400.ms, curve: Curves.easeOut)
+                    .slideY(
+                      begin: 0.1,
+                      end: 0,
+                      duration: 400.ms,
+                      curve: Curves.easeOut,
+                    );
+              },
+            );
+          },
+          loading: () => const Center(
+            key: ValueKey('loading'),
+            child: CircularProgressIndicator(),
+          ),
+          error: (error, stack) => Center(
+            key: const ValueKey('error'),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(Icons.error_outline, size: 64, color: Colors.red),
+                const SizedBox(height: 16),
+                Text('Error loading items: $error'),
+                const SizedBox(height: 16),
+                ElevatedButton(
+                  onPressed: () {
+                    ref.invalidate(itemsListProvider(collectionId));
+                  },
+                  child: const Text('Retry'),
+                ),
+              ],
+            ),
           ),
         ),
       ),

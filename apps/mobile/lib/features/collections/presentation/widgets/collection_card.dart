@@ -28,17 +28,20 @@ class CollectionCard extends StatelessWidget {
           child: Row(
             children: [
               // Icon
-              Container(
-                width: 56,
-                height: 56,
-                decoration: BoxDecoration(
-                  color: colorScheme.primaryContainer,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Icon(
-                  _getIconForType(collection.type),
-                  color: colorScheme.onPrimaryContainer,
-                  size: 28,
+              Hero(
+                tag: 'collection_${collection.id}',
+                child: Container(
+                  width: 56,
+                  height: 56,
+                  decoration: BoxDecoration(
+                    color: colorScheme.primaryContainer,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Icon(
+                    _getIconForType(collection.type),
+                    color: colorScheme.onPrimaryContainer,
+                    size: 28,
+                  ),
                 ),
               ),
               const SizedBox(width: 16),
