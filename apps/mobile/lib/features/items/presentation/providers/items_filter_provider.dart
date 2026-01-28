@@ -5,6 +5,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'items_filter_provider.g.dart';
 
 enum ItemSortBy {
+  custom('Custom'),
   title('Title'),
   createdAt('Date Created'),
   purchaseDate('Date Purchased'),
@@ -24,8 +25,8 @@ class ItemFilterState {
 
   const ItemFilterState({
     this.searchQuery = '',
-    this.sortBy = ItemSortBy.createdAt,
-    this.sortAscending = false,
+    this.sortBy = ItemSortBy.custom,
+    this.sortAscending = true,
     this.conditions = const {},
     this.showOnlyFavorites = false,
   });
@@ -118,6 +119,7 @@ Stream<List<Item>> filteredItemsList(Ref ref, String collectionId) async* {
     // Sorting
     filtered.sort((a, b) {
       final comparison = switch (filter.sortBy) {
+        ItemSortBy.custom => a.sortOrder.compareTo(b.sortOrder),
         ItemSortBy.title => a.title.compareTo(b.title),
         ItemSortBy.createdAt => a.createdAt.compareTo(b.createdAt),
         ItemSortBy.purchaseDate => (a.purchaseDate ?? DateTime(1900)).compareTo(

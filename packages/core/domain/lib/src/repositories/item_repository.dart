@@ -21,4 +21,6 @@ abstract class ItemRepository {
     required String collectionId,
     required String query,
   });
+
+  Future<Either<AppException, void>> reorderItems(List<String> itemIds);
 }

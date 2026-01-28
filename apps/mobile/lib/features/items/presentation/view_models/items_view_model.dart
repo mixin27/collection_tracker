@@ -80,3 +80,11 @@ Stream<Item?> itemDetail(Ref ref, String itemId) {
   final repository = ref.watch(itemRepositoryProvider);
   return repository.watchItemById(itemId);
 }
+
+@riverpod
+Future<void> reorderItems(Ref ref, List<String> itemIds) async {
+  final repository = ref.read(itemRepositoryProvider);
+  final result = await repository.reorderItems(itemIds);
+
+  result.fold((exception) => throw exception, (_) => null);
+}

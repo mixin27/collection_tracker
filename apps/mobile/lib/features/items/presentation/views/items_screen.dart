@@ -149,27 +149,69 @@ class _ItemsScreenState extends ConsumerState<ItemsScreen> {
             }
 
             if (viewMode == ItemsViewMode.list) {
-              return ListView.builder(
-                key: const ValueKey('list'),
-                padding: const EdgeInsets.all(16),
-                itemCount: items.length,
-                itemBuilder: (context, index) {
-                  final item = items[index];
-                  return ItemCard(
-                        item: item,
-                        onTap: () => context.push('/items/${item.id}'),
-                        onDelete: () => _showDeleteDialog(context, ref, item),
-                      )
-                      .animate(delay: (index * 50).ms)
-                      .fadeIn(duration: 400.ms, curve: Curves.easeOut)
-                      .slideY(
-                        begin: 0.1,
-                        end: 0,
-                        duration: 400.ms,
-                        curve: Curves.easeOut,
-                      );
-                },
-              );
+              final canReorder = filter.sortBy == ItemSortBy.custom;
+
+              if (canReorder) {
+                return ReorderableListView.builder(
+                  key: const ValueKey('list'),
+                  padding: const EdgeInsets.all(16),
+                  itemCount: items.length,
+                  onReorder: (oldIndex, newIndex) async {
+                    if (oldIndex < newIndex) {
+                      newIndex -= 1;
+                    }
+                    final reorderedItems = List<Item>.from(items);
+                    final item = reorderedItems.removeAt(oldIndex);
+                    reorderedItems.insert(newIndex, item);
+
+                    final itemIds = reorderedItems.map((e) => e.id).toList();
+                    await ref.read(reorderItemsProvider(itemIds).future);
+                  },
+                  itemBuilder: (context, index) {
+                    final item = items[index];
+                    return Container(
+                      key: ValueKey(item.id),
+                      child:
+                          ItemCard(
+                                item: item,
+                                onTap: () => context.push('/items/${item.id}'),
+                                onDelete: () =>
+                                    _showDeleteDialog(context, ref, item),
+                              )
+                              .animate(delay: (index * 50).ms)
+                              .fadeIn(duration: 400.ms, curve: Curves.easeOut)
+                              .slideY(
+                                begin: 0.1,
+                                end: 0,
+                                duration: 400.ms,
+                                curve: Curves.easeOut,
+                              ),
+                    );
+                  },
+                );
+              } else {
+                return ListView.builder(
+                  key: const ValueKey('list'),
+                  padding: const EdgeInsets.all(16),
+                  itemCount: items.length,
+                  itemBuilder: (context, index) {
+                    final item = items[index];
+                    return ItemCard(
+                          item: item,
+                          onTap: () => context.push('/items/${item.id}'),
+                          onDelete: () => _showDeleteDialog(context, ref, item),
+                        )
+                        .animate(delay: (index * 50).ms)
+                        .fadeIn(duration: 400.ms, curve: Curves.easeOut)
+                        .slideY(
+                          begin: 0.1,
+                          end: 0,
+                          duration: 400.ms,
+                          curve: Curves.easeOut,
+                        );
+                  },
+                );
+              }
             } else {
               return GridView.builder(
                 key: const ValueKey('grid'),

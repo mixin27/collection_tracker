@@ -57,6 +57,8 @@ void main() async {
   // Initialize
   await AnalyticsService.initialize(config);
 
+  Logger.info("All services are initialized!");
+
   runApp(
     ProviderScope(
       overrides: [
