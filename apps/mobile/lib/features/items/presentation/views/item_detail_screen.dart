@@ -9,8 +9,9 @@ import '../view_models/items_view_model.dart';
 
 class ItemDetailScreen extends ConsumerWidget {
   final String itemId;
+  final String? heroTag;
 
-  const ItemDetailScreen({required this.itemId, super.key});
+  const ItemDetailScreen({required this.itemId, this.heroTag, super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -32,6 +33,7 @@ class ItemDetailScreen extends ConsumerWidget {
             title: Text(item.title),
             actions: [
               IconButton(
+                tooltip: 'Add to favorites',
                 icon: Icon(
                   item.isFavorite ? Icons.favorite : Icons.favorite_border,
                   color: item.isFavorite ? Colors.red : null,
@@ -41,6 +43,7 @@ class ItemDetailScreen extends ConsumerWidget {
                 },
               ),
               IconButton(
+                tooltip: 'Add to wishlist',
                 icon: Icon(
                   item.isWishlist ? Icons.bookmark : Icons.bookmark_border,
                   color: item.isWishlist ? theme.colorScheme.primary : null,
@@ -51,6 +54,7 @@ class ItemDetailScreen extends ConsumerWidget {
               ),
               IconButton(
                 icon: const Icon(Icons.edit),
+                tooltip: 'Edit item',
                 onPressed: () {
                   context.push('/items/${item.id}/edit');
                 },
@@ -62,7 +66,7 @@ class ItemDetailScreen extends ConsumerWidget {
               // Cover Image
               if (item.coverImagePath != null)
                 Hero(
-                  tag: 'item_${item.id}',
+                  tag: heroTag ?? 'item_${item.id}',
                   child: SizedBox(
                     height: 300,
                     width: double.infinity,
@@ -82,7 +86,7 @@ class ItemDetailScreen extends ConsumerWidget {
                 )
               else if (item.coverImageUrl != null)
                 Hero(
-                  tag: 'item_${item.id}',
+                  tag: heroTag ?? 'item_${item.id}',
                   child: SizedBox(
                     height: 300,
                     width: double.infinity,
@@ -104,7 +108,7 @@ class ItemDetailScreen extends ConsumerWidget {
                 )
               else
                 Hero(
-                  tag: 'item_${item.id}',
+                  tag: heroTag ?? 'item_${item.id}',
                   child: Container(
                     height: 200,
                     width: double.infinity,

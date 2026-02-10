@@ -10,6 +10,7 @@ import '../providers/items_filter_provider.dart';
 import '../widgets/item_card.dart';
 import '../widgets/item_grid_card.dart';
 import '../widgets/item_filter_sheet.dart';
+import '../../../collections/presentation/widgets/collection_details_sheet.dart';
 
 class ItemsScreen extends ConsumerStatefulWidget {
   final String collectionId;
@@ -89,6 +90,10 @@ class _ItemsScreenState extends ConsumerState<ItemsScreen> {
             : const Text('Items'),
         actions: [
           if (!_isSearching) ...[
+            IconButton(
+              icon: const Icon(Icons.info_outline),
+              onPressed: () => _showCollectionDetails(context),
+            ),
             IconButton(
               icon: Icon(
                 viewMode == ItemsViewMode.list
@@ -209,12 +214,16 @@ class _ItemsScreenState extends ConsumerState<ItemsScreen> {
                   },
                   itemBuilder: (context, index) {
                     final item = items[index];
+                    final heroTag = 'collection_items_${item.id}';
                     return Container(
                       key: ValueKey(item.id),
                       child:
                           ItemCard(
                                 item: item,
-                                onTap: () => context.push('/items/${item.id}'),
+                                heroTag: heroTag,
+                                onTap: () => context.push(
+                                  '/items/${item.id}?heroTag=$heroTag',
+                                ),
                                 onDelete: () =>
                                     _showDeleteDialog(context, ref, item),
                               )
@@ -236,9 +245,13 @@ class _ItemsScreenState extends ConsumerState<ItemsScreen> {
                   itemCount: items.length,
                   itemBuilder: (context, index) {
                     final item = items[index];
+                    final heroTag = 'collection_items_${item.id}';
                     return ItemCard(
                           item: item,
-                          onTap: () => context.push('/items/${item.id}'),
+                          heroTag: heroTag,
+                          onTap: () => context.push(
+                            '/items/${item.id}?heroTag=$heroTag',
+                          ),
                           onDelete: () => _showDeleteDialog(context, ref, item),
                         )
                         .animate(delay: (index * 50).ms)
@@ -265,9 +278,12 @@ class _ItemsScreenState extends ConsumerState<ItemsScreen> {
                 itemCount: items.length,
                 itemBuilder: (context, index) {
                   final item = items[index];
+                  final heroTag = 'collection_items_${item.id}';
                   return ItemGridCard(
                         item: item,
-                        onTap: () => context.push('/items/${item.id}'),
+                        heroTag: heroTag,
+                        onTap: () =>
+                            context.push('/items/${item.id}?heroTag=$heroTag'),
                         onDelete: () => _showDeleteDialog(context, ref, item),
                       )
                       .animate(delay: (index * 50).ms)
@@ -321,6 +337,16 @@ class _ItemsScreenState extends ConsumerState<ItemsScreen> {
       context: context,
       isScrollControlled: true,
       builder: (context) => const ItemFilterSheet(),
+    );
+  }
+
+  void _showCollectionDetails(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) =>
+          CollectionDetailsSheet(collectionId: widget.collectionId),
     );
   }
 

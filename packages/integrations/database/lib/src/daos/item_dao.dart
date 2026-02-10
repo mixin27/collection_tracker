@@ -98,6 +98,22 @@ class ItemDao extends DatabaseAccessor<AppDatabase> with _$ItemDaoMixin {
         .get();
   }
 
+  // Watch all favorite items across collections
+  Stream<List<ItemData>> watchAllFavoriteItems() {
+    return (select(items)
+          ..where((tbl) => tbl.isFavorite.equals(true))
+          ..orderBy([(tbl) => OrderingTerm.desc(tbl.createdAt)]))
+        .watch();
+  }
+
+  // Watch all wishlist items across collections
+  Stream<List<ItemData>> watchAllWishlistItems() {
+    return (select(items)
+          ..where((tbl) => tbl.isWishlist.equals(true))
+          ..orderBy([(tbl) => OrderingTerm.desc(tbl.createdAt)]))
+        .watch();
+  }
+
   // Insert item
   Future<int> insertItem(ItemsCompanion item) {
     return transaction(() async {
