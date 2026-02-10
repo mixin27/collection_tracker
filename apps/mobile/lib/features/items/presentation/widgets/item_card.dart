@@ -67,6 +67,14 @@ class ItemCard extends StatelessWidget {
                             size: 20,
                             color: Colors.red[400],
                           ),
+                        if (item.isWishlist) ...[
+                          const SizedBox(width: 4),
+                          Icon(
+                            Icons.bookmark,
+                            size: 20,
+                            color: theme.colorScheme.primary,
+                          ),
+                        ],
                       ],
                     ),
                     if (item.description != null &&

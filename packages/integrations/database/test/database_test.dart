@@ -283,5 +283,53 @@ void main() {
       final items = await db.itemDao.getItemsByCollection(collectionId);
       expect(items, isEmpty);
     });
+
+    test('toggle wishlist', () async {
+      final now = DateTime.now();
+      await db.itemDao.insertItem(
+        ItemsCompanion.insert(
+          id: 'item-wish',
+          collectionId: collectionId,
+          title: 'Wish Item',
+          createdAt: now,
+          updatedAt: now,
+        ),
+      );
+
+      await db.itemDao.toggleWishlist('item-wish', true);
+      var item = await db.itemDao.getItemById('item-wish');
+      expect(item?.isWishlist, true);
+
+      await db.itemDao.toggleWishlist('item-wish', false);
+      item = await db.itemDao.getItemById('item-wish');
+      expect(item?.isWishlist, false);
+    });
+
+    test('get wishlist items', () async {
+      final now = DateTime.now();
+      await db.itemDao.insertItem(
+        ItemsCompanion.insert(
+          id: 'item-normal-2',
+          collectionId: collectionId,
+          title: 'Normal',
+          createdAt: now,
+          updatedAt: now,
+        ),
+      );
+      await db.itemDao.insertItem(
+        ItemsCompanion.insert(
+          id: 'item-wish-2',
+          collectionId: collectionId,
+          title: 'Wish',
+          createdAt: now,
+          updatedAt: now,
+          isWishlist: const Value(true),
+        ),
+      );
+
+      final wishes = await db.itemDao.getWishlistItems(collectionId);
+      expect(wishes.length, 1);
+      expect(wishes.first.title, 'Wish');
+    });
   });
 }

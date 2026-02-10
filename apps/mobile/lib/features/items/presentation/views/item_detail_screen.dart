@@ -37,7 +37,16 @@ class ItemDetailScreen extends ConsumerWidget {
                   color: item.isFavorite ? Colors.red : null,
                 ),
                 onPressed: () {
-                  // todo(mixin27): Toggle favorite
+                  ref.read(toggleFavoriteProvider(item));
+                },
+              ),
+              IconButton(
+                icon: Icon(
+                  item.isWishlist ? Icons.bookmark : Icons.bookmark_border,
+                  color: item.isWishlist ? theme.colorScheme.primary : null,
+                ),
+                onPressed: () {
+                  ref.read(toggleWishlistProvider(item));
                 },
               ),
               IconButton(

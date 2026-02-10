@@ -64,6 +64,20 @@ Future<void> updateItem(Ref ref, Item item) async {
 }
 
 @riverpod
+Future<void> toggleFavorite(Ref ref, Item item) async {
+  await ref.read(
+    updateItemProvider(item.copyWith(isFavorite: !item.isFavorite)).future,
+  );
+}
+
+@riverpod
+Future<void> toggleWishlist(Ref ref, Item item) async {
+  await ref.read(
+    updateItemProvider(item.copyWith(isWishlist: !item.isWishlist)).future,
+  );
+}
+
+@riverpod
 Future<void> deleteItem(Ref ref, String id) async {
   final repository = ref.read(itemRepositoryProvider);
   final result = await repository.deleteItem(id);
