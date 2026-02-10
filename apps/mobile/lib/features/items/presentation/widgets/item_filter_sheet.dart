@@ -83,6 +83,12 @@ class ItemFilterSheet extends ConsumerWidget {
                 onChanged: (_) => notifier.toggleFavorites(),
                 contentPadding: EdgeInsets.zero,
               ),
+              SwitchListTile(
+                title: const Text('Show Wishlist Only'),
+                value: filter.showOnlyWishlist,
+                onChanged: (_) => notifier.toggleWishlist(),
+                contentPadding: EdgeInsets.zero,
+              ),
               const SizedBox(height: 24),
 
               // Conditions Section

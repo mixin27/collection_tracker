@@ -9,11 +9,13 @@ class ItemCard extends StatelessWidget {
   final Item item;
   final VoidCallback onTap;
   final VoidCallback onDelete;
+  final String? heroTag;
 
   const ItemCard({
     required this.item,
     required this.onTap,
     required this.onDelete,
+    this.heroTag,
     super.key,
   });
 
@@ -32,7 +34,7 @@ class ItemCard extends StatelessWidget {
             children: [
               // Cover Image
               Hero(
-                tag: 'item_${item.id}',
+                tag: heroTag ?? 'item_${item.id}',
                 child: Container(
                   width: 60,
                   height: 80,
@@ -67,6 +69,14 @@ class ItemCard extends StatelessWidget {
                             size: 20,
                             color: Colors.red[400],
                           ),
+                        if (item.isWishlist) ...[
+                          const SizedBox(width: 4),
+                          Icon(
+                            Icons.bookmark,
+                            size: 20,
+                            color: theme.colorScheme.primary,
+                          ),
+                        ],
                       ],
                     ),
                     if (item.description != null &&

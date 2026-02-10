@@ -86,6 +86,34 @@ class ItemDao extends DatabaseAccessor<AppDatabase> with _$ItemDaoMixin {
         .get();
   }
 
+  // Get wishlist items
+  Future<List<ItemData>> getWishlistItems(String collectionId) {
+    return (select(items)
+          ..where(
+            (tbl) =>
+                tbl.collectionId.equals(collectionId) &
+                tbl.isWishlist.equals(true),
+          )
+          ..orderBy([(tbl) => OrderingTerm.desc(tbl.createdAt)]))
+        .get();
+  }
+
+  // Watch all favorite items across collections
+  Stream<List<ItemData>> watchAllFavoriteItems() {
+    return (select(items)
+          ..where((tbl) => tbl.isFavorite.equals(true))
+          ..orderBy([(tbl) => OrderingTerm.desc(tbl.createdAt)]))
+        .watch();
+  }
+
+  // Watch all wishlist items across collections
+  Stream<List<ItemData>> watchAllWishlistItems() {
+    return (select(items)
+          ..where((tbl) => tbl.isWishlist.equals(true))
+          ..orderBy([(tbl) => OrderingTerm.desc(tbl.createdAt)]))
+        .watch();
+  }
+
   // Insert item
   Future<int> insertItem(ItemsCompanion item) {
     return transaction(() async {
@@ -149,8 +177,6 @@ class ItemDao extends DatabaseAccessor<AppDatabase> with _$ItemDaoMixin {
     });
   }
 
-  // Toggle favorite
-  // Toggle favorite
   Future<void> reorderItems(List<String> itemIds) {
     return transaction(() async {
       for (var i = 0; i < itemIds.length; i++) {
@@ -161,10 +187,20 @@ class ItemDao extends DatabaseAccessor<AppDatabase> with _$ItemDaoMixin {
     });
   }
 
+  // Toggle favorite
   Future<void> toggleFavorite(String id, bool isFavorite) async {
     await (update(items)..where((tbl) => tbl.id.equals(id))).write(
       ItemsCompanion(
         isFavorite: Value(isFavorite),
+        updatedAt: Value(DateTime.now()),
+      ),
+    );
+  }
+
+  Future<void> toggleWishlist(String id, bool isWishlist) async {
+    await (update(items)..where((tbl) => tbl.id.equals(id))).write(
+      ItemsCompanion(
+        isWishlist: Value(isWishlist),
         updatedAt: Value(DateTime.now()),
       ),
     );

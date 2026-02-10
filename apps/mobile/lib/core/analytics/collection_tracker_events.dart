@@ -13,7 +13,7 @@ class CollectionEvents {
       category: 'collection',
       properties: {
         'collection_type': collectionType,
-        if (collectionName != null) 'collection_name': collectionName,
+        'collection_name': ?collectionName,
         ...?properties,
       },
     );
@@ -32,7 +32,7 @@ class CollectionEvents {
       properties: {
         'collection_type': collectionType,
         'source': source,
-        if (metadataFound != null) 'metadata_found': metadataFound,
+        'metadata_found': ?metadataFound,
         ...?properties,
       },
     );
@@ -49,7 +49,7 @@ class CollectionEvents {
       category: 'collection',
       properties: {
         'collection_type': collectionType,
-        if (successful != null) 'successful': successful,
+        'successful': ?successful,
         ...?properties,
       },
     );

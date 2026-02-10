@@ -133,6 +133,20 @@ class ItemRepositoryImpl implements ItemRepository {
   }
 
   @override
+  Stream<List<Item>> watchAllFavoriteItems() {
+    return _dao.watchAllFavoriteItems().map(
+      (data) => data.map(_mapToEntity).toList(),
+    );
+  }
+
+  @override
+  Stream<List<Item>> watchAllWishlistItems() {
+    return _dao.watchAllWishlistItems().map(
+      (data) => data.map(_mapToEntity).toList(),
+    );
+  }
+
+  @override
   Future<Either<AppException, List<Item>>> searchItems({
     required String collectionId,
     required String query,
@@ -193,6 +207,7 @@ class ItemRepositoryImpl implements ItemRepository {
       currentValue: data.currentValue,
       location: data.location,
       isFavorite: data.isFavorite,
+      isWishlist: data.isWishlist,
       quantity: data.quantity,
       sortOrder: data.sortOrder,
       tags: [], // Tags will be implemented later
@@ -220,6 +235,7 @@ class ItemRepositoryImpl implements ItemRepository {
       currentValue: Value(entity.currentValue),
       location: Value(entity.location),
       isFavorite: Value(entity.isFavorite),
+      isWishlist: Value(entity.isWishlist),
       quantity: Value(entity.quantity),
       sortOrder: Value(entity.sortOrder),
       createdAt: Value(entity.createdAt),

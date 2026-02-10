@@ -8,11 +8,13 @@ class ItemGridCard extends StatelessWidget {
   final Item item;
   final VoidCallback onTap;
   final VoidCallback onDelete;
+  final String? heroTag;
 
   const ItemGridCard({
     required this.item,
     required this.onTap,
     required this.onDelete,
+    this.heroTag,
     super.key,
   });
 
@@ -32,7 +34,7 @@ class ItemGridCard extends StatelessWidget {
               children: [
                 Expanded(
                   child: Hero(
-                    tag: 'item_${item.id}',
+                    tag: heroTag ?? 'item_${item.id}',
                     child: _buildImage(theme),
                   ),
                 ),

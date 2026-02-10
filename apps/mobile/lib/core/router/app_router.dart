@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../../features/collections/presentation/views/collection_detail_screen.dart';
 import '../../features/collections/presentation/views/collections_screen.dart';
 import '../../features/collections/presentation/views/create_collection_screen.dart';
 import '../../features/collections/presentation/views/edit_collection_screen.dart';
@@ -19,14 +18,18 @@ import '../../features/statistics/presentation/views/statistics_screen.dart';
 import 'app_shell.dart';
 import 'package:collection_tracker/core/observers/analytics_observer.dart';
 import 'routes.dart';
+import '../../features/items/presentation/views/global_items_screen.dart';
 
 part 'app_router.g.dart';
+
+final _rootNavigatorKey = GlobalKey<NavigatorState>();
 
 @riverpod
 GoRouter appRouter(Ref ref) {
   final onboardingComplete = ref.watch(onboardingCompleteProvider);
 
   return GoRouter(
+    navigatorKey: _rootNavigatorKey,
     observers: [AnalyticsObserver()],
     initialLocation: onboardingComplete
         ? Routes.collections
@@ -52,35 +55,30 @@ GoRouter appRouter(Ref ref) {
                   GoRoute(
                     path: 'create',
                     name: 'create-collection',
+                    parentNavigatorKey: _rootNavigatorKey,
                     builder: (context, state) => const CreateCollectionScreen(),
                   ),
                   GoRoute(
                     path: ':id',
-                    name: 'collection-detail',
+                    name: 'collection-items',
                     builder: (context, state) {
                       final id = state.pathParameters['id']!;
-                      return CollectionDetailScreen(collectionId: id);
+                      return ItemsScreen(collectionId: id);
                     },
                     routes: [
                       GoRoute(
                         path: 'edit',
                         name: 'edit-collection',
+                        parentNavigatorKey: _rootNavigatorKey,
                         builder: (context, state) {
                           final id = state.pathParameters['id']!;
                           return EditCollectionScreen(collectionId: id);
                         },
                       ),
                       GoRoute(
-                        path: 'items',
-                        name: 'items',
-                        builder: (context, state) {
-                          final id = state.pathParameters['id']!;
-                          return ItemsScreen(collectionId: id);
-                        },
-                      ),
-                      GoRoute(
                         path: 'search',
                         name: 'search',
+                        parentNavigatorKey: _rootNavigatorKey,
                         builder: (context, state) {
                           final id = state.pathParameters['id']!;
                           return SearchScreen(collectionId: id);
@@ -89,6 +87,7 @@ GoRouter appRouter(Ref ref) {
                       GoRoute(
                         path: 'add-item',
                         name: 'add-item',
+                        parentNavigatorKey: _rootNavigatorKey,
                         builder: (context, state) {
                           final id = state.pathParameters['id']!;
                           return AddItemScreen(collectionId: id);
@@ -97,6 +96,26 @@ GoRouter appRouter(Ref ref) {
                     ],
                   ),
                 ],
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: '/favorites',
+                name: 'favorites',
+                builder: (_, _) =>
+                    const GlobalItemsScreen(type: GlobalItemsType.favorites),
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: '/wishlist',
+                name: 'wishlist',
+                builder: (_, _) =>
+                    const GlobalItemsScreen(type: GlobalItemsType.wishlist),
               ),
             ],
           ),
@@ -117,7 +136,8 @@ GoRouter appRouter(Ref ref) {
         name: 'item-detail',
         builder: (context, state) {
           final id = state.pathParameters['id']!;
-          return ItemDetailScreen(itemId: id);
+          final heroTag = state.uri.queryParameters['heroTag'];
+          return ItemDetailScreen(itemId: id, heroTag: heroTag);
         },
         routes: [
           GoRoute(

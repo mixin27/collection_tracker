@@ -23,6 +23,7 @@ abstract class Item with _$Item {
     double? currentValue,
     String? location,
     @Default(false) bool isFavorite,
+    @Default(false) bool isWishlist,
     @Default(1) int quantity,
     @Default(0) int sortOrder,
     @Default([]) List<String> tags,

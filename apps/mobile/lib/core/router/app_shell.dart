@@ -57,9 +57,19 @@ class ScaffoldWithNavigationBar extends StatelessWidget {
         selectedIndex: currentIndex,
         destinations: const [
           NavigationDestination(
-            icon: Icon(Icons.calendar_today_outlined),
-            selectedIcon: Icon(Icons.calendar_today),
+            icon: Icon(Icons.collections_outlined),
+            selectedIcon: Icon(Icons.collections),
             label: 'Home',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.favorite_border),
+            selectedIcon: Icon(Icons.favorite),
+            label: 'Favorites',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.bookmark_border),
+            selectedIcon: Icon(Icons.bookmark),
+            label: 'Wishlist',
           ),
           NavigationDestination(
             icon: Icon(Icons.settings_outlined),
@@ -138,9 +148,19 @@ class ScaffoldWithNavigationRail extends StatelessWidget {
             ),
             destinations: const <NavigationRailDestination>[
               NavigationRailDestination(
-                icon: Icon(Icons.calendar_today_outlined),
-                selectedIcon: Icon(Icons.calendar_today),
+                icon: Icon(Icons.collections_outlined),
+                selectedIcon: Icon(Icons.collections),
                 label: Text('Home'),
+              ),
+              NavigationRailDestination(
+                icon: Icon(Icons.favorite_border),
+                selectedIcon: Icon(Icons.favorite),
+                label: Text('Favorites'),
+              ),
+              NavigationRailDestination(
+                icon: Icon(Icons.bookmark_border),
+                selectedIcon: Icon(Icons.bookmark),
+                label: Text('Wishlist'),
               ),
               NavigationRailDestination(
                 icon: Icon(Icons.settings_outlined),

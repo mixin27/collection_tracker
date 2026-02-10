@@ -22,6 +22,7 @@ class ItemFilterState {
   final bool sortAscending;
   final Set<ItemCondition> conditions;
   final bool showOnlyFavorites;
+  final bool showOnlyWishlist;
 
   const ItemFilterState({
     this.searchQuery = '',
@@ -29,6 +30,7 @@ class ItemFilterState {
     this.sortAscending = true,
     this.conditions = const {},
     this.showOnlyFavorites = false,
+    this.showOnlyWishlist = false,
   });
 
   ItemFilterState copyWith({
@@ -37,6 +39,7 @@ class ItemFilterState {
     bool? sortAscending,
     Set<ItemCondition>? conditions,
     bool? showOnlyFavorites,
+    bool? showOnlyWishlist,
   }) {
     return ItemFilterState(
       searchQuery: searchQuery ?? this.searchQuery,
@@ -44,6 +47,7 @@ class ItemFilterState {
       sortAscending: sortAscending ?? this.sortAscending,
       conditions: conditions ?? this.conditions,
       showOnlyFavorites: showOnlyFavorites ?? this.showOnlyFavorites,
+      showOnlyWishlist: showOnlyWishlist ?? this.showOnlyWishlist,
     );
   }
 }
@@ -81,6 +85,10 @@ class ItemFilter extends _$ItemFilter {
     state = state.copyWith(showOnlyFavorites: !state.showOnlyFavorites);
   }
 
+  void toggleWishlist() {
+    state = state.copyWith(showOnlyWishlist: !state.showOnlyWishlist);
+  }
+
   void reset() {
     state = const ItemFilterState();
   }
@@ -106,6 +114,11 @@ Stream<List<Item>> filteredItemsList(Ref ref, String collectionId) async* {
     // Favorites
     if (filter.showOnlyFavorites) {
       filtered = filtered.where((item) => item.isFavorite).toList();
+    }
+
+    // Wishlist
+    if (filter.showOnlyWishlist) {
+      filtered = filtered.where((item) => item.isWishlist).toList();
     }
 
     // Conditions
