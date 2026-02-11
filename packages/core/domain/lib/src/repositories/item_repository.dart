@@ -18,6 +18,7 @@ abstract class ItemRepository {
   Stream<Item?> watchItemById(String id);
   Stream<List<Item>> watchAllFavoriteItems();
   Stream<List<Item>> watchAllWishlistItems();
+  Stream<List<Item>> watchItemsByTag(String tagName);
   Stream<List<(String, int)>> watchTagsWithUsage();
 
   Future<Either<AppException, List<Item>>> searchItems({

@@ -150,6 +150,35 @@ class ItemDao extends DatabaseAccessor<AppDatabase> with _$ItemDaoMixin {
         .watch();
   }
 
+  // Get items that contain a specific tag
+  Future<List<ItemData>> getItemsByTag(String tagName) async {
+    final query =
+        select(items).join([
+            innerJoin(itemTags, itemTags.itemId.equalsExp(items.id)),
+            innerJoin(tags, tags.id.equalsExp(itemTags.tagId)),
+          ])
+          ..where(tags.name.equals(tagName))
+          ..orderBy([OrderingTerm.desc(items.createdAt)]);
+
+    final rows = await query.get();
+    return rows.map((row) => row.readTable(items)).toList();
+  }
+
+  // Watch items that contain a specific tag
+  Stream<List<ItemData>> watchItemsByTag(String tagName) {
+    final query =
+        select(items).join([
+            innerJoin(itemTags, itemTags.itemId.equalsExp(items.id)),
+            innerJoin(tags, tags.id.equalsExp(itemTags.tagId)),
+          ])
+          ..where(tags.name.equals(tagName))
+          ..orderBy([OrderingTerm.desc(items.createdAt)]);
+
+    return query.watch().map((rows) {
+      return rows.map((row) => row.readTable(items)).toList();
+    });
+  }
+
   // Get tags for an item
   Future<List<String>> getTagsForItem(String itemId) async {
     final query = select(itemTags).join([

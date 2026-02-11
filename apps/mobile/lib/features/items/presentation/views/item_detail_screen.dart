@@ -165,10 +165,14 @@ class ItemDetailScreen extends ConsumerWidget {
                           runSpacing: 8,
                           children: item.tags
                               .map(
-                                (tag) => Chip(
+                                (tag) => ActionChip(
                                   label: Text(tag),
                                   backgroundColor:
                                       theme.colorScheme.secondaryContainer,
+                                  onPressed: () => context.pushNamed(
+                                    'tag-items',
+                                    queryParameters: {'tag': tag},
+                                  ),
                                 ),
                               )
                               .toList(),

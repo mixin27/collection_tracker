@@ -10,6 +10,7 @@ import '../../features/items/presentation/views/add_item_screen.dart';
 import '../../features/items/presentation/views/edit_item_screen.dart';
 import '../../features/items/presentation/views/item_detail_screen.dart';
 import '../../features/items/presentation/views/items_screen.dart';
+import '../../features/items/presentation/views/tag_items_screen.dart';
 import '../../features/onboarding/presentation/views/onboarding_screen.dart';
 import '../../features/scanner/presentation/views/scanner_screen.dart';
 import '../../features/search/presentation/views/search_screen.dart';
@@ -158,6 +159,14 @@ GoRouter appRouter(Ref ref) {
             },
           ),
         ],
+      ),
+      GoRoute(
+        path: Routes.tagItems,
+        name: 'tag-items',
+        builder: (context, state) {
+          final tag = state.uri.queryParameters['tag'] ?? '';
+          return TagItemsScreen(tagName: tag);
+        },
       ),
       GoRoute(
         path: Routes.scanner,

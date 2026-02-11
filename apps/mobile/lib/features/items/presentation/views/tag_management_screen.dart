@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../view_models/tag_management_view_model.dart';
 
@@ -240,7 +241,10 @@ class _TagManagementScreenState extends ConsumerState<TagManagementScreen> {
                                           },
                                     onTap: _selectionMode
                                         ? () => _toggleSelection(tag)
-                                        : null,
+                                        : () => context.pushNamed(
+                                            'tag-items',
+                                            queryParameters: {'tag': tag},
+                                          ),
                                     leading: AnimatedSwitcher(
                                       duration: const Duration(
                                         milliseconds: 180,

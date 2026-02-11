@@ -164,6 +164,19 @@ class ItemRepositoryImpl implements ItemRepository {
   }
 
   @override
+  Stream<List<Item>> watchItemsByTag(String tagName) {
+    return _dao.watchItemsByTag(tagName).asyncMap((data) async {
+      final mapped = await Future.wait(
+        data.map((item) async {
+          final tags = await _dao.getTagsForItem(item.id);
+          return _mapToEntity(item, tags);
+        }),
+      );
+      return mapped;
+    });
+  }
+
+  @override
   Stream<List<(String, int)>> watchTagsWithUsage() {
     return _dao.watchTagsWithUsage();
   }

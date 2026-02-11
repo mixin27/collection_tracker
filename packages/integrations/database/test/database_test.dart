@@ -517,5 +517,48 @@ void main() {
       expect(tags2, isNot(contains('DeleteMe')));
       expect(allTags.any((entry) => entry.$1 == 'DeleteMe'), isFalse);
     });
+
+    test('get items by tag returns matching collection items', () async {
+      final now = DateTime.now();
+      await db.itemDao.insertItem(
+        ItemsCompanion.insert(
+          id: 'item-tag-query-1',
+          collectionId: collectionId,
+          title: 'Match A',
+          createdAt: now,
+          updatedAt: now,
+        ),
+        tags: const ['FilterTag'],
+      );
+      await db.itemDao.insertItem(
+        ItemsCompanion.insert(
+          id: 'item-tag-query-2',
+          collectionId: collectionId,
+          title: 'No Match',
+          createdAt: now,
+          updatedAt: now,
+        ),
+        tags: const ['OtherTag'],
+      );
+      await db.itemDao.insertItem(
+        ItemsCompanion.insert(
+          id: 'item-tag-query-3',
+          collectionId: collectionId,
+          title: 'Match B',
+          createdAt: now,
+          updatedAt: now,
+        ),
+        tags: const ['FilterTag'],
+      );
+
+      final filtered = await db.itemDao.getItemsByTag('FilterTag');
+
+      expect(filtered.length, 2);
+      expect(
+        filtered.map((item) => item.title),
+        containsAll(['Match A', 'Match B']),
+      );
+      expect(filtered.map((item) => item.title), isNot(contains('No Match')));
+    });
   });
 }
