@@ -164,6 +164,11 @@ class ItemRepositoryImpl implements ItemRepository {
   }
 
   @override
+  Stream<List<(String, int)>> watchTagsWithUsage() {
+    return _dao.watchTagsWithUsage();
+  }
+
+  @override
   Future<Either<AppException, List<Item>>> searchItems({
     required String collectionId,
     required String query,
@@ -199,6 +204,57 @@ class ItemRepositoryImpl implements ItemRepository {
       return Left(
         AppException.database(
           message: 'Failed to reorder items',
+          stackTrace: stack,
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<Either<AppException, void>> renameTag({
+    required String oldName,
+    required String newName,
+  }) async {
+    try {
+      await _dao.renameTag(oldName: oldName, newName: newName);
+      return const Right(null);
+    } catch (e, stack) {
+      return Left(
+        AppException.database(
+          message: 'Failed to rename tag',
+          stackTrace: stack,
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<Either<AppException, void>> mergeTags({
+    required String sourceName,
+    required String targetName,
+  }) async {
+    try {
+      await _dao.mergeTags(sourceName: sourceName, targetName: targetName);
+      return const Right(null);
+    } catch (e, stack) {
+      return Left(
+        AppException.database(
+          message: 'Failed to merge tags',
+          stackTrace: stack,
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<Either<AppException, void>> deleteTag(String tagName) async {
+    try {
+      await _dao.deleteTagByName(tagName);
+      return const Right(null);
+    } catch (e, stack) {
+      return Left(
+        AppException.database(
+          message: 'Failed to delete tag',
           stackTrace: stack,
         ),
       );

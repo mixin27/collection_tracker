@@ -115,6 +115,11 @@ class _ItemsScreenState extends ConsumerState<ItemsScreen> {
               ),
               onPressed: () => _showFilterSheet(context),
             ),
+            IconButton(
+              icon: const Icon(Icons.sell_outlined),
+              tooltip: 'Manage tags',
+              onPressed: () => context.push('/settings/tags'),
+            ),
           ],
           IconButton(
             icon: Icon(_isSearching ? Icons.close : Icons.search),

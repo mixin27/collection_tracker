@@ -8,6 +8,42 @@ part 'item_dao.g.dart';
 class ItemDao extends DatabaseAccessor<AppDatabase> with _$ItemDaoMixin {
   ItemDao(super.db);
 
+  // Get all tags with usage count
+  Future<List<(String, int)>> getTagsWithUsage() async {
+    final rows = await customSelect(
+      '''
+      SELECT t.name AS name, COUNT(it.item_id) AS usage
+      FROM tags t
+      LEFT JOIN item_tags it ON it.tag_id = t.id
+      GROUP BY t.id, t.name
+      ORDER BY t.name COLLATE NOCASE ASC
+      ''',
+      readsFrom: {tags, itemTags},
+    ).get();
+
+    return rows
+        .map((row) => (row.read<String>('name'), row.read<int>('usage')))
+        .toList();
+  }
+
+  // Watch all tags with usage count
+  Stream<List<(String, int)>> watchTagsWithUsage() {
+    return customSelect(
+      '''
+      SELECT t.name AS name, COUNT(it.item_id) AS usage
+      FROM tags t
+      LEFT JOIN item_tags it ON it.tag_id = t.id
+      GROUP BY t.id, t.name
+      ORDER BY t.name COLLATE NOCASE ASC
+      ''',
+      readsFrom: {tags, itemTags},
+    ).watch().map(
+      (rows) => rows
+          .map((row) => (row.read<String>('name'), row.read<int>('usage')))
+          .toList(),
+    );
+  }
+
   // Get all items in a collection
   Future<List<ItemData>> getItemsByCollection(String collectionId) {
     return (select(items)
@@ -363,6 +399,96 @@ class ItemDao extends DatabaseAccessor<AppDatabase> with _$ItemDaoMixin {
         itemTags,
       ).insert(ItemTagsCompanion.insert(itemId: itemId, tagId: tagId));
     }
+  }
+
+  // Rename tag. If new tag already exists, this becomes a merge.
+  Future<void> renameTag({
+    required String oldName,
+    required String newName,
+  }) async {
+    final sourceName = oldName.trim();
+    final targetName = newName.trim();
+    if (sourceName.isEmpty || targetName.isEmpty || sourceName == targetName) {
+      return;
+    }
+
+    await transaction(() async {
+      final sourceTag = await (select(
+        tags,
+      )..where((tbl) => tbl.name.equals(sourceName))).getSingleOrNull();
+      if (sourceTag == null) return;
+
+      final targetTag = await (select(
+        tags,
+      )..where((tbl) => tbl.name.equals(targetName))).getSingleOrNull();
+
+      if (targetTag == null) {
+        await (update(tags)..where((tbl) => tbl.id.equals(sourceTag.id))).write(
+          TagsCompanion(
+            name: Value(targetName),
+            updatedAt: Value(DateTime.now()),
+          ),
+        );
+        return;
+      }
+
+      await _mergeTagIds(sourceTagId: sourceTag.id, targetTagId: targetTag.id);
+      await (delete(tags)..where((tbl) => tbl.id.equals(sourceTag.id))).go();
+    });
+  }
+
+  // Merge source tag into target tag and remove source tag.
+  Future<void> mergeTags({
+    required String sourceName,
+    required String targetName,
+  }) async {
+    final source = sourceName.trim();
+    final target = targetName.trim();
+    if (source.isEmpty || target.isEmpty || source == target) return;
+
+    await transaction(() async {
+      final sourceTag = await (select(
+        tags,
+      )..where((tbl) => tbl.name.equals(source))).getSingleOrNull();
+      final targetTag = await (select(
+        tags,
+      )..where((tbl) => tbl.name.equals(target))).getSingleOrNull();
+
+      if (sourceTag == null || targetTag == null) return;
+
+      await _mergeTagIds(sourceTagId: sourceTag.id, targetTagId: targetTag.id);
+      await (delete(tags)..where((tbl) => tbl.id.equals(sourceTag.id))).go();
+    });
+  }
+
+  // Delete tag and all item-tag relationships by cascade.
+  Future<void> deleteTagByName(String tagName) async {
+    final normalized = tagName.trim();
+    if (normalized.isEmpty) return;
+
+    await (delete(tags)..where((tbl) => tbl.name.equals(normalized))).go();
+  }
+
+  Future<void> _mergeTagIds({
+    required String sourceTagId,
+    required String targetTagId,
+  }) async {
+    if (sourceTagId == targetTagId) return;
+
+    // Remove rows that would conflict with (item_id, tag_id) unique key.
+    await customStatement(
+      '''
+      DELETE FROM item_tags
+      WHERE tag_id = ?
+      AND item_id IN (
+        SELECT item_id FROM item_tags WHERE tag_id = ?
+      )
+      ''',
+      <Object>[sourceTagId, targetTagId],
+    );
+
+    await (update(itemTags)..where((tbl) => tbl.tagId.equals(sourceTagId)))
+        .write(ItemTagsCompanion(tagId: Value(targetTagId)));
   }
 
   // Delete item
