@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -42,6 +44,9 @@ class _AddItemScreenState extends ConsumerState<AddItemScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // Watch collection details so they are available for search/scan actions
+    ref.watch(collectionDetailProvider(widget.collectionId));
+
     return Scaffold(
       appBar: AppBar(title: const Text('Add Item')),
       body: Form(
@@ -187,6 +192,7 @@ class _AddItemScreenState extends ConsumerState<AddItemScreen> {
   }
 
   Future<void> _showMetadataSearch(BuildContext context) async {
+    log('show metadata search');
     final collectionAsync = ref.read(
       collectionDetailProvider(widget.collectionId),
     );
