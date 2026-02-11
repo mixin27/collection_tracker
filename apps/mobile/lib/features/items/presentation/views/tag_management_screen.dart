@@ -14,14 +14,26 @@ class TagManagementScreen extends ConsumerStatefulWidget {
 
 class _TagManagementScreenState extends ConsumerState<TagManagementScreen> {
   final _searchController = TextEditingController();
+  final _scrollController = ScrollController();
+  static const int _pageSize = 50;
   String _query = '';
   bool _isBusy = false;
   bool _selectionMode = false;
   final Set<String> _selectedTags = <String>{};
+  int _visibleCount = _pageSize;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_onScroll);
+  }
 
   @override
   void dispose() {
     _searchController.dispose();
+    _scrollController
+      ..removeListener(_onScroll)
+      ..dispose();
     super.dispose();
   }
 
@@ -73,7 +85,10 @@ class _TagManagementScreenState extends ConsumerState<TagManagementScreen> {
             padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
             child: TextField(
               controller: _searchController,
-              onChanged: (value) => setState(() => _query = value.trim()),
+              onChanged: (value) => setState(() {
+                _query = value.trim();
+                _visibleCount = _pageSize;
+              }),
               decoration: const InputDecoration(
                 hintText: 'Search tags...',
                 prefixIcon: Icon(Icons.search),
@@ -91,6 +106,8 @@ class _TagManagementScreenState extends ConsumerState<TagManagementScreen> {
                       _query.toLowerCase(),
                     );
                   }).toList();
+                  final visibleCount = _visibleCount.clamp(0, filtered.length);
+                  final visible = filtered.take(visibleCount).toList();
 
                   if (filtered.isEmpty) {
                     return Center(
@@ -117,10 +134,19 @@ class _TagManagementScreenState extends ConsumerState<TagManagementScreen> {
                                 onPressed: _isBusy
                                     ? null
                                     : () => _selectAllFiltered(
-                                        filtered.map((entry) => entry.$1),
+                                        visible.map((entry) => entry.$1),
                                       ),
                                 icon: const Icon(Icons.select_all),
-                                label: const Text('Select all filtered'),
+                                label: const Text('Select visible'),
+                              ),
+                              OutlinedButton.icon(
+                                onPressed: _isBusy
+                                    ? null
+                                    : () => _selectAllFiltered(
+                                        filtered.map((entry) => entry.$1),
+                                      ),
+                                icon: const Icon(Icons.done_all),
+                                label: const Text('Select all matches'),
                               ),
                               OutlinedButton.icon(
                                 onPressed: _isBusy || _selectedTags.isEmpty
@@ -135,16 +161,45 @@ class _TagManagementScreenState extends ConsumerState<TagManagementScreen> {
                       Expanded(
                         child: ListView.separated(
                           key: const ValueKey('tags-list'),
+                          controller: _scrollController,
                           padding: const EdgeInsets.fromLTRB(12, 8, 12, 24),
-                          itemCount: filtered.length,
+                          itemCount:
+                              visible.length +
+                              (visible.length < filtered.length ? 1 : 0),
                           separatorBuilder: (_, _) => const SizedBox(height: 8),
                           itemBuilder: (context, index) {
-                            final tag = filtered[index].$1;
-                            final usage = filtered[index].$2;
+                            if (index == visible.length) {
+                              final remaining =
+                                  filtered.length - visible.length;
+                              return Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 10,
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    'Scroll to load $remaining more tags',
+                                    style: theme.textTheme.bodySmall?.copyWith(
+                                      color: theme.colorScheme.onSurfaceVariant,
+                                    ),
+                                  ),
+                                ),
+                              );
+                            }
+
+                            final tag = visible[index].$1;
+                            final usage = visible[index].$2;
                             final isSelected = _selectedTags.contains(tag);
 
                             return Card(
                                   child: ListTile(
+                                    onLongPress: _isBusy
+                                        ? null
+                                        : () {
+                                            _toggleSelection(tag);
+                                            setState(
+                                              () => _selectionMode = true,
+                                            );
+                                          },
                                     onTap: _selectionMode
                                         ? () => _toggleSelection(tag)
                                         : null,
@@ -338,6 +393,24 @@ class _TagManagementScreenState extends ConsumerState<TagManagementScreen> {
     setState(() {
       _selectedTags.addAll(filteredTags);
       _selectionMode = _selectedTags.isNotEmpty;
+    });
+  }
+
+  void _onScroll() {
+    if (!_scrollController.hasClients) return;
+    final position = _scrollController.position;
+    if (position.pixels < position.maxScrollExtent - 120) return;
+    if (!mounted || _isBusy) return;
+
+    final tags = ref.read(tagsWithUsageProvider).asData?.value ?? const [];
+    final filteredLength = tags.where((entry) {
+      if (_query.isEmpty) return true;
+      return entry.$1.toLowerCase().contains(_query.toLowerCase());
+    }).length;
+
+    if (_visibleCount >= filteredLength) return;
+    setState(() {
+      _visibleCount = (_visibleCount + _pageSize).clamp(0, filteredLength);
     });
   }
 
