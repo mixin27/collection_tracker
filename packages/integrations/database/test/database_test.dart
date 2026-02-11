@@ -331,5 +331,69 @@ void main() {
       expect(wishes.length, 1);
       expect(wishes.first.title, 'Wish');
     });
+
+    test('insert item with tags', () async {
+      final now = DateTime.now();
+      await db.itemDao.insertItem(
+        ItemsCompanion.insert(
+          id: 'item-tags-1',
+          collectionId: collectionId,
+          title: 'Tagged Item',
+          createdAt: now,
+          updatedAt: now,
+        ),
+        tags: const ['Manga', 'Rare'],
+      );
+
+      final itemWithTags = await db.itemDao.getItemWithTags('item-tags-1');
+      expect(itemWithTags, isNotNull);
+      expect(itemWithTags!.$2, containsAll(<String>['Manga', 'Rare']));
+    });
+
+    test('update item tags replaces existing tags', () async {
+      final now = DateTime.now();
+      await db.itemDao.insertItem(
+        ItemsCompanion.insert(
+          id: 'item-tags-2',
+          collectionId: collectionId,
+          title: 'Replace Tags',
+          createdAt: now,
+          updatedAt: now,
+        ),
+        tags: const ['OldTag'],
+      );
+
+      await db.itemDao.updateItem(
+        ItemsCompanion(
+          id: const Value('item-tags-2'),
+          title: const Value('Replace Tags'),
+          updatedAt: Value(now.add(const Duration(minutes: 1))),
+        ),
+        tags: const ['NewTagA', 'NewTagB'],
+      );
+
+      final tags = await db.itemDao.getTagsForItem('item-tags-2');
+      expect(tags, containsAll(<String>['NewTagA', 'NewTagB']));
+      expect(tags, isNot(contains('OldTag')));
+    });
+
+    test('deleting item removes item-tag relations', () async {
+      final now = DateTime.now();
+      await db.itemDao.insertItem(
+        ItemsCompanion.insert(
+          id: 'item-tags-3',
+          collectionId: collectionId,
+          title: 'Delete Tagged',
+          createdAt: now,
+          updatedAt: now,
+        ),
+        tags: const ['ToDelete'],
+      );
+
+      await db.itemDao.deleteItem('item-tags-3');
+      final tags = await db.itemDao.getTagsForItem('item-tags-3');
+
+      expect(tags, isEmpty);
+    });
   });
 }

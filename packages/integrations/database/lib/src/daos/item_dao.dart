@@ -4,7 +4,7 @@ import 'package:drift/drift.dart';
 
 part 'item_dao.g.dart';
 
-@DriftAccessor(tables: [Items, Collections])
+@DriftAccessor(tables: [Items, Collections, ItemTags, Tags])
 class ItemDao extends DatabaseAccessor<AppDatabase> with _$ItemDaoMixin {
   ItemDao(super.db);
 
@@ -114,11 +114,186 @@ class ItemDao extends DatabaseAccessor<AppDatabase> with _$ItemDaoMixin {
         .watch();
   }
 
-  // Insert item
-  Future<int> insertItem(ItemsCompanion item) {
+  // Get tags for an item
+  Future<List<String>> getTagsForItem(String itemId) async {
+    final query = select(itemTags).join([
+      innerJoin(tags, tags.id.equalsExp(itemTags.tagId)),
+    ])..where(itemTags.itemId.equals(itemId));
+
+    final result = await query.map((row) => row.readTable(tags).name).get();
+    return result;
+  }
+
+  // Watch tags for an item
+  Stream<List<String>> watchTagsForItem(String itemId) {
+    final query = select(itemTags).join([
+      innerJoin(tags, tags.id.equalsExp(itemTags.tagId)),
+    ])..where(itemTags.itemId.equals(itemId));
+
+    return query.map((row) => row.readTable(tags).name).watch();
+  }
+
+  // Watch items with tags
+  Stream<List<(ItemData, List<String>)>> watchItemsWithTags(
+    String collectionId,
+  ) {
+    final query =
+        select(items).join([
+            leftOuterJoin(itemTags, itemTags.itemId.equalsExp(items.id)),
+            leftOuterJoin(tags, tags.id.equalsExp(itemTags.tagId)),
+          ])
+          ..where(items.collectionId.equals(collectionId))
+          ..orderBy([OrderingTerm.desc(items.createdAt)]);
+
+    return query.watch().map((rows) {
+      final grouped = <String, (ItemData, List<String>)>{};
+
+      for (final row in rows) {
+        final item = row.readTable(items);
+        final tag = row.readTableOrNull(tags);
+
+        if (!grouped.containsKey(item.id)) {
+          grouped[item.id] = (item, <String>[]);
+        }
+
+        if (tag != null) {
+          grouped[item.id]!.$2.add(tag.name);
+        }
+      }
+
+      return grouped.values.toList();
+    });
+  }
+
+  // Watch item with tags
+  Stream<(ItemData, List<String>)?> watchItemWithTags(String id) {
+    final query = select(items).join([
+      leftOuterJoin(itemTags, itemTags.itemId.equalsExp(items.id)),
+      leftOuterJoin(tags, tags.id.equalsExp(itemTags.tagId)),
+    ])..where(items.id.equals(id));
+
+    return query.watch().map((rows) {
+      if (rows.isEmpty) return null;
+
+      final item = rows.first.readTable(items);
+      final tagNames = <String>[];
+
+      for (final row in rows) {
+        final tag = row.readTableOrNull(tags);
+        if (tag != null) {
+          tagNames.add(tag.name);
+        }
+      }
+
+      return (item, tagNames);
+    });
+  }
+
+  // Get item with tags
+  Future<(ItemData, List<String>)?> getItemWithTags(String id) async {
+    final query = select(items).join([
+      leftOuterJoin(itemTags, itemTags.itemId.equalsExp(items.id)),
+      leftOuterJoin(tags, tags.id.equalsExp(itemTags.tagId)),
+    ])..where(items.id.equals(id));
+
+    final rows = await query.get();
+    if (rows.isEmpty) return null;
+
+    final item = rows.first.readTable(items);
+    final tagNames = <String>[];
+
+    for (final row in rows) {
+      final tag = row.readTableOrNull(tags);
+      if (tag != null) {
+        tagNames.add(tag.name);
+      }
+    }
+
+    return (item, tagNames);
+  }
+
+  // Get items with tags
+  Future<List<(ItemData, List<String>)>> getItemsWithTags(
+    String collectionId,
+  ) async {
+    final query =
+        select(items).join([
+            leftOuterJoin(itemTags, itemTags.itemId.equalsExp(items.id)),
+            leftOuterJoin(tags, tags.id.equalsExp(itemTags.tagId)),
+          ])
+          ..where(items.collectionId.equals(collectionId))
+          ..orderBy([OrderingTerm.desc(items.createdAt)]);
+
+    final rows = await query.get();
+    final grouped = <String, (ItemData, List<String>)>{};
+
+    for (final row in rows) {
+      final item = row.readTable(items);
+      final tag = row.readTableOrNull(tags);
+
+      if (!grouped.containsKey(item.id)) {
+        grouped[item.id] = (item, <String>[]);
+      }
+
+      if (tag != null) {
+        grouped[item.id]!.$2.add(tag.name);
+      }
+    }
+
+    return grouped.values.toList();
+  }
+
+  // Get items with tags paginated
+  Future<List<(ItemData, List<String>)>> getItemsWithTagsPaginated({
+    required String collectionId,
+    required int limit,
+    required int offset,
+  }) async {
+    // We need to query items first to apply pagination, then join tags
+    final itemsQuery = select(items)
+      ..where((tbl) => tbl.collectionId.equals(collectionId))
+      ..orderBy([(tbl) => OrderingTerm.desc(tbl.createdAt)])
+      ..limit(limit, offset: offset);
+
+    final itemRows = await itemsQuery.get();
+
+    if (itemRows.isEmpty) {
+      return [];
+    }
+
+    final itemIds = itemRows.map((e) => e.id).toList();
+
+    final tagsQuery = select(itemTags).join([
+      innerJoin(tags, tags.id.equalsExp(itemTags.tagId)),
+    ])..where(itemTags.itemId.isIn(itemIds));
+
+    final tagRows = await tagsQuery.get();
+
+    final tagMap = <String, List<String>>{};
+    for (final row in tagRows) {
+      final itemId = row.readTable(itemTags).itemId;
+      final tagName = row.readTable(tags).name;
+
+      if (!tagMap.containsKey(itemId)) {
+        tagMap[itemId] = [];
+      }
+      tagMap[itemId]!.add(tagName);
+    }
+
+    return itemRows.map((item) {
+      return (item, tagMap[item.id] ?? <String>[]);
+    }).toList();
+  }
+
+  // Insert item with tags
+  Future<int> insertItem(ItemsCompanion item, {List<String>? tags}) {
     return transaction(() async {
       final id = await into(items).insert(item);
       final collectionId = item.collectionId.value;
+
+      if (tags != null && tags.isNotEmpty) {
+        await _updateItemTags(item.id.value, tags);
+      }
 
       final collection = await (select(
         collections,
@@ -139,11 +314,55 @@ class ItemDao extends DatabaseAccessor<AppDatabase> with _$ItemDaoMixin {
     });
   }
 
-  // Update item
-  Future<int> updateItem(ItemsCompanion item) {
-    return (update(
-      items,
-    )..where((tbl) => tbl.id.equals(item.id.value))).write(item);
+  // Update item with tags
+  Future<int> updateItem(ItemsCompanion item, {List<String>? tags}) {
+    return transaction(() async {
+      final rowsAffected = await (update(
+        items,
+      )..where((tbl) => tbl.id.equals(item.id.value))).write(item);
+
+      if (rowsAffected > 0 && tags != null) {
+        await _updateItemTags(item.id.value, tags);
+      }
+
+      return rowsAffected;
+    });
+  }
+
+  Future<void> _updateItemTags(String itemId, List<String> tagNames) async {
+    // 1. Get or create tags
+    final tagIds = <String>[];
+    for (final name in tagNames) {
+      final existingTag = await (select(
+        tags,
+      )..where((tbl) => tbl.name.equals(name))).getSingleOrNull();
+
+      if (existingTag != null) {
+        tagIds.add(existingTag.id);
+      } else {
+        final newTagId = DateTime.now().microsecondsSinceEpoch
+            .toString(); // Simple ID generation
+        await into(tags).insert(
+          TagsCompanion.insert(
+            id: newTagId,
+            name: name,
+            createdAt: DateTime.now(),
+            updatedAt: DateTime.now(),
+          ),
+        );
+        tagIds.add(newTagId);
+      }
+    }
+
+    // 2. Remove existing item tags
+    await (delete(itemTags)..where((tbl) => tbl.itemId.equals(itemId))).go();
+
+    // 3. Insert new item tags
+    for (final tagId in tagIds) {
+      await into(
+        itemTags,
+      ).insert(ItemTagsCompanion.insert(itemId: itemId, tagId: tagId));
+    }
   }
 
   // Delete item
@@ -151,6 +370,8 @@ class ItemDao extends DatabaseAccessor<AppDatabase> with _$ItemDaoMixin {
     return transaction(() async {
       final item = await getItemById(id);
       if (item == null) return 0;
+
+      // Tags and ItemTags are deleted by cascade
 
       final deletedCount = await (delete(
         items,

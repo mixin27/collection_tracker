@@ -6,12 +6,15 @@ import 'package:path_provider/path_provider.dart';
 
 part 'app_database.g.dart';
 
-@DriftDatabase(tables: [Collections, Items], daos: [CollectionDao, ItemDao])
+@DriftDatabase(
+  tables: [Collections, Items, Tags, ItemTags],
+  daos: [CollectionDao, ItemDao],
+)
 class AppDatabase extends _$AppDatabase {
   AppDatabase([QueryExecutor? executor]) : super(executor ?? _openConnection());
 
   @override
-  int get schemaVersion => 3;
+  int get schemaVersion => 4;
 
   @override
   MigrationStrategy get migration {
@@ -32,6 +35,11 @@ class AppDatabase extends _$AppDatabase {
 
         if (from < 3) {
           await m.addColumn(items, items.isWishlist);
+        }
+
+        if (from < 4) {
+          await m.createTable(tags);
+          await m.createTable(itemTags);
         }
       },
       beforeOpen: (details) async {

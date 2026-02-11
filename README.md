@@ -252,9 +252,9 @@ If you have any questions or issues:
 
 ## 🗺️ Roadmap
 
-- [ ] Barcode scanning with camera
-- [ ] Image upload and gallery
-- [ ] Advanced search and filters
+- [x] Barcode scanning with camera
+- [x] Image upload and gallery
+- [x] Advanced search and filters
 - [ ] Cloud synchronization
 - [ ] Import/Export data (CSV, JSON)
 - [ ] Price tracking and statistics
