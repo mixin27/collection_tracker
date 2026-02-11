@@ -50,20 +50,6 @@ class _TagManagementScreenState extends ConsumerState<TagManagementScreen> {
         actions: _selectionMode
             ? [
                 IconButton(
-                  tooltip: 'Merge selected',
-                  onPressed: _selectedTags.length >= 2 && !_isBusy
-                      ? _mergeSelectedTags
-                      : null,
-                  icon: const Icon(Icons.merge_type),
-                ),
-                IconButton(
-                  tooltip: 'Delete selected',
-                  onPressed: _selectedTags.isNotEmpty && !_isBusy
-                      ? _deleteSelectedTags
-                      : null,
-                  icon: const Icon(Icons.delete_outline),
-                ),
-                IconButton(
                   tooltip: 'Cancel selection',
                   onPressed: _isBusy ? null : _clearSelectionMode,
                   icon: const Icon(Icons.close),
@@ -79,6 +65,58 @@ class _TagManagementScreenState extends ConsumerState<TagManagementScreen> {
                 ),
               ],
       ),
+      bottomNavigationBar: _selectionMode
+          ? SafeArea(
+              top: false,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(12, 8, 12, 12),
+                child: Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: theme.colorScheme.surfaceContainerHigh,
+                    borderRadius: BorderRadius.circular(14),
+                    border: Border.all(color: theme.colorScheme.outlineVariant),
+                  ),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: OutlinedButton.icon(
+                          onPressed: _selectedTags.isEmpty || _isBusy
+                              ? null
+                              : _clearSelectionMode,
+                          icon: const Icon(Icons.deselect),
+                          label: const Text('Clear'),
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: FilledButton.icon(
+                          onPressed: _selectedTags.length < 2 || _isBusy
+                              ? null
+                              : _mergeSelectedTags,
+                          icon: const Icon(Icons.merge_type),
+                          label: const Text('Merge'),
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: FilledButton.icon(
+                          style: FilledButton.styleFrom(
+                            backgroundColor: Colors.red,
+                          ),
+                          onPressed: _selectedTags.isEmpty || _isBusy
+                              ? null
+                              : _deleteSelectedTags,
+                          icon: const Icon(Icons.delete_outline),
+                          label: const Text('Delete'),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            )
+          : null,
       body: Column(
         children: [
           Padding(
