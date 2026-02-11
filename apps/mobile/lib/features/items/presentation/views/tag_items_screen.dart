@@ -8,18 +8,53 @@ import '../view_models/items_view_model.dart';
 import '../view_models/tag_items_view_model.dart';
 import '../widgets/item_card.dart';
 
-class TagItemsScreen extends ConsumerWidget {
+class TagItemsScreen extends ConsumerStatefulWidget {
   final String tagName;
 
   const TagItemsScreen({required this.tagName, super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<TagItemsScreen> createState() => _TagItemsScreenState();
+}
+
+enum _TagItemsSort { newest, oldest, title }
+
+class _TagItemsScreenState extends ConsumerState<TagItemsScreen> {
+  final Set<String> _collapsedCollections = <String>{};
+  _TagItemsSort _sort = _TagItemsSort.newest;
+
+  @override
+  Widget build(BuildContext context) {
+    final tagName = widget.tagName;
     final itemsAsync = ref.watch(tagItemsProvider(tagName));
     final collectionsAsync = ref.watch(collectionsViewModelProvider);
 
     return Scaffold(
-      appBar: AppBar(title: Text('Tag: $tagName')),
+      appBar: AppBar(
+        title: Text('Tag: $tagName'),
+        actions: [
+          PopupMenuButton<_TagItemsSort>(
+            tooltip: 'Sort',
+            initialValue: _sort,
+            onSelected: (value) => setState(() => _sort = value),
+            itemBuilder: (context) => const [
+              PopupMenuItem(
+                value: _TagItemsSort.newest,
+                child: Text('Sort: Newest'),
+              ),
+              PopupMenuItem(
+                value: _TagItemsSort.oldest,
+                child: Text('Sort: Oldest'),
+              ),
+              PopupMenuItem(
+                value: _TagItemsSort.title,
+                child: Text('Sort: Title'),
+              ),
+            ],
+            icon: const Icon(Icons.sort),
+          ),
+        ],
+      ),
       body: itemsAsync.when(
         data: (items) => collectionsAsync.when(
           data: (collections) =>
@@ -78,47 +113,91 @@ class TagItemsScreen extends ConsumerWidget {
       itemCount: sortedCollectionIds.length,
       itemBuilder: (context, sectionIndex) {
         final collectionId = sortedCollectionIds[sectionIndex];
-        final sectionItems = grouped[collectionId]!;
+        final sectionItems = _sortedItems(grouped[collectionId]!);
         final collectionName = collectionNames[collectionId] ?? 'Unknown';
+        final isCollapsed = _collapsedCollections.contains(collectionId);
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Padding(
-              padding: const EdgeInsets.only(bottom: 8, top: 8),
-              child: Row(
-                children: [
-                  Text(
-                    collectionName,
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.w700,
+            InkWell(
+              borderRadius: BorderRadius.circular(12),
+              onTap: () => _toggleCollectionCollapse(collectionId),
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(8, 8, 4, 8),
+                child: Row(
+                  children: [
+                    Icon(isCollapsed ? Icons.expand_more : Icons.expand_less),
+                    const SizedBox(width: 4),
+                    Expanded(
+                      child: Text(
+                        collectionName,
+                        style: Theme.of(context).textTheme.titleMedium
+                            ?.copyWith(fontWeight: FontWeight.w700),
+                      ),
                     ),
-                  ),
-                  const SizedBox(width: 8),
-                  Text(
-                    '(${sectionItems.length})',
-                    style: Theme.of(context).textTheme.bodySmall,
-                  ),
-                ],
+                    Text(
+                      '(${sectionItems.length})',
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
+                    IconButton(
+                      tooltip: 'Open collection',
+                      icon: const Icon(Icons.open_in_new, size: 20),
+                      onPressed: () => context.go('/collections/$collectionId'),
+                    ),
+                  ],
+                ),
               ),
             ),
-            ...sectionItems.map((item) {
-              final heroTag = 'tag_${tagName}_${item.id}';
-              return ItemCard(
-                item: item,
-                heroTag: heroTag,
-                onTap: () => context.pushNamed(
-                  'item-detail',
-                  pathParameters: {'id': item.id},
-                  queryParameters: {'heroTag': heroTag},
-                ),
-                onDelete: () => _showDeleteDialog(context, ref, item),
-              );
-            }),
+            AnimatedSwitcher(
+              duration: const Duration(milliseconds: 220),
+              child: isCollapsed
+                  ? const SizedBox.shrink()
+                  : Column(
+                      key: ValueKey(collectionId),
+                      children: sectionItems.map((item) {
+                        final heroTag = 'tag_${widget.tagName}_${item.id}';
+                        return ItemCard(
+                          item: item,
+                          heroTag: heroTag,
+                          onTap: () => context.pushNamed(
+                            'item-detail',
+                            pathParameters: {'id': item.id},
+                            queryParameters: {'heroTag': heroTag},
+                          ),
+                          onDelete: () => _showDeleteDialog(context, ref, item),
+                        );
+                      }).toList(),
+                    ),
+            ),
           ],
         );
       },
     );
+  }
+
+  List<Item> _sortedItems(List<Item> items) {
+    final sorted = List<Item>.from(items);
+    sorted.sort((a, b) {
+      return switch (_sort) {
+        _TagItemsSort.newest => b.createdAt.compareTo(a.createdAt),
+        _TagItemsSort.oldest => a.createdAt.compareTo(b.createdAt),
+        _TagItemsSort.title => a.title.toLowerCase().compareTo(
+          b.title.toLowerCase(),
+        ),
+      };
+    });
+    return sorted;
+  }
+
+  void _toggleCollectionCollapse(String collectionId) {
+    setState(() {
+      if (_collapsedCollections.contains(collectionId)) {
+        _collapsedCollections.remove(collectionId);
+      } else {
+        _collapsedCollections.add(collectionId);
+      }
+    });
   }
 
   Future<void> _showDeleteDialog(

@@ -114,16 +114,11 @@ class ItemCard extends StatelessWidget {
                           children: item.tags
                               .take(3)
                               .map(
-                                (tag) => Container(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 8,
-                                    vertical: 2,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    color: theme.colorScheme.secondaryContainer,
-                                    borderRadius: BorderRadius.circular(999),
-                                  ),
-                                  child: Text(
+                                (tag) => ActionChip(
+                                  visualDensity: VisualDensity.compact,
+                                  materialTapTargetSize:
+                                      MaterialTapTargetSize.shrinkWrap,
+                                  label: Text(
                                     tag,
                                     style: theme.textTheme.labelSmall?.copyWith(
                                       color: theme
@@ -131,6 +126,12 @@ class ItemCard extends StatelessWidget {
                                           .onSecondaryContainer,
                                       fontWeight: FontWeight.w600,
                                     ),
+                                  ),
+                                  backgroundColor:
+                                      theme.colorScheme.secondaryContainer,
+                                  onPressed: () => context.pushNamed(
+                                    'tag-items',
+                                    queryParameters: {'tag': tag},
                                   ),
                                 ),
                               )
