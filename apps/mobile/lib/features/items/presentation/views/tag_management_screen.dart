@@ -104,95 +104,139 @@ class _TagManagementScreenState extends ConsumerState<TagManagementScreen> {
                     );
                   }
 
-                  return ListView.separated(
-                    key: const ValueKey('tags-list'),
-                    padding: const EdgeInsets.fromLTRB(12, 8, 12, 24),
-                    itemCount: filtered.length,
-                    separatorBuilder: (_, _) => const SizedBox(height: 8),
-                    itemBuilder: (context, index) {
-                      final tag = filtered[index].$1;
-                      final usage = filtered[index].$2;
-                      final isSelected = _selectedTags.contains(tag);
+                  return Column(
+                    children: [
+                      if (_selectionMode)
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(16, 8, 16, 4),
+                          child: Wrap(
+                            spacing: 8,
+                            runSpacing: 8,
+                            children: [
+                              OutlinedButton.icon(
+                                onPressed: _isBusy
+                                    ? null
+                                    : () => _selectAllFiltered(
+                                        filtered.map((entry) => entry.$1),
+                                      ),
+                                icon: const Icon(Icons.select_all),
+                                label: const Text('Select all filtered'),
+                              ),
+                              OutlinedButton.icon(
+                                onPressed: _isBusy || _selectedTags.isEmpty
+                                    ? null
+                                    : _clearSelectionMode,
+                                icon: const Icon(Icons.deselect),
+                                label: const Text('Clear selection'),
+                              ),
+                            ],
+                          ),
+                        ),
+                      Expanded(
+                        child: ListView.separated(
+                          key: const ValueKey('tags-list'),
+                          padding: const EdgeInsets.fromLTRB(12, 8, 12, 24),
+                          itemCount: filtered.length,
+                          separatorBuilder: (_, _) => const SizedBox(height: 8),
+                          itemBuilder: (context, index) {
+                            final tag = filtered[index].$1;
+                            final usage = filtered[index].$2;
+                            final isSelected = _selectedTags.contains(tag);
 
-                      return Card(
-                            child: ListTile(
-                              onTap: _selectionMode
-                                  ? () => _toggleSelection(tag)
-                                  : null,
-                              leading: AnimatedSwitcher(
-                                duration: const Duration(milliseconds: 180),
-                                child: _selectionMode
-                                    ? Checkbox(
-                                        key: ValueKey('checkbox-$tag'),
-                                        value: isSelected,
-                                        onChanged: _isBusy
-                                            ? null
-                                            : (_) => _toggleSelection(tag),
-                                      )
-                                    : CircleAvatar(
-                                        key: ValueKey('avatar-$tag'),
-                                        backgroundColor: theme
-                                            .colorScheme
-                                            .secondaryContainer,
-                                        child: const Icon(Icons.sell_outlined),
+                            return Card(
+                                  child: ListTile(
+                                    onTap: _selectionMode
+                                        ? () => _toggleSelection(tag)
+                                        : null,
+                                    leading: AnimatedSwitcher(
+                                      duration: const Duration(
+                                        milliseconds: 180,
                                       ),
-                              ),
-                              title: Text(tag),
-                              subtitle: Text(
-                                usage == 1
-                                    ? 'Used in 1 item'
-                                    : 'Used in $usage items',
-                              ),
-                              trailing: _selectionMode
-                                  ? null
-                                  : PopupMenuButton<_TagAction>(
-                                      onSelected: (action) => _handleAction(
-                                        action: action,
-                                        tag: tag,
-                                      ),
-                                      itemBuilder: (context) => const [
-                                        PopupMenuItem(
-                                          value: _TagAction.rename,
-                                          child: ListTile(
-                                            contentPadding: EdgeInsets.zero,
-                                            leading: Icon(
-                                              Icons.drive_file_rename_outline,
-                                            ),
-                                            title: Text('Rename'),
-                                          ),
-                                        ),
-                                        PopupMenuItem(
-                                          value: _TagAction.merge,
-                                          child: ListTile(
-                                            contentPadding: EdgeInsets.zero,
-                                            leading: Icon(Icons.merge_type),
-                                            title: Text('Merge Into...'),
-                                          ),
-                                        ),
-                                        PopupMenuItem(
-                                          value: _TagAction.delete,
-                                          child: ListTile(
-                                            contentPadding: EdgeInsets.zero,
-                                            leading: Icon(
-                                              Icons.delete,
-                                              color: Colors.red,
-                                            ),
-                                            title: Text(
-                                              'Delete',
-                                              style: TextStyle(
-                                                color: Colors.red,
+                                      child: _selectionMode
+                                          ? Checkbox(
+                                              key: ValueKey('checkbox-$tag'),
+                                              value: isSelected,
+                                              onChanged: _isBusy
+                                                  ? null
+                                                  : (_) =>
+                                                        _toggleSelection(tag),
+                                            )
+                                          : CircleAvatar(
+                                              key: ValueKey('avatar-$tag'),
+                                              backgroundColor: theme
+                                                  .colorScheme
+                                                  .secondaryContainer,
+                                              child: const Icon(
+                                                Icons.sell_outlined,
                                               ),
                                             ),
-                                          ),
-                                        ),
-                                      ],
                                     ),
-                            ),
-                          )
-                          .animate(delay: (index * 35).ms)
-                          .fadeIn(duration: 260.ms, curve: Curves.easeOut)
-                          .slideY(begin: 0.08, end: 0, duration: 260.ms);
-                    },
+                                    title: Text(tag),
+                                    subtitle: Text(
+                                      usage == 1
+                                          ? 'Used in 1 item'
+                                          : 'Used in $usage items',
+                                    ),
+                                    trailing: _selectionMode
+                                        ? null
+                                        : PopupMenuButton<_TagAction>(
+                                            onSelected: (action) =>
+                                                _handleAction(
+                                                  action: action,
+                                                  tag: tag,
+                                                ),
+                                            itemBuilder: (context) => const [
+                                              PopupMenuItem(
+                                                value: _TagAction.rename,
+                                                child: ListTile(
+                                                  contentPadding:
+                                                      EdgeInsets.zero,
+                                                  leading: Icon(
+                                                    Icons
+                                                        .drive_file_rename_outline,
+                                                  ),
+                                                  title: Text('Rename'),
+                                                ),
+                                              ),
+                                              PopupMenuItem(
+                                                value: _TagAction.merge,
+                                                child: ListTile(
+                                                  contentPadding:
+                                                      EdgeInsets.zero,
+                                                  leading: Icon(
+                                                    Icons.merge_type,
+                                                  ),
+                                                  title: Text('Merge Into...'),
+                                                ),
+                                              ),
+                                              PopupMenuItem(
+                                                value: _TagAction.delete,
+                                                child: ListTile(
+                                                  contentPadding:
+                                                      EdgeInsets.zero,
+                                                  leading: Icon(
+                                                    Icons.delete,
+                                                    color: Colors.red,
+                                                  ),
+                                                  title: Text(
+                                                    'Delete',
+                                                    style: TextStyle(
+                                                      color: Colors.red,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                  ),
+                                )
+                                .animate(delay: (index * 35).ms)
+                                .fadeIn(duration: 260.ms, curve: Curves.easeOut)
+                                .slideY(begin: 0.08, end: 0, duration: 260.ms);
+                          },
+                        ),
+                      ),
+                    ],
                   );
                 },
                 loading: () => const Center(child: CircularProgressIndicator()),
@@ -286,6 +330,14 @@ class _TagManagementScreenState extends ConsumerState<TagManagementScreen> {
     setState(() {
       _selectionMode = false;
       _selectedTags.clear();
+    });
+  }
+
+  void _selectAllFiltered(Iterable<String> filteredTags) {
+    if (_isBusy) return;
+    setState(() {
+      _selectedTags.addAll(filteredTags);
+      _selectionMode = _selectedTags.isNotEmpty;
     });
   }
 
