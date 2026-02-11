@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../view_models/items_view_model.dart';
+import '../widgets/item_tags_editor.dart';
 
 class EditItemScreen extends ConsumerStatefulWidget {
   final String itemId;
@@ -27,6 +28,7 @@ class _EditItemScreenState extends ConsumerState<EditItemScreen> {
   bool _isInitialized = false;
   Item? _item;
   ItemCondition? _selectedCondition;
+  List<String> _tags = const [];
 
   @override
   void initState() {
@@ -66,6 +68,7 @@ class _EditItemScreenState extends ConsumerState<EditItemScreen> {
           _locationController.text = item.location ?? '';
           _quantityController.text = item.quantity.toString();
           _selectedCondition = item.condition;
+          _tags = List<String>.from(item.tags);
           _isInitialized = true;
         }
 
@@ -125,6 +128,16 @@ class _EditItemScreenState extends ConsumerState<EditItemScreen> {
                   ),
                   maxLines: 3,
                   textCapitalization: TextCapitalization.sentences,
+                ),
+                const SizedBox(height: 16),
+
+                ItemTagsEditor(
+                  initialTags: _tags,
+                  onChanged: (tags) {
+                    _tags = tags;
+                  },
+                  label: 'Tags (optional)',
+                  hintText: 'e.g., Signed, First Edition',
                 ),
                 const SizedBox(height: 16),
 
@@ -247,6 +260,7 @@ class _EditItemScreenState extends ConsumerState<EditItemScreen> {
             : _locationController.text.trim(),
         quantity: int.parse(_quantityController.text),
         condition: _selectedCondition,
+        tags: _tags,
       );
 
       await ref.read(updateItemProvider(updated).future);

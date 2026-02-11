@@ -149,6 +149,34 @@ class ItemDetailScreen extends ConsumerWidget {
                       const SizedBox(height: 16),
                     ],
 
+                    if (item.tags.isNotEmpty) ...[
+                      Text(
+                        'Tags',
+                        style: theme.textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      AnimatedSize(
+                        duration: const Duration(milliseconds: 240),
+                        curve: Curves.easeOutCubic,
+                        child: Wrap(
+                          spacing: 8,
+                          runSpacing: 8,
+                          children: item.tags
+                              .map(
+                                (tag) => Chip(
+                                  label: Text(tag),
+                                  backgroundColor:
+                                      theme.colorScheme.secondaryContainer,
+                                ),
+                              )
+                              .toList(),
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                    ],
+
                     // Details Card
                     Card(
                       child: Padding(

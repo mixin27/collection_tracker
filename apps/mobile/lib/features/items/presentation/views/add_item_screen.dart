@@ -11,6 +11,7 @@ import 'package:metadata_api/metadata_api.dart';
 import 'metadata_search_delegate.dart';
 
 import '../view_models/items_view_model.dart';
+import '../widgets/item_tags_editor.dart';
 
 class AddItemScreen extends ConsumerStatefulWidget {
   final String collectionId;
@@ -33,6 +34,7 @@ class _AddItemScreenState extends ConsumerState<AddItemScreen> {
   bool _isFetchingMetadata = false;
   String? _imagePath;
   String? _coverImageUrl;
+  List<String> _tags = const [];
 
   @override
   void dispose() {
@@ -172,6 +174,16 @@ class _AddItemScreenState extends ConsumerState<AddItemScreen> {
               maxLines: 4,
               textCapitalization: TextCapitalization.sentences,
             ),
+            const SizedBox(height: 16),
+
+            ItemTagsEditor(
+              initialTags: _tags,
+              onChanged: (tags) {
+                _tags = tags;
+              },
+              label: 'Tags (optional)',
+              hintText: 'e.g., Rare, Completed Set',
+            ),
             const SizedBox(height: 24),
 
             // Add button
@@ -295,6 +307,7 @@ class _AddItemScreenState extends ConsumerState<AddItemScreen> {
               : _descriptionController.text.trim(),
           coverImageUrl: _coverImageUrl,
           coverImagePath: _imagePath,
+          tags: _tags,
         ).future,
       );
 
