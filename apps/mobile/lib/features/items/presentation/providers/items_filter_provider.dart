@@ -21,6 +21,7 @@ class ItemFilterState {
   final ItemSortBy sortBy;
   final bool sortAscending;
   final Set<ItemCondition> conditions;
+  final Set<String> tags;
   final bool showOnlyFavorites;
   final bool showOnlyWishlist;
 
@@ -29,6 +30,7 @@ class ItemFilterState {
     this.sortBy = ItemSortBy.custom,
     this.sortAscending = true,
     this.conditions = const {},
+    this.tags = const {},
     this.showOnlyFavorites = false,
     this.showOnlyWishlist = false,
   });
@@ -38,6 +40,7 @@ class ItemFilterState {
     ItemSortBy? sortBy,
     bool? sortAscending,
     Set<ItemCondition>? conditions,
+    Set<String>? tags,
     bool? showOnlyFavorites,
     bool? showOnlyWishlist,
   }) {
@@ -46,6 +49,7 @@ class ItemFilterState {
       sortBy: sortBy ?? this.sortBy,
       sortAscending: sortAscending ?? this.sortAscending,
       conditions: conditions ?? this.conditions,
+      tags: tags ?? this.tags,
       showOnlyFavorites: showOnlyFavorites ?? this.showOnlyFavorites,
       showOnlyWishlist: showOnlyWishlist ?? this.showOnlyWishlist,
     );
@@ -81,6 +85,16 @@ class ItemFilter extends _$ItemFilter {
     state = state.copyWith(conditions: nextConditions);
   }
 
+  void toggleTag(String tag) {
+    final nextTags = Set<String>.from(state.tags);
+    if (nextTags.contains(tag)) {
+      nextTags.remove(tag);
+    } else {
+      nextTags.add(tag);
+    }
+    state = state.copyWith(tags: nextTags);
+  }
+
   void toggleFavorites() {
     state = state.copyWith(showOnlyFavorites: !state.showOnlyFavorites);
   }
@@ -107,7 +121,8 @@ Stream<List<Item>> filteredItemsList(Ref ref, String collectionId) async* {
       final query = filter.searchQuery.toLowerCase();
       filtered = filtered.where((item) {
         return item.title.toLowerCase().contains(query) ||
-            (item.description?.toLowerCase().contains(query) ?? false);
+            (item.description?.toLowerCase().contains(query) ?? false) ||
+            item.tags.any((tag) => tag.toLowerCase().contains(query));
       }).toList();
     }
 
@@ -126,6 +141,16 @@ Stream<List<Item>> filteredItemsList(Ref ref, String collectionId) async* {
       filtered = filtered.where((item) {
         return item.condition != null &&
             filter.conditions.contains(item.condition);
+      }).toList();
+    }
+
+    // Tags (match any selected tag)
+    if (filter.tags.isNotEmpty) {
+      filtered = filtered.where((item) {
+        final itemTags = item.tags.map((tag) => tag.toLowerCase()).toSet();
+        return filter.tags.any(
+          (selected) => itemTags.contains(selected.toLowerCase()),
+        );
       }).toList();
     }
 

@@ -331,5 +331,234 @@ void main() {
       expect(wishes.length, 1);
       expect(wishes.first.title, 'Wish');
     });
+
+    test('insert item with tags', () async {
+      final now = DateTime.now();
+      await db.itemDao.insertItem(
+        ItemsCompanion.insert(
+          id: 'item-tags-1',
+          collectionId: collectionId,
+          title: 'Tagged Item',
+          createdAt: now,
+          updatedAt: now,
+        ),
+        tags: const ['Manga', 'Rare'],
+      );
+
+      final itemWithTags = await db.itemDao.getItemWithTags('item-tags-1');
+      expect(itemWithTags, isNotNull);
+      expect(itemWithTags!.$2, containsAll(<String>['Manga', 'Rare']));
+    });
+
+    test('update item tags replaces existing tags', () async {
+      final now = DateTime.now();
+      await db.itemDao.insertItem(
+        ItemsCompanion.insert(
+          id: 'item-tags-2',
+          collectionId: collectionId,
+          title: 'Replace Tags',
+          createdAt: now,
+          updatedAt: now,
+        ),
+        tags: const ['OldTag'],
+      );
+
+      await db.itemDao.updateItem(
+        ItemsCompanion(
+          id: const Value('item-tags-2'),
+          title: const Value('Replace Tags'),
+          updatedAt: Value(now.add(const Duration(minutes: 1))),
+        ),
+        tags: const ['NewTagA', 'NewTagB'],
+      );
+
+      final tags = await db.itemDao.getTagsForItem('item-tags-2');
+      expect(tags, containsAll(<String>['NewTagA', 'NewTagB']));
+      expect(tags, isNot(contains('OldTag')));
+    });
+
+    test('deleting item removes item-tag relations', () async {
+      final now = DateTime.now();
+      await db.itemDao.insertItem(
+        ItemsCompanion.insert(
+          id: 'item-tags-3',
+          collectionId: collectionId,
+          title: 'Delete Tagged',
+          createdAt: now,
+          updatedAt: now,
+        ),
+        tags: const ['ToDelete'],
+      );
+
+      await db.itemDao.deleteItem('item-tags-3');
+      final tags = await db.itemDao.getTagsForItem('item-tags-3');
+
+      expect(tags, isEmpty);
+    });
+
+    test('watch tags with usage returns counts', () async {
+      final now = DateTime.now();
+      await db.itemDao.insertItem(
+        ItemsCompanion.insert(
+          id: 'item-usage-1',
+          collectionId: collectionId,
+          title: 'Usage 1',
+          createdAt: now,
+          updatedAt: now,
+        ),
+        tags: const ['Shared', 'UniqueA'],
+      );
+      await db.itemDao.insertItem(
+        ItemsCompanion.insert(
+          id: 'item-usage-2',
+          collectionId: collectionId,
+          title: 'Usage 2',
+          createdAt: now,
+          updatedAt: now,
+        ),
+        tags: const ['Shared'],
+      );
+
+      final tagsWithUsage = await db.itemDao.getTagsWithUsage();
+      expect(tagsWithUsage, contains(('Shared', 2)));
+      expect(tagsWithUsage, contains(('UniqueA', 1)));
+    });
+
+    test('rename tag updates tag name for linked items', () async {
+      final now = DateTime.now();
+      await db.itemDao.insertItem(
+        ItemsCompanion.insert(
+          id: 'item-rename-1',
+          collectionId: collectionId,
+          title: 'Rename Tag Item',
+          createdAt: now,
+          updatedAt: now,
+        ),
+        tags: const ['OldName'],
+      );
+
+      await db.itemDao.renameTag(oldName: 'OldName', newName: 'NewName');
+      final tags = await db.itemDao.getTagsForItem('item-rename-1');
+
+      expect(tags, contains('NewName'));
+      expect(tags, isNot(contains('OldName')));
+    });
+
+    test('merge tags consolidates duplicates across items', () async {
+      final now = DateTime.now();
+      await db.itemDao.insertItem(
+        ItemsCompanion.insert(
+          id: 'item-merge-1',
+          collectionId: collectionId,
+          title: 'Merge 1',
+          createdAt: now,
+          updatedAt: now,
+        ),
+        tags: const ['SourceTag', 'TargetTag'],
+      );
+      await db.itemDao.insertItem(
+        ItemsCompanion.insert(
+          id: 'item-merge-2',
+          collectionId: collectionId,
+          title: 'Merge 2',
+          createdAt: now,
+          updatedAt: now,
+        ),
+        tags: const ['SourceTag'],
+      );
+
+      await db.itemDao.mergeTags(
+        sourceName: 'SourceTag',
+        targetName: 'TargetTag',
+      );
+
+      final tagsItem1 = await db.itemDao.getTagsForItem('item-merge-1');
+      final tagsItem2 = await db.itemDao.getTagsForItem('item-merge-2');
+      final allTags = await db.itemDao.getTagsWithUsage();
+
+      expect(tagsItem1.where((t) => t == 'TargetTag').length, 1);
+      expect(tagsItem1, isNot(contains('SourceTag')));
+      expect(tagsItem2, contains('TargetTag'));
+      expect(tagsItem2, isNot(contains('SourceTag')));
+      expect(allTags.any((entry) => entry.$1 == 'SourceTag'), isFalse);
+    });
+
+    test('delete tag removes it from all items', () async {
+      final now = DateTime.now();
+      await db.itemDao.insertItem(
+        ItemsCompanion.insert(
+          id: 'item-delete-tag-1',
+          collectionId: collectionId,
+          title: 'Delete Tag 1',
+          createdAt: now,
+          updatedAt: now,
+        ),
+        tags: const ['DeleteMe', 'KeepMe'],
+      );
+      await db.itemDao.insertItem(
+        ItemsCompanion.insert(
+          id: 'item-delete-tag-2',
+          collectionId: collectionId,
+          title: 'Delete Tag 2',
+          createdAt: now,
+          updatedAt: now,
+        ),
+        tags: const ['DeleteMe'],
+      );
+
+      await db.itemDao.deleteTagByName('DeleteMe');
+
+      final tags1 = await db.itemDao.getTagsForItem('item-delete-tag-1');
+      final tags2 = await db.itemDao.getTagsForItem('item-delete-tag-2');
+      final allTags = await db.itemDao.getTagsWithUsage();
+
+      expect(tags1, contains('KeepMe'));
+      expect(tags1, isNot(contains('DeleteMe')));
+      expect(tags2, isNot(contains('DeleteMe')));
+      expect(allTags.any((entry) => entry.$1 == 'DeleteMe'), isFalse);
+    });
+
+    test('get items by tag returns matching collection items', () async {
+      final now = DateTime.now();
+      await db.itemDao.insertItem(
+        ItemsCompanion.insert(
+          id: 'item-tag-query-1',
+          collectionId: collectionId,
+          title: 'Match A',
+          createdAt: now,
+          updatedAt: now,
+        ),
+        tags: const ['FilterTag'],
+      );
+      await db.itemDao.insertItem(
+        ItemsCompanion.insert(
+          id: 'item-tag-query-2',
+          collectionId: collectionId,
+          title: 'No Match',
+          createdAt: now,
+          updatedAt: now,
+        ),
+        tags: const ['OtherTag'],
+      );
+      await db.itemDao.insertItem(
+        ItemsCompanion.insert(
+          id: 'item-tag-query-3',
+          collectionId: collectionId,
+          title: 'Match B',
+          createdAt: now,
+          updatedAt: now,
+        ),
+        tags: const ['FilterTag'],
+      );
+
+      final filtered = await db.itemDao.getItemsByTag('FilterTag');
+
+      expect(filtered.length, 2);
+      expect(
+        filtered.map((item) => item.title),
+        containsAll(['Match A', 'Match B']),
+      );
+      expect(filtered.map((item) => item.title), isNot(contains('No Match')));
+    });
   });
 }

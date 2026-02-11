@@ -10,11 +10,13 @@ import '../../features/items/presentation/views/add_item_screen.dart';
 import '../../features/items/presentation/views/edit_item_screen.dart';
 import '../../features/items/presentation/views/item_detail_screen.dart';
 import '../../features/items/presentation/views/items_screen.dart';
+import '../../features/items/presentation/views/tag_items_screen.dart';
 import '../../features/onboarding/presentation/views/onboarding_screen.dart';
 import '../../features/scanner/presentation/views/scanner_screen.dart';
 import '../../features/search/presentation/views/search_screen.dart';
 import '../../features/settings/presentation/views/settings_screen.dart';
 import '../../features/statistics/presentation/views/statistics_screen.dart';
+import '../../features/items/presentation/views/tag_management_screen.dart';
 import 'app_shell.dart';
 import 'package:collection_tracker/core/observers/analytics_observer.dart';
 import 'routes.dart';
@@ -125,6 +127,14 @@ GoRouter appRouter(Ref ref) {
                 path: Routes.settings,
                 name: 'settings',
                 builder: (_, _) => const SettingsScreen(),
+                routes: [
+                  GoRoute(
+                    path: 'tags',
+                    name: 'manage-tags',
+                    parentNavigatorKey: _rootNavigatorKey,
+                    builder: (_, _) => const TagManagementScreen(),
+                  ),
+                ],
               ),
             ],
           ),
@@ -149,6 +159,14 @@ GoRouter appRouter(Ref ref) {
             },
           ),
         ],
+      ),
+      GoRoute(
+        path: Routes.tagItems,
+        name: 'tag-items',
+        builder: (context, state) {
+          final tag = state.uri.queryParameters['tag'] ?? '';
+          return TagItemsScreen(tagName: tag);
+        },
       ),
       GoRoute(
         path: Routes.scanner,

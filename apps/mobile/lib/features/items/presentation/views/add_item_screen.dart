@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -9,6 +11,7 @@ import 'package:metadata_api/metadata_api.dart';
 import 'metadata_search_delegate.dart';
 
 import '../view_models/items_view_model.dart';
+import '../widgets/item_tags_editor.dart';
 
 class AddItemScreen extends ConsumerStatefulWidget {
   final String collectionId;
@@ -31,6 +34,7 @@ class _AddItemScreenState extends ConsumerState<AddItemScreen> {
   bool _isFetchingMetadata = false;
   String? _imagePath;
   String? _coverImageUrl;
+  List<String> _tags = const [];
 
   @override
   void dispose() {
@@ -42,6 +46,9 @@ class _AddItemScreenState extends ConsumerState<AddItemScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // Watch collection details so they are available for search/scan actions
+    ref.watch(collectionDetailProvider(widget.collectionId));
+
     return Scaffold(
       appBar: AppBar(title: const Text('Add Item')),
       body: Form(
@@ -167,6 +174,16 @@ class _AddItemScreenState extends ConsumerState<AddItemScreen> {
               maxLines: 4,
               textCapitalization: TextCapitalization.sentences,
             ),
+            const SizedBox(height: 16),
+
+            ItemTagsEditor(
+              initialTags: _tags,
+              onChanged: (tags) {
+                _tags = tags;
+              },
+              label: 'Tags (optional)',
+              hintText: 'e.g., Rare, Completed Set',
+            ),
             const SizedBox(height: 24),
 
             // Add button
@@ -187,6 +204,7 @@ class _AddItemScreenState extends ConsumerState<AddItemScreen> {
   }
 
   Future<void> _showMetadataSearch(BuildContext context) async {
+    log('show metadata search');
     final collectionAsync = ref.read(
       collectionDetailProvider(widget.collectionId),
     );
@@ -289,6 +307,7 @@ class _AddItemScreenState extends ConsumerState<AddItemScreen> {
               : _descriptionController.text.trim(),
           coverImageUrl: _coverImageUrl,
           coverImagePath: _imagePath,
+          tags: _tags,
         ).future,
       );
 

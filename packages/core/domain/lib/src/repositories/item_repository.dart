@@ -18,6 +18,8 @@ abstract class ItemRepository {
   Stream<Item?> watchItemById(String id);
   Stream<List<Item>> watchAllFavoriteItems();
   Stream<List<Item>> watchAllWishlistItems();
+  Stream<List<Item>> watchItemsByTag(String tagName);
+  Stream<List<(String, int)>> watchTagsWithUsage();
 
   Future<Either<AppException, List<Item>>> searchItems({
     required String collectionId,
@@ -25,4 +27,13 @@ abstract class ItemRepository {
   });
 
   Future<Either<AppException, void>> reorderItems(List<String> itemIds);
+  Future<Either<AppException, void>> renameTag({
+    required String oldName,
+    required String newName,
+  });
+  Future<Either<AppException, void>> mergeTags({
+    required String sourceName,
+    required String targetName,
+  });
+  Future<Either<AppException, void>> deleteTag(String tagName);
 }

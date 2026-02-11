@@ -108,11 +108,17 @@ class _ItemsScreenState extends ConsumerState<ItemsScreen> {
               icon: Badge(
                 isLabelVisible:
                     filter.conditions.isNotEmpty ||
+                    filter.tags.isNotEmpty ||
                     filter.showOnlyFavorites ||
                     filter.sortBy != ItemSortBy.createdAt,
                 child: const Icon(Icons.filter_list),
               ),
               onPressed: () => _showFilterSheet(context),
+            ),
+            IconButton(
+              icon: const Icon(Icons.sell_outlined),
+              tooltip: 'Manage tags',
+              onPressed: () => context.push('/settings/tags'),
             ),
           ],
           IconButton(
@@ -144,6 +150,7 @@ class _ItemsScreenState extends ConsumerState<ItemsScreen> {
                     Icon(
                       _isSearching ||
                               filter.conditions.isNotEmpty ||
+                              filter.tags.isNotEmpty ||
                               filter.showOnlyFavorites
                           ? Icons.search_off
                           : Icons.inventory_2_outlined,
@@ -157,6 +164,7 @@ class _ItemsScreenState extends ConsumerState<ItemsScreen> {
                       items.isEmpty &&
                               (_isSearching ||
                                   filter.conditions.isNotEmpty ||
+                                  filter.tags.isNotEmpty ||
                                   filter.showOnlyFavorites)
                           ? 'No matches found'
                           : 'No items yet',
@@ -166,12 +174,14 @@ class _ItemsScreenState extends ConsumerState<ItemsScreen> {
                     Text(
                       _isSearching ||
                               filter.conditions.isNotEmpty ||
+                              filter.tags.isNotEmpty ||
                               filter.showOnlyFavorites
                           ? 'Try adjusting your filters'
                           : 'Add your first item to get started',
                     ),
                     if (!_isSearching &&
                         filter.conditions.isEmpty &&
+                        filter.tags.isEmpty &&
                         !filter.showOnlyFavorites) ...[
                       const SizedBox(height: 24),
                       FilledButton.icon(
@@ -336,7 +346,7 @@ class _ItemsScreenState extends ConsumerState<ItemsScreen> {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      builder: (context) => const ItemFilterSheet(),
+      builder: (context) => ItemFilterSheet(collectionId: widget.collectionId),
     );
   }
 

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class ItemGridCard extends StatelessWidget {
   final Item item;
@@ -56,6 +57,32 @@ class ItemGridCard extends StatelessWidget {
                           item.condition!.name.toUpperCase(),
                           style: theme.textTheme.labelSmall?.copyWith(
                             color: theme.colorScheme.primary,
+                          ),
+                        ),
+                      if (item.tags.isNotEmpty)
+                        Padding(
+                          padding: const EdgeInsets.only(top: 4),
+                          child: InkWell(
+                            onTap: () => context.pushNamed(
+                              'tag-items',
+                              queryParameters: {'tag': item.tags.first},
+                            ),
+                            borderRadius: BorderRadius.circular(999),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 6,
+                                vertical: 2,
+                              ),
+                              child: Text(
+                                '#${item.tags.first}',
+                                style: theme.textTheme.labelSmall?.copyWith(
+                                  color: theme.colorScheme.onSurfaceVariant,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
                           ),
                         ),
                     ],

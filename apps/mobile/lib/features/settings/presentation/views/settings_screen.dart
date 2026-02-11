@@ -1,6 +1,7 @@
 import 'package:collection_tracker/core/providers/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:storage/storage.dart';
 import 'package:ui/ui.dart';
 
@@ -60,6 +61,12 @@ class SettingsScreen extends ConsumerWidget {
             onTap: () {
               // todo(mixin27): Implement cloud sync
             },
+          ),
+          ListTile(
+            leading: const Icon(Icons.sell_outlined),
+            title: const Text('Manage Tags'),
+            subtitle: const Text('Rename, merge, and delete tags'),
+            onTap: () => context.push('/settings/tags'),
           ),
           const Divider(),
           _SectionHeader(title: 'About'),

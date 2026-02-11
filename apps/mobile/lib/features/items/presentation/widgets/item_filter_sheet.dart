@@ -1,16 +1,28 @@
 import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '../providers/items_filter_provider.dart';
+import '../view_models/items_view_model.dart';
 
 class ItemFilterSheet extends ConsumerWidget {
-  const ItemFilterSheet({super.key});
+  final String collectionId;
+
+  const ItemFilterSheet({required this.collectionId, super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final filter = ref.watch(itemFilterProvider);
     final notifier = ref.read(itemFilterProvider.notifier);
+    final itemsAsync = ref.watch(itemsListProvider(collectionId));
     final theme = Theme.of(context);
+    final availableTags = itemsAsync.maybeWhen(
+      data: (items) {
+        final tags = items.expand((item) => item.tags).toSet().toList()..sort();
+        return tags;
+      },
+      orElse: () => const <String>[],
+    );
 
     return DraggableScrollableSheet(
       initialChildSize: 0.6,
@@ -110,6 +122,32 @@ class ItemFilterSheet extends ConsumerWidget {
                   );
                 }).toList(),
               ),
+              if (availableTags.isNotEmpty) ...[
+                const SizedBox(height: 24),
+                Text(
+                  'Tags',
+                  style: theme.textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 12),
+                AnimatedSize(
+                  duration: const Duration(milliseconds: 220),
+                  curve: Curves.easeOutCubic,
+                  child: Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
+                    children: availableTags.map((tag) {
+                      final isSelected = filter.tags.contains(tag);
+                      return FilterChip(
+                        label: Text(tag),
+                        selected: isSelected,
+                        onSelected: (_) => notifier.toggleTag(tag),
+                      );
+                    }).toList(),
+                  ),
+                ),
+              ],
               const SizedBox(height: 48),
 
               SizedBox(

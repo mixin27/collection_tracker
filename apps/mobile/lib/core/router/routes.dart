@@ -7,6 +7,8 @@ abstract final class Routes {
   static const scanner = '/scanner';
   static const statistics = '/statistics';
   static const settings = '/settings';
+  static const settingsTags = '/settings/tags';
+  static const tagItems = '/tags/items';
 
   // static String bookingWithId(int id) => '$booking/$id';
 }

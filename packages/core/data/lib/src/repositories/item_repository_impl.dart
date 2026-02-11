@@ -16,19 +16,21 @@ class ItemRepositoryImpl implements ItemRepository {
     int? offset,
   }) async {
     try {
-      final List<ItemData> data;
+      final List<(ItemData, List<String>)> data;
 
       if (limit != null && offset != null) {
-        data = await _dao.getItemsPaginated(
+        data = await _dao.getItemsWithTagsPaginated(
           collectionId: collectionId,
           limit: limit,
           offset: offset,
         );
       } else {
-        data = await _dao.getItemsByCollection(collectionId);
+        data = await _dao.getItemsWithTags(collectionId);
       }
 
-      final items = data.map(_mapToEntity).toList();
+      final items = data
+          .map((entry) => _mapToEntity(entry.$1, entry.$2))
+          .toList();
       return Right(items);
     } catch (e, stack) {
       return Left(
@@ -43,7 +45,7 @@ class ItemRepositoryImpl implements ItemRepository {
   @override
   Future<Either<AppException, Item>> getItemById(String id) async {
     try {
-      final data = await _dao.getItemById(id);
+      final data = await _dao.getItemWithTags(id);
       if (data == null) {
         return const Left(
           AppException.notFound(
@@ -52,7 +54,7 @@ class ItemRepositoryImpl implements ItemRepository {
           ),
         );
       }
-      return Right(_mapToEntity(data));
+      return Right(_mapToEntity(data.$1, data.$2));
     } catch (e, stack) {
       return Left(
         AppException.database(
@@ -67,7 +69,7 @@ class ItemRepositoryImpl implements ItemRepository {
   Future<Either<AppException, Item>> createItem(Item item) async {
     try {
       final companion = _mapToCompanion(item);
-      await _dao.insertItem(companion);
+      await _dao.insertItem(companion, tags: item.tags);
       return Right(item);
     } catch (e, stack) {
       return Left(
@@ -83,7 +85,7 @@ class ItemRepositoryImpl implements ItemRepository {
   Future<Either<AppException, Item>> updateItem(Item item) async {
     try {
       final companion = _mapToCompanion(item);
-      final success = await _dao.updateItem(companion);
+      final success = await _dao.updateItem(companion, tags: item.tags);
       if (success < 1) {
         return const Left(
           AppException.notFound(
@@ -121,29 +123,62 @@ class ItemRepositoryImpl implements ItemRepository {
   @override
   Stream<List<Item>> watchItems(String collectionId) {
     return _dao
-        .watchItemsByCollection(collectionId)
-        .map((data) => data.map(_mapToEntity).toList());
+        .watchItemsWithTags(collectionId)
+        .map(
+          (data) =>
+              data.map((entry) => _mapToEntity(entry.$1, entry.$2)).toList(),
+        );
   }
 
   @override
   Stream<Item?> watchItemById(String id) {
     return _dao
-        .watchItemById(id)
-        .map((data) => data != null ? _mapToEntity(data) : null);
+        .watchItemWithTags(id)
+        .map((data) => data != null ? _mapToEntity(data.$1, data.$2) : null);
   }
 
   @override
   Stream<List<Item>> watchAllFavoriteItems() {
-    return _dao.watchAllFavoriteItems().map(
-      (data) => data.map(_mapToEntity).toList(),
-    );
+    return _dao.watchAllFavoriteItems().asyncMap((data) async {
+      final mapped = await Future.wait(
+        data.map((item) async {
+          final tags = await _dao.getTagsForItem(item.id);
+          return _mapToEntity(item, tags);
+        }),
+      );
+      return mapped;
+    });
   }
 
   @override
   Stream<List<Item>> watchAllWishlistItems() {
-    return _dao.watchAllWishlistItems().map(
-      (data) => data.map(_mapToEntity).toList(),
-    );
+    return _dao.watchAllWishlistItems().asyncMap((data) async {
+      final mapped = await Future.wait(
+        data.map((item) async {
+          final tags = await _dao.getTagsForItem(item.id);
+          return _mapToEntity(item, tags);
+        }),
+      );
+      return mapped;
+    });
+  }
+
+  @override
+  Stream<List<Item>> watchItemsByTag(String tagName) {
+    return _dao.watchItemsByTag(tagName).asyncMap((data) async {
+      final mapped = await Future.wait(
+        data.map((item) async {
+          final tags = await _dao.getTagsForItem(item.id);
+          return _mapToEntity(item, tags);
+        }),
+      );
+      return mapped;
+    });
+  }
+
+  @override
+  Stream<List<(String, int)>> watchTagsWithUsage() {
+    return _dao.watchTagsWithUsage();
   }
 
   @override
@@ -156,7 +191,12 @@ class ItemRepositoryImpl implements ItemRepository {
         collectionId: collectionId,
         query: query,
       );
-      final items = data.map(_mapToEntity).toList();
+      final items = await Future.wait(
+        data.map((item) async {
+          final tags = await _dao.getTagsForItem(item.id);
+          return _mapToEntity(item, tags);
+        }),
+      );
       return Right(items);
     } catch (e, stack) {
       return Left(
@@ -183,7 +223,58 @@ class ItemRepositoryImpl implements ItemRepository {
     }
   }
 
-  Item _mapToEntity(ItemData data) {
+  @override
+  Future<Either<AppException, void>> renameTag({
+    required String oldName,
+    required String newName,
+  }) async {
+    try {
+      await _dao.renameTag(oldName: oldName, newName: newName);
+      return const Right(null);
+    } catch (e, stack) {
+      return Left(
+        AppException.database(
+          message: 'Failed to rename tag',
+          stackTrace: stack,
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<Either<AppException, void>> mergeTags({
+    required String sourceName,
+    required String targetName,
+  }) async {
+    try {
+      await _dao.mergeTags(sourceName: sourceName, targetName: targetName);
+      return const Right(null);
+    } catch (e, stack) {
+      return Left(
+        AppException.database(
+          message: 'Failed to merge tags',
+          stackTrace: stack,
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<Either<AppException, void>> deleteTag(String tagName) async {
+    try {
+      await _dao.deleteTagByName(tagName);
+      return const Right(null);
+    } catch (e, stack) {
+      return Left(
+        AppException.database(
+          message: 'Failed to delete tag',
+          stackTrace: stack,
+        ),
+      );
+    }
+  }
+
+  Item _mapToEntity(ItemData data, [List<String> tags = const []]) {
     return Item(
       id: data.id,
       collectionId: data.collectionId,
@@ -210,7 +301,7 @@ class ItemRepositoryImpl implements ItemRepository {
       isWishlist: data.isWishlist,
       quantity: data.quantity,
       sortOrder: data.sortOrder,
-      tags: [], // Tags will be implemented later
+      tags: tags,
       createdAt: data.createdAt,
       updatedAt: data.updatedAt,
     );
