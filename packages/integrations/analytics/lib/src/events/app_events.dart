@@ -41,11 +41,7 @@ class AppEvents {
     return AnalyticsEvent.custom(
       name: 'app_crashed',
       category: 'error',
-      properties: {
-        'error': error,
-        'stack_trace': ?stackTrace,
-        ...?properties,
-      },
+      properties: {'error': error, 'stack_trace': ?stackTrace, ...?properties},
     );
   }
 

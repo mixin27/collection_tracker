@@ -11,11 +11,7 @@ class FormEvents {
     return AnalyticsEvent.custom(
       name: 'form_started',
       category: 'form',
-      properties: {
-        'form_name': formName,
-        'form_id': ?formId,
-        ...?properties,
-      },
+      properties: {'form_name': formName, 'form_id': ?formId, ...?properties},
     );
   }
 

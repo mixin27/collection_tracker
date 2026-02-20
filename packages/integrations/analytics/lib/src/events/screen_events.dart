@@ -85,11 +85,7 @@ class ScreenEvents {
     return AnalyticsEvent.custom(
       name: 'deep_link_opened',
       category: 'navigation',
-      properties: {
-        'deep_link': deepLink,
-        'source': ?source,
-        ...?properties,
-      },
+      properties: {'deep_link': deepLink, 'source': ?source, ...?properties},
     );
   }
 }
