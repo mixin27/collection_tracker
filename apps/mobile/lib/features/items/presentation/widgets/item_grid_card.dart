@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:ui/ui.dart';
 
 class ItemGridCard extends StatelessWidget {
   final Item item;
@@ -23,11 +24,13 @@ class ItemGridCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return Card(
-      clipBehavior: Clip.antiAlias,
-      child: InkWell(
-        onTap: onTap,
-        onLongPress: () => _showMenu(context),
+    return AppCard(
+      padding: EdgeInsets.zero,
+      borderRadius: BorderRadius.circular(AppRadii.lg),
+      onTap: onTap,
+      onLongPress: () => _showMenu(context),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(AppRadii.lg - 1),
         child: Stack(
           children: [
             Column(
@@ -40,7 +43,7 @@ class ItemGridCard extends StatelessWidget {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(AppSpacing.sm),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -67,7 +70,7 @@ class ItemGridCard extends StatelessWidget {
                               'tag-items',
                               queryParameters: {'tag': item.tags.first},
                             ),
-                            borderRadius: BorderRadius.circular(999),
+                            borderRadius: BorderRadius.circular(AppRadii.pill),
                             child: Padding(
                               padding: const EdgeInsets.symmetric(
                                 horizontal: 6,
@@ -139,7 +142,7 @@ class ItemGridCard extends StatelessWidget {
   }
 
   void _showMenu(BuildContext context) {
-    showModalBottomSheet(
+    showAppSheet(
       context: context,
       builder: (context) => SafeArea(
         child: Column(

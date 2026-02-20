@@ -1,6 +1,7 @@
 import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:ui/ui.dart';
 
 import '../providers/items_filter_provider.dart';
 import '../view_models/items_view_model.dart';
@@ -45,9 +46,10 @@ class ItemFilterSheet extends ConsumerWidget {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  TextButton(
+                  AppButton(
+                    label: 'Reset',
+                    variant: AppButtonVariant.ghost,
                     onPressed: () => notifier.reset(),
-                    child: const Text('Reset'),
                   ),
                 ],
               ),
@@ -132,8 +134,8 @@ class ItemFilterSheet extends ConsumerWidget {
                 ),
                 const SizedBox(height: 12),
                 AnimatedSize(
-                  duration: const Duration(milliseconds: 220),
-                  curve: Curves.easeOutCubic,
+                  duration: AppMotion.medium,
+                  curve: AppMotion.emphasized,
                   child: Wrap(
                     spacing: 8,
                     runSpacing: 8,
@@ -152,9 +154,10 @@ class ItemFilterSheet extends ConsumerWidget {
 
               SizedBox(
                 width: double.infinity,
-                child: FilledButton(
+                child: AppButton(
+                  label: 'Apply',
+                  expand: true,
                   onPressed: () => Navigator.pop(context),
-                  child: const Text('Apply'),
                 ),
               ),
               const SizedBox(height: 16),

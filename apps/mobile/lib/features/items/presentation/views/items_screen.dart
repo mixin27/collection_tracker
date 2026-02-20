@@ -1,8 +1,8 @@
 import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:go_router/go_router.dart';
+import 'package:ui/ui.dart';
 
 import '../view_models/items_view_model.dart';
 import '../../../../core/providers/providers.dart';
@@ -137,63 +137,48 @@ class _ItemsScreenState extends ConsumerState<ItemsScreen> {
           ),
         ],
       ),
-      body: AnimatedSwitcher(
-        duration: 300.ms,
+      body: AppAnimatedSwitcher(
+        duration: AppMotion.medium,
         child: displayItemsAsync.when(
           data: (items) {
             if (items.isEmpty) {
-              return Center(
+              return EmptyState(
                 key: const ValueKey('empty'),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      _isSearching ||
-                              filter.conditions.isNotEmpty ||
-                              filter.tags.isNotEmpty ||
-                              filter.showOnlyFavorites
-                          ? Icons.search_off
-                          : Icons.inventory_2_outlined,
-                      size: 80,
-                      color: Theme.of(
-                        context,
-                      ).colorScheme.primary.withValues(alpha: 0.3),
-                    ),
-                    const SizedBox(height: 16),
-                    Text(
-                      items.isEmpty &&
-                              (_isSearching ||
-                                  filter.conditions.isNotEmpty ||
-                                  filter.tags.isNotEmpty ||
-                                  filter.showOnlyFavorites)
-                          ? 'No matches found'
-                          : 'No items yet',
-                      style: Theme.of(context).textTheme.headlineSmall,
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      _isSearching ||
-                              filter.conditions.isNotEmpty ||
-                              filter.tags.isNotEmpty ||
-                              filter.showOnlyFavorites
-                          ? 'Try adjusting your filters'
-                          : 'Add your first item to get started',
-                    ),
-                    if (!_isSearching &&
+                icon:
+                    _isSearching ||
+                        filter.conditions.isNotEmpty ||
+                        filter.tags.isNotEmpty ||
+                        filter.showOnlyFavorites
+                    ? Icons.search_off
+                    : Icons.inventory_2_outlined,
+                title:
+                    items.isEmpty &&
+                        (_isSearching ||
+                            filter.conditions.isNotEmpty ||
+                            filter.tags.isNotEmpty ||
+                            filter.showOnlyFavorites)
+                    ? 'No matches found'
+                    : 'No items yet',
+                message:
+                    _isSearching ||
+                        filter.conditions.isNotEmpty ||
+                        filter.tags.isNotEmpty ||
+                        filter.showOnlyFavorites
+                    ? 'Try adjusting your filters'
+                    : 'Add your first item to get started',
+                action:
+                    !_isSearching &&
                         filter.conditions.isEmpty &&
                         filter.tags.isEmpty &&
-                        !filter.showOnlyFavorites) ...[
-                      const SizedBox(height: 24),
-                      FilledButton.icon(
+                        !filter.showOnlyFavorites
+                    ? AppButton(
+                        label: 'Add Item',
+                        icon: const Icon(Icons.add),
                         onPressed: () => context.push(
                           '/collections/${widget.collectionId}/add-item',
                         ),
-                        icon: const Icon(Icons.add),
-                        label: const Text('Add Item'),
-                      ),
-                    ],
-                  ],
-                ),
+                      )
+                    : null,
               );
             }
 
@@ -225,26 +210,16 @@ class _ItemsScreenState extends ConsumerState<ItemsScreen> {
                   itemBuilder: (context, index) {
                     final item = items[index];
                     final heroTag = 'collection_items_${item.id}';
-                    return Container(
+                    return AppReveal(
                       key: ValueKey(item.id),
-                      child:
-                          ItemCard(
-                                item: item,
-                                heroTag: heroTag,
-                                onTap: () => context.push(
-                                  '/items/${item.id}?heroTag=$heroTag',
-                                ),
-                                onDelete: () =>
-                                    _showDeleteDialog(context, ref, item),
-                              )
-                              .animate(delay: (index * 50).ms)
-                              .fadeIn(duration: 400.ms, curve: Curves.easeOut)
-                              .slideY(
-                                begin: 0.1,
-                                end: 0,
-                                duration: 400.ms,
-                                curve: Curves.easeOut,
-                              ),
+                      delay: AppMotion.stagger * index,
+                      child: ItemCard(
+                        item: item,
+                        heroTag: heroTag,
+                        onTap: () =>
+                            context.push('/items/${item.id}?heroTag=$heroTag'),
+                        onDelete: () => _showDeleteDialog(context, ref, item),
+                      ),
                     );
                   },
                 );
@@ -256,22 +231,16 @@ class _ItemsScreenState extends ConsumerState<ItemsScreen> {
                   itemBuilder: (context, index) {
                     final item = items[index];
                     final heroTag = 'collection_items_${item.id}';
-                    return ItemCard(
-                          item: item,
-                          heroTag: heroTag,
-                          onTap: () => context.push(
-                            '/items/${item.id}?heroTag=$heroTag',
-                          ),
-                          onDelete: () => _showDeleteDialog(context, ref, item),
-                        )
-                        .animate(delay: (index * 50).ms)
-                        .fadeIn(duration: 400.ms, curve: Curves.easeOut)
-                        .slideY(
-                          begin: 0.1,
-                          end: 0,
-                          duration: 400.ms,
-                          curve: Curves.easeOut,
-                        );
+                    return AppReveal(
+                      delay: AppMotion.stagger * index,
+                      child: ItemCard(
+                        item: item,
+                        heroTag: heroTag,
+                        onTap: () =>
+                            context.push('/items/${item.id}?heroTag=$heroTag'),
+                        onDelete: () => _showDeleteDialog(context, ref, item),
+                      ),
+                    );
                   },
                 );
               }
@@ -289,21 +258,18 @@ class _ItemsScreenState extends ConsumerState<ItemsScreen> {
                 itemBuilder: (context, index) {
                   final item = items[index];
                   final heroTag = 'collection_items_${item.id}';
-                  return ItemGridCard(
-                        item: item,
-                        heroTag: heroTag,
-                        onTap: () =>
-                            context.push('/items/${item.id}?heroTag=$heroTag'),
-                        onDelete: () => _showDeleteDialog(context, ref, item),
-                      )
-                      .animate(delay: (index * 50).ms)
-                      .fadeIn(duration: 400.ms, curve: Curves.easeOut)
-                      .scale(
-                        begin: const Offset(0.9, 0.9),
-                        end: const Offset(1, 1),
-                        duration: 400.ms,
-                        curve: Curves.easeOut,
-                      );
+                  return AppReveal(
+                    delay: AppMotion.stagger * index,
+                    beginOffsetY: 0.02,
+                    beginScale: 0.94,
+                    child: ItemGridCard(
+                      item: item,
+                      heroTag: heroTag,
+                      onTap: () =>
+                          context.push('/items/${item.id}?heroTag=$heroTag'),
+                      onDelete: () => _showDeleteDialog(context, ref, item),
+                    ),
+                  );
                 },
               );
             }
@@ -312,25 +278,12 @@ class _ItemsScreenState extends ConsumerState<ItemsScreen> {
             key: ValueKey('loading'),
             child: CircularProgressIndicator(),
           ),
-          error: (error, stack) => Center(
+          error: (error, stack) => ErrorView(
             key: const ValueKey('error'),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Icon(Icons.error_outline, size: 64, color: Colors.red),
-                const SizedBox(height: 16),
-                Text('Error loading items: $error'),
-                const SizedBox(height: 16),
-                ElevatedButton(
-                  onPressed: () {
-                    ref.invalidate(
-                      filteredItemsListProvider(widget.collectionId),
-                    );
-                  },
-                  child: const Text('Retry'),
-                ),
-              ],
-            ),
+            message: 'Error loading items: $error',
+            onRetry: () {
+              ref.invalidate(filteredItemsListProvider(widget.collectionId));
+            },
           ),
         ),
       ),
@@ -371,14 +324,15 @@ class _ItemsScreenState extends ConsumerState<ItemsScreen> {
         title: const Text('Delete Item'),
         content: Text('Are you sure you want to delete "${item.title}"?'),
         actions: [
-          TextButton(
+          AppButton(
+            label: 'Cancel',
+            variant: AppButtonVariant.ghost,
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Cancel'),
           ),
-          FilledButton(
+          AppButton(
+            label: 'Delete',
+            variant: AppButtonVariant.danger,
             onPressed: () => Navigator.pop(context, true),
-            style: FilledButton.styleFrom(backgroundColor: Colors.red),
-            child: const Text('Delete'),
           ),
         ],
       ),

@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:ui/ui.dart';
 
 class ItemCard extends StatelessWidget {
   final Item item;
@@ -23,133 +24,120 @@ class ItemCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return Card(
-      margin: const EdgeInsets.only(bottom: 12),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(12),
-        child: Padding(
-          padding: const EdgeInsets.all(12),
-          child: Row(
-            children: [
-              // Cover Image
-              Hero(
-                tag: heroTag ?? 'item_${item.id}',
-                child: Container(
-                  width: 60,
-                  height: 80,
-                  decoration: BoxDecoration(
-                    color: theme.colorScheme.surfaceContainerHighest,
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: _buildImage(theme),
-                ),
+    return AppCard(
+      margin: const EdgeInsets.only(bottom: AppSpacing.md),
+      padding: const EdgeInsets.all(AppSpacing.md),
+      borderRadius: BorderRadius.circular(AppRadii.md),
+      onTap: onTap,
+      child: Row(
+        children: [
+          Hero(
+            tag: heroTag ?? 'item_${item.id}',
+            child: Container(
+              width: 60,
+              height: 80,
+              decoration: BoxDecoration(
+                color: theme.colorScheme.surfaceContainerHighest,
+                borderRadius: BorderRadius.circular(AppRadii.sm),
               ),
-              const SizedBox(width: 12),
-              // Content
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+              child: _buildImage(theme),
+            ),
+          ),
+          const SizedBox(width: AppSpacing.md),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
                   children: [
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Text(
-                            item.title,
-                            style: theme.textTheme.titleMedium?.copyWith(
-                              fontWeight: FontWeight.bold,
-                            ),
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                          ),
+                    Expanded(
+                      child: Text(
+                        item.title,
+                        style: theme.textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.bold,
                         ),
-                        if (item.isFavorite)
-                          Icon(
-                            Icons.favorite,
-                            size: 20,
-                            color: Colors.red[400],
-                          ),
-                        if (item.isWishlist) ...[
-                          const SizedBox(width: 4),
-                          Icon(
-                            Icons.bookmark,
-                            size: 20,
-                            color: theme.colorScheme.primary,
-                          ),
-                        ],
-                      ],
-                    ),
-                    if (item.description != null &&
-                        item.description!.isNotEmpty) ...[
-                      const SizedBox(height: 4),
-                      Text(
-                        item.description!,
-                        style: theme.textTheme.bodySmall,
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                       ),
-                    ],
-                    const SizedBox(height: 4),
-                    Row(
-                      children: [
-                        if (item.condition != null) ...[
-                          _ConditionBadge(condition: item.condition!),
-                          const SizedBox(width: 8),
-                        ],
-                        if (item.quantity > 1)
-                          Text(
-                            'Qty: ${item.quantity}',
-                            style: theme.textTheme.bodySmall,
-                          ),
-                      ],
                     ),
-                    if (item.tags.isNotEmpty) ...[
-                      const SizedBox(height: 8),
-                      AnimatedSize(
-                        duration: const Duration(milliseconds: 220),
-                        curve: Curves.easeOutCubic,
-                        child: Wrap(
-                          spacing: 6,
-                          runSpacing: 6,
-                          children: item.tags
-                              .take(3)
-                              .map(
-                                (tag) => ActionChip(
-                                  visualDensity: VisualDensity.compact,
-                                  materialTapTargetSize:
-                                      MaterialTapTargetSize.shrinkWrap,
-                                  label: Text(
-                                    tag,
-                                    style: theme.textTheme.labelSmall?.copyWith(
-                                      color: theme
-                                          .colorScheme
-                                          .onSecondaryContainer,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                  backgroundColor:
-                                      theme.colorScheme.secondaryContainer,
-                                  onPressed: () => context.pushNamed(
-                                    'tag-items',
-                                    queryParameters: {'tag': tag},
-                                  ),
-                                ),
-                              )
-                              .toList(),
-                        ),
+                    if (item.isFavorite)
+                      Icon(Icons.favorite, size: 20, color: Colors.red[400]),
+                    if (item.isWishlist) ...[
+                      const SizedBox(width: 4),
+                      Icon(
+                        Icons.bookmark,
+                        size: 20,
+                        color: theme.colorScheme.primary,
                       ),
                     ],
                   ],
                 ),
-              ),
-              // Menu
-              IconButton(
-                icon: const Icon(Icons.more_vert),
-                onPressed: () => _showMenu(context),
-              ),
-            ],
+                if (item.description != null &&
+                    item.description!.isNotEmpty) ...[
+                  const SizedBox(height: 4),
+                  Text(
+                    item.description!,
+                    style: theme.textTheme.bodySmall,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ],
+                const SizedBox(height: 4),
+                Row(
+                  children: [
+                    if (item.condition != null) ...[
+                      _ConditionBadge(condition: item.condition!),
+                      const SizedBox(width: 8),
+                    ],
+                    if (item.quantity > 1)
+                      Text(
+                        'Qty: ${item.quantity}',
+                        style: theme.textTheme.bodySmall,
+                      ),
+                  ],
+                ),
+                if (item.tags.isNotEmpty) ...[
+                  const SizedBox(height: 8),
+                  AnimatedSize(
+                    duration: AppMotion.medium,
+                    curve: AppMotion.emphasized,
+                    child: Wrap(
+                      spacing: 6,
+                      runSpacing: 6,
+                      children: item.tags
+                          .take(3)
+                          .map(
+                            (tag) => ActionChip(
+                              visualDensity: VisualDensity.compact,
+                              materialTapTargetSize:
+                                  MaterialTapTargetSize.shrinkWrap,
+                              label: Text(
+                                tag,
+                                style: theme.textTheme.labelSmall?.copyWith(
+                                  color: theme.colorScheme.onSecondaryContainer,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                              backgroundColor:
+                                  theme.colorScheme.secondaryContainer,
+                              onPressed: () => context.pushNamed(
+                                'tag-items',
+                                queryParameters: {'tag': tag},
+                              ),
+                            ),
+                          )
+                          .toList(),
+                    ),
+                  ),
+                ],
+              ],
+            ),
           ),
-        ),
+          IconButton(
+            icon: const Icon(Icons.more_vert),
+            onPressed: () => _showMenu(context),
+          ),
+        ],
       ),
     );
   }
@@ -193,7 +181,7 @@ class ItemCard extends StatelessWidget {
   }
 
   void _showMenu(BuildContext context) {
-    showModalBottomSheet(
+    showAppSheet(
       context: context,
       builder: (context) => SafeArea(
         child: Column(
@@ -215,6 +203,7 @@ class ItemCard extends StatelessWidget {
                 onDelete();
               },
             ),
+            const SizedBox(height: AppSpacing.sm),
           ],
         ),
       ),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:ui/ui.dart';
 
 import '../view_models/tag_management_view_model.dart';
 
@@ -70,46 +70,47 @@ class _TagManagementScreenState extends ConsumerState<TagManagementScreen> {
           ? SafeArea(
               top: false,
               child: Padding(
-                padding: const EdgeInsets.fromLTRB(12, 8, 12, 12),
-                child: Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: theme.colorScheme.surfaceContainerHigh,
-                    borderRadius: BorderRadius.circular(14),
-                    border: Border.all(color: theme.colorScheme.outlineVariant),
-                  ),
+                padding: const EdgeInsets.fromLTRB(
+                  AppSpacing.md,
+                  AppSpacing.sm,
+                  AppSpacing.md,
+                  AppSpacing.md,
+                ),
+                child: AppCard(
+                  padding: const EdgeInsets.all(AppSpacing.sm),
+                  borderRadius: BorderRadius.circular(AppRadii.lg),
+                  color: theme.colorScheme.surfaceContainerHigh,
                   child: Row(
                     children: [
                       Expanded(
-                        child: OutlinedButton.icon(
+                        child: AppButton(
+                          label: 'Clear',
+                          icon: const Icon(Icons.deselect, size: 18),
+                          variant: AppButtonVariant.secondary,
                           onPressed: _selectedTags.isEmpty || _isBusy
                               ? null
                               : _clearSelectionMode,
-                          icon: const Icon(Icons.deselect),
-                          label: const Text('Clear'),
                         ),
                       ),
-                      const SizedBox(width: 8),
+                      const SizedBox(width: AppSpacing.sm),
                       Expanded(
-                        child: FilledButton.icon(
+                        child: AppButton(
+                          label: 'Merge',
+                          icon: const Icon(Icons.merge_type, size: 18),
                           onPressed: _selectedTags.length < 2 || _isBusy
                               ? null
                               : _mergeSelectedTags,
-                          icon: const Icon(Icons.merge_type),
-                          label: const Text('Merge'),
                         ),
                       ),
-                      const SizedBox(width: 8),
+                      const SizedBox(width: AppSpacing.sm),
                       Expanded(
-                        child: FilledButton.icon(
-                          style: FilledButton.styleFrom(
-                            backgroundColor: Colors.red,
-                          ),
+                        child: AppButton(
+                          label: 'Delete',
+                          icon: const Icon(Icons.delete_outline, size: 18),
+                          variant: AppButtonVariant.danger,
                           onPressed: _selectedTags.isEmpty || _isBusy
                               ? null
                               : _deleteSelectedTags,
-                          icon: const Icon(Icons.delete_outline),
-                          label: const Text('Delete'),
                         ),
                       ),
                     ],
@@ -121,22 +122,25 @@ class _TagManagementScreenState extends ConsumerState<TagManagementScreen> {
       body: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
-            child: TextField(
+            padding: const EdgeInsets.fromLTRB(
+              AppSpacing.lg,
+              AppSpacing.md,
+              AppSpacing.lg,
+              AppSpacing.sm,
+            ),
+            child: AppInput(
               controller: _searchController,
               onChanged: (value) => setState(() {
                 _query = value.trim();
                 _visibleCount = _pageSize;
               }),
-              decoration: const InputDecoration(
-                hintText: 'Search tags...',
-                prefixIcon: Icon(Icons.search),
-              ),
+              hintText: 'Search tags...',
+              prefixIcon: const Icon(Icons.search),
             ),
           ),
           Expanded(
-            child: AnimatedSwitcher(
-              duration: const Duration(milliseconds: 220),
+            child: AppAnimatedSwitcher(
+              duration: AppMotion.medium,
               child: tagsAsync.when(
                 data: (tags) {
                   final filtered = tags.where((entry) {
@@ -164,35 +168,43 @@ class _TagManagementScreenState extends ConsumerState<TagManagementScreen> {
                     children: [
                       if (_selectionMode)
                         Padding(
-                          padding: const EdgeInsets.fromLTRB(16, 8, 16, 4),
+                          padding: const EdgeInsets.fromLTRB(
+                            AppSpacing.lg,
+                            AppSpacing.sm,
+                            AppSpacing.lg,
+                            AppSpacing.xs,
+                          ),
                           child: Wrap(
-                            spacing: 8,
-                            runSpacing: 8,
+                            spacing: AppSpacing.sm,
+                            runSpacing: AppSpacing.sm,
                             children: [
-                              OutlinedButton.icon(
+                              AppButton(
+                                label: 'Select visible',
+                                icon: const Icon(Icons.select_all, size: 18),
+                                variant: AppButtonVariant.secondary,
                                 onPressed: _isBusy
                                     ? null
                                     : () => _selectAllFiltered(
                                         visible.map((entry) => entry.$1),
                                       ),
-                                icon: const Icon(Icons.select_all),
-                                label: const Text('Select visible'),
                               ),
-                              OutlinedButton.icon(
+                              AppButton(
+                                label: 'Select all matches',
+                                icon: const Icon(Icons.done_all, size: 18),
+                                variant: AppButtonVariant.secondary,
                                 onPressed: _isBusy
                                     ? null
                                     : () => _selectAllFiltered(
                                         filtered.map((entry) => entry.$1),
                                       ),
-                                icon: const Icon(Icons.done_all),
-                                label: const Text('Select all matches'),
                               ),
-                              OutlinedButton.icon(
+                              AppButton(
+                                label: 'Clear selection',
+                                icon: const Icon(Icons.deselect, size: 18),
+                                variant: AppButtonVariant.secondary,
                                 onPressed: _isBusy || _selectedTags.isEmpty
                                     ? null
                                     : _clearSelectionMode,
-                                icon: const Icon(Icons.deselect),
-                                label: const Text('Clear selection'),
                               ),
                             ],
                           ),
@@ -201,11 +213,17 @@ class _TagManagementScreenState extends ConsumerState<TagManagementScreen> {
                         child: ListView.separated(
                           key: const ValueKey('tags-list'),
                           controller: _scrollController,
-                          padding: const EdgeInsets.fromLTRB(12, 8, 12, 24),
+                          padding: const EdgeInsets.fromLTRB(
+                            AppSpacing.md,
+                            AppSpacing.sm,
+                            AppSpacing.md,
+                            AppSpacing.xl,
+                          ),
                           itemCount:
                               visible.length +
                               (visible.length < filtered.length ? 1 : 0),
-                          separatorBuilder: (_, _) => const SizedBox(height: 8),
+                          separatorBuilder: (_, _) =>
+                              const SizedBox(height: AppSpacing.sm),
                           itemBuilder: (context, index) {
                             if (index == visible.length) {
                               final remaining =
@@ -229,107 +247,97 @@ class _TagManagementScreenState extends ConsumerState<TagManagementScreen> {
                             final usage = visible[index].$2;
                             final isSelected = _selectedTags.contains(tag);
 
-                            return Card(
-                                  child: ListTile(
-                                    onLongPress: _isBusy
-                                        ? null
-                                        : () {
-                                            _toggleSelection(tag);
-                                            setState(
-                                              () => _selectionMode = true,
-                                            );
-                                          },
-                                    onTap: _selectionMode
-                                        ? () => _toggleSelection(tag)
-                                        : () => context.pushNamed(
-                                            'tag-items',
-                                            queryParameters: {'tag': tag},
-                                          ),
-                                    leading: AnimatedSwitcher(
-                                      duration: const Duration(
-                                        milliseconds: 180,
-                                      ),
-                                      child: _selectionMode
-                                          ? Checkbox(
-                                              key: ValueKey('checkbox-$tag'),
-                                              value: isSelected,
-                                              onChanged: _isBusy
-                                                  ? null
-                                                  : (_) =>
-                                                        _toggleSelection(tag),
-                                            )
-                                          : CircleAvatar(
-                                              key: ValueKey('avatar-$tag'),
-                                              backgroundColor: theme
-                                                  .colorScheme
-                                                  .secondaryContainer,
-                                              child: const Icon(
-                                                Icons.sell_outlined,
-                                              ),
+                            return AppReveal(
+                              delay: AppMotion.stagger * index,
+                              child: AppCard(
+                                padding: EdgeInsets.zero,
+                                child: ListTile(
+                                  onLongPress: _isBusy
+                                      ? null
+                                      : () {
+                                          _toggleSelection(tag);
+                                          setState(() => _selectionMode = true);
+                                        },
+                                  onTap: _selectionMode
+                                      ? () => _toggleSelection(tag)
+                                      : () => context.pushNamed(
+                                          'tag-items',
+                                          queryParameters: {'tag': tag},
+                                        ),
+                                  leading: AnimatedSwitcher(
+                                    duration: AppMotion.fast,
+                                    child: _selectionMode
+                                        ? Checkbox(
+                                            key: ValueKey('checkbox-$tag'),
+                                            value: isSelected,
+                                            onChanged: _isBusy
+                                                ? null
+                                                : (_) => _toggleSelection(tag),
+                                          )
+                                        : CircleAvatar(
+                                            key: ValueKey('avatar-$tag'),
+                                            backgroundColor: theme
+                                                .colorScheme
+                                                .secondaryContainer,
+                                            child: const Icon(
+                                              Icons.sell_outlined,
                                             ),
-                                    ),
-                                    title: Text(tag),
-                                    subtitle: Text(
-                                      usage == 1
-                                          ? 'Used in 1 item'
-                                          : 'Used in $usage items',
-                                    ),
-                                    trailing: _selectionMode
-                                        ? null
-                                        : PopupMenuButton<_TagAction>(
-                                            onSelected: (action) =>
-                                                _handleAction(
-                                                  action: action,
-                                                  tag: tag,
-                                                ),
-                                            itemBuilder: (context) => const [
-                                              PopupMenuItem(
-                                                value: _TagAction.rename,
-                                                child: ListTile(
-                                                  contentPadding:
-                                                      EdgeInsets.zero,
-                                                  leading: Icon(
-                                                    Icons
-                                                        .drive_file_rename_outline,
-                                                  ),
-                                                  title: Text('Rename'),
-                                                ),
-                                              ),
-                                              PopupMenuItem(
-                                                value: _TagAction.merge,
-                                                child: ListTile(
-                                                  contentPadding:
-                                                      EdgeInsets.zero,
-                                                  leading: Icon(
-                                                    Icons.merge_type,
-                                                  ),
-                                                  title: Text('Merge Into...'),
-                                                ),
-                                              ),
-                                              PopupMenuItem(
-                                                value: _TagAction.delete,
-                                                child: ListTile(
-                                                  contentPadding:
-                                                      EdgeInsets.zero,
-                                                  leading: Icon(
-                                                    Icons.delete,
-                                                    color: Colors.red,
-                                                  ),
-                                                  title: Text(
-                                                    'Delete',
-                                                    style: TextStyle(
-                                                      color: Colors.red,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
                                           ),
                                   ),
-                                )
-                                .animate(delay: (index * 35).ms)
-                                .fadeIn(duration: 260.ms, curve: Curves.easeOut)
-                                .slideY(begin: 0.08, end: 0, duration: 260.ms);
+                                  title: Text(tag),
+                                  subtitle: Text(
+                                    usage == 1
+                                        ? 'Used in 1 item'
+                                        : 'Used in $usage items',
+                                  ),
+                                  trailing: _selectionMode
+                                      ? null
+                                      : PopupMenuButton<_TagAction>(
+                                          onSelected: (action) => _handleAction(
+                                            action: action,
+                                            tag: tag,
+                                          ),
+                                          itemBuilder: (context) => const [
+                                            PopupMenuItem(
+                                              value: _TagAction.rename,
+                                              child: ListTile(
+                                                contentPadding: EdgeInsets.zero,
+                                                leading: Icon(
+                                                  Icons
+                                                      .drive_file_rename_outline,
+                                                ),
+                                                title: Text('Rename'),
+                                              ),
+                                            ),
+                                            PopupMenuItem(
+                                              value: _TagAction.merge,
+                                              child: ListTile(
+                                                contentPadding: EdgeInsets.zero,
+                                                leading: Icon(Icons.merge_type),
+                                                title: Text('Merge Into...'),
+                                              ),
+                                            ),
+                                            PopupMenuItem(
+                                              value: _TagAction.delete,
+                                              child: ListTile(
+                                                contentPadding: EdgeInsets.zero,
+                                                leading: Icon(
+                                                  Icons.delete,
+                                                  color: Colors.red,
+                                                ),
+                                                title: Text(
+                                                  'Delete',
+                                                  style: TextStyle(
+                                                    color: Colors.red,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                ),
+                              ),
+                            );
                           },
                         ),
                       ),
@@ -373,25 +381,24 @@ class _TagManagementScreenState extends ConsumerState<TagManagementScreen> {
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('Rename Tag'),
-        content: TextFormField(
+        content: AppInput(
           initialValue: oldName,
           autofocus: true,
-          decoration: const InputDecoration(
-            labelText: 'New name',
-            prefixIcon: Icon(Icons.sell_outlined),
-          ),
+          labelText: 'New name',
+          prefixIcon: const Icon(Icons.sell_outlined),
           onChanged: (value) {
             draftName = value.trim();
           },
         ),
         actions: [
-          TextButton(
+          AppButton(
+            label: 'Cancel',
+            variant: AppButtonVariant.ghost,
             onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
           ),
-          FilledButton(
+          AppButton(
+            label: 'Rename',
             onPressed: () => Navigator.pop(context, draftName),
-            child: const Text('Rename'),
           ),
         ],
       ),
@@ -488,13 +495,14 @@ class _TagManagementScreenState extends ConsumerState<TagManagementScreen> {
             ],
           ),
           actions: [
-            TextButton(
+            AppButton(
+              label: 'Cancel',
+              variant: AppButtonVariant.ghost,
               onPressed: () => Navigator.pop(context, false),
-              child: const Text('Cancel'),
             ),
-            FilledButton(
+            AppButton(
+              label: 'Merge',
               onPressed: () => Navigator.pop(context, true),
-              child: const Text('Merge'),
             ),
           ],
         ),
@@ -534,14 +542,15 @@ class _TagManagementScreenState extends ConsumerState<TagManagementScreen> {
           'Delete ${selected.length} selected tags from all items?\n\nThis cannot be undone.',
         ),
         actions: [
-          TextButton(
+          AppButton(
+            label: 'Cancel',
+            variant: AppButtonVariant.ghost,
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Cancel'),
           ),
-          FilledButton(
+          AppButton(
+            label: 'Delete',
+            variant: AppButtonVariant.danger,
             onPressed: () => Navigator.pop(context, true),
-            style: FilledButton.styleFrom(backgroundColor: Colors.red),
-            child: const Text('Delete'),
           ),
         ],
       ),
@@ -570,9 +579,8 @@ class _TagManagementScreenState extends ConsumerState<TagManagementScreen> {
         .toList();
     if (candidates.isEmpty || !mounted) return;
 
-    final targetName = await showModalBottomSheet<String>(
+    final targetName = await showAppSheet<String>(
       context: context,
-      showDragHandle: true,
       builder: (context) => SafeArea(
         child: ListView(
           padding: const EdgeInsets.only(bottom: 16),
@@ -615,14 +623,15 @@ class _TagManagementScreenState extends ConsumerState<TagManagementScreen> {
           'Delete "$tagName" from all items?\n\nThis cannot be undone.',
         ),
         actions: [
-          TextButton(
+          AppButton(
+            label: 'Cancel',
+            variant: AppButtonVariant.ghost,
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Cancel'),
           ),
-          FilledButton(
+          AppButton(
+            label: 'Delete',
+            variant: AppButtonVariant.danger,
             onPressed: () => Navigator.pop(context, true),
-            style: FilledButton.styleFrom(backgroundColor: Colors.red),
-            child: const Text('Delete'),
           ),
         ],
       ),

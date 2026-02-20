@@ -6,6 +6,7 @@ import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:ui/ui.dart';
 
 import '../providers/price_tracking_provider.dart';
 import '../view_models/items_view_model.dart';
@@ -185,195 +186,179 @@ class ItemDetailScreen extends ConsumerWidget {
                       const SizedBox(height: 16),
                     ],
 
-                    Card(
-                      child: Padding(
-                        padding: const EdgeInsets.all(16),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              children: [
-                                Text(
-                                  'Price Tracking',
-                                  style: theme.textTheme.titleMedium?.copyWith(
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                const Spacer(),
-                                TextButton.icon(
-                                  onPressed: () =>
-                                      _showUpdateCurrentValueDialog(
-                                        context,
-                                        ref,
-                                        item,
-                                      ),
-                                  icon: const Icon(Icons.show_chart),
-                                  label: const Text('Update'),
-                                ),
-                              ],
-                            ),
-                            if (item.currentValue != null) ...[
-                              const SizedBox(height: 4),
+                    AppCard(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
                               Text(
-                                _formatCurrency(item.currentValue!),
-                                style: theme.textTheme.headlineSmall?.copyWith(
-                                  fontWeight: FontWeight.w700,
-                                  color: theme.colorScheme.primary,
+                                'Price Tracking',
+                                style: theme.textTheme.titleMedium?.copyWith(
+                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
-                            ] else ...[
-                              const SizedBox(height: 4),
-                              Text(
-                                'No current value set',
-                                style: theme.textTheme.bodyMedium?.copyWith(
-                                  color: theme.colorScheme.onSurfaceVariant,
+                              const Spacer(),
+                              AppButton(
+                                label: 'Update',
+                                icon: const Icon(Icons.show_chart, size: 18),
+                                variant: AppButtonVariant.ghost,
+                                onPressed: () => _showUpdateCurrentValueDialog(
+                                  context,
+                                  ref,
+                                  item,
                                 ),
                               ),
                             ],
-                            const SizedBox(height: 12),
-                            priceHistoryAsync.when(
-                              data: (history) {
-                                if (history.isEmpty) {
-                                  return Text(
-                                    'No historical points yet. Update current value to start tracking.',
-                                    style: theme.textTheme.bodySmall?.copyWith(
-                                      color: theme.colorScheme.onSurfaceVariant,
-                                    ),
-                                  );
-                                }
-
-                                final recent = history.reversed
-                                    .take(5)
-                                    .toList();
-                                return Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    _PriceHistoryChart(points: history),
-                                    const SizedBox(height: 12),
-                                    ...recent.map(
-                                      (entry) => Padding(
-                                        padding: const EdgeInsets.only(
-                                          bottom: 6,
-                                        ),
-                                        child: Row(
-                                          children: [
-                                            Text(
-                                              _formatDate(entry.$1),
-                                              style: theme.textTheme.bodySmall,
-                                            ),
-                                            const Spacer(),
-                                            Text(
-                                              _formatCurrency(entry.$2),
-                                              style: theme.textTheme.bodyMedium
-                                                  ?.copyWith(
-                                                    fontWeight: FontWeight.w600,
-                                                  ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                );
-                              },
-                              loading: () => const SizedBox(
-                                height: 80,
-                                child: Center(
-                                  child: CircularProgressIndicator(
-                                    strokeWidth: 2,
-                                  ),
-                                ),
+                          ),
+                          if (item.currentValue != null) ...[
+                            const SizedBox(height: 4),
+                            Text(
+                              _formatCurrency(item.currentValue!),
+                              style: theme.textTheme.headlineSmall?.copyWith(
+                                fontWeight: FontWeight.w700,
+                                color: theme.colorScheme.primary,
                               ),
-                              error: (_, _) => Text(
-                                'Unable to load price history',
-                                style: theme.textTheme.bodySmall?.copyWith(
-                                  color: theme.colorScheme.error,
-                                ),
+                            ),
+                          ] else ...[
+                            const SizedBox(height: 4),
+                            Text(
+                              'No current value set',
+                              style: theme.textTheme.bodyMedium?.copyWith(
+                                color: theme.colorScheme.onSurfaceVariant,
                               ),
                             ),
                           ],
-                        ),
+                          const SizedBox(height: 12),
+                          priceHistoryAsync.when(
+                            data: (history) {
+                              if (history.isEmpty) {
+                                return Text(
+                                  'No historical points yet. Update current value to start tracking.',
+                                  style: theme.textTheme.bodySmall?.copyWith(
+                                    color: theme.colorScheme.onSurfaceVariant,
+                                  ),
+                                );
+                              }
+
+                              final recent = history.reversed.take(5).toList();
+                              return Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  _PriceHistoryChart(points: history),
+                                  const SizedBox(height: 12),
+                                  ...recent.map(
+                                    (entry) => Padding(
+                                      padding: const EdgeInsets.only(bottom: 6),
+                                      child: Row(
+                                        children: [
+                                          Text(
+                                            _formatDate(entry.$1),
+                                            style: theme.textTheme.bodySmall,
+                                          ),
+                                          const Spacer(),
+                                          Text(
+                                            _formatCurrency(entry.$2),
+                                            style: theme.textTheme.bodyMedium
+                                                ?.copyWith(
+                                                  fontWeight: FontWeight.w600,
+                                                ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              );
+                            },
+                            loading: () => const SizedBox(
+                              height: 80,
+                              child: Center(
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                ),
+                              ),
+                            ),
+                            error: (_, _) => Text(
+                              'Unable to load price history',
+                              style: theme.textTheme.bodySmall?.copyWith(
+                                color: theme.colorScheme.error,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                     const SizedBox(height: 16),
 
                     // Details Card
-                    Card(
-                      child: Padding(
-                        padding: const EdgeInsets.all(16),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Details',
-                              style: theme.textTheme.titleMedium?.copyWith(
-                                fontWeight: FontWeight.bold,
-                              ),
+                    AppCard(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Details',
+                            style: theme.textTheme.titleMedium?.copyWith(
+                              fontWeight: FontWeight.bold,
                             ),
-                            const SizedBox(height: 12),
-                            if (item.barcode != null)
-                              _DetailRow(
-                                label: 'Barcode',
-                                value: item.barcode!,
-                              ),
-                            if (item.condition != null)
-                              _DetailRow(
-                                label: 'Condition',
-                                value: item.condition!.name.toUpperCase(),
-                              ),
+                          ),
+                          const SizedBox(height: 12),
+                          if (item.barcode != null)
+                            _DetailRow(label: 'Barcode', value: item.barcode!),
+                          if (item.condition != null)
                             _DetailRow(
-                              label: 'Quantity',
-                              value: '${item.quantity}',
+                              label: 'Condition',
+                              value: item.condition!.name.toUpperCase(),
                             ),
-                            if (item.location != null)
-                              _DetailRow(
-                                label: 'Location',
-                                value: item.location!,
-                              ),
-                            if (item.purchasePrice != null)
-                              _DetailRow(
-                                label: 'Purchase Price',
-                                value:
-                                    '\$${item.purchasePrice!.toStringAsFixed(2)}',
-                              ),
-                            if (item.currentValue != null)
-                              _DetailRow(
-                                label: 'Current Value',
-                                value:
-                                    '\$${item.currentValue!.toStringAsFixed(2)}',
-                              ),
-                            if (item.purchaseDate != null)
-                              _DetailRow(
-                                label: 'Purchase Date',
-                                value: _formatDate(item.purchaseDate!),
-                              ),
-                          ],
-                        ),
+                          _DetailRow(
+                            label: 'Quantity',
+                            value: '${item.quantity}',
+                          ),
+                          if (item.location != null)
+                            _DetailRow(
+                              label: 'Location',
+                              value: item.location!,
+                            ),
+                          if (item.purchasePrice != null)
+                            _DetailRow(
+                              label: 'Purchase Price',
+                              value:
+                                  '\$${item.purchasePrice!.toStringAsFixed(2)}',
+                            ),
+                          if (item.currentValue != null)
+                            _DetailRow(
+                              label: 'Current Value',
+                              value:
+                                  '\$${item.currentValue!.toStringAsFixed(2)}',
+                            ),
+                          if (item.purchaseDate != null)
+                            _DetailRow(
+                              label: 'Purchase Date',
+                              value: _formatDate(item.purchaseDate!),
+                            ),
+                        ],
                       ),
                     ),
 
                     // Notes
                     if (item.notes != null && item.notes!.isNotEmpty) ...[
                       const SizedBox(height: 16),
-                      Card(
-                        child: Padding(
-                          padding: const EdgeInsets.all(16),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Notes',
-                                style: theme.textTheme.titleMedium?.copyWith(
-                                  fontWeight: FontWeight.bold,
-                                ),
+                      AppCard(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Notes',
+                              style: theme.textTheme.titleMedium?.copyWith(
+                                fontWeight: FontWeight.bold,
                               ),
-                              const SizedBox(height: 8),
-                              Text(
-                                item.notes!,
-                                style: theme.textTheme.bodyMedium,
-                              ),
-                            ],
-                          ),
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              item.notes!,
+                              style: theme.textTheme.bodyMedium,
+                            ),
+                          ],
                         ),
                       ),
                     ],
@@ -414,31 +399,30 @@ class ItemDetailScreen extends ConsumerWidget {
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('Update Current Value'),
-        content: TextFormField(
+        content: AppInput(
           initialValue: draftValue,
           autofocus: true,
           keyboardType: const TextInputType.numberWithOptions(decimal: true),
-          decoration: const InputDecoration(
-            labelText: 'Current value',
-            prefixText: '\$',
-            hintText: '0.00',
-          ),
+          labelText: 'Current value',
+          prefixText: '\$',
+          hintText: '0.00',
           onChanged: (value) {
             draftValue = value;
           },
         ),
         actions: [
-          TextButton(
+          AppButton(
+            label: 'Cancel',
+            variant: AppButtonVariant.ghost,
             onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
           ),
-          FilledButton(
+          AppButton(
+            label: 'Save',
             onPressed: () {
               final parsed = double.tryParse(draftValue.trim());
               if (parsed == null || parsed < 0) return;
               Navigator.pop(context, parsed);
             },
-            child: const Text('Save'),
           ),
         ],
       ),

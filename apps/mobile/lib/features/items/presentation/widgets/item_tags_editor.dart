@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ui/ui.dart';
 
 class ItemTagsEditor extends StatefulWidget {
   final List<String> initialTags;
@@ -59,12 +60,10 @@ class _ItemTagsEditorState extends State<ItemTagsEditor> {
         Row(
           children: [
             Expanded(
-              child: TextFormField(
+              child: AppInput(
                 controller: _controller,
-                decoration: InputDecoration(
-                  hintText: widget.hintText,
-                  prefixIcon: const Icon(Icons.sell_outlined),
-                ),
+                hintText: widget.hintText,
+                prefixIcon: const Icon(Icons.sell_outlined),
                 textInputAction: TextInputAction.done,
                 onFieldSubmitted: (_) => _addTag(),
               ),
@@ -78,10 +77,8 @@ class _ItemTagsEditorState extends State<ItemTagsEditor> {
           ],
         ),
         const SizedBox(height: 10),
-        AnimatedSwitcher(
-          duration: const Duration(milliseconds: 220),
-          switchInCurve: Curves.easeOutCubic,
-          switchOutCurve: Curves.easeInCubic,
+        AppAnimatedSwitcher(
+          duration: AppMotion.medium,
           child: _tags.isEmpty
               ? Container(
                   key: const ValueKey('empty-tags'),
@@ -103,8 +100,8 @@ class _ItemTagsEditorState extends State<ItemTagsEditor> {
                 )
               : AnimatedSize(
                   key: const ValueKey('tags'),
-                  duration: const Duration(milliseconds: 220),
-                  curve: Curves.easeOutCubic,
+                  duration: AppMotion.medium,
+                  curve: AppMotion.emphasized,
                   child: Wrap(
                     spacing: 8,
                     runSpacing: 8,

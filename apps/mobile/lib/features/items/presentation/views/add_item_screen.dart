@@ -61,205 +61,192 @@ class _AddItemScreenState extends ConsumerState<AddItemScreen> {
       body: Form(
         key: _formKey,
         child: ListView(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(AppSpacing.lg),
           children: [
             // Image picker
-            Center(
-              child: ImagePickerWidget(
-                imagePath: _imagePath,
-                imageUrl: _coverImageUrl,
-                onPickFromGallery: () async {
-                  final path = await _imageStorageService
-                      .pickImageFromGallery();
-                  if (path != null && mounted) {
-                    setState(() {
-                      _imagePath = path;
-                      _coverImageUrl = null;
-                    });
-                  }
-                },
-                onPickFromCamera: () async {
-                  final path = await _imageStorageService.pickImageFromCamera();
-                  if (path != null && mounted) {
-                    setState(() {
-                      _imagePath = path;
-                      _coverImageUrl = null;
-                    });
-                  }
-                },
-                onRemove: () {
-                  setState(() {
-                    _imagePath = null;
-                    _coverImageUrl = null;
-                  });
-                },
-              ),
-            ),
-            const SizedBox(height: 24),
-
-            // Title field
-            TextFormField(
-              controller: _titleController,
-              decoration: InputDecoration(
-                labelText: 'Title',
-                hintText: 'e.g., The Lord of the Rings',
-                prefixIcon: const Icon(Icons.title),
-                suffixIcon: IconButton(
-                  icon: const Icon(Icons.search),
-                  onPressed: () => _showMetadataSearch(context),
-                ),
-              ),
-              textCapitalization: TextCapitalization.words,
-              validator: (value) {
-                if (value == null || value.trim().isEmpty) {
-                  return 'Please enter a title';
-                }
-                return null;
-              },
-            ),
-            const SizedBox(height: 16),
-
-            // Barcode field
-            TextFormField(
-              controller: _barcodeController,
-              decoration: InputDecoration(
-                labelText: 'Barcode (optional)',
-                hintText: 'ISBN, UPC, etc.',
-                prefixIcon: const Icon(Icons.qr_code),
-                suffixIcon: IconButton(
-                  icon: const Icon(Icons.camera_alt),
-                  onPressed: () async {
-                    final barcode = await context.push<String>(
-                      '/scanner?collectionId=${widget.collectionId}',
-                    );
-
-                    if (barcode != null && mounted) {
-                      _barcodeController.text = barcode;
-                      _fetchMetadata(barcode);
+            AppCard(
+              child: Center(
+                child: ImagePickerWidget(
+                  imagePath: _imagePath,
+                  imageUrl: _coverImageUrl,
+                  onPickFromGallery: () async {
+                    final path = await _imageStorageService
+                        .pickImageFromGallery();
+                    if (path != null && mounted) {
+                      setState(() {
+                        _imagePath = path;
+                        _coverImageUrl = null;
+                      });
                     }
+                  },
+                  onPickFromCamera: () async {
+                    final path = await _imageStorageService
+                        .pickImageFromCamera();
+                    if (path != null && mounted) {
+                      setState(() {
+                        _imagePath = path;
+                        _coverImageUrl = null;
+                      });
+                    }
+                  },
+                  onRemove: () {
+                    setState(() {
+                      _imagePath = null;
+                      _coverImageUrl = null;
+                    });
                   },
                 ),
               ),
-              keyboardType: TextInputType.text,
-              onFieldSubmitted: (value) {
-                if (value.trim().isNotEmpty) {
-                  _fetchMetadata(value.trim());
-                }
-              },
             ),
-            if (_isFetchingMetadata)
-              const Padding(
-                padding: EdgeInsets.only(top: 8.0),
-                child: Center(
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      SizedBox(
-                        width: 16,
-                        height: 16,
-                        child: CircularProgressIndicator(strokeWidth: 2),
+            const SizedBox(height: AppSpacing.lg),
+
+            AppCard(
+              child: Column(
+                children: [
+                  AppInput(
+                    controller: _titleController,
+                    labelText: 'Title',
+                    hintText: 'e.g., The Lord of the Rings',
+                    prefixIcon: const Icon(Icons.title),
+                    suffixIcon: IconButton(
+                      icon: const Icon(Icons.search),
+                      onPressed: () => _showMetadataSearch(context),
+                    ),
+                    textCapitalization: TextCapitalization.words,
+                    validator: (value) {
+                      if (value == null || value.trim().isEmpty) {
+                        return 'Please enter a title';
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: AppSpacing.md),
+                  AppInput(
+                    controller: _barcodeController,
+                    labelText: 'Barcode (optional)',
+                    hintText: 'ISBN, UPC, etc.',
+                    prefixIcon: const Icon(Icons.qr_code),
+                    suffixIcon: IconButton(
+                      icon: const Icon(Icons.camera_alt),
+                      onPressed: () async {
+                        final barcode = await context.push<String>(
+                          '/scanner?collectionId=${widget.collectionId}',
+                        );
+
+                        if (barcode != null && mounted) {
+                          _barcodeController.text = barcode;
+                          _fetchMetadata(barcode);
+                        }
+                      },
+                    ),
+                    keyboardType: TextInputType.text,
+                    onFieldSubmitted: (value) {
+                      if (value.trim().isNotEmpty) {
+                        _fetchMetadata(value.trim());
+                      }
+                    },
+                  ),
+                  if (_isFetchingMetadata)
+                    const Padding(
+                      padding: EdgeInsets.only(top: AppSpacing.sm),
+                      child: Center(
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            SizedBox(
+                              width: 16,
+                              height: 16,
+                              child: CircularProgressIndicator(strokeWidth: 2),
+                            ),
+                            SizedBox(width: 8),
+                            Text(
+                              'Fetching metadata...',
+                              style: TextStyle(fontSize: 12),
+                            ),
+                          ],
+                        ),
                       ),
-                      SizedBox(width: 8),
-                      Text(
-                        'Fetching metadata...',
-                        style: TextStyle(fontSize: 12),
+                    ),
+                  const SizedBox(height: AppSpacing.md),
+                  AppInput(
+                    controller: _descriptionController,
+                    labelText: 'Description (optional)',
+                    hintText: 'Add a description',
+                    prefixIcon: const Icon(Icons.description),
+                    maxLines: 4,
+                    textCapitalization: TextCapitalization.sentences,
+                  ),
+                  const SizedBox(height: AppSpacing.md),
+                  ItemTagsEditor(
+                    initialTags: _tags,
+                    onChanged: (tags) {
+                      _tags = tags;
+                    },
+                    label: 'Tags (optional)',
+                    hintText: 'e.g., Rare, Completed Set',
+                  ),
+                  const SizedBox(height: AppSpacing.md),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: AppInput(
+                          controller: _purchasePriceController,
+                          labelText: 'Purchase Price',
+                          prefixText: '\$',
+                          prefixIcon: const Icon(Icons.attach_money),
+                          keyboardType: const TextInputType.numberWithOptions(
+                            decimal: true,
+                          ),
+                          validator: _validatePriceInput,
+                        ),
+                      ),
+                      const SizedBox(width: AppSpacing.md),
+                      Expanded(
+                        child: AppInput(
+                          controller: _currentValueController,
+                          labelText: 'Current Value',
+                          prefixText: '\$',
+                          prefixIcon: const Icon(Icons.show_chart),
+                          keyboardType: const TextInputType.numberWithOptions(
+                            decimal: true,
+                          ),
+                          validator: _validatePriceInput,
+                        ),
                       ),
                     ],
                   ),
-                ),
-              ),
-            const SizedBox(height: 16),
-
-            // Description field
-            TextFormField(
-              controller: _descriptionController,
-              decoration: const InputDecoration(
-                labelText: 'Description (optional)',
-                hintText: 'Add a description',
-                prefixIcon: Icon(Icons.description),
-              ),
-              maxLines: 4,
-              textCapitalization: TextCapitalization.sentences,
-            ),
-            const SizedBox(height: 16),
-
-            ItemTagsEditor(
-              initialTags: _tags,
-              onChanged: (tags) {
-                _tags = tags;
-              },
-              label: 'Tags (optional)',
-              hintText: 'e.g., Rare, Completed Set',
-            ),
-            const SizedBox(height: 16),
-
-            Row(
-              children: [
-                Expanded(
-                  child: TextFormField(
-                    controller: _purchasePriceController,
-                    decoration: const InputDecoration(
-                      labelText: 'Purchase Price',
-                      prefixText: '\$',
-                      prefixIcon: Icon(Icons.attach_money),
+                  const SizedBox(height: AppSpacing.md),
+                  AppInput(
+                    controller: _purchaseDateController,
+                    readOnly: true,
+                    decoration: InputDecoration(
+                      labelText: 'Purchase Date (optional)',
+                      prefixIcon: const Icon(Icons.calendar_today),
+                      suffixIcon: _selectedPurchaseDate == null
+                          ? null
+                          : IconButton(
+                              icon: const Icon(Icons.clear),
+                              onPressed: () {
+                                setState(() {
+                                  _selectedPurchaseDate = null;
+                                  _purchaseDateController.clear();
+                                });
+                              },
+                            ),
                     ),
-                    keyboardType: const TextInputType.numberWithOptions(
-                      decimal: true,
-                    ),
-                    validator: _validatePriceInput,
+                    onTap: _pickPurchaseDate,
                   ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: TextFormField(
-                    controller: _currentValueController,
-                    decoration: const InputDecoration(
-                      labelText: 'Current Value',
-                      prefixText: '\$',
-                      prefixIcon: Icon(Icons.show_chart),
-                    ),
-                    keyboardType: const TextInputType.numberWithOptions(
-                      decimal: true,
-                    ),
-                    validator: _validatePriceInput,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 16),
-
-            TextFormField(
-              controller: _purchaseDateController,
-              readOnly: true,
-              decoration: InputDecoration(
-                labelText: 'Purchase Date (optional)',
-                prefixIcon: const Icon(Icons.calendar_today),
-                suffixIcon: _selectedPurchaseDate == null
-                    ? null
-                    : IconButton(
-                        icon: const Icon(Icons.clear),
-                        onPressed: () {
-                          setState(() {
-                            _selectedPurchaseDate = null;
-                            _purchaseDateController.clear();
-                          });
-                        },
-                      ),
+                ],
               ),
-              onTap: _pickPurchaseDate,
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: AppSpacing.xl),
 
             // Add button
-            FilledButton(
+            AppButton(
+              label: 'Add Item',
+              isLoading: _isLoading,
               onPressed: _isLoading ? null : _handleAdd,
-              child: _isLoading
-                  ? const SizedBox(
-                      height: 20,
-                      width: 20,
-                      child: CircularProgressIndicator(strokeWidth: 2),
-                    )
-                  : const Text('Add Item'),
+              expand: true,
             ),
           ],
         ),

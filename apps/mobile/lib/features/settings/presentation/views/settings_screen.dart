@@ -12,82 +12,103 @@ class SettingsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final themeSummary = ref.watch(
+      themeSettingsProvider.select(
+        (s) => '${s.mode.name.toUpperCase()} - ${s.variant.label}',
+      ),
+    );
+
     return Scaffold(
       appBar: AppBar(title: const Text('Settings')),
       body: ListView(
+        padding: const EdgeInsets.fromLTRB(
+          AppSpacing.lg,
+          AppSpacing.md,
+          AppSpacing.lg,
+          AppSpacing.xxl,
+        ),
         children: [
-          _SectionHeader(title: 'General'),
-          ListTile(
-            leading: const Icon(Icons.palette),
-            title: const Text('Theme'),
-            subtitle: Text(
-              '${ref.watch(themeSettingsProvider.select((s) => s.mode.name.toUpperCase()))} - '
-              '${ref.watch(themeSettingsProvider.select((s) => s.variant.label))}',
+          AppReveal(
+            child: _SettingsSection(
+              title: 'General',
+              children: [
+                _SettingsTile(
+                  icon: Icons.palette,
+                  title: 'Theme',
+                  subtitle: themeSummary,
+                  onTap: () => _showThemeSelector(context, ref),
+                ),
+                _SettingsTile(
+                  icon: Icons.language,
+                  title: 'Language',
+                  subtitle: 'English',
+                  onTap: () {},
+                ),
+              ],
             ),
-            onTap: () => _showThemeSelector(context, ref),
           ),
-          ListTile(
-            leading: const Icon(Icons.language),
-            title: const Text('Language'),
-            subtitle: const Text('English'),
-            onTap: () {
-              // todo(mixin27): Implement language selector
-            },
+          const SizedBox(height: AppSpacing.lg),
+          AppReveal(
+            delay: AppMotion.stagger,
+            child: _SettingsSection(
+              title: 'Data',
+              children: [
+                _SettingsTile(
+                  icon: Icons.file_download,
+                  title: 'Export to JSON',
+                  subtitle: 'Export all data as JSON file',
+                  onTap: () => _handleExportJson(context, ref),
+                ),
+                _SettingsTile(
+                  icon: Icons.table_chart,
+                  title: 'Export to CSV',
+                  subtitle: 'Export items as CSV spreadsheet',
+                  onTap: () => _handleExportCsv(context, ref),
+                ),
+                _SettingsTile(
+                  icon: Icons.file_upload,
+                  title: 'Import from JSON',
+                  subtitle: 'Import data from JSON file',
+                  onTap: () => _handleImportJson(context, ref),
+                ),
+                _SettingsTile(
+                  icon: Icons.cloud_upload,
+                  title: 'Cloud Sync',
+                  subtitle: 'Not configured',
+                  onTap: () {},
+                ),
+                _SettingsTile(
+                  icon: Icons.sell_outlined,
+                  title: 'Manage Tags',
+                  subtitle: 'Rename, merge, and delete tags',
+                  onTap: () => context.push('/settings/tags'),
+                ),
+              ],
+            ),
           ),
-          const Divider(),
-          _SectionHeader(title: 'Data'),
-          ListTile(
-            leading: const Icon(Icons.file_download),
-            title: const Text('Export to JSON'),
-            subtitle: const Text('Export all data as JSON file'),
-            onTap: () => _handleExportJson(context, ref),
-          ),
-          ListTile(
-            leading: const Icon(Icons.table_chart),
-            title: const Text('Export to CSV'),
-            subtitle: const Text('Export items as CSV spreadsheet'),
-            onTap: () => _handleExportCsv(context, ref),
-          ),
-          ListTile(
-            leading: const Icon(Icons.file_upload),
-            title: const Text('Import from JSON'),
-            subtitle: const Text('Import data from JSON file'),
-            onTap: () => _handleImportJson(context, ref),
-          ),
-          ListTile(
-            leading: const Icon(Icons.cloud_upload),
-            title: const Text('Cloud Sync'),
-            subtitle: const Text('Not configured'),
-            onTap: () {
-              // todo(mixin27): Implement cloud sync
-            },
-          ),
-          ListTile(
-            leading: const Icon(Icons.sell_outlined),
-            title: const Text('Manage Tags'),
-            subtitle: const Text('Rename, merge, and delete tags'),
-            onTap: () => context.push('/settings/tags'),
-          ),
-          const Divider(),
-          _SectionHeader(title: 'About'),
-          ListTile(
-            leading: const Icon(Icons.info),
-            title: const Text('Version'),
-            subtitle: const Text('1.0.0'),
-          ),
-          ListTile(
-            leading: const Icon(Icons.description),
-            title: const Text('Privacy Policy'),
-            onTap: () {
-              // todo(mixin27): Show privacy policy
-            },
-          ),
-          ListTile(
-            leading: const Icon(Icons.gavel),
-            title: const Text('Terms of Service'),
-            onTap: () {
-              // todo(mixin27): Show terms of service
-            },
+          const SizedBox(height: AppSpacing.lg),
+          AppReveal(
+            delay: AppMotion.stagger * 2,
+            child: _SettingsSection(
+              title: 'About',
+              children: [
+                const _SettingsTile(
+                  icon: Icons.info,
+                  title: 'Version',
+                  subtitle: '1.0.0',
+                ),
+                _SettingsTile(
+                  icon: Icons.description,
+                  title: 'Privacy Policy',
+                  onTap: () {},
+                ),
+                _SettingsTile(
+                  icon: Icons.gavel,
+                  title: 'Terms of Service',
+                  onTap: () {},
+                ),
+              ],
+            ),
           ),
         ],
       ),
@@ -97,7 +118,6 @@ class SettingsScreen extends ConsumerWidget {
   Future<void> _handleExportJson(BuildContext context, WidgetRef ref) async {
     try {
       final messenger = ScaffoldMessenger.of(context);
-
       messenger.showSnackBar(
         const SnackBar(content: Text('Exporting data...')),
       );
@@ -132,7 +152,6 @@ class SettingsScreen extends ConsumerWidget {
   Future<void> _handleExportCsv(BuildContext context, WidgetRef ref) async {
     try {
       final messenger = ScaffoldMessenger.of(context);
-
       messenger.showSnackBar(
         const SnackBar(content: Text('Exporting data...')),
       );
@@ -171,17 +190,17 @@ class SettingsScreen extends ConsumerWidget {
         title: const Text('Import Data'),
         content: const Text(
           'This will import collections and items from a JSON file. '
-          'Existing data will not be deleted.\n\n'
-          'Continue?',
+          'Existing data will not be deleted.\n\nContinue?',
         ),
         actions: [
-          TextButton(
+          AppButton(
+            label: 'Cancel',
+            variant: AppButtonVariant.ghost,
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Cancel'),
           ),
-          FilledButton(
+          AppButton(
+            label: 'Import',
             onPressed: () => Navigator.pop(context, true),
-            child: const Text('Import'),
           ),
         ],
       ),
@@ -191,7 +210,6 @@ class SettingsScreen extends ConsumerWidget {
 
     try {
       final messenger = ScaffoldMessenger.of(context);
-
       messenger.showSnackBar(
         const SnackBar(content: Text('Importing data...')),
       );
@@ -219,120 +237,103 @@ class SettingsScreen extends ConsumerWidget {
   }
 
   Future<void> _showThemeSelector(BuildContext context, WidgetRef ref) async {
-    await showModalBottomSheet(
+    await showAppSheet(
       context: context,
       builder: (context) {
         return Consumer(
           builder: (context, ref, _) {
-            final s = ref.watch(themeSettingsProvider);
-            return SafeArea(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 24),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 24),
-                      child: Text(
-                        'Theme Mode',
-                        style: Theme.of(context).textTheme.titleMedium,
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: ThemeMode.values.map((mode) {
-                        final isSelected = s.mode == mode;
-                        return ChoiceChip(
-                          label: Text(mode.name.toUpperCase()),
-                          selected: isSelected,
-                          onSelected: (selected) {
-                            if (selected) {
-                              ref
-                                  .read(themeSettingsProvider.notifier)
-                                  .setThemeMode(mode);
-                            }
-                          },
-                        );
-                      }).toList(),
-                    ),
-                    const SizedBox(height: 24),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 24),
-                      child: Text(
-                        'Color Variant',
-                        style: Theme.of(context).textTheme.titleMedium,
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    SizedBox(
-                      height: 56,
-                      child: ListView.separated(
-                        scrollDirection: Axis.horizontal,
-                        padding: const EdgeInsets.symmetric(horizontal: 24),
-                        itemCount: AppThemeVariant.values.length,
-                        separatorBuilder: (context, index) =>
-                            const SizedBox(width: 16),
-                        itemBuilder: (context, index) {
-                          final variant = AppThemeVariant.values[index];
-                          final isSelected = s.variant == variant;
-                          return GestureDetector(
-                            onTap: () {
-                              ref
-                                  .read(themeSettingsProvider.notifier)
-                                  .setThemeVariant(variant);
-                            },
-                            child: Container(
-                              width: 48,
-                              height: 48,
-                              decoration: BoxDecoration(
-                                color: variant.color,
-                                shape: BoxShape.circle,
-                                border: isSelected
-                                    ? Border.all(
-                                        color: Theme.of(
-                                          context,
-                                        ).colorScheme.primary,
-                                        width: 3,
-                                      )
-                                    : null,
-                                boxShadow: isSelected
-                                    ? [
-                                        BoxShadow(
-                                          color: variant.color.withValues(
-                                            alpha: 0.4,
-                                          ),
-                                          blurRadius: 8,
-                                          spreadRadius: 2,
-                                        ),
-                                      ]
-                                    : null,
-                              ),
-                              child: isSelected
-                                  ? const Icon(Icons.check, color: Colors.white)
-                                  : null,
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    SwitchListTile(
-                      title: const Text('Amoled Mode (Pure Black)'),
-                      subtitle: const Text(
-                        'Reduces battery consumption on OLED screens',
-                      ),
-                      value: s.amoled,
-                      onChanged: (value) {
+            final settings = ref.watch(themeSettingsProvider);
+
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Theme Mode',
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                const SizedBox(height: AppSpacing.md),
+                Wrap(
+                  spacing: AppSpacing.sm,
+                  runSpacing: AppSpacing.sm,
+                  children: ThemeMode.values.map((mode) {
+                    final isSelected = settings.mode == mode;
+                    return ChoiceChip(
+                      label: Text(mode.name.toUpperCase()),
+                      selected: isSelected,
+                      onSelected: (selected) {
+                        if (!selected) return;
                         ref
                             .read(themeSettingsProvider.notifier)
-                            .setAmoled(value);
+                            .setThemeMode(mode);
                       },
-                    ),
-                  ],
+                    );
+                  }).toList(),
                 ),
-              ),
+                const SizedBox(height: AppSpacing.xl),
+                Text(
+                  'Color Variant',
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                const SizedBox(height: AppSpacing.md),
+                SizedBox(
+                  height: 56,
+                  child: ListView.separated(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: AppThemeVariant.values.length,
+                    separatorBuilder: (_, _) =>
+                        const SizedBox(width: AppSpacing.md),
+                    itemBuilder: (context, index) {
+                      final variant = AppThemeVariant.values[index];
+                      final isSelected = settings.variant == variant;
+                      return GestureDetector(
+                        onTap: () {
+                          ref
+                              .read(themeSettingsProvider.notifier)
+                              .setThemeVariant(variant);
+                        },
+                        child: AnimatedContainer(
+                          duration: AppMotion.fast,
+                          curve: AppMotion.emphasized,
+                          width: 46,
+                          height: 46,
+                          decoration: BoxDecoration(
+                            color: variant.color,
+                            shape: BoxShape.circle,
+                            border: isSelected
+                                ? Border.all(
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.primary,
+                                    width: 3,
+                                  )
+                                : null,
+                          ),
+                          child: isSelected
+                              ? const Icon(Icons.check, color: Colors.white)
+                              : null,
+                        ),
+                      );
+                    },
+                  ),
+                ),
+                const SizedBox(height: AppSpacing.lg),
+                SwitchListTile(
+                  contentPadding: EdgeInsets.zero,
+                  title: const Text('Amoled Mode (Pure Black)'),
+                  subtitle: const Text(
+                    'Reduces battery consumption on OLED screens',
+                  ),
+                  value: settings.amoled,
+                  onChanged: (value) {
+                    ref.read(themeSettingsProvider.notifier).setAmoled(value);
+                  },
+                ),
+              ],
             );
           },
         );
@@ -341,22 +342,80 @@ class SettingsScreen extends ConsumerWidget {
   }
 }
 
-class _SectionHeader extends StatelessWidget {
+class _SettingsSection extends StatelessWidget {
   final String title;
+  final List<Widget> children;
 
-  const _SectionHeader({required this.title});
+  const _SettingsSection({required this.title, required this.children});
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
-      child: Text(
-        title,
-        style: Theme.of(context).textTheme.titleSmall?.copyWith(
-          color: Theme.of(context).colorScheme.primary,
-          fontWeight: FontWeight.bold,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(left: AppSpacing.xs),
+          child: Text(
+            title,
+            style: Theme.of(context).textTheme.titleSmall?.copyWith(
+              color: Theme.of(context).colorScheme.primary,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
         ),
-      ),
+        const SizedBox(height: AppSpacing.sm),
+        AppCard(
+          padding: EdgeInsets.zero,
+          child: Column(children: _withDividers(context, children)),
+        ),
+      ],
+    );
+  }
+
+  static List<Widget> _withDividers(BuildContext context, List<Widget> items) {
+    if (items.isEmpty) return const [];
+    final out = <Widget>[];
+    for (var i = 0; i < items.length; i++) {
+      out.add(items[i]);
+      if (i < items.length - 1) {
+        out.add(
+          Divider(
+            height: 1,
+            color: Theme.of(context).colorScheme.outlineVariant,
+          ),
+        );
+      }
+    }
+    return out;
+  }
+}
+
+class _SettingsTile extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final String? subtitle;
+  final VoidCallback? onTap;
+
+  const _SettingsTile({
+    required this.icon,
+    required this.title,
+    this.subtitle,
+    this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      leading: Icon(icon),
+      title: Text(title),
+      subtitle: subtitle != null ? Text(subtitle!) : null,
+      trailing: onTap != null
+          ? Icon(
+              Icons.chevron_right_rounded,
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+            )
+          : null,
+      onTap: onTap,
     );
   }
 }

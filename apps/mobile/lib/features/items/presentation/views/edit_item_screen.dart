@@ -2,6 +2,7 @@ import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:ui/ui.dart';
 
 import '../view_models/items_view_model.dart';
 import '../widgets/item_tags_editor.dart';
@@ -62,7 +63,11 @@ class _EditItemScreenState extends ConsumerState<EditItemScreen> {
         if (item == null) {
           return Scaffold(
             appBar: AppBar(title: const Text('Edit Item')),
-            body: const Center(child: Text('Item not found')),
+            body: const EmptyState(
+              icon: Icons.inventory_2_outlined,
+              title: 'Item not found',
+              message: 'This item may have been removed.',
+            ),
           );
         }
 
@@ -94,203 +99,177 @@ class _EditItemScreenState extends ConsumerState<EditItemScreen> {
           body: Form(
             key: _formKey,
             child: ListView(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.all(AppSpacing.lg),
               children: [
-                // Title field
-                TextFormField(
-                  controller: _titleController,
-                  decoration: const InputDecoration(
-                    labelText: 'Title',
-                    prefixIcon: Icon(Icons.title),
-                  ),
-                  textCapitalization: TextCapitalization.words,
-                  validator: (value) {
-                    if (value == null || value.trim().isEmpty) {
-                      return 'Please enter a title';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 16),
-
-                // Barcode field
-                TextFormField(
-                  controller: _barcodeController,
-                  decoration: InputDecoration(
-                    labelText: 'Barcode (optional)',
-                    prefixIcon: const Icon(Icons.qr_code),
-                    suffixIcon: IconButton(
-                      icon: const Icon(Icons.camera_alt),
-                      onPressed: () async {
-                        final barcode = await context.push<String>('/scanner');
-
-                        if (barcode != null && mounted) {
-                          setState(() {
-                            _barcodeController.text = barcode;
-                          });
-                        }
-                      },
-                    ),
-                  ),
-                  keyboardType: TextInputType.number,
-                ),
-                const SizedBox(height: 16),
-
-                // Description field
-                TextFormField(
-                  controller: _descriptionController,
-                  decoration: const InputDecoration(
-                    labelText: 'Description (optional)',
-                    prefixIcon: Icon(Icons.description),
-                  ),
-                  maxLines: 3,
-                  textCapitalization: TextCapitalization.sentences,
-                ),
-                const SizedBox(height: 16),
-
-                ItemTagsEditor(
-                  initialTags: _tags,
-                  onChanged: (tags) {
-                    _tags = tags;
-                  },
-                  label: 'Tags (optional)',
-                  hintText: 'e.g., Signed, First Edition',
-                ),
-                const SizedBox(height: 16),
-
-                Row(
-                  children: [
-                    Expanded(
-                      child: TextFormField(
-                        controller: _purchasePriceController,
-                        decoration: const InputDecoration(
-                          labelText: 'Purchase Price',
-                          prefixText: '\$',
-                          prefixIcon: Icon(Icons.attach_money),
-                        ),
-                        keyboardType: const TextInputType.numberWithOptions(
-                          decimal: true,
-                        ),
-                        validator: _validatePriceInput,
+                AppCard(
+                  child: Column(
+                    children: [
+                      AppInput(
+                        controller: _titleController,
+                        labelText: 'Title',
+                        prefixIcon: const Icon(Icons.title),
+                        textCapitalization: TextCapitalization.words,
+                        validator: (value) {
+                          if (value == null || value.trim().isEmpty) {
+                            return 'Please enter a title';
+                          }
+                          return null;
+                        },
                       ),
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: TextFormField(
-                        controller: _currentValueController,
-                        decoration: const InputDecoration(
-                          labelText: 'Current Value',
-                          prefixText: '\$',
-                          prefixIcon: Icon(Icons.show_chart),
-                        ),
-                        keyboardType: const TextInputType.numberWithOptions(
-                          decimal: true,
-                        ),
-                        validator: _validatePriceInput,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 16),
+                      const SizedBox(height: AppSpacing.md),
+                      AppInput(
+                        controller: _barcodeController,
+                        labelText: 'Barcode (optional)',
+                        prefixIcon: const Icon(Icons.qr_code),
+                        suffixIcon: IconButton(
+                          icon: const Icon(Icons.camera_alt),
+                          onPressed: () async {
+                            final barcode = await context.push<String>(
+                              '/scanner',
+                            );
 
-                TextFormField(
-                  controller: _purchaseDateController,
-                  readOnly: true,
-                  decoration: InputDecoration(
-                    labelText: 'Purchase Date (optional)',
-                    prefixIcon: const Icon(Icons.calendar_today),
-                    suffixIcon: _selectedPurchaseDate == null
-                        ? null
-                        : IconButton(
-                            icon: const Icon(Icons.clear),
-                            onPressed: () {
+                            if (barcode != null && mounted) {
                               setState(() {
-                                _selectedPurchaseDate = null;
-                                _purchaseDateController.clear();
+                                _barcodeController.text = barcode;
                               });
-                            },
+                            }
+                          },
+                        ),
+                        keyboardType: TextInputType.number,
+                      ),
+                      const SizedBox(height: AppSpacing.md),
+                      AppInput(
+                        controller: _descriptionController,
+                        labelText: 'Description (optional)',
+                        prefixIcon: const Icon(Icons.description),
+                        maxLines: 3,
+                        textCapitalization: TextCapitalization.sentences,
+                      ),
+                      const SizedBox(height: AppSpacing.md),
+                      ItemTagsEditor(
+                        initialTags: _tags,
+                        onChanged: (tags) {
+                          _tags = tags;
+                        },
+                        label: 'Tags (optional)',
+                        hintText: 'e.g., Signed, First Edition',
+                      ),
+                      const SizedBox(height: AppSpacing.md),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: AppInput(
+                              controller: _purchasePriceController,
+                              labelText: 'Purchase Price',
+                              prefixText: '\$',
+                              prefixIcon: const Icon(Icons.attach_money),
+                              keyboardType:
+                                  const TextInputType.numberWithOptions(
+                                    decimal: true,
+                                  ),
+                              validator: _validatePriceInput,
+                            ),
                           ),
+                          const SizedBox(width: AppSpacing.md),
+                          Expanded(
+                            child: AppInput(
+                              controller: _currentValueController,
+                              labelText: 'Current Value',
+                              prefixText: '\$',
+                              prefixIcon: const Icon(Icons.show_chart),
+                              keyboardType:
+                                  const TextInputType.numberWithOptions(
+                                    decimal: true,
+                                  ),
+                              validator: _validatePriceInput,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: AppSpacing.md),
+                      AppInput(
+                        controller: _purchaseDateController,
+                        readOnly: true,
+                        decoration: InputDecoration(
+                          labelText: 'Purchase Date (optional)',
+                          prefixIcon: const Icon(Icons.calendar_today),
+                          suffixIcon: _selectedPurchaseDate == null
+                              ? null
+                              : IconButton(
+                                  icon: const Icon(Icons.clear),
+                                  onPressed: () {
+                                    setState(() {
+                                      _selectedPurchaseDate = null;
+                                      _purchaseDateController.clear();
+                                    });
+                                  },
+                                ),
+                        ),
+                        onTap: _pickPurchaseDate,
+                      ),
+                      const SizedBox(height: AppSpacing.md),
+                      DropdownButtonFormField<ItemCondition>(
+                        initialValue: _selectedCondition,
+                        decoration: const InputDecoration(
+                          labelText: 'Condition (optional)',
+                          prefixIcon: Icon(Icons.star),
+                        ),
+                        items: ItemCondition.values.map((condition) {
+                          return DropdownMenuItem(
+                            value: condition,
+                            child: Text(condition.name.toUpperCase()),
+                          );
+                        }).toList(),
+                        onChanged: (value) {
+                          setState(() {
+                            _selectedCondition = value;
+                          });
+                        },
+                      ),
+                      const SizedBox(height: AppSpacing.md),
+                      AppInput(
+                        controller: _quantityController,
+                        labelText: 'Quantity',
+                        prefixIcon: const Icon(Icons.numbers),
+                        keyboardType: TextInputType.number,
+                        validator: (value) {
+                          if (value == null || value.trim().isEmpty) {
+                            return 'Please enter quantity';
+                          }
+                          final quantity = int.tryParse(value);
+                          if (quantity == null || quantity < 1) {
+                            return 'Please enter a valid quantity';
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: AppSpacing.md),
+                      AppInput(
+                        controller: _locationController,
+                        labelText: 'Location (optional)',
+                        hintText: 'e.g., Shelf A, Box 3',
+                        prefixIcon: const Icon(Icons.location_on),
+                        textCapitalization: TextCapitalization.words,
+                      ),
+                      const SizedBox(height: AppSpacing.md),
+                      AppInput(
+                        controller: _notesController,
+                        labelText: 'Notes (optional)',
+                        prefixIcon: const Icon(Icons.note),
+                        maxLines: 3,
+                        textCapitalization: TextCapitalization.sentences,
+                      ),
+                    ],
                   ),
-                  onTap: _pickPurchaseDate,
                 ),
-                const SizedBox(height: 16),
-
-                // Condition selector
-                DropdownButtonFormField<ItemCondition>(
-                  initialValue: _selectedCondition,
-                  decoration: const InputDecoration(
-                    labelText: 'Condition (optional)',
-                    prefixIcon: Icon(Icons.star),
-                  ),
-                  items: ItemCondition.values.map((condition) {
-                    return DropdownMenuItem(
-                      value: condition,
-                      child: Text(condition.name.toUpperCase()),
-                    );
-                  }).toList(),
-                  onChanged: (value) {
-                    setState(() {
-                      _selectedCondition = value;
-                    });
-                  },
-                ),
-                const SizedBox(height: 16),
-
-                // Quantity field
-                TextFormField(
-                  controller: _quantityController,
-                  decoration: const InputDecoration(
-                    labelText: 'Quantity',
-                    prefixIcon: Icon(Icons.numbers),
-                  ),
-                  keyboardType: TextInputType.number,
-                  validator: (value) {
-                    if (value == null || value.trim().isEmpty) {
-                      return 'Please enter quantity';
-                    }
-                    final quantity = int.tryParse(value);
-                    if (quantity == null || quantity < 1) {
-                      return 'Please enter a valid quantity';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 16),
-
-                // Location field
-                TextFormField(
-                  controller: _locationController,
-                  decoration: const InputDecoration(
-                    labelText: 'Location (optional)',
-                    hintText: 'e.g., Shelf A, Box 3',
-                    prefixIcon: Icon(Icons.location_on),
-                  ),
-                  textCapitalization: TextCapitalization.words,
-                ),
-                const SizedBox(height: 16),
-
-                // Notes field
-                TextFormField(
-                  controller: _notesController,
-                  decoration: const InputDecoration(
-                    labelText: 'Notes (optional)',
-                    prefixIcon: Icon(Icons.note),
-                  ),
-                  maxLines: 3,
-                  textCapitalization: TextCapitalization.sentences,
-                ),
-                const SizedBox(height: 24),
+                const SizedBox(height: AppSpacing.xl),
 
                 // Save button
-                FilledButton(
+                AppButton(
+                  label: 'Save Changes',
+                  isLoading: _isSaving,
                   onPressed: _isSaving ? null : _handleSave,
-                  child: _isSaving
-                      ? const SizedBox(
-                          height: 20,
-                          width: 20,
-                          child: CircularProgressIndicator(strokeWidth: 2),
-                        )
-                      : const Text('Save Changes'),
+                  expand: true,
                 ),
               ],
             ),
@@ -299,11 +278,11 @@ class _EditItemScreenState extends ConsumerState<EditItemScreen> {
       },
       loading: () => Scaffold(
         appBar: AppBar(title: const Text('Edit Item')),
-        body: const Center(child: CircularProgressIndicator()),
+        body: const LoadingView(message: 'Loading item...'),
       ),
       error: (error, stack) => Scaffold(
         appBar: AppBar(title: const Text('Edit Item')),
-        body: Center(child: Text('Error: $error')),
+        body: ErrorView(message: 'Error: $error'),
       ),
     );
   }
