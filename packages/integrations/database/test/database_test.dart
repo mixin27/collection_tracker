@@ -560,5 +560,77 @@ void main() {
       );
       expect(filtered.map((item) => item.title), isNot(contains('No Match')));
     });
+
+    test('insert item records initial price history points', () async {
+      final now = DateTime.now();
+      await db.itemDao.insertItem(
+        ItemsCompanion.insert(
+          id: 'item-price-1',
+          collectionId: collectionId,
+          title: 'Price Seed',
+          purchasePrice: const Value(10.0),
+          purchaseDate: Value(now.subtract(const Duration(days: 1))),
+          currentValue: const Value(12.5),
+          createdAt: now,
+          updatedAt: now,
+        ),
+      );
+
+      final history = await db.itemDao.getPriceHistoryForItem('item-price-1');
+      expect(history.length, 2);
+      expect(history.map((entry) => entry.value), containsAll([10.0, 12.5]));
+    });
+
+    test('updating current value appends price history point', () async {
+      final now = DateTime.now();
+      await db.itemDao.insertItem(
+        ItemsCompanion.insert(
+          id: 'item-price-2',
+          collectionId: collectionId,
+          title: 'Track Current',
+          currentValue: const Value(20.0),
+          createdAt: now,
+          updatedAt: now,
+        ),
+      );
+
+      await db.itemDao.updateItem(
+        ItemsCompanion(
+          id: const Value('item-price-2'),
+          currentValue: const Value(24.0),
+          updatedAt: Value(now.add(const Duration(minutes: 1))),
+        ),
+      );
+
+      final history = await db.itemDao.getPriceHistoryForItem('item-price-2');
+      expect(history.length, 2);
+      expect(history.last.value, 24.0);
+    });
+
+    test('updating non-price fields does not add history point', () async {
+      final now = DateTime.now();
+      await db.itemDao.insertItem(
+        ItemsCompanion.insert(
+          id: 'item-price-3',
+          collectionId: collectionId,
+          title: 'No Price Change',
+          currentValue: const Value(30.0),
+          createdAt: now,
+          updatedAt: now,
+        ),
+      );
+
+      await db.itemDao.updateItem(
+        ItemsCompanion(
+          id: const Value('item-price-3'),
+          title: const Value('Renamed'),
+          updatedAt: Value(now.add(const Duration(minutes: 2))),
+        ),
+      );
+
+      final history = await db.itemDao.getPriceHistoryForItem('item-price-3');
+      expect(history.length, 1);
+      expect(history.first.value, 30.0);
+    });
   });
 }

@@ -4,7 +4,7 @@ import 'package:drift/drift.dart';
 
 part 'item_dao.g.dart';
 
-@DriftAccessor(tables: [Items, Collections, ItemTags, Tags])
+@DriftAccessor(tables: [Items, Collections, ItemTags, Tags, ItemPriceHistory])
 class ItemDao extends DatabaseAccessor<AppDatabase> with _$ItemDaoMixin {
   ItemDao(super.db);
 
@@ -147,6 +147,28 @@ class ItemDao extends DatabaseAccessor<AppDatabase> with _$ItemDaoMixin {
     return (select(items)
           ..where((tbl) => tbl.isWishlist.equals(true))
           ..orderBy([(tbl) => OrderingTerm.desc(tbl.createdAt)]))
+        .watch();
+  }
+
+  // Get historical price points for an item (oldest first)
+  Future<List<ItemPriceHistoryData>> getPriceHistoryForItem(String itemId) {
+    return (select(itemPriceHistory)
+          ..where((tbl) => tbl.itemId.equals(itemId))
+          ..orderBy([
+            (tbl) => OrderingTerm.asc(tbl.recordedAt),
+            (tbl) => OrderingTerm.asc(tbl.id),
+          ]))
+        .get();
+  }
+
+  // Watch historical price points for an item (oldest first)
+  Stream<List<ItemPriceHistoryData>> watchPriceHistoryForItem(String itemId) {
+    return (select(itemPriceHistory)
+          ..where((tbl) => tbl.itemId.equals(itemId))
+          ..orderBy([
+            (tbl) => OrderingTerm.asc(tbl.recordedAt),
+            (tbl) => OrderingTerm.asc(tbl.id),
+          ]))
         .watch();
   }
 
@@ -360,6 +382,36 @@ class ItemDao extends DatabaseAccessor<AppDatabase> with _$ItemDaoMixin {
         await _updateItemTags(item.id.value, tags);
       }
 
+      final purchasePrice = item.purchasePrice.present
+          ? item.purchasePrice.value
+          : null;
+      final currentValue = item.currentValue.present
+          ? item.currentValue.value
+          : null;
+      final purchaseDate = item.purchaseDate.present
+          ? item.purchaseDate.value
+          : null;
+      final createdAt = item.createdAt.value;
+      final updatedAt = item.updatedAt.value;
+
+      if (purchasePrice != null) {
+        await _recordPricePoint(
+          itemId: item.id.value,
+          value: purchasePrice,
+          recordedAt: purchaseDate ?? createdAt,
+          source: 'purchase',
+        );
+      }
+
+      if (currentValue != null && currentValue != purchasePrice) {
+        await _recordPricePoint(
+          itemId: item.id.value,
+          value: currentValue,
+          recordedAt: updatedAt,
+          source: 'current',
+        );
+      }
+
       final collection = await (select(
         collections,
       )..where((tbl) => tbl.id.equals(collectionId))).getSingleOrNull();
@@ -382,6 +434,9 @@ class ItemDao extends DatabaseAccessor<AppDatabase> with _$ItemDaoMixin {
   // Update item with tags
   Future<int> updateItem(ItemsCompanion item, {List<String>? tags}) {
     return transaction(() async {
+      final existingItem = await getItemById(item.id.value);
+      if (existingItem == null) return 0;
+
       final rowsAffected = await (update(
         items,
       )..where((tbl) => tbl.id.equals(item.id.value))).write(item);
@@ -390,8 +445,64 @@ class ItemDao extends DatabaseAccessor<AppDatabase> with _$ItemDaoMixin {
         await _updateItemTags(item.id.value, tags);
       }
 
+      if (rowsAffected > 0) {
+        final previousPurchasePrice = existingItem.purchasePrice;
+        final nextPurchasePrice = item.purchasePrice.present
+            ? item.purchasePrice.value
+            : previousPurchasePrice;
+
+        if (nextPurchasePrice != null &&
+            nextPurchasePrice != previousPurchasePrice) {
+          final recordedAt = item.purchaseDate.present
+              ? item.purchaseDate.value
+              : existingItem.purchaseDate;
+          await _recordPricePoint(
+            itemId: item.id.value,
+            value: nextPurchasePrice,
+            recordedAt: recordedAt ?? DateTime.now(),
+            source: 'purchase',
+          );
+        }
+
+        final previousCurrentValue = existingItem.currentValue;
+        final nextCurrentValue = item.currentValue.present
+            ? item.currentValue.value
+            : previousCurrentValue;
+        if (nextCurrentValue != null &&
+            nextCurrentValue != previousCurrentValue) {
+          final recordedAt = item.updatedAt.present
+              ? item.updatedAt.value
+              : DateTime.now();
+          await _recordPricePoint(
+            itemId: item.id.value,
+            value: nextCurrentValue,
+            recordedAt: recordedAt,
+            source: 'current',
+          );
+        }
+      }
+
       return rowsAffected;
     });
+  }
+
+  Future<void> _recordPricePoint({
+    required String itemId,
+    required double value,
+    required DateTime recordedAt,
+    required String source,
+  }) async {
+    final id =
+        '${itemId}_${recordedAt.microsecondsSinceEpoch}_${DateTime.now().microsecondsSinceEpoch}';
+    await into(itemPriceHistory).insert(
+      ItemPriceHistoryCompanion.insert(
+        id: id,
+        itemId: itemId,
+        value: value,
+        recordedAt: recordedAt,
+        source: Value(source),
+      ),
+    );
   }
 
   Future<void> _updateItemTags(String itemId, List<String> tagNames) async {

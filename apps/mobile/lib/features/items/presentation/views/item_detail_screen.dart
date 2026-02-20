@@ -1,10 +1,13 @@
 import 'dart:io';
+import 'dart:math' as math;
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../providers/price_tracking_provider.dart';
 import '../view_models/items_view_model.dart';
 
 class ItemDetailScreen extends ConsumerWidget {
@@ -27,6 +30,7 @@ class ItemDetailScreen extends ConsumerWidget {
         }
 
         final theme = Theme.of(context);
+        final priceHistoryAsync = ref.watch(itemPriceHistoryProvider(item.id));
 
         return Scaffold(
           appBar: AppBar(
@@ -181,6 +185,118 @@ class ItemDetailScreen extends ConsumerWidget {
                       const SizedBox(height: 16),
                     ],
 
+                    Card(
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                Text(
+                                  'Price Tracking',
+                                  style: theme.textTheme.titleMedium?.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                const Spacer(),
+                                TextButton.icon(
+                                  onPressed: () =>
+                                      _showUpdateCurrentValueDialog(
+                                        context,
+                                        ref,
+                                        item,
+                                      ),
+                                  icon: const Icon(Icons.show_chart),
+                                  label: const Text('Update'),
+                                ),
+                              ],
+                            ),
+                            if (item.currentValue != null) ...[
+                              const SizedBox(height: 4),
+                              Text(
+                                _formatCurrency(item.currentValue!),
+                                style: theme.textTheme.headlineSmall?.copyWith(
+                                  fontWeight: FontWeight.w700,
+                                  color: theme.colorScheme.primary,
+                                ),
+                              ),
+                            ] else ...[
+                              const SizedBox(height: 4),
+                              Text(
+                                'No current value set',
+                                style: theme.textTheme.bodyMedium?.copyWith(
+                                  color: theme.colorScheme.onSurfaceVariant,
+                                ),
+                              ),
+                            ],
+                            const SizedBox(height: 12),
+                            priceHistoryAsync.when(
+                              data: (history) {
+                                if (history.isEmpty) {
+                                  return Text(
+                                    'No historical points yet. Update current value to start tracking.',
+                                    style: theme.textTheme.bodySmall?.copyWith(
+                                      color: theme.colorScheme.onSurfaceVariant,
+                                    ),
+                                  );
+                                }
+
+                                final recent = history.reversed
+                                    .take(5)
+                                    .toList();
+                                return Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    _PriceHistoryChart(points: history),
+                                    const SizedBox(height: 12),
+                                    ...recent.map(
+                                      (entry) => Padding(
+                                        padding: const EdgeInsets.only(
+                                          bottom: 6,
+                                        ),
+                                        child: Row(
+                                          children: [
+                                            Text(
+                                              _formatDate(entry.$1),
+                                              style: theme.textTheme.bodySmall,
+                                            ),
+                                            const Spacer(),
+                                            Text(
+                                              _formatCurrency(entry.$2),
+                                              style: theme.textTheme.bodyMedium
+                                                  ?.copyWith(
+                                                    fontWeight: FontWeight.w600,
+                                                  ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                );
+                              },
+                              loading: () => const SizedBox(
+                                height: 80,
+                                child: Center(
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                  ),
+                                ),
+                              ),
+                              error: (_, _) => Text(
+                                'Unable to load price history',
+                                style: theme.textTheme.bodySmall?.copyWith(
+                                  color: theme.colorScheme.error,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+
                     // Details Card
                     Card(
                       child: Padding(
@@ -219,6 +335,12 @@ class ItemDetailScreen extends ConsumerWidget {
                                 label: 'Purchase Price',
                                 value:
                                     '\$${item.purchasePrice!.toStringAsFixed(2)}',
+                              ),
+                            if (item.currentValue != null)
+                              _DetailRow(
+                                label: 'Current Value',
+                                value:
+                                    '\$${item.currentValue!.toStringAsFixed(2)}',
                               ),
                             if (item.purchaseDate != null)
                               _DetailRow(
@@ -275,6 +397,178 @@ class ItemDetailScreen extends ConsumerWidget {
 
   String _formatDate(DateTime date) {
     return '${date.day}/${date.month}/${date.year}';
+  }
+
+  String _formatCurrency(double value) {
+    return '\$${value.toStringAsFixed(2)}';
+  }
+
+  Future<void> _showUpdateCurrentValueDialog(
+    BuildContext context,
+    WidgetRef ref,
+    Item item,
+  ) async {
+    var draftValue = item.currentValue?.toStringAsFixed(2) ?? '';
+
+    final value = await showDialog<double>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Update Current Value'),
+        content: TextFormField(
+          initialValue: draftValue,
+          autofocus: true,
+          keyboardType: const TextInputType.numberWithOptions(decimal: true),
+          decoration: const InputDecoration(
+            labelText: 'Current value',
+            prefixText: '\$',
+            hintText: '0.00',
+          ),
+          onChanged: (value) {
+            draftValue = value;
+          },
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
+          ),
+          FilledButton(
+            onPressed: () {
+              final parsed = double.tryParse(draftValue.trim());
+              if (parsed == null || parsed < 0) return;
+              Navigator.pop(context, parsed);
+            },
+            child: const Text('Save'),
+          ),
+        ],
+      ),
+    );
+
+    if (value == null || !context.mounted) return;
+
+    try {
+      await ref.read(
+        updateItemProvider(item.copyWith(currentValue: value)).future,
+      );
+      if (context.mounted) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text('Current value updated')));
+      }
+    } catch (e) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Failed to update value: $e'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
+  }
+}
+
+class _PriceHistoryChart extends StatelessWidget {
+  final List<(DateTime, double)> points;
+
+  const _PriceHistoryChart({required this.points});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Container(
+      height: 110,
+      width: double.infinity,
+      padding: const EdgeInsets.all(8),
+      decoration: BoxDecoration(
+        color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.4),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: CustomPaint(
+        painter: _PriceHistoryPainter(
+          points: points,
+          lineColor: theme.colorScheme.primary,
+          pointColor: theme.colorScheme.primaryContainer,
+        ),
+      ),
+    );
+  }
+}
+
+class _PriceHistoryPainter extends CustomPainter {
+  final List<(DateTime, double)> points;
+  final Color lineColor;
+  final Color pointColor;
+
+  _PriceHistoryPainter({
+    required this.points,
+    required this.lineColor,
+    required this.pointColor,
+  });
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    if (points.isEmpty) return;
+
+    final minY = points.map((e) => e.$2).reduce(math.min);
+    final maxY = points.map((e) => e.$2).reduce(math.max);
+    final yRange = (maxY - minY).abs() < 0.001 ? 1.0 : maxY - minY;
+    final xStep = points.length == 1
+        ? size.width
+        : size.width / (points.length - 1);
+
+    final linePaint = Paint()
+      ..color = lineColor
+      ..strokeWidth = 2
+      ..style = PaintingStyle.stroke
+      ..strokeCap = StrokeCap.round;
+
+    final fillPaint = Paint()
+      ..shader = LinearGradient(
+        colors: [lineColor.withValues(alpha: 0.18), Colors.transparent],
+        begin: Alignment.topCenter,
+        end: Alignment.bottomCenter,
+      ).createShader(Rect.fromLTWH(0, 0, size.width, size.height));
+
+    final linePath = Path();
+    final fillPath = Path();
+
+    for (var i = 0; i < points.length; i++) {
+      final x = xStep * i;
+      final normalizedY = (points[i].$2 - minY) / yRange;
+      final y = size.height - (normalizedY * (size.height - 10)) - 5;
+
+      if (i == 0) {
+        linePath.moveTo(x, y);
+        fillPath.moveTo(x, size.height);
+        fillPath.lineTo(x, y);
+      } else {
+        linePath.lineTo(x, y);
+        fillPath.lineTo(x, y);
+      }
+    }
+
+    final lastX = xStep * (points.length - 1);
+    fillPath.lineTo(lastX, size.height);
+    fillPath.close();
+
+    canvas.drawPath(fillPath, fillPaint);
+    canvas.drawPath(linePath, linePaint);
+
+    final pointPaint = Paint()..color = pointColor;
+    for (var i = 0; i < points.length; i++) {
+      final x = xStep * i;
+      final normalizedY = (points[i].$2 - minY) / yRange;
+      final y = size.height - (normalizedY * (size.height - 10)) - 5;
+      canvas.drawCircle(Offset(x, y), 3, pointPaint);
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant _PriceHistoryPainter oldDelegate) {
+    return oldDelegate.points != points ||
+        oldDelegate.lineColor != lineColor ||
+        oldDelegate.pointColor != pointColor;
   }
 }
 

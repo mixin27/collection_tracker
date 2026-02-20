@@ -27,6 +27,9 @@ class _AddItemScreenState extends ConsumerState<AddItemScreen> {
   final _titleController = TextEditingController();
   final _barcodeController = TextEditingController();
   final _descriptionController = TextEditingController();
+  final _purchasePriceController = TextEditingController();
+  final _currentValueController = TextEditingController();
+  final _purchaseDateController = TextEditingController();
 
   final _imageStorageService = ImageStorageService();
 
@@ -35,12 +38,16 @@ class _AddItemScreenState extends ConsumerState<AddItemScreen> {
   String? _imagePath;
   String? _coverImageUrl;
   List<String> _tags = const [];
+  DateTime? _selectedPurchaseDate;
 
   @override
   void dispose() {
     _titleController.dispose();
     _barcodeController.dispose();
     _descriptionController.dispose();
+    _purchasePriceController.dispose();
+    _currentValueController.dispose();
+    _purchaseDateController.dispose();
     super.dispose();
   }
 
@@ -184,6 +191,63 @@ class _AddItemScreenState extends ConsumerState<AddItemScreen> {
               label: 'Tags (optional)',
               hintText: 'e.g., Rare, Completed Set',
             ),
+            const SizedBox(height: 16),
+
+            Row(
+              children: [
+                Expanded(
+                  child: TextFormField(
+                    controller: _purchasePriceController,
+                    decoration: const InputDecoration(
+                      labelText: 'Purchase Price',
+                      prefixText: '\$',
+                      prefixIcon: Icon(Icons.attach_money),
+                    ),
+                    keyboardType: const TextInputType.numberWithOptions(
+                      decimal: true,
+                    ),
+                    validator: _validatePriceInput,
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: TextFormField(
+                    controller: _currentValueController,
+                    decoration: const InputDecoration(
+                      labelText: 'Current Value',
+                      prefixText: '\$',
+                      prefixIcon: Icon(Icons.show_chart),
+                    ),
+                    keyboardType: const TextInputType.numberWithOptions(
+                      decimal: true,
+                    ),
+                    validator: _validatePriceInput,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+
+            TextFormField(
+              controller: _purchaseDateController,
+              readOnly: true,
+              decoration: InputDecoration(
+                labelText: 'Purchase Date (optional)',
+                prefixIcon: const Icon(Icons.calendar_today),
+                suffixIcon: _selectedPurchaseDate == null
+                    ? null
+                    : IconButton(
+                        icon: const Icon(Icons.clear),
+                        onPressed: () {
+                          setState(() {
+                            _selectedPurchaseDate = null;
+                            _purchaseDateController.clear();
+                          });
+                        },
+                      ),
+              ),
+              onTap: _pickPurchaseDate,
+            ),
             const SizedBox(height: 24),
 
             // Add button
@@ -308,6 +372,9 @@ class _AddItemScreenState extends ConsumerState<AddItemScreen> {
           coverImageUrl: _coverImageUrl,
           coverImagePath: _imagePath,
           tags: _tags,
+          purchasePrice: _parsePriceInput(_purchasePriceController.text),
+          currentValue: _parsePriceInput(_currentValueController.text),
+          purchaseDate: _selectedPurchaseDate,
         ).future,
       );
 
@@ -333,5 +400,40 @@ class _AddItemScreenState extends ConsumerState<AddItemScreen> {
         });
       }
     }
+  }
+
+  String? _validatePriceInput(String? value) {
+    if (value == null || value.trim().isEmpty) return null;
+    final parsed = _parsePriceInput(value);
+    if (parsed == null) return 'Invalid price';
+    if (parsed < 0) return 'Must be positive';
+    return null;
+  }
+
+  double? _parsePriceInput(String raw) {
+    final normalized = raw.trim().replaceAll(',', '');
+    if (normalized.isEmpty) return null;
+    return double.tryParse(normalized);
+  }
+
+  Future<void> _pickPurchaseDate() async {
+    final picked = await showDatePicker(
+      context: context,
+      initialDate: _selectedPurchaseDate ?? DateTime.now(),
+      firstDate: DateTime(1900),
+      lastDate: DateTime.now().add(const Duration(days: 3650)),
+    );
+
+    if (picked == null || !mounted) return;
+    setState(() {
+      _selectedPurchaseDate = picked;
+      _purchaseDateController.text = _formatDate(picked);
+    });
+  }
+
+  String _formatDate(DateTime date) {
+    final month = date.month.toString().padLeft(2, '0');
+    final day = date.day.toString().padLeft(2, '0');
+    return '${date.year}-$month-$day';
   }
 }

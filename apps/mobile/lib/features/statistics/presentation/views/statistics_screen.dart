@@ -70,7 +70,7 @@ class StatisticsScreen extends ConsumerWidget {
                   Expanded(
                     child: StatCard(
                       title: 'Total Value',
-                      value: '\$${stats.totalValue.toStringAsFixed(0)}',
+                      value: '\$${stats.totalValue.toStringAsFixed(2)}',
                       icon: Icons.attach_money,
                       color: Colors.orange,
                     ),

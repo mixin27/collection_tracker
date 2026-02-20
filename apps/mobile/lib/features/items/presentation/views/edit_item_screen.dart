@@ -20,6 +20,9 @@ class _EditItemScreenState extends ConsumerState<EditItemScreen> {
   final _titleController = TextEditingController();
   final _barcodeController = TextEditingController();
   final _descriptionController = TextEditingController();
+  final _purchasePriceController = TextEditingController();
+  final _currentValueController = TextEditingController();
+  final _purchaseDateController = TextEditingController();
   final _notesController = TextEditingController();
   final _locationController = TextEditingController();
   final _quantityController = TextEditingController();
@@ -29,6 +32,7 @@ class _EditItemScreenState extends ConsumerState<EditItemScreen> {
   Item? _item;
   ItemCondition? _selectedCondition;
   List<String> _tags = const [];
+  DateTime? _selectedPurchaseDate;
 
   @override
   void initState() {
@@ -40,6 +44,9 @@ class _EditItemScreenState extends ConsumerState<EditItemScreen> {
     _titleController.dispose();
     _barcodeController.dispose();
     _descriptionController.dispose();
+    _purchasePriceController.dispose();
+    _currentValueController.dispose();
+    _purchaseDateController.dispose();
     _notesController.dispose();
     _locationController.dispose();
     _quantityController.dispose();
@@ -64,6 +71,16 @@ class _EditItemScreenState extends ConsumerState<EditItemScreen> {
           _titleController.text = item.title;
           _barcodeController.text = item.barcode ?? '';
           _descriptionController.text = item.description ?? '';
+          _purchasePriceController.text = item.purchasePrice != null
+              ? item.purchasePrice!.toStringAsFixed(2)
+              : '';
+          _currentValueController.text = item.currentValue != null
+              ? item.currentValue!.toStringAsFixed(2)
+              : '';
+          _selectedPurchaseDate = item.purchaseDate;
+          _purchaseDateController.text = _selectedPurchaseDate != null
+              ? _formatDate(_selectedPurchaseDate!)
+              : '';
           _notesController.text = item.notes ?? '';
           _locationController.text = item.location ?? '';
           _quantityController.text = item.quantity.toString();
@@ -138,6 +155,63 @@ class _EditItemScreenState extends ConsumerState<EditItemScreen> {
                   },
                   label: 'Tags (optional)',
                   hintText: 'e.g., Signed, First Edition',
+                ),
+                const SizedBox(height: 16),
+
+                Row(
+                  children: [
+                    Expanded(
+                      child: TextFormField(
+                        controller: _purchasePriceController,
+                        decoration: const InputDecoration(
+                          labelText: 'Purchase Price',
+                          prefixText: '\$',
+                          prefixIcon: Icon(Icons.attach_money),
+                        ),
+                        keyboardType: const TextInputType.numberWithOptions(
+                          decimal: true,
+                        ),
+                        validator: _validatePriceInput,
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: TextFormField(
+                        controller: _currentValueController,
+                        decoration: const InputDecoration(
+                          labelText: 'Current Value',
+                          prefixText: '\$',
+                          prefixIcon: Icon(Icons.show_chart),
+                        ),
+                        keyboardType: const TextInputType.numberWithOptions(
+                          decimal: true,
+                        ),
+                        validator: _validatePriceInput,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+
+                TextFormField(
+                  controller: _purchaseDateController,
+                  readOnly: true,
+                  decoration: InputDecoration(
+                    labelText: 'Purchase Date (optional)',
+                    prefixIcon: const Icon(Icons.calendar_today),
+                    suffixIcon: _selectedPurchaseDate == null
+                        ? null
+                        : IconButton(
+                            icon: const Icon(Icons.clear),
+                            onPressed: () {
+                              setState(() {
+                                _selectedPurchaseDate = null;
+                                _purchaseDateController.clear();
+                              });
+                            },
+                          ),
+                  ),
+                  onTap: _pickPurchaseDate,
                 ),
                 const SizedBox(height: 16),
 
@@ -261,6 +335,9 @@ class _EditItemScreenState extends ConsumerState<EditItemScreen> {
         quantity: int.parse(_quantityController.text),
         condition: _selectedCondition,
         tags: _tags,
+        purchasePrice: _parsePriceInput(_purchasePriceController.text),
+        currentValue: _parsePriceInput(_currentValueController.text),
+        purchaseDate: _selectedPurchaseDate,
       );
 
       await ref.read(updateItemProvider(updated).future);
@@ -287,5 +364,46 @@ class _EditItemScreenState extends ConsumerState<EditItemScreen> {
         });
       }
     }
+  }
+
+  String? _validatePriceInput(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return null;
+    }
+    final parsed = _parsePriceInput(value);
+    if (parsed == null) {
+      return 'Invalid price';
+    }
+    if (parsed < 0) {
+      return 'Must be positive';
+    }
+    return null;
+  }
+
+  double? _parsePriceInput(String raw) {
+    final normalized = raw.trim().replaceAll(',', '');
+    if (normalized.isEmpty) return null;
+    return double.tryParse(normalized);
+  }
+
+  Future<void> _pickPurchaseDate() async {
+    final initialDate = _selectedPurchaseDate ?? DateTime.now();
+    final picked = await showDatePicker(
+      context: context,
+      initialDate: initialDate,
+      firstDate: DateTime(1900),
+      lastDate: DateTime.now().add(const Duration(days: 3650)),
+    );
+    if (picked == null || !mounted) return;
+    setState(() {
+      _selectedPurchaseDate = picked;
+      _purchaseDateController.text = _formatDate(picked);
+    });
+  }
+
+  String _formatDate(DateTime date) {
+    final month = date.month.toString().padLeft(2, '0');
+    final day = date.day.toString().padLeft(2, '0');
+    return '${date.year}-$month-$day';
   }
 }
