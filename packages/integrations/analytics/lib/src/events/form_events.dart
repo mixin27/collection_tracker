@@ -11,11 +11,7 @@ class FormEvents {
     return AnalyticsEvent.custom(
       name: 'form_started',
       category: 'form',
-      properties: {
-        'form_name': formName,
-        if (formId != null) 'form_id': formId,
-        ...?properties,
-      },
+      properties: {'form_name': formName, 'form_id': ?formId, ...?properties},
     );
   }
 
@@ -32,9 +28,9 @@ class FormEvents {
       category: 'form',
       properties: {
         'form_name': formName,
-        if (formId != null) 'form_id': formId,
-        if (duration != null) 'duration_ms': duration,
-        if (fieldCount != null) 'field_count': fieldCount,
+        'form_id': ?formId,
+        'duration_ms': ?duration,
+        'field_count': ?fieldCount,
         ...?properties,
       },
     );
@@ -53,9 +49,9 @@ class FormEvents {
       category: 'form',
       properties: {
         'form_name': formName,
-        if (formId != null) 'form_id': formId,
-        if (lastFieldIndex != null) 'last_field_index': lastFieldIndex,
-        if (duration != null) 'duration_ms': duration,
+        'form_id': ?formId,
+        'last_field_index': ?lastFieldIndex,
+        'duration_ms': ?duration,
         ...?properties,
       },
     );
@@ -110,7 +106,7 @@ class FormEvents {
       properties: {
         'form_name': formName,
         'field_name': fieldName,
-        if (duration != null) 'duration_ms': duration,
+        'duration_ms': ?duration,
         ...?properties,
       },
     );

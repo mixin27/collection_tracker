@@ -69,8 +69,8 @@ class TMDBClient {
         'query': query,
         'page': page,
         'include_adult': includeAdult,
-        if (language != null) 'language': language,
-        if (year != null) 'year': year,
+        'language': ?language,
+        'year': ?year,
       };
 
       final response = await _dio.get(
@@ -105,7 +105,7 @@ class TMDBClient {
 
       final queryParams = <String, dynamic>{
         // 'api_key': _apiKey,
-        if (language != null) 'language': language,
+        'language': ?language,
       };
 
       final response = await _dio.get(
@@ -157,7 +157,7 @@ class TMDBClient {
       final queryParams = <String, dynamic>{
         // 'api_key': _apiKey,
         'external_source': 'imdb_id',
-        if (language != null) 'language': language,
+        'language': ?language,
       };
 
       final response = await _dio.get(
@@ -195,7 +195,7 @@ class TMDBClient {
       final queryParams = <String, dynamic>{
         // 'api_key': _apiKey,
         'page': page,
-        if (language != null) 'language': language,
+        'language': ?language,
       };
 
       final response = await _dio.get(
@@ -223,7 +223,7 @@ class TMDBClient {
       final queryParams = <String, dynamic>{
         // 'api_key': _apiKey,
         'page': page,
-        if (language != null) 'language': language,
+        'language': ?language,
       };
 
       final response = await _dio.get(
@@ -251,7 +251,7 @@ class TMDBClient {
       final queryParams = <String, dynamic>{
         // 'api_key': _apiKey,
         'page': page,
-        if (language != null) 'language': language,
+        'language': ?language,
       };
 
       final response = await _dio.get(
@@ -279,7 +279,7 @@ class TMDBClient {
       final queryParams = <String, dynamic>{
         // 'api_key': _apiKey,
         'page': page,
-        if (language != null) 'language': language,
+        'language': ?language,
       };
 
       final response = await _dio.get(
@@ -316,14 +316,14 @@ class TMDBClient {
       final queryParams = <String, dynamic>{
         // 'api_key': _apiKey,
         'page': page,
-        if (language != null) 'language': language,
-        if (sortBy != null) 'sort_by': sortBy,
+        'language': ?language,
+        'sort_by': ?sortBy,
         if (yearFrom != null) 'primary_release_date.gte': '$yearFrom-01-01',
         if (yearTo != null) 'primary_release_date.lte': '$yearTo-12-31',
         if (withGenres != null && withGenres.isNotEmpty)
           'with_genres': withGenres.join(','),
-        if (voteAverageGte != null) 'vote_average.gte': voteAverageGte,
-        if (voteCountGte != null) 'vote_count.gte': voteCountGte,
+        'vote_average.gte': ?voteAverageGte,
+        'vote_count.gte': ?voteCountGte,
       };
 
       final response = await _dio.get(

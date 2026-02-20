@@ -13,7 +13,7 @@ class SocialEvents {
       category: 'social',
       properties: {
         'method': method,
-        if (inviteCount != null) 'invite_count': inviteCount,
+        'invite_count': ?inviteCount,
         ...?properties,
       },
     );
@@ -30,7 +30,7 @@ class SocialEvents {
       category: 'social',
       properties: {
         'referral_code': referralCode,
-        if (referrerId != null) 'referrer_id': referrerId,
+        'referrer_id': ?referrerId,
         ...?properties,
       },
     );
@@ -47,7 +47,7 @@ class SocialEvents {
       category: 'social',
       properties: {
         'profile_id': profileId,
-        if (profileType != null) 'profile_type': profileType,
+        'profile_type': ?profileType,
         ...?properties,
       },
     );

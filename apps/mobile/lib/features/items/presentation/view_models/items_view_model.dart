@@ -22,6 +22,9 @@ Future<void> createItem(
   String? coverImageUrl,
   String? coverImagePath,
   List<String> tags = const [],
+  double? purchasePrice,
+  double? currentValue,
+  DateTime? purchaseDate,
 }) async {
   final repository = ref.read(itemRepositoryProvider);
 
@@ -34,6 +37,9 @@ Future<void> createItem(
     coverImageUrl: coverImageUrl,
     coverImagePath: coverImagePath,
     tags: tags,
+    purchasePrice: purchasePrice,
+    currentValue: currentValue,
+    purchaseDate: purchaseDate,
     createdAt: DateTime.now(),
     updatedAt: DateTime.now(),
   );

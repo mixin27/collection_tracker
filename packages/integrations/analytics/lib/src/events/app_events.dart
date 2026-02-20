@@ -10,7 +10,7 @@ class AppEvents {
     return AnalyticsEvent.custom(
       name: 'app_opened',
       category: 'lifecycle',
-      properties: {if (source != null) 'source': source, ...?properties},
+      properties: {'source': ?source, ...?properties},
     );
   }
 
@@ -41,11 +41,7 @@ class AppEvents {
     return AnalyticsEvent.custom(
       name: 'app_crashed',
       category: 'error',
-      properties: {
-        'error': error,
-        if (stackTrace != null) 'stack_trace': stackTrace,
-        ...?properties,
-      },
+      properties: {'error': error, 'stack_trace': ?stackTrace, ...?properties},
     );
   }
 
@@ -61,8 +57,8 @@ class AppEvents {
       category: 'error',
       properties: {
         'error': error,
-        if (screen != null) 'screen': screen,
-        if (context != null) 'context': context,
+        'screen': ?screen,
+        'context': ?context,
         ...?properties,
       },
     );

@@ -66,8 +66,9 @@ class StatisticsViewModel extends _$StatisticsViewModel {
       if (item.isFavorite) {
         favoriteCount++;
       }
-      if (item.purchasePrice != null) {
-        totalValue += item.purchasePrice! * item.quantity;
+      final effectiveValue = item.currentValue ?? item.purchasePrice;
+      if (effectiveValue != null) {
+        totalValue += effectiveValue * item.quantity;
       }
     }
 

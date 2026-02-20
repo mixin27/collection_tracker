@@ -16,8 +16,8 @@ class EngagementEvents {
       properties: {
         'query_length': query.length,
         'result_count': resultCount,
-        if (category != null) 'category': category,
-        if (duration != null) 'duration_ms': duration,
+        'category': ?category,
+        'duration_ms': ?duration,
         ...?properties,
       },
     );
@@ -36,7 +36,7 @@ class EngagementEvents {
       properties: {
         'filter_type': filterType,
         'filter_value': filterValue.toString(),
-        if (resultCount != null) 'result_count': resultCount,
+        'result_count': ?resultCount,
         ...?properties,
       },
     );
@@ -107,7 +107,7 @@ class EngagementEvents {
         'content_type': contentType,
         'content_id': contentId,
         'rating': rating,
-        if (maxRating != null) 'max_rating': maxRating,
+        'max_rating': ?maxRating,
         ...?properties,
       },
     );
@@ -126,7 +126,7 @@ class EngagementEvents {
       properties: {
         'content_type': contentType,
         'content_id': contentId,
-        if (commentLength != null) 'comment_length': commentLength,
+        'comment_length': ?commentLength,
         ...?properties,
       },
     );
@@ -145,7 +145,7 @@ class EngagementEvents {
       properties: {
         'tutorial_name': tutorialName,
         'step_count': stepCount,
-        if (duration != null) 'duration_ms': duration,
+        'duration_ms': ?duration,
         ...?properties,
       },
     );

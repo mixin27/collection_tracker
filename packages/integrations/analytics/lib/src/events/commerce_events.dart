@@ -16,8 +16,8 @@ class CommerceEvents {
       properties: {
         'product_id': productId,
         'product_name': productName,
-        if (category != null) 'category': category,
-        if (price != null) 'price': price,
+        'category': ?category,
+        'price': ?price,
         ...?properties,
       },
     );
@@ -63,7 +63,7 @@ class CommerceEvents {
         'plan_name': planName,
         'price': price,
         'currency': currency ?? 'USD',
-        if (billingPeriod != null) 'billing_period': billingPeriod,
+        'billing_period': ?billingPeriod,
         ...?properties,
       },
     );

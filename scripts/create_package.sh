@@ -31,7 +31,7 @@ version: 1.0.0
 publish_to: 'none'
 
 environment:
-  sdk: ^3.10.4
+  sdk: ^3.11.0
   flutter: ">=1.17.0"
 
 dependencies:

@@ -177,6 +177,13 @@ class ItemRepositoryImpl implements ItemRepository {
   }
 
   @override
+  Stream<List<(DateTime, double)>> watchPriceHistory(String itemId) {
+    return _dao
+        .watchPriceHistoryForItem(itemId)
+        .map((rows) => rows.map((row) => (row.recordedAt, row.value)).toList());
+  }
+
+  @override
   Stream<List<(String, int)>> watchTagsWithUsage() {
     return _dao.watchTagsWithUsage();
   }
