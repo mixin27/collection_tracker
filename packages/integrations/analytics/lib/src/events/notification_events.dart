@@ -13,7 +13,7 @@ class NotificationEvents {
       category: 'notification',
       properties: {
         'notification_type': notificationType,
-        if (campaignId != null) 'campaign_id': campaignId,
+        'campaign_id': ?campaignId,
         ...?properties,
       },
     );
@@ -31,8 +31,8 @@ class NotificationEvents {
       category: 'notification',
       properties: {
         'notification_type': notificationType,
-        if (campaignId != null) 'campaign_id': campaignId,
-        if (action != null) 'action': action,
+        'campaign_id': ?campaignId,
+        'action': ?action,
         ...?properties,
       },
     );
@@ -49,7 +49,7 @@ class NotificationEvents {
       category: 'notification',
       properties: {
         'notification_type': notificationType,
-        if (campaignId != null) 'campaign_id': campaignId,
+        'campaign_id': ?campaignId,
         ...?properties,
       },
     );

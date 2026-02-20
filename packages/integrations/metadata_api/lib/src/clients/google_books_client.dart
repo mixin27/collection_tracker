@@ -66,8 +66,8 @@ class GoogleBooksClient {
         'maxResults': pageSize,
         'printType': 'books',
         if (_apiKey != null) 'key': _apiKey,
-        if (langRestrict != null) 'langRestrict': langRestrict,
-        if (orderBy != null) 'orderBy': orderBy,
+        'langRestrict': ?langRestrict,
+        'orderBy': ?orderBy,
       };
 
       final response = await _dio.get('/volumes', queryParameters: queryParams);

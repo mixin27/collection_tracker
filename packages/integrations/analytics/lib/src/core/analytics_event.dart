@@ -68,7 +68,7 @@ abstract class AnalyticsEvent with _$AnalyticsEvent {
       name: 'screen_view',
       properties: {
         'screen_name': screenName,
-        if (screenClass != null) 'screen_class': screenClass,
+        'screen_class': ?screenClass,
         ...?properties,
       },
       timestamp: DateTime.now(),
@@ -86,7 +86,7 @@ abstract class AnalyticsEvent with _$AnalyticsEvent {
       name: 'button_clicked',
       properties: {
         'button_name': buttonName,
-        if (screenName != null) 'screen_name': screenName,
+        'screen_name': ?screenName,
         ...?properties,
       },
       timestamp: DateTime.now(),

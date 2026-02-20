@@ -34,7 +34,7 @@ class PerformanceEvents {
       properties: {
         'endpoint': endpoint,
         'error': error,
-        if (statusCode != null) 'status_code': statusCode,
+        'status_code': ?statusCode,
         ...?properties,
       },
     );

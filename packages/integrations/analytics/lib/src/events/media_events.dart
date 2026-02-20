@@ -17,7 +17,7 @@ class MediaEvents {
         'media_type': mediaType,
         'media_id': mediaId,
         'media_title': mediaTitle,
-        if (duration != null) 'duration_seconds': duration,
+        'duration_seconds': ?duration,
         ...?properties,
       },
     );

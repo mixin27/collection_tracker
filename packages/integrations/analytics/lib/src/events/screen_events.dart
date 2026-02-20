@@ -14,8 +14,8 @@ class ScreenEvents {
       category: 'navigation',
       properties: {
         'screen_name': screenName,
-        if (screenClass != null) 'screen_class': screenClass,
-        if (previousScreen != null) 'previous_screen': previousScreen,
+        'screen_class': ?screenClass,
+        'previous_screen': ?previousScreen,
         ...?properties,
       },
     );
@@ -34,7 +34,7 @@ class ScreenEvents {
       properties: {
         'tab_name': tabName,
         'tab_index': tabIndex,
-        if (screenName != null) 'screen_name': screenName,
+        'screen_name': ?screenName,
         ...?properties,
       },
     );
@@ -51,7 +51,7 @@ class ScreenEvents {
       category: 'navigation',
       properties: {
         'modal_name': modalName,
-        if (trigger != null) 'trigger': trigger,
+        'trigger': ?trigger,
         ...?properties,
       },
     );
@@ -69,8 +69,8 @@ class ScreenEvents {
       category: 'navigation',
       properties: {
         'modal_name': modalName,
-        if (action != null) 'action': action,
-        if (timeSpent != null) 'time_spent_ms': timeSpent,
+        'action': ?action,
+        'time_spent_ms': ?timeSpent,
         ...?properties,
       },
     );
@@ -87,7 +87,7 @@ class ScreenEvents {
       category: 'navigation',
       properties: {
         'deep_link': deepLink,
-        if (source != null) 'source': source,
+        'source': ?source,
         ...?properties,
       },
     );
