@@ -184,26 +184,24 @@ class SettingsScreen extends ConsumerWidget {
   }
 
   Future<void> _handleImportJson(BuildContext context, WidgetRef ref) async {
-    final confirmed = await showDialog<bool>(
+    final confirmed = await showAppDialog<bool>(
       context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Import Data'),
-        content: const Text(
-          'This will import collections and items from a JSON file. '
-          'Existing data will not be deleted.\n\nContinue?',
-        ),
-        actions: [
-          AppButton(
-            label: 'Cancel',
-            variant: AppButtonVariant.ghost,
-            onPressed: () => Navigator.pop(context, false),
-          ),
-          AppButton(
-            label: 'Import',
-            onPressed: () => Navigator.pop(context, true),
-          ),
-        ],
+      title: const Text('Import Data'),
+      content: const Text(
+        'This will import collections and items from a JSON file. '
+        'Existing data will not be deleted.\n\nContinue?',
       ),
+      actions: [
+        AppButton(
+          label: 'Cancel',
+          variant: AppButtonVariant.ghost,
+          onPressed: () => Navigator.pop(context, false),
+        ),
+        AppButton(
+          label: 'Import',
+          onPressed: () => Navigator.pop(context, true),
+        ),
+      ],
     );
 
     if (confirmed != true || !context.mounted) return;

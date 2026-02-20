@@ -201,24 +201,22 @@ class _TagItemsScreenState extends ConsumerState<TagItemsScreen> {
     WidgetRef ref,
     Item item,
   ) async {
-    final confirmed = await showDialog<bool>(
+    final confirmed = await showAppDialog<bool>(
       context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Delete Item'),
-        content: Text('Delete "${item.title}"?'),
-        actions: [
-          AppButton(
-            label: 'Cancel',
-            variant: AppButtonVariant.ghost,
-            onPressed: () => Navigator.pop(context, false),
-          ),
-          AppButton(
-            label: 'Delete',
-            variant: AppButtonVariant.danger,
-            onPressed: () => Navigator.pop(context, true),
-          ),
-        ],
-      ),
+      title: const Text('Delete Item'),
+      content: Text('Delete "${item.title}"?'),
+      actions: [
+        AppButton(
+          label: 'Cancel',
+          variant: AppButtonVariant.ghost,
+          onPressed: () => Navigator.pop(context, false),
+        ),
+        AppButton(
+          label: 'Delete',
+          variant: AppButtonVariant.danger,
+          onPressed: () => Navigator.pop(context, true),
+        ),
+      ],
     );
 
     if (confirmed != true || !context.mounted) return;

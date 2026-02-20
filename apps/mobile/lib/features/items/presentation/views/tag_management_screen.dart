@@ -377,31 +377,29 @@ class _TagManagementScreenState extends ConsumerState<TagManagementScreen> {
 
   Future<void> _renameTag(String oldName) async {
     var draftName = oldName;
-    final newName = await showDialog<String>(
+    final newName = await showAppDialog<String>(
       context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Rename Tag'),
-        content: AppInput(
-          initialValue: oldName,
-          autofocus: true,
-          labelText: 'New name',
-          prefixIcon: const Icon(Icons.sell_outlined),
-          onChanged: (value) {
-            draftName = value.trim();
-          },
-        ),
-        actions: [
-          AppButton(
-            label: 'Cancel',
-            variant: AppButtonVariant.ghost,
-            onPressed: () => Navigator.pop(context),
-          ),
-          AppButton(
-            label: 'Rename',
-            onPressed: () => Navigator.pop(context, draftName),
-          ),
-        ],
+      title: const Text('Rename Tag'),
+      content: AppInput(
+        initialValue: oldName,
+        autofocus: true,
+        labelText: 'New name',
+        prefixIcon: const Icon(Icons.sell_outlined),
+        onChanged: (value) {
+          draftName = value.trim();
+        },
       ),
+      actions: [
+        AppButton(
+          label: 'Cancel',
+          variant: AppButtonVariant.ghost,
+          onPressed: () => Navigator.pop(context),
+        ),
+        AppButton(
+          label: 'Rename',
+          onPressed: () => Navigator.pop(context, draftName),
+        ),
+      ],
     );
 
     if (newName == null || newName.isEmpty || newName == oldName || !mounted) {
@@ -468,45 +466,43 @@ class _TagManagementScreenState extends ConsumerState<TagManagementScreen> {
     if (selected.length < 2 || !mounted) return;
 
     String destination = selected.first;
-    final confirmed = await showDialog<bool>(
+    final confirmed = await showAppDialog<bool>(
       context: context,
-      builder: (context) => StatefulBuilder(
-        builder: (context, setDialogState) => AlertDialog(
-          title: const Text('Merge Selected Tags'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text('Choose destination tag:'),
-              const SizedBox(height: 12),
-              ...selected.map(
-                (tag) => ListTile(
-                  dense: true,
-                  contentPadding: EdgeInsets.zero,
-                  leading: Icon(
-                    destination == tag
-                        ? Icons.radio_button_checked
-                        : Icons.radio_button_off,
-                  ),
-                  title: Text(tag),
-                  onTap: () => setDialogState(() => destination = tag),
+      title: const Text('Merge Selected Tags'),
+      content: StatefulBuilder(
+        builder: (context, setDialogState) => Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text('Choose destination tag:'),
+            const SizedBox(height: 12),
+            ...selected.map(
+              (tag) => ListTile(
+                dense: true,
+                contentPadding: EdgeInsets.zero,
+                leading: Icon(
+                  destination == tag
+                      ? Icons.radio_button_checked
+                      : Icons.radio_button_off,
                 ),
+                title: Text(tag),
+                onTap: () => setDialogState(() => destination = tag),
               ),
-            ],
-          ),
-          actions: [
-            AppButton(
-              label: 'Cancel',
-              variant: AppButtonVariant.ghost,
-              onPressed: () => Navigator.pop(context, false),
-            ),
-            AppButton(
-              label: 'Merge',
-              onPressed: () => Navigator.pop(context, true),
             ),
           ],
         ),
       ),
+      actions: [
+        AppButton(
+          label: 'Cancel',
+          variant: AppButtonVariant.ghost,
+          onPressed: () => Navigator.pop(context, false),
+        ),
+        AppButton(
+          label: 'Merge',
+          onPressed: () => Navigator.pop(context, true),
+        ),
+      ],
     );
 
     if (confirmed != true || !mounted) return;
@@ -534,26 +530,24 @@ class _TagManagementScreenState extends ConsumerState<TagManagementScreen> {
     final selected = _selectedTags.toList()..sort();
     if (selected.isEmpty || !mounted) return;
 
-    final confirmed = await showDialog<bool>(
+    final confirmed = await showAppDialog<bool>(
       context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Delete Selected Tags'),
-        content: Text(
-          'Delete ${selected.length} selected tags from all items?\n\nThis cannot be undone.',
-        ),
-        actions: [
-          AppButton(
-            label: 'Cancel',
-            variant: AppButtonVariant.ghost,
-            onPressed: () => Navigator.pop(context, false),
-          ),
-          AppButton(
-            label: 'Delete',
-            variant: AppButtonVariant.danger,
-            onPressed: () => Navigator.pop(context, true),
-          ),
-        ],
+      title: const Text('Delete Selected Tags'),
+      content: Text(
+        'Delete ${selected.length} selected tags from all items?\n\nThis cannot be undone.',
       ),
+      actions: [
+        AppButton(
+          label: 'Cancel',
+          variant: AppButtonVariant.ghost,
+          onPressed: () => Navigator.pop(context, false),
+        ),
+        AppButton(
+          label: 'Delete',
+          variant: AppButtonVariant.danger,
+          onPressed: () => Navigator.pop(context, true),
+        ),
+      ],
     );
 
     if (confirmed != true || !mounted) return;
@@ -615,26 +609,24 @@ class _TagManagementScreenState extends ConsumerState<TagManagementScreen> {
   }
 
   Future<void> _deleteTag(String tagName) async {
-    final confirmed = await showDialog<bool>(
+    final confirmed = await showAppDialog<bool>(
       context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Delete Tag'),
-        content: Text(
-          'Delete "$tagName" from all items?\n\nThis cannot be undone.',
-        ),
-        actions: [
-          AppButton(
-            label: 'Cancel',
-            variant: AppButtonVariant.ghost,
-            onPressed: () => Navigator.pop(context, false),
-          ),
-          AppButton(
-            label: 'Delete',
-            variant: AppButtonVariant.danger,
-            onPressed: () => Navigator.pop(context, true),
-          ),
-        ],
+      title: const Text('Delete Tag'),
+      content: Text(
+        'Delete "$tagName" from all items?\n\nThis cannot be undone.',
       ),
+      actions: [
+        AppButton(
+          label: 'Cancel',
+          variant: AppButtonVariant.ghost,
+          onPressed: () => Navigator.pop(context, false),
+        ),
+        AppButton(
+          label: 'Delete',
+          variant: AppButtonVariant.danger,
+          onPressed: () => Navigator.pop(context, true),
+        ),
+      ],
     );
 
     if (confirmed != true || !mounted) return;

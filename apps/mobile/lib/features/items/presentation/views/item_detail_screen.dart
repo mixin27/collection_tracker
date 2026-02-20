@@ -395,37 +395,35 @@ class ItemDetailScreen extends ConsumerWidget {
   ) async {
     var draftValue = item.currentValue?.toStringAsFixed(2) ?? '';
 
-    final value = await showDialog<double>(
+    final value = await showAppDialog<double>(
       context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Update Current Value'),
-        content: AppInput(
-          initialValue: draftValue,
-          autofocus: true,
-          keyboardType: const TextInputType.numberWithOptions(decimal: true),
-          labelText: 'Current value',
-          prefixText: '\$',
-          hintText: '0.00',
-          onChanged: (value) {
-            draftValue = value;
+      title: const Text('Update Current Value'),
+      content: AppInput(
+        initialValue: draftValue,
+        autofocus: true,
+        keyboardType: const TextInputType.numberWithOptions(decimal: true),
+        labelText: 'Current value',
+        prefixText: '\$',
+        hintText: '0.00',
+        onChanged: (value) {
+          draftValue = value;
+        },
+      ),
+      actions: [
+        AppButton(
+          label: 'Cancel',
+          variant: AppButtonVariant.ghost,
+          onPressed: () => Navigator.pop(context),
+        ),
+        AppButton(
+          label: 'Save',
+          onPressed: () {
+            final parsed = double.tryParse(draftValue.trim());
+            if (parsed == null || parsed < 0) return;
+            Navigator.pop(context, parsed);
           },
         ),
-        actions: [
-          AppButton(
-            label: 'Cancel',
-            variant: AppButtonVariant.ghost,
-            onPressed: () => Navigator.pop(context),
-          ),
-          AppButton(
-            label: 'Save',
-            onPressed: () {
-              final parsed = double.tryParse(draftValue.trim());
-              if (parsed == null || parsed < 0) return;
-              Navigator.pop(context, parsed);
-            },
-          ),
-        ],
-      ),
+      ],
     );
 
     if (value == null || !context.mounted) return;

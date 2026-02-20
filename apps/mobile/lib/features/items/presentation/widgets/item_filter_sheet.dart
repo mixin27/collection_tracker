@@ -25,146 +25,141 @@ class ItemFilterSheet extends ConsumerWidget {
       orElse: () => const <String>[],
     );
 
-    return DraggableScrollableSheet(
-      initialChildSize: 0.6,
-      minChildSize: 0.4,
-      maxChildSize: 0.9,
-      expand: false,
-      builder: (context, scrollController) {
-        return SingleChildScrollView(
-          controller: scrollController,
-          padding: const EdgeInsets.all(24),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Sort & Filter',
-                    style: theme.textTheme.headlineSmall?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  AppButton(
-                    label: 'Reset',
-                    variant: AppButtonVariant.ghost,
-                    onPressed: () => notifier.reset(),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 24),
+    final maxHeight = MediaQuery.sizeOf(context).height * 0.82;
 
-              // Sort By Section
-              Text(
-                'Sort By',
-                style: theme.textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 12),
-              Wrap(
-                spacing: 8,
-                children: ItemSortBy.values.map((option) {
-                  final isSelected = filter.sortBy == option;
-                  return ChoiceChip(
-                    label: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(option.label),
-                        if (isSelected) ...[
-                          const SizedBox(width: 4),
-                          Icon(
-                            filter.sortAscending
-                                ? Icons.arrow_upward
-                                : Icons.arrow_downward,
-                            size: 14,
-                          ),
-                        ],
-                      ],
-                    ),
-                    selected: isSelected,
-                    onSelected: (_) => notifier.setSortBy(option),
-                  );
-                }).toList(),
-              ),
-              const SizedBox(height: 32),
-
-              // Favorites Section
-              SwitchListTile(
-                title: const Text('Show Favorites Only'),
-                value: filter.showOnlyFavorites,
-                onChanged: (_) => notifier.toggleFavorites(),
-                contentPadding: EdgeInsets.zero,
-              ),
-              SwitchListTile(
-                title: const Text('Show Wishlist Only'),
-                value: filter.showOnlyWishlist,
-                onChanged: (_) => notifier.toggleWishlist(),
-                contentPadding: EdgeInsets.zero,
-              ),
-              const SizedBox(height: 24),
-
-              // Conditions Section
-              Text(
-                'Conditions',
-                style: theme.textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 12),
-              Wrap(
-                spacing: 8,
-                children: ItemCondition.values.map((condition) {
-                  final isSelected = filter.conditions.contains(condition);
-                  return FilterChip(
-                    label: Text(condition.name.toUpperCase()),
-                    selected: isSelected,
-                    onSelected: (_) => notifier.toggleCondition(condition),
-                  );
-                }).toList(),
-              ),
-              if (availableTags.isNotEmpty) ...[
-                const SizedBox(height: 24),
+    return ConstrainedBox(
+      constraints: BoxConstraints(maxHeight: maxHeight),
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.all(8),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
                 Text(
-                  'Tags',
-                  style: theme.textTheme.titleMedium?.copyWith(
+                  'Sort & Filter',
+                  style: theme.textTheme.headlineSmall?.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                const SizedBox(height: 12),
-                AnimatedSize(
-                  duration: AppMotion.medium,
-                  curve: AppMotion.emphasized,
-                  child: Wrap(
-                    spacing: 8,
-                    runSpacing: 8,
-                    children: availableTags.map((tag) {
-                      final isSelected = filter.tags.contains(tag);
-                      return FilterChip(
-                        label: Text(tag),
-                        selected: isSelected,
-                        onSelected: (_) => notifier.toggleTag(tag),
-                      );
-                    }).toList(),
-                  ),
+                AppButton(
+                  label: 'Reset',
+                  variant: AppButtonVariant.ghost,
+                  onPressed: () => notifier.reset(),
                 ),
               ],
-              const SizedBox(height: 48),
+            ),
+            const SizedBox(height: 24),
 
-              SizedBox(
-                width: double.infinity,
-                child: AppButton(
-                  label: 'Apply',
-                  expand: true,
-                  onPressed: () => Navigator.pop(context),
+            // Sort By Section
+            Text(
+              'Sort By',
+              style: theme.textTheme.titleMedium?.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 12),
+            Wrap(
+              spacing: 8,
+              children: ItemSortBy.values.map((option) {
+                final isSelected = filter.sortBy == option;
+                return ChoiceChip(
+                  label: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(option.label),
+                      if (isSelected) ...[
+                        const SizedBox(width: 4),
+                        Icon(
+                          filter.sortAscending
+                              ? Icons.arrow_upward
+                              : Icons.arrow_downward,
+                          size: 14,
+                        ),
+                      ],
+                    ],
+                  ),
+                  selected: isSelected,
+                  onSelected: (_) => notifier.setSortBy(option),
+                );
+              }).toList(),
+            ),
+            const SizedBox(height: 32),
+
+            // Favorites Section
+            SwitchListTile(
+              title: const Text('Show Favorites Only'),
+              value: filter.showOnlyFavorites,
+              onChanged: (_) => notifier.toggleFavorites(),
+              contentPadding: EdgeInsets.zero,
+            ),
+            SwitchListTile(
+              title: const Text('Show Wishlist Only'),
+              value: filter.showOnlyWishlist,
+              onChanged: (_) => notifier.toggleWishlist(),
+              contentPadding: EdgeInsets.zero,
+            ),
+            const SizedBox(height: 24),
+
+            // Conditions Section
+            Text(
+              'Conditions',
+              style: theme.textTheme.titleMedium?.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 12),
+            Wrap(
+              spacing: 8,
+              children: ItemCondition.values.map((condition) {
+                final isSelected = filter.conditions.contains(condition);
+                return FilterChip(
+                  label: Text(condition.name.toUpperCase()),
+                  selected: isSelected,
+                  onSelected: (_) => notifier.toggleCondition(condition),
+                );
+              }).toList(),
+            ),
+            if (availableTags.isNotEmpty) ...[
+              const SizedBox(height: 24),
+              Text(
+                'Tags',
+                style: theme.textTheme.titleMedium?.copyWith(
+                  fontWeight: FontWeight.bold,
                 ),
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 12),
+              AnimatedSize(
+                duration: AppMotion.medium,
+                curve: AppMotion.emphasized,
+                child: Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: availableTags.map((tag) {
+                    final isSelected = filter.tags.contains(tag);
+                    return FilterChip(
+                      label: Text(tag),
+                      selected: isSelected,
+                      onSelected: (_) => notifier.toggleTag(tag),
+                    );
+                  }).toList(),
+                ),
+              ),
             ],
-          ),
-        );
-      },
+            const SizedBox(height: 32),
+            SizedBox(
+              width: double.infinity,
+              child: AppButton(
+                label: 'Apply',
+                expand: true,
+                onPressed: () => Navigator.pop(context),
+              ),
+            ),
+            const SizedBox(height: 8),
+          ],
+        ),
+      ),
     );
   }
 }

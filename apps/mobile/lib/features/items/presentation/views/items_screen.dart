@@ -76,7 +76,7 @@ class _ItemsScreenState extends ConsumerState<ItemsScreen> {
     return Scaffold(
       appBar: AppBar(
         title: _isSearching
-            ? TextField(
+            ? AppInput(
                 controller: _searchController,
                 autofocus: true,
                 decoration: const InputDecoration(
@@ -296,7 +296,7 @@ class _ItemsScreenState extends ConsumerState<ItemsScreen> {
   }
 
   void _showFilterSheet(BuildContext context) {
-    showModalBottomSheet(
+    showAppSheet(
       context: context,
       isScrollControlled: true,
       builder: (context) => ItemFilterSheet(collectionId: widget.collectionId),
@@ -304,10 +304,9 @@ class _ItemsScreenState extends ConsumerState<ItemsScreen> {
   }
 
   void _showCollectionDetails(BuildContext context) {
-    showModalBottomSheet(
+    showAppSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: Colors.transparent,
       builder: (context) =>
           CollectionDetailsSheet(collectionId: widget.collectionId),
     );
@@ -318,24 +317,22 @@ class _ItemsScreenState extends ConsumerState<ItemsScreen> {
     WidgetRef ref,
     Item item,
   ) async {
-    final confirmed = await showDialog<bool>(
+    final confirmed = await showAppDialog<bool>(
       context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Delete Item'),
-        content: Text('Are you sure you want to delete "${item.title}"?'),
-        actions: [
-          AppButton(
-            label: 'Cancel',
-            variant: AppButtonVariant.ghost,
-            onPressed: () => Navigator.pop(context, false),
-          ),
-          AppButton(
-            label: 'Delete',
-            variant: AppButtonVariant.danger,
-            onPressed: () => Navigator.pop(context, true),
-          ),
-        ],
-      ),
+      title: const Text('Delete Item'),
+      content: Text('Are you sure you want to delete "${item.title}"?'),
+      actions: [
+        AppButton(
+          label: 'Cancel',
+          variant: AppButtonVariant.ghost,
+          onPressed: () => Navigator.pop(context, false),
+        ),
+        AppButton(
+          label: 'Delete',
+          variant: AppButtonVariant.danger,
+          onPressed: () => Navigator.pop(context, true),
+        ),
+      ],
     );
 
     if (confirmed == true && context.mounted) {
