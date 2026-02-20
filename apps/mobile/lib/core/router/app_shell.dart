@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:ui/ui.dart';
 
 class AppShell extends StatelessWidget {
   const AppShell({required this.navigationShell, Key? key})
-    : super(key: key ?? const ValueKey('ScaffoldWithNestedNavigation'));
+    : super(key: key ?? const ValueKey('CollectionTrackerShell'));
 
   final StatefulNavigationShell navigationShell;
 
@@ -18,31 +19,63 @@ class AppShell extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
 
-    // Standard material breakpoint for NavigationRail vs BottomNavigationBar
     if (size.width < 600) {
-      return ScaffoldWithNavigationBar(
+      return _GlassBottomShell(
         body: navigationShell,
         currentIndex: navigationShell.currentIndex,
         onDestinationSelected: _goBranch,
-      );
-    } else {
-      return ScaffoldWithNavigationRail(
-        body: navigationShell,
-        currentIndex: navigationShell.currentIndex,
-        onDestinationSelected: _goBranch,
-        // Show extended rail on large desktop screens
-        extended: size.width >= 1200,
       );
     }
+
+    return _RailShell(
+      body: navigationShell,
+      currentIndex: navigationShell.currentIndex,
+      onDestinationSelected: _goBranch,
+      extended: size.width >= 1200,
+    );
   }
 }
 
-class ScaffoldWithNavigationBar extends StatelessWidget {
-  const ScaffoldWithNavigationBar({
+class _ShellDestination {
+  final IconData icon;
+  final IconData selectedIcon;
+  final String label;
+
+  const _ShellDestination({
+    required this.icon,
+    required this.selectedIcon,
+    required this.label,
+  });
+}
+
+const _destinations = <_ShellDestination>[
+  _ShellDestination(
+    icon: Icons.inventory_2_outlined,
+    selectedIcon: Icons.inventory_2,
+    label: 'Home',
+  ),
+  _ShellDestination(
+    icon: Icons.favorite_border,
+    selectedIcon: Icons.favorite,
+    label: 'Favorites',
+  ),
+  _ShellDestination(
+    icon: Icons.bookmark_border,
+    selectedIcon: Icons.bookmark,
+    label: 'Wishlist',
+  ),
+  _ShellDestination(
+    icon: Icons.settings_outlined,
+    selectedIcon: Icons.settings,
+    label: 'Settings',
+  ),
+];
+
+class _GlassBottomShell extends StatelessWidget {
+  const _GlassBottomShell({
     required this.body,
     required this.currentIndex,
     required this.onDestinationSelected,
-    super.key,
   });
 
   final Widget body;
@@ -51,50 +84,49 @@ class ScaffoldWithNavigationBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final tokens = theme.extension<DesignTokens>() ?? const DesignTokens();
+    final bottomInset = MediaQuery.paddingOf(context).bottom;
+    final navReservedSpace =
+        tokens.navBarHeight + tokens.navBarBottomMargin + bottomInset + 12;
+
     return Scaffold(
-      body: body,
-      bottomNavigationBar: NavigationBar(
-        selectedIndex: currentIndex,
-        destinations: const [
-          NavigationDestination(
-            icon: Icon(Icons.inventory_2_outlined),
-            selectedIcon: Icon(Icons.inventory_2),
-            label: 'Home',
+      body: Stack(
+        fit: StackFit.expand,
+        children: [
+          AnimatedPadding(
+            duration: AppMotion.medium,
+            curve: AppMotion.emphasized,
+            padding: EdgeInsets.only(bottom: navReservedSpace),
+            child: body,
           ),
-          NavigationDestination(
-            icon: Icon(Icons.favorite_border),
-            selectedIcon: Icon(Icons.favorite),
-            label: 'Favorites',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.bookmark_border),
-            selectedIcon: Icon(Icons.bookmark),
-            label: 'Wishlist',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.settings_outlined),
-            selectedIcon: Icon(Icons.settings),
-            label: 'Settings',
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: GlassSegmentedNavigationBar(
+              selectedIndex: currentIndex,
+              onDestinationSelected: onDestinationSelected,
+              destinations: _destinations
+                  .map(
+                    (destination) => GlassNavDestination(
+                      icon: destination.icon,
+                      selectedIcon: destination.selectedIcon,
+                      label: destination.label,
+                    ),
+                  )
+                  .toList(),
+            ),
           ),
         ],
-        onDestinationSelected: onDestinationSelected,
       ),
-      // floatingActionButton: FloatingActionButton(
-      //   heroTag: 'home-scanner-fab',
-      //   onPressed: () => context.push('/scanner'),
-      //   child: const Icon(Icons.qr_code_scanner),
-      // ),
-      // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
 }
 
-class ScaffoldWithNavigationRail extends StatelessWidget {
-  const ScaffoldWithNavigationRail({
+class _RailShell extends StatelessWidget {
+  const _RailShell({
     required this.body,
     required this.currentIndex,
     required this.onDestinationSelected,
-    super.key,
     this.extended = false,
   });
 
@@ -105,72 +137,77 @@ class ScaffoldWithNavigationRail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Scaffold(
       body: Row(
         children: [
-          NavigationRail(
-            selectedIndex: currentIndex,
-            onDestinationSelected: onDestinationSelected,
-            labelType: extended
-                ? NavigationRailLabelType.none
-                : NavigationRailLabelType.all,
-            extended: extended,
-            // Add leading widget for app icon/logo
-            leading: Column(
-              children: [
-                const SizedBox(height: 8),
-                // Container(
-                //   width: 48,
-                //   height: 48,
-                //   decoration: BoxDecoration(
-                //     borderRadius: BorderRadius.circular(10),
-                //     image: const DecorationImage(
-                //       image: AssetImage('assets/images/logo.png'),
-                //       fit: BoxFit.cover,
-                //     ),
-                //   ),
-                // ),
-                if (extended) ...[
-                  const SizedBox(height: 8),
-                  Text(
-                    'Collection Tracker',
-                    style: Theme.of(context).textTheme.bodyLarge,
+          Padding(
+            padding: const EdgeInsets.fromLTRB(12, 12, 0, 12),
+            child: SizedBox(
+              width: extended ? 242 : 96,
+              child: GlassSurface(
+                borderRadius: BorderRadius.circular(AppRadii.xl),
+                padding: const EdgeInsets.symmetric(vertical: AppSpacing.md),
+                child: NavigationRail(
+                  selectedIndex: currentIndex,
+                  onDestinationSelected: onDestinationSelected,
+                  labelType: extended
+                      ? NavigationRailLabelType.none
+                      : NavigationRailLabelType.all,
+                  extended: extended,
+                  backgroundColor: Colors.transparent,
+                  indicatorColor: theme.colorScheme.primary.withValues(
+                    alpha: 0.2,
                   ),
-                ],
-                // Can be used for primary action
-                // FloatingActionButton(
-                //   heroTag: 'home-scanner-fab',
-                //   onPressed: () => context.push('/scanner'),
-                //   child: const Icon(Icons.qr_code_scanner),
-                // ),
-                const SizedBox(height: 16),
-              ],
+                  selectedIconTheme: IconThemeData(
+                    color: theme.colorScheme.primary,
+                  ),
+                  selectedLabelTextStyle: theme.textTheme.labelMedium?.copyWith(
+                    color: theme.colorScheme.primary,
+                    fontWeight: FontWeight.w700,
+                  ),
+                  unselectedIconTheme: IconThemeData(
+                    color: theme.colorScheme.onSurfaceVariant,
+                  ),
+                  unselectedLabelTextStyle: theme.textTheme.labelMedium
+                      ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+                  leading: Padding(
+                    padding: const EdgeInsets.only(bottom: AppSpacing.lg),
+                    child: Column(
+                      children: [
+                        const SizedBox(height: AppSpacing.sm),
+                        if (extended) ...[
+                          Text(
+                            'Collection',
+                            style: theme.textTheme.titleMedium?.copyWith(
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                          Text(
+                            'Tracker',
+                            style: theme.textTheme.bodyMedium?.copyWith(
+                              color: theme.colorScheme.onSurfaceVariant,
+                            ),
+                          ),
+                        ],
+                      ],
+                    ),
+                  ),
+                  destinations: _destinations
+                      .map(
+                        (destination) => NavigationRailDestination(
+                          icon: Icon(destination.icon),
+                          selectedIcon: Icon(destination.selectedIcon),
+                          label: Text(destination.label),
+                        ),
+                      )
+                      .toList(),
+                ),
+              ),
             ),
-            destinations: const <NavigationRailDestination>[
-              NavigationRailDestination(
-                icon: Icon(Icons.inventory_2_outlined),
-                selectedIcon: Icon(Icons.inventory_2),
-                label: Text('Home'),
-              ),
-              NavigationRailDestination(
-                icon: Icon(Icons.favorite_border),
-                selectedIcon: Icon(Icons.favorite),
-                label: Text('Favorites'),
-              ),
-              NavigationRailDestination(
-                icon: Icon(Icons.bookmark_border),
-                selectedIcon: Icon(Icons.bookmark),
-                label: Text('Wishlist'),
-              ),
-              NavigationRailDestination(
-                icon: Icon(Icons.settings_outlined),
-                selectedIcon: Icon(Icons.settings),
-                label: Text('Settings'),
-              ),
-            ],
           ),
-          const VerticalDivider(thickness: 1, width: 1),
-          // This is the main content.
+          const SizedBox(width: 12),
           Expanded(child: body),
         ],
       ),
