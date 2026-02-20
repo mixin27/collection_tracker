@@ -130,6 +130,16 @@ class ItemCard extends StatelessWidget {
                     ),
                   ),
                 ],
+                if (item.currentValue != null) ...[
+                  const SizedBox(height: AppSpacing.sm),
+                  Text(
+                    '\$${item.currentValue!.toStringAsFixed(2)}',
+                    style: theme.textTheme.labelLarge?.copyWith(
+                      color: theme.colorScheme.primary,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ],
               ],
             ),
           ),

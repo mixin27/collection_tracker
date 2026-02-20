@@ -13,10 +13,10 @@ class CollectionDetailsSheet extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final collectionAsync = ref.watch(collectionStreamProvider(collectionId));
-    final maxHeight = MediaQuery.sizeOf(context).height * 0.74;
+    final maxHeight = MediaQuery.sizeOf(context).height * 0.68;
 
-    return SizedBox(
-      height: maxHeight,
+    return ConstrainedBox(
+      constraints: BoxConstraints(maxHeight: maxHeight),
       child: collectionAsync.when(
         data: (collection) {
           if (collection == null) {
@@ -26,47 +26,52 @@ class CollectionDetailsSheet extends ConsumerWidget {
               message: 'The selected collection is not available.',
             );
           }
-          return ListView(
+          return SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
             padding: const EdgeInsets.all(AppSpacing.sm),
-            children: [
-              Text(
-                collection.name,
-                style: Theme.of(context).textTheme.headlineMedium,
-              ),
-              const SizedBox(height: 8),
-              Row(
-                children: [
-                  Chip(label: Text(collection.type.name)),
-                  const SizedBox(width: 8),
-                  Text(
-                    '${collection.itemCount} items',
-                    style: Theme.of(context).textTheme.bodyMedium,
-                  ),
-                ],
-              ),
-              const SizedBox(height: 24),
-              _buildStatRow(
-                context,
-                'Created',
-                collection.createdAt.formatMediumDate(),
-              ),
-              const SizedBox(height: 16),
-              _buildStatRow(
-                context,
-                'Last Updated',
-                collection.updatedAt.formatMediumDate(),
-              ),
-              const SizedBox(height: 32),
-              AppButton(
-                label: 'Edit Collection',
-                variant: AppButtonVariant.secondary,
-                icon: const Icon(Icons.edit),
-                onPressed: () {
-                  context.pop();
-                  context.push('/collections/$collectionId/edit');
-                },
-              ),
-            ],
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  collection.name,
+                  style: Theme.of(context).textTheme.headlineMedium,
+                ),
+                const SizedBox(height: 8),
+                Row(
+                  children: [
+                    Chip(label: Text(collection.type.name)),
+                    const SizedBox(width: 8),
+                    Text(
+                      '${collection.itemCount} items',
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 24),
+                _buildStatRow(
+                  context,
+                  'Created',
+                  collection.createdAt.formatMediumDate(),
+                ),
+                const SizedBox(height: 16),
+                _buildStatRow(
+                  context,
+                  'Last Updated',
+                  collection.updatedAt.formatMediumDate(),
+                ),
+                const SizedBox(height: 32),
+                AppButton(
+                  label: 'Edit Collection',
+                  variant: AppButtonVariant.secondary,
+                  icon: const Icon(Icons.edit),
+                  onPressed: () {
+                    context.pop();
+                    context.push('/collections/$collectionId/edit');
+                  },
+                ),
+                const SizedBox(height: AppSpacing.xs),
+              ],
+            ),
           );
         },
         loading: () => const LoadingView(message: 'Loading collection...'),

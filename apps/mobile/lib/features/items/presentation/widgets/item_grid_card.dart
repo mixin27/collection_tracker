@@ -23,6 +23,9 @@ class ItemGridCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final conditionColor = item.condition == null
+        ? theme.colorScheme.onSurfaceVariant
+        : _conditionColor(item.condition!);
 
     return AppCard(
       padding: EdgeInsets.zero,
@@ -31,74 +34,111 @@ class ItemGridCard extends StatelessWidget {
       onLongPress: () => _showMenu(context),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(AppRadii.lg - 1),
-        child: Stack(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Expanded(
-                  child: Hero(
+            Expanded(
+              flex: 6,
+              child: Stack(
+                fit: StackFit.expand,
+                children: [
+                  Hero(
                     tag: heroTag ?? 'item_${item.id}',
                     child: _buildImage(theme),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(AppSpacing.sm),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        item.title,
-                        style: theme.textTheme.labelLarge?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
+                  DecoratedBox(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.bottomCenter,
+                        end: Alignment.topCenter,
+                        colors: [
+                          Colors.black.withValues(alpha: 0.38),
+                          Colors.transparent,
+                        ],
                       ),
-                      if (item.condition != null)
-                        Text(
-                          item.condition!.name.toUpperCase(),
-                          style: theme.textTheme.labelSmall?.copyWith(
+                    ),
+                  ),
+                  Positioned(
+                    top: AppSpacing.xs,
+                    right: AppSpacing.xs,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        if (item.isWishlist)
+                          _IconBubble(
+                            icon: Icons.bookmark_rounded,
                             color: theme.colorScheme.primary,
                           ),
+                        if (item.isFavorite)
+                          _IconBubble(
+                            icon: Icons.favorite_rounded,
+                            color: Colors.red[400] ?? Colors.red,
+                          ),
+                        _IconBubble(
+                          icon: Icons.more_horiz_rounded,
+                          color: theme.colorScheme.onSurface,
+                          onTap: () => _showMenu(context),
                         ),
-                      if (item.tags.isNotEmpty)
-                        Padding(
-                          padding: const EdgeInsets.only(top: 4),
-                          child: InkWell(
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Expanded(
+              flex: 5,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(
+                  AppSpacing.sm,
+                  AppSpacing.sm,
+                  AppSpacing.sm,
+                  AppSpacing.sm,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      item.title,
+                      style: theme.textTheme.labelLarge?.copyWith(
+                        fontWeight: FontWeight.w700,
+                        height: 1.2,
+                      ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    const SizedBox(height: 6),
+                    Wrap(
+                      spacing: AppSpacing.xs,
+                      runSpacing: AppSpacing.xs,
+                      children: [
+                        if (item.condition != null)
+                          _Pill(
+                            icon: Icons.verified_outlined,
+                            label: item.condition!.name.toUpperCase(),
+                            color: conditionColor,
+                          ),
+                        if (item.quantity > 1)
+                          _Pill(
+                            icon: Icons.layers_outlined,
+                            label: 'Qty ${item.quantity}',
+                            color: theme.colorScheme.primary,
+                          ),
+                        if (item.tags.isNotEmpty)
+                          _Pill(
+                            icon: Icons.sell_outlined,
+                            label: '#${item.tags.first}',
+                            color: theme.colorScheme.onSurfaceVariant,
                             onTap: () => context.pushNamed(
                               'tag-items',
                               queryParameters: {'tag': item.tags.first},
                             ),
-                            borderRadius: BorderRadius.circular(AppRadii.pill),
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 6,
-                                vertical: 2,
-                              ),
-                              child: Text(
-                                '#${item.tags.first}',
-                                style: theme.textTheme.labelSmall?.copyWith(
-                                  color: theme.colorScheme.onSurfaceVariant,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
                           ),
-                        ),
-                    ],
-                  ),
+                      ],
+                    ),
+                  ],
                 ),
-              ],
-            ),
-            if (item.isFavorite)
-              Positioned(
-                top: 8,
-                right: 8,
-                child: Icon(Icons.favorite, size: 20, color: Colors.red[400]),
               ),
+            ),
           ],
         ),
       ),
@@ -113,7 +153,7 @@ class ItemGridCard extends StatelessWidget {
         errorBuilder: (context, error, stackTrace) {
           return Center(
             child: Icon(
-              Icons.image_not_supported,
+              Icons.image_not_supported_rounded,
               color: theme.colorScheme.onSurfaceVariant,
             ),
           );
@@ -124,9 +164,9 @@ class ItemGridCard extends StatelessWidget {
         imageUrl: item.coverImageUrl!,
         fit: BoxFit.cover,
         placeholder: (context, url) =>
-            const Center(child: CircularProgressIndicator()),
+            const Center(child: CircularProgressIndicator(strokeWidth: 2)),
         errorWidget: (context, url, error) => Icon(
-          Icons.image_not_supported,
+          Icons.image_not_supported_rounded,
           color: theme.colorScheme.onSurfaceVariant,
         ),
       );
@@ -134,7 +174,7 @@ class ItemGridCard extends StatelessWidget {
       return Container(
         color: theme.colorScheme.surfaceContainerHighest,
         child: Icon(
-          Icons.image_not_supported,
+          Icons.image_not_supported_rounded,
           color: theme.colorScheme.onSurfaceVariant,
         ),
       );
@@ -149,16 +189,111 @@ class ItemGridCard extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             ListTile(
-              leading: const Icon(Icons.delete, color: Colors.red),
+              leading: const Icon(Icons.edit_rounded),
+              title: const Text('Edit'),
+              onTap: () {
+                Navigator.pop(context);
+                context.push('/items/${item.id}/edit');
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.delete_outline, color: Colors.red),
               title: const Text('Delete', style: TextStyle(color: Colors.red)),
               onTap: () {
                 Navigator.pop(context);
                 onDelete();
               },
             ),
+            const SizedBox(height: AppSpacing.sm),
           ],
         ),
       ),
     );
+  }
+
+  Color _conditionColor(ItemCondition condition) {
+    return switch (condition) {
+      ItemCondition.mint => const Color(0xFF199A6C),
+      ItemCondition.good => const Color(0xFF2D6CDF),
+      ItemCondition.fair => const Color(0xFFD96B12),
+      ItemCondition.poor => const Color(0xFFD64545),
+    };
+  }
+}
+
+class _Pill extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final Color color;
+  final VoidCallback? onTap;
+
+  const _Pill({
+    required this.icon,
+    required this.label,
+    required this.color,
+    this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        borderRadius: BorderRadius.circular(AppRadii.pill),
+        onTap: onTap,
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+          decoration: BoxDecoration(
+            color: color.withValues(alpha: 0.12),
+            borderRadius: BorderRadius.circular(AppRadii.pill),
+            border: Border.all(color: color.withValues(alpha: 0.35)),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(icon, size: 12, color: color),
+              const SizedBox(width: 4),
+              Text(
+                label,
+                style: theme.textTheme.labelSmall?.copyWith(
+                  color: color,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _IconBubble extends StatelessWidget {
+  final IconData icon;
+  final Color color;
+  final VoidCallback? onTap;
+
+  const _IconBubble({required this.icon, required this.color, this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final bubble = Container(
+      margin: const EdgeInsets.only(left: 4),
+      padding: const EdgeInsets.all(5),
+      decoration: BoxDecoration(
+        color: theme.colorScheme.surface.withValues(alpha: 0.9),
+        borderRadius: BorderRadius.circular(AppRadii.pill),
+        border: Border.all(
+          color: theme.colorScheme.outlineVariant.withValues(alpha: 0.6),
+        ),
+      ),
+      child: Icon(icon, size: 16, color: color),
+    );
+
+    if (onTap == null) return bubble;
+    return GestureDetector(onTap: onTap, child: bubble);
   }
 }
