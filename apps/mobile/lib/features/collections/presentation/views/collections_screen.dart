@@ -4,12 +4,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ui/ui.dart';
 
+import '../../../../core/providers/providers.dart';
 import '../view_models/collections_view_model.dart';
 import '../widgets/collection_card.dart';
 import '../widgets/collection_grid_tile.dart';
 import '../widgets/empty_collections_view.dart';
-
-enum _CollectionsViewMode { list, grid }
 
 class CollectionsScreen extends ConsumerStatefulWidget {
   const CollectionsScreen({super.key});
@@ -19,32 +18,26 @@ class CollectionsScreen extends ConsumerStatefulWidget {
 }
 
 class _CollectionsScreenState extends ConsumerState<CollectionsScreen> {
-  _CollectionsViewMode _viewMode = _CollectionsViewMode.list;
-
   @override
   Widget build(BuildContext context) {
     final collectionsAsync = ref.watch(collectionsViewModelProvider);
+    final viewMode = ref.watch(collectionsViewModeProvider);
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('My Collections'),
         actions: [
           IconButton(
-            tooltip: _viewMode == _CollectionsViewMode.list
+            tooltip: viewMode == CollectionsViewMode.list
                 ? 'Switch to grid'
                 : 'Switch to list',
             icon: Icon(
-              _viewMode == _CollectionsViewMode.list
+              viewMode == CollectionsViewMode.list
                   ? Icons.grid_view_rounded
                   : Icons.view_agenda_rounded,
             ),
-            onPressed: () {
-              setState(() {
-                _viewMode = _viewMode == _CollectionsViewMode.list
-                    ? _CollectionsViewMode.grid
-                    : _CollectionsViewMode.list;
-              });
-            },
+            onPressed: () =>
+                ref.read(collectionsViewModeProvider.notifier).toggle(),
           ),
           IconButton(
             icon: const Icon(Icons.bar_chart_rounded),
@@ -125,7 +118,7 @@ class _CollectionsScreenState extends ConsumerState<CollectionsScreen> {
                           ),
                         ),
                       ),
-                      if (_viewMode == _CollectionsViewMode.list)
+                      if (viewMode == CollectionsViewMode.list)
                         SliverPadding(
                           padding: const EdgeInsets.fromLTRB(
                             AppSpacing.lg,

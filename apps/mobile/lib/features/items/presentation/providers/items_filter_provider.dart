@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:collection_tracker/features/items/presentation/view_models/items_view_model.dart';
 import 'package:domain/domain.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:storage/storage.dart';
 
 part 'items_filter_provider.g.dart';
 
@@ -58,9 +61,32 @@ class ItemFilterState {
 
 @riverpod
 class ItemFilter extends _$ItemFilter {
+  static const _sortByKey = 'items_filter_sort_by';
+  static const _sortAscendingKey = 'items_filter_sort_ascending';
+  static const _favoritesOnlyKey = 'items_filter_only_favorites';
+  static const _wishlistOnlyKey = 'items_filter_only_wishlist';
+
+  late final PrefsStorageService _prefs;
+
   @override
   ItemFilterState build() {
-    return const ItemFilterState();
+    _prefs = PrefsStorageService.instance;
+
+    final sortByIndex =
+        _prefs.readSync<int>(_sortByKey) ?? ItemSortBy.custom.index;
+    final sortBy = sortByIndex < 0 || sortByIndex >= ItemSortBy.values.length
+        ? ItemSortBy.custom
+        : ItemSortBy.values[sortByIndex];
+    final sortAscending = _prefs.readSync<bool>(_sortAscendingKey) ?? true;
+    final showOnlyFavorites = _prefs.readSync<bool>(_favoritesOnlyKey) ?? false;
+    final showOnlyWishlist = _prefs.readSync<bool>(_wishlistOnlyKey) ?? false;
+
+    return ItemFilterState(
+      sortBy: sortBy,
+      sortAscending: sortAscending,
+      showOnlyFavorites: showOnlyFavorites,
+      showOnlyWishlist: showOnlyWishlist,
+    );
   }
 
   void setSearchQuery(String query) {
@@ -73,6 +99,7 @@ class ItemFilter extends _$ItemFilter {
     } else {
       state = state.copyWith(sortBy: sortBy, sortAscending: false);
     }
+    _persistDisplayPrefs();
   }
 
   void toggleCondition(ItemCondition condition) {
@@ -97,14 +124,24 @@ class ItemFilter extends _$ItemFilter {
 
   void toggleFavorites() {
     state = state.copyWith(showOnlyFavorites: !state.showOnlyFavorites);
+    _persistDisplayPrefs();
   }
 
   void toggleWishlist() {
     state = state.copyWith(showOnlyWishlist: !state.showOnlyWishlist);
+    _persistDisplayPrefs();
   }
 
   void reset() {
     state = const ItemFilterState();
+    _persistDisplayPrefs();
+  }
+
+  void _persistDisplayPrefs() {
+    unawaited(_prefs.save<int>(_sortByKey, state.sortBy.index));
+    unawaited(_prefs.save<bool>(_sortAscendingKey, state.sortAscending));
+    unawaited(_prefs.save<bool>(_favoritesOnlyKey, state.showOnlyFavorites));
+    unawaited(_prefs.save<bool>(_wishlistOnlyKey, state.showOnlyWishlist));
   }
 }
 
