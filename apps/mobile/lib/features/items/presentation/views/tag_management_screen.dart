@@ -212,6 +212,9 @@ class _TagManagementScreenState extends ConsumerState<TagManagementScreen> {
                       Expanded(
                         child: ListView.separated(
                           key: const ValueKey('tags-list'),
+                          physics: const AlwaysScrollableScrollPhysics(
+                            parent: BouncingScrollPhysics(),
+                          ),
                           controller: _scrollController,
                           padding: const EdgeInsets.fromLTRB(
                             AppSpacing.md,

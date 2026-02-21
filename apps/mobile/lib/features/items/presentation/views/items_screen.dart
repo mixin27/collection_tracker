@@ -179,6 +179,9 @@ class _ItemsScreenState extends ConsumerState<ItemsScreen> {
                     child: canReorder
                         ? ReorderableListView.builder(
                             key: const ValueKey('list-reorder'),
+                            physics: const AlwaysScrollableScrollPhysics(
+                              parent: BouncingScrollPhysics(),
+                            ),
                             padding: const EdgeInsets.all(AppSpacing.lg),
                             itemCount: items.length,
                             onReorder: (oldIndex, newIndex) {
@@ -272,6 +275,9 @@ class _ItemsScreenState extends ConsumerState<ItemsScreen> {
 
                         return GridView.builder(
                           key: const ValueKey('grid'),
+                          physics: const AlwaysScrollableScrollPhysics(
+                            parent: BouncingScrollPhysics(),
+                          ),
                           padding: const EdgeInsets.all(AppSpacing.lg),
                           gridDelegate:
                               SliverGridDelegateWithFixedCrossAxisCount(

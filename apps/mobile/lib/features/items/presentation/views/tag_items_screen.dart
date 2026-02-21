@@ -98,6 +98,9 @@ class _TagItemsScreenState extends ConsumerState<TagItemsScreen> {
       });
 
     return ListView.builder(
+      physics: const AlwaysScrollableScrollPhysics(
+        parent: BouncingScrollPhysics(),
+      ),
       padding: const EdgeInsets.fromLTRB(16, 12, 16, 20),
       itemCount: sortedCollectionIds.length,
       itemBuilder: (context, sectionIndex) {

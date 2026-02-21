@@ -77,7 +77,9 @@ class _CollectionsScreenState extends ConsumerState<CollectionsScreen> {
                       .fold<int>(0, (sum, value) => sum + value);
 
                   return CustomScrollView(
-                    physics: const AlwaysScrollableScrollPhysics(),
+                    physics: const AlwaysScrollableScrollPhysics(
+                      parent: BouncingScrollPhysics(),
+                    ),
                     slivers: [
                       SliverToBoxAdapter(
                         child: Padding(
