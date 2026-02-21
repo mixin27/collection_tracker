@@ -217,11 +217,11 @@ class SettingsScreen extends ConsumerWidget {
         AppButton(
           label: l10n.actionCancel,
           variant: AppButtonVariant.ghost,
-          onPressed: () => Navigator.pop(context, false),
+          onPressed: () => closeAppDialog(context, false),
         ),
         AppButton(
           label: l10n.actionImport,
-          onPressed: () => Navigator.pop(context, true),
+          onPressed: () => closeAppDialog(context, true),
         ),
       ],
     );
@@ -369,12 +369,12 @@ class SettingsScreen extends ConsumerWidget {
         AppButton(
           label: l10n.actionCancel,
           variant: AppButtonVariant.ghost,
-          onPressed: () => Navigator.pop(context, false),
+          onPressed: () => closeAppDialog(context, false),
         ),
         AppButton(
           label: l10n.settingsCrashlyticsTestConfirmAction,
           variant: AppButtonVariant.danger,
-          onPressed: () => Navigator.pop(context, true),
+          onPressed: () => closeAppDialog(context, true),
         ),
       ],
     );

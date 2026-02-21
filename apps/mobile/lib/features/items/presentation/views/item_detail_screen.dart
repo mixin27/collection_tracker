@@ -474,14 +474,14 @@ class ItemDetailScreen extends ConsumerWidget {
         AppButton(
           label: l10n.actionCancel,
           variant: AppButtonVariant.ghost,
-          onPressed: () => Navigator.pop(context),
+          onPressed: () => closeAppDialog(context),
         ),
         AppButton(
           label: l10n.actionSave,
           onPressed: () {
             final parsed = double.tryParse(draftValue.trim());
             if (parsed == null || parsed < 0) return;
-            Navigator.pop(context, parsed);
+            closeAppDialog(context, parsed);
           },
         ),
       ],

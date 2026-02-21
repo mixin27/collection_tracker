@@ -19,6 +19,12 @@ Future<T?> showAppDialog<T>({
   );
 }
 
+Future<void> closeAppDialog<T>(BuildContext context, [T? result]) async {
+  final navigator = Navigator.maybeOf(context);
+  if (navigator == null) return;
+  await navigator.maybePop<T>(result);
+}
+
 class AppDialog extends StatelessWidget {
   final Widget? title;
   final Widget content;

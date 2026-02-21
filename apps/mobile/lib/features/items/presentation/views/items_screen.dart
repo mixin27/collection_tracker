@@ -368,12 +368,12 @@ class _ItemsScreenState extends ConsumerState<ItemsScreen> {
         AppButton(
           label: l10n.actionCancel,
           variant: AppButtonVariant.ghost,
-          onPressed: () => Navigator.pop(context, false),
+          onPressed: () => closeAppDialog(context, false),
         ),
         AppButton(
           label: l10n.actionDelete,
           variant: AppButtonVariant.danger,
-          onPressed: () => Navigator.pop(context, true),
+          onPressed: () => closeAppDialog(context, true),
         ),
       ],
     );

@@ -404,11 +404,11 @@ class _TagManagementScreenState extends ConsumerState<TagManagementScreen> {
         AppButton(
           label: context.l10n.actionCancel,
           variant: AppButtonVariant.ghost,
-          onPressed: () => Navigator.pop(context),
+          onPressed: () => closeAppDialog(context),
         ),
         AppButton(
           label: context.l10n.tagManagementRenameAction,
-          onPressed: () => Navigator.pop(context, draftName),
+          onPressed: () => closeAppDialog(context, draftName),
         ),
       ],
     );
@@ -507,11 +507,11 @@ class _TagManagementScreenState extends ConsumerState<TagManagementScreen> {
         AppButton(
           label: context.l10n.actionCancel,
           variant: AppButtonVariant.ghost,
-          onPressed: () => Navigator.pop(context, false),
+          onPressed: () => closeAppDialog(context, false),
         ),
         AppButton(
           label: context.l10n.tagManagementMergeAction,
-          onPressed: () => Navigator.pop(context, true),
+          onPressed: () => closeAppDialog(context, true),
         ),
       ],
     );
@@ -554,12 +554,12 @@ class _TagManagementScreenState extends ConsumerState<TagManagementScreen> {
         AppButton(
           label: context.l10n.actionCancel,
           variant: AppButtonVariant.ghost,
-          onPressed: () => Navigator.pop(context, false),
+          onPressed: () => closeAppDialog(context, false),
         ),
         AppButton(
           label: context.l10n.actionDelete,
           variant: AppButtonVariant.danger,
-          onPressed: () => Navigator.pop(context, true),
+          onPressed: () => closeAppDialog(context, true),
         ),
       ],
     );
@@ -636,12 +636,12 @@ class _TagManagementScreenState extends ConsumerState<TagManagementScreen> {
         AppButton(
           label: context.l10n.actionCancel,
           variant: AppButtonVariant.ghost,
-          onPressed: () => Navigator.pop(context, false),
+          onPressed: () => closeAppDialog(context, false),
         ),
         AppButton(
           label: context.l10n.actionDelete,
           variant: AppButtonVariant.danger,
-          onPressed: () => Navigator.pop(context, true),
+          onPressed: () => closeAppDialog(context, true),
         ),
       ],
     );
