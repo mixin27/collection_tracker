@@ -1,0 +1,862 @@
+{
+  "@@locale": "ja",
+  "appTitle": "Collection Tracker",
+  "@appTitle": {},
+  "navHome": "ホーム",
+  "@navHome": {},
+  "navFavorites": "お気に入り",
+  "@navFavorites": {},
+  "navWishlist": "ウィッシュリスト",
+  "@navWishlist": {},
+  "navSettings": "設定",
+  "@navSettings": {},
+  "actionApply": "Apply",
+  "@actionApply": {},
+  "actionCancel": "キャンセル",
+  "@actionCancel": {},
+  "actionDelete": "削除",
+  "@actionDelete": {},
+  "actionDismiss": "閉じる",
+  "@actionDismiss": {},
+  "actionEdit": "Edit",
+  "@actionEdit": {},
+  "actionImport": "インポート",
+  "@actionImport": {},
+  "actionRefresh": "Refresh",
+  "@actionRefresh": {},
+  "actionReset": "Reset",
+  "@actionReset": {},
+  "actionSave": "Save",
+  "@actionSave": {},
+  "actionSwitchToGrid": "グリッド表示",
+  "@actionSwitchToGrid": {},
+  "actionSwitchToList": "リスト表示",
+  "@actionSwitchToList": {},
+  "actionUpdate": "Update",
+  "@actionUpdate": {},
+  "settingsTitle": "設定",
+  "@settingsTitle": {},
+  "settingsSectionGeneral": "一般",
+  "@settingsSectionGeneral": {},
+  "settingsSectionData": "データ",
+  "@settingsSectionData": {},
+  "settingsSectionAbout": "情報",
+  "@settingsSectionAbout": {},
+  "settingsThemeTitle": "テーマ",
+  "@settingsThemeTitle": {},
+  "settingsLanguageTitle": "言語",
+  "@settingsLanguageTitle": {},
+  "settingsExportJsonTitle": "JSONにエクスポート",
+  "@settingsExportJsonTitle": {},
+  "settingsExportJsonSubtitle": "すべてのデータをJSONとして出力",
+  "@settingsExportJsonSubtitle": {},
+  "settingsExportCsvTitle": "CSVにエクスポート",
+  "@settingsExportCsvTitle": {},
+  "settingsExportCsvSubtitle": "アイテムをCSVとして出力",
+  "@settingsExportCsvSubtitle": {},
+  "settingsImportJsonTitle": "JSONからインポート",
+  "@settingsImportJsonTitle": {},
+  "settingsImportJsonSubtitle": "JSONファイルからデータを取り込む",
+  "@settingsImportJsonSubtitle": {},
+  "settingsCloudSyncTitle": "クラウド同期",
+  "@settingsCloudSyncTitle": {},
+  "settingsCloudSyncSubtitle": "未設定",
+  "@settingsCloudSyncSubtitle": {},
+  "settingsManageTagsTitle": "タグ管理",
+  "@settingsManageTagsTitle": {},
+  "settingsManageTagsSubtitle": "タグの名前変更・統合・削除",
+  "@settingsManageTagsSubtitle": {},
+  "settingsVersionTitle": "バージョン",
+  "@settingsVersionTitle": {},
+  "settingsPrivacyPolicyTitle": "プライバシーポリシー",
+  "@settingsPrivacyPolicyTitle": {},
+  "settingsTermsTitle": "利用規約",
+  "@settingsTermsTitle": {},
+  "settingsExportingData": "データをエクスポート中...",
+  "@settingsExportingData": {},
+  "settingsDataExportSuccess": "データのエクスポートに成功しました！",
+  "@settingsDataExportSuccess": {},
+  "settingsExportFailed": "エクスポートに失敗しました: {error}",
+  "@settingsExportFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsImportDataTitle": "データをインポート",
+  "@settingsImportDataTitle": {},
+  "settingsImportDataMessage": "JSONファイルからコレクションとアイテムをインポートします。既存データは削除されません。\\n\\n続行しますか？",
+  "@settingsImportDataMessage": {},
+  "settingsImportingData": "データをインポート中...",
+  "@settingsImportingData": {},
+  "settingsDataImportSuccess": "データのインポートに成功しました！",
+  "@settingsDataImportSuccess": {},
+  "settingsImportFailed": "インポートに失敗しました: {error}",
+  "@settingsImportFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsThemeModeTitle": "テーマモード",
+  "@settingsThemeModeTitle": {},
+  "settingsThemeColorVariantTitle": "カラーバリエーション",
+  "@settingsThemeColorVariantTitle": {},
+  "settingsAmoledTitle": "Amoledモード（純黒）",
+  "@settingsAmoledTitle": {},
+  "settingsAmoledSubtitle": "OLED画面でバッテリー消費を抑えます",
+  "@settingsAmoledSubtitle": {},
+  "themeModeSystem": "システム",
+  "@themeModeSystem": {},
+  "themeModeLight": "ライト",
+  "@themeModeLight": {},
+  "themeModeDark": "ダーク",
+  "@themeModeDark": {},
+  "languageSystem": "システム設定",
+  "@languageSystem": {},
+  "languageEnglish": "英語",
+  "@languageEnglish": {},
+  "languageSpanish": "スペイン語",
+  "@languageSpanish": {},
+  "languageIndonesian": "インドネシア語",
+  "@languageIndonesian": {},
+  "languageJapanese": "日本語",
+  "@languageJapanese": {},
+  "languageKorean": "韓国語",
+  "@languageKorean": {},
+  "languageChineseSimplified": "簡体字中国語",
+  "@languageChineseSimplified": {},
+  "languageBurmese": "ビルマ語",
+  "@languageBurmese": {},
+  "collectionsTitle": "マイコレクション",
+  "@collectionsTitle": {},
+  "collectionsCountLabel": "コレクション",
+  "@collectionsCountLabel": {},
+  "collectionsNewButton": "新しいコレクション",
+  "@collectionsNewButton": {},
+  "collectionsActionsTooltip": "コレクション操作",
+  "@collectionsActionsTooltip": {},
+  "collectionsOpenAction": "コレクションを開く",
+  "@collectionsOpenAction": {},
+  "collectionsEditAction": "コレクションを編集",
+  "@collectionsEditAction": {},
+  "collectionsDeleteTitle": "コレクションを削除",
+  "@collectionsDeleteTitle": {},
+  "collectionsDeleteMessage": "\"{name}\" とこのコレクション内の {itemCount} 件のアイテムを削除しますか？",
+  "@collectionsDeleteMessage": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "itemCount": {
+        "type": "int"
+      }
+    }
+  },
+  "collectionsDeleted": "{name} を削除しました",
+  "@collectionsDeleted": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "collectionsErrorLoading": "Error loading collections: {error}",
+  "@collectionsErrorLoading": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "itemsTitle": "アイテム",
+  "@itemsTitle": {},
+  "itemsCountLabel": "アイテム",
+  "@itemsCountLabel": {},
+  "itemsCountWithValue": "{count}件",
+  "@itemsCountWithValue": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "itemsSearchHint": "アイテムを検索...",
+  "@itemsSearchHint": {},
+  "itemsNoMatchesTitle": "一致する結果がありません",
+  "@itemsNoMatchesTitle": {},
+  "itemsNoMatchesMessage": "フィルターやキーワードを変更してください。",
+  "@itemsNoMatchesMessage": {},
+  "itemsNoItemsTitle": "まだアイテムがありません",
+  "@itemsNoItemsTitle": {},
+  "itemsNoItemsMessage": "最初のアイテムを追加して始めましょう。",
+  "@itemsNoItemsMessage": {},
+  "itemsAddButton": "アイテムを追加",
+  "@itemsAddButton": {},
+  "itemsLoadingMessage": "アイテムを読み込み中...",
+  "@itemsLoadingMessage": {},
+  "itemsErrorLoading": "アイテムの読み込みエラー: {error}",
+  "@itemsErrorLoading": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "itemsDeleteTitle": "アイテムを削除",
+  "@itemsDeleteTitle": {},
+  "itemsDeleteMessage": "\"{name}\" を削除しますか？",
+  "@itemsDeleteMessage": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "itemsDeleted": "{name} を削除しました",
+  "@itemsDeleted": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "itemsOverviewCount": "{count}件",
+  "@itemsOverviewCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "itemsSortedBy": "並び順: {sortLabel}",
+  "@itemsSortedBy": {
+    "placeholders": {
+      "sortLabel": {
+        "type": "String"
+      }
+    }
+  },
+  "itemsCollectionDetailsTooltip": "コレクション詳細",
+  "@itemsCollectionDetailsTooltip": {},
+  "itemsFiltersTooltip": "フィルター",
+  "@itemsFiltersTooltip": {},
+  "itemsFilterTitle": "アイテムを絞り込む",
+  "@itemsFilterTitle": {},
+  "itemsSortByTitle": "並び替え",
+  "@itemsSortByTitle": {},
+  "itemsFilterFavoritesOnly": "お気に入りのみ",
+  "@itemsFilterFavoritesOnly": {},
+  "itemsFilterWishlistOnly": "ウィッシュリストのみ",
+  "@itemsFilterWishlistOnly": {},
+  "itemsFilterConditionsTitle": "状態",
+  "@itemsFilterConditionsTitle": {},
+  "itemsTagsTitle": "タグ",
+  "@itemsTagsTitle": {},
+  "itemsQuantityLabel": "数量: {quantity}",
+  "@itemsQuantityLabel": {
+    "placeholders": {
+      "quantity": {
+        "type": "int"
+      }
+    }
+  },
+  "itemsQuantityShort": "x{quantity}",
+  "@itemsQuantityShort": {
+    "placeholders": {
+      "quantity": {
+        "type": "int"
+      }
+    }
+  },
+  "itemSortCustom": "カスタム順",
+  "@itemSortCustom": {},
+  "itemSortTitle": "タイトル",
+  "@itemSortTitle": {},
+  "itemSortCreatedAt": "追加日",
+  "@itemSortCreatedAt": {},
+  "itemSortPurchaseDate": "購入日",
+  "@itemSortPurchaseDate": {},
+  "itemSortCurrentValue": "現在価値",
+  "@itemSortCurrentValue": {},
+  "itemSortQuantity": "数量",
+  "@itemSortQuantity": {},
+  "itemConditionMint": "新品同様",
+  "@itemConditionMint": {},
+  "itemConditionGood": "良好",
+  "@itemConditionGood": {},
+  "itemConditionFair": "普通",
+  "@itemConditionFair": {},
+  "itemConditionPoor": "悪い",
+  "@itemConditionPoor": {},
+  "itemDetailNotFoundTitle": "アイテムが見つかりません",
+  "@itemDetailNotFoundTitle": {},
+  "itemDetailNotFoundMessage": "このアイテムは存在しません。",
+  "@itemDetailNotFoundMessage": {},
+  "itemDetailFavorited": "お気に入り済み",
+  "@itemDetailFavorited": {},
+  "itemDetailFavorite": "お気に入り",
+  "@itemDetailFavorite": {},
+  "itemDetailInWishlist": "ウィッシュリスト済み",
+  "@itemDetailInWishlist": {},
+  "itemDetailPriceTrackingTitle": "価格トラッキング",
+  "@itemDetailPriceTrackingTitle": {},
+  "itemDetailNoValueMessage": "現在価値がありません",
+  "@itemDetailNoValueMessage": {},
+  "itemDetailNoHistoryMessage": "価格履歴がまだありません",
+  "@itemDetailNoHistoryMessage": {},
+  "itemDetailPriceHistoryError": "価格履歴を読み込めません",
+  "@itemDetailPriceHistoryError": {},
+  "itemDetailDetailsTitle": "詳細",
+  "@itemDetailDetailsTitle": {},
+  "itemDetailBarcodeLabel": "バーコード",
+  "@itemDetailBarcodeLabel": {},
+  "itemDetailConditionLabel": "状態",
+  "@itemDetailConditionLabel": {},
+  "itemDetailQuantityLabel": "数量",
+  "@itemDetailQuantityLabel": {},
+  "itemDetailLocationLabel": "保管場所",
+  "@itemDetailLocationLabel": {},
+  "itemDetailPurchasePriceLabel": "購入価格",
+  "@itemDetailPurchasePriceLabel": {},
+  "itemDetailCurrentValueLabel": "現在価値",
+  "@itemDetailCurrentValueLabel": {},
+  "itemDetailPurchaseDateLabel": "購入日",
+  "@itemDetailPurchaseDateLabel": {},
+  "itemDetailNotesTitle": "メモ",
+  "@itemDetailNotesTitle": {},
+  "itemDetailLoadingMessage": "アイテム詳細を読み込み中...",
+  "@itemDetailLoadingMessage": {},
+  "itemDetailErrorLoading": "アイテム詳細の読み込みエラー: {error}",
+  "@itemDetailErrorLoading": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "itemDetailUpdateValueTitle": "現在価値を更新",
+  "@itemDetailUpdateValueTitle": {},
+  "itemDetailCurrentValueUpdated": "現在価値を更新しました",
+  "@itemDetailCurrentValueUpdated": {},
+  "itemDetailUpdateValueFailed": "値の更新に失敗しました: {error}",
+  "@itemDetailUpdateValueFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "addItemTitle": "アイテムを追加",
+  "@addItemTitle": {},
+  "addItemSubmit": "アイテムを追加",
+  "@addItemSubmit": {},
+  "addItemTitleHint": "例: ロード・オブ・ザ・リング",
+  "@addItemTitleHint": {},
+  "addItemFetchingMetadata": "メタデータを取得中...",
+  "@addItemFetchingMetadata": {},
+  "addItemMatchedMetadata": "{source} のメタデータに一致しました",
+  "@addItemMatchedMetadata": {
+    "placeholders": {
+      "source": {
+        "type": "String"
+      }
+    }
+  },
+  "addItemTagsHint": "例: レア, コンプリートセット",
+  "@addItemTagsHint": {},
+  "addItemSuccess": "アイテムを追加しました",
+  "@addItemSuccess": {},
+  "addItemError": "アイテムの追加エラー: {error}",
+  "@addItemError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "editItemTitle": "アイテムを編集",
+  "@editItemTitle": {},
+  "editItemLoading": "アイテムを読み込み中...",
+  "@editItemLoading": {},
+  "editItemError": "エラー: {error}",
+  "@editItemError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "editItemSaveChanges": "変更を保存",
+  "@editItemSaveChanges": {},
+  "editItemTagsHint": "例: サイン入り, 初版",
+  "@editItemTagsHint": {},
+  "editItemSuccess": "アイテムを更新しました",
+  "@editItemSuccess": {},
+  "editItemUpdateError": "アイテムの更新エラー: {error}",
+  "@editItemUpdateError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "itemFormTitleLabel": "タイトル",
+  "@itemFormTitleLabel": {},
+  "itemFormTitleRequired": "タイトルを入力してください",
+  "@itemFormTitleRequired": {},
+  "itemFormBarcodeLabelOptional": "バーコード（任意）",
+  "@itemFormBarcodeLabelOptional": {},
+  "itemFormBarcodeHint": "ISBN, UPC など",
+  "@itemFormBarcodeHint": {},
+  "itemFormDescriptionLabelOptional": "説明（任意）",
+  "@itemFormDescriptionLabelOptional": {},
+  "itemFormDescriptionHint": "説明を追加",
+  "@itemFormDescriptionHint": {},
+  "itemFormTagsLabelOptional": "タグ（任意）",
+  "@itemFormTagsLabelOptional": {},
+  "itemFormPurchaseDateLabelOptional": "購入日（任意）",
+  "@itemFormPurchaseDateLabelOptional": {},
+  "itemFormConditionLabelOptional": "状態（任意）",
+  "@itemFormConditionLabelOptional": {},
+  "itemFormQuantityRequired": "数量を入力してください",
+  "@itemFormQuantityRequired": {},
+  "itemFormQuantityInvalid": "有効な数量を入力してください",
+  "@itemFormQuantityInvalid": {},
+  "itemFormLocationLabelOptional": "保管場所（任意）",
+  "@itemFormLocationLabelOptional": {},
+  "itemFormLocationHint": "例: 棚A、箱3",
+  "@itemFormLocationHint": {},
+  "itemFormNotesLabelOptional": "メモ（任意）",
+  "@itemFormNotesLabelOptional": {},
+  "itemFormInvalidPrice": "無効な価格です",
+  "@itemFormInvalidPrice": {},
+  "itemFormMustBePositive": "0以上で入力してください",
+  "@itemFormMustBePositive": {},
+  "itemTagsEditorHint": "タグを追加",
+  "@itemTagsEditorHint": {},
+  "itemTagsEditorAddTooltip": "タグを追加",
+  "@itemTagsEditorAddTooltip": {},
+  "itemTagsEditorEmptyMessage": "まだタグがありません。タグを追加すると整理しやすくなります。",
+  "@itemTagsEditorEmptyMessage": {},
+  "itemTagsEditorTooLong": "タグは50文字以内で入力してください",
+  "@itemTagsEditorTooLong": {},
+  "globalItemsLoading": "アイテムを読み込み中...",
+  "@globalItemsLoading": {},
+  "globalItemsErrorLoading": "エラー: {error}",
+  "@globalItemsErrorLoading": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "globalItemsNoFavoritesTitle": "お気に入りのアイテムはまだありません",
+  "@globalItemsNoFavoritesTitle": {},
+  "globalItemsNoFavoritesMessage": "アイテムをお気に入りに追加するとここに表示されます。",
+  "@globalItemsNoFavoritesMessage": {},
+  "globalItemsNoWishlistTitle": "ウィッシュリストは空です",
+  "@globalItemsNoWishlistTitle": {},
+  "globalItemsNoWishlistMessage": "アイテムをウィッシュリストに保存するとここに表示されます。",
+  "@globalItemsNoWishlistMessage": {},
+  "metadataSearchFieldLabel": "{collectionType} をタイトルで検索",
+  "@metadataSearchFieldLabel": {
+    "placeholders": {
+      "collectionType": {
+        "type": "String"
+      }
+    }
+  },
+  "metadataSearchEmptyTitle": "メタデータ検索",
+  "@metadataSearchEmptyTitle": {},
+  "metadataSearchEmptyMessage": "検索するタイトルを入力してください。",
+  "@metadataSearchEmptyMessage": {},
+  "metadataSearchLoading": "メタデータを検索中...",
+  "@metadataSearchLoading": {},
+  "metadataSearchError": "エラー: {error}",
+  "@metadataSearchError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "metadataSearchNoResultsTitle": "結果がありません",
+  "@metadataSearchNoResultsTitle": {},
+  "metadataSearchNoResultsMessage": "このタイトルのメタデータは見つかりませんでした。",
+  "@metadataSearchNoResultsMessage": {},
+  "metadataSearchSuggestionTitle": "タイトルで検索",
+  "@metadataSearchSuggestionTitle": {},
+  "metadataSearchSuggestionMessage": "入力してメタデータを検索してください。",
+  "@metadataSearchSuggestionMessage": {},
+  "tagItemsTitle": "タグ: {tag}",
+  "@tagItemsTitle": {
+    "placeholders": {
+      "tag": {
+        "type": "String"
+      }
+    }
+  },
+  "tagItemsSortTooltip": "並び替え",
+  "@tagItemsSortTooltip": {},
+  "tagItemsSortNewest": "並び替え: 新しい順",
+  "@tagItemsSortNewest": {},
+  "tagItemsSortOldest": "並び替え: 古い順",
+  "@tagItemsSortOldest": {},
+  "tagItemsSortTitle": "並び替え: タイトル順",
+  "@tagItemsSortTitle": {},
+  "tagItemsLoadingCollections": "コレクションを読み込み中...",
+  "@tagItemsLoadingCollections": {},
+  "tagItemsLoadingItems": "タグ付きアイテムを読み込み中...",
+  "@tagItemsLoadingItems": {},
+  "tagItemsError": "エラー: {error}",
+  "@tagItemsError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "tagItemsEmptyTitle": "アイテムが見つかりません",
+  "@tagItemsEmptyTitle": {},
+  "tagItemsEmptyMessage": "このタグを使用しているアイテムはありません。",
+  "@tagItemsEmptyMessage": {},
+  "tagItemsUnknownCollection": "不明",
+  "@tagItemsUnknownCollection": {},
+  "tagItemsOpenCollectionTooltip": "コレクションを開く",
+  "@tagItemsOpenCollectionTooltip": {},
+  "tagItemsDeleteFailed": "削除に失敗しました: {error}",
+  "@tagItemsDeleteFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "tagManagementTitle": "タグ管理",
+  "@tagManagementTitle": {},
+  "tagManagementSelectedCount": "{count}件を選択",
+  "@tagManagementSelectedCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "tagManagementCancelSelectionTooltip": "選択をキャンセル",
+  "@tagManagementCancelSelectionTooltip": {},
+  "tagManagementSelectTagsTooltip": "タグを選択",
+  "@tagManagementSelectTagsTooltip": {},
+  "tagManagementSearchHint": "タグを検索...",
+  "@tagManagementSearchHint": {},
+  "tagManagementEmptyTitle": "まだタグがありません",
+  "@tagManagementEmptyTitle": {},
+  "tagManagementNoMatch": "\"{query}\" に一致するタグはありません",
+  "@tagManagementNoMatch": {
+    "placeholders": {
+      "query": {
+        "type": "String"
+      }
+    }
+  },
+  "tagManagementSelectVisible": "表示中を選択",
+  "@tagManagementSelectVisible": {},
+  "tagManagementSelectAllMatches": "一致するものをすべて選択",
+  "@tagManagementSelectAllMatches": {},
+  "tagManagementClearSelection": "選択を解除",
+  "@tagManagementClearSelection": {},
+  "tagManagementScrollMore": "スクロールしてさらに {remaining} 件のタグを読み込む",
+  "@tagManagementScrollMore": {
+    "placeholders": {
+      "remaining": {
+        "type": "int"
+      }
+    }
+  },
+  "tagManagementUsedInOne": "1件のアイテムで使用",
+  "@tagManagementUsedInOne": {},
+  "tagManagementUsedInMany": "{count}件のアイテムで使用",
+  "@tagManagementUsedInMany": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "tagManagementRenameAction": "名前を変更",
+  "@tagManagementRenameAction": {},
+  "tagManagementMergeAction": "統合",
+  "@tagManagementMergeAction": {},
+  "tagManagementMergeIntoAction": "次に統合...",
+  "@tagManagementMergeIntoAction": {},
+  "tagManagementLoadError": "タグの読み込みに失敗しました: {error}",
+  "@tagManagementLoadError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "tagManagementRenameTitle": "タグ名を変更",
+  "@tagManagementRenameTitle": {},
+  "tagManagementNewNameLabel": "新しい名前",
+  "@tagManagementNewNameLabel": {},
+  "tagManagementRenameSuccess": "\"{oldName}\" を \"{newName}\" に変更しました",
+  "@tagManagementRenameSuccess": {
+    "placeholders": {
+      "oldName": {
+        "type": "String"
+      },
+      "newName": {
+        "type": "String"
+      }
+    }
+  },
+  "tagManagementMergeSelectedTitle": "選択したタグを統合",
+  "@tagManagementMergeSelectedTitle": {},
+  "tagManagementChooseDestination": "統合先のタグを選択:",
+  "@tagManagementChooseDestination": {},
+  "tagManagementMergeSelectedSuccess": "{count}件のタグを \"{destination}\" に統合しました",
+  "@tagManagementMergeSelectedSuccess": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "destination": {
+        "type": "String"
+      }
+    }
+  },
+  "tagManagementDeleteSelectedTitle": "選択したタグを削除",
+  "@tagManagementDeleteSelectedTitle": {},
+  "tagManagementDeleteSelectedMessage": "すべてのアイテムから選択した {count} 件のタグを削除しますか？\\n\\nこの操作は元に戻せません。",
+  "@tagManagementDeleteSelectedMessage": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "tagManagementDeleteSelectedSuccess": "{count}件のタグを削除しました",
+  "@tagManagementDeleteSelectedSuccess": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "tagManagementMergeIntoTitle": "統合先",
+  "@tagManagementMergeIntoTitle": {},
+  "tagManagementMergeSuccess": "\"{source}\" を \"{target}\" に統合しました",
+  "@tagManagementMergeSuccess": {
+    "placeholders": {
+      "source": {
+        "type": "String"
+      },
+      "target": {
+        "type": "String"
+      }
+    }
+  },
+  "tagManagementDeleteTitle": "タグを削除",
+  "@tagManagementDeleteTitle": {},
+  "tagManagementDeleteMessage": "すべてのアイテムから \"{tagName}\" を削除しますか？\\n\\nこの操作は元に戻せません。",
+  "@tagManagementDeleteMessage": {
+    "placeholders": {
+      "tagName": {
+        "type": "String"
+      }
+    }
+  },
+  "tagManagementDeleteSuccess": "\"{tagName}\" を削除しました",
+  "@tagManagementDeleteSuccess": {
+    "placeholders": {
+      "tagName": {
+        "type": "String"
+      }
+    }
+  },
+  "tagManagementMutationError": "タグの更新に失敗しました: {error}",
+  "@tagManagementMutationError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "statisticsTitle": "統計",
+  "@statisticsTitle": {},
+  "statisticsEmptyTitle": "まだ統計がありません",
+  "@statisticsEmptyTitle": {},
+  "statisticsEmptyMessage": "コレクションとアイテムを追加するとインサイトを表示できます。",
+  "@statisticsEmptyMessage": {},
+  "statisticsLoadingMessage": "統計を読み込み中...",
+  "@statisticsLoadingMessage": {},
+  "statisticsErrorLoading": "統計の読み込みエラー: {error}",
+  "@statisticsErrorLoading": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "statisticsPortfolioValueTitle": "ポートフォリオ価値",
+  "@statisticsPortfolioValueTitle": {},
+  "statisticsAveragePricedItem": "平均評価額: {value}",
+  "@statisticsAveragePricedItem": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "statisticsPricedItemsBadge": "価格設定済み: {priced}/{total}",
+  "@statisticsPricedItemsBadge": {
+    "placeholders": {
+      "priced": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "statisticsQuantityTitle": "総数量",
+  "@statisticsQuantityTitle": {},
+  "statisticsFavoritesTitle": "お気に入り",
+  "@statisticsFavoritesTitle": {},
+  "statisticsPercentOfItems": "アイテムの{percent}%",
+  "@statisticsPercentOfItems": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "statisticsInventoryHealthTitle": "在庫状況",
+  "@statisticsInventoryHealthTitle": {},
+  "statisticsValuationCoverageLabel": "価格設定カバレッジ",
+  "@statisticsValuationCoverageLabel": {},
+  "statisticsPricedCaption": "{total}件中{priced}件に価格あり",
+  "@statisticsPricedCaption": {
+    "placeholders": {
+      "priced": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "statisticsFavoritesCoverageLabel": "お気に入りカバレッジ",
+  "@statisticsFavoritesCoverageLabel": {},
+  "statisticsFavoritesCaption": "{total}件中{favorites}件がお気に入り",
+  "@statisticsFavoritesCaption": {
+    "placeholders": {
+      "favorites": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "statisticsWishlistCoverageLabel": "ウィッシュリストカバレッジ",
+  "@statisticsWishlistCoverageLabel": {},
+  "statisticsWishlistCaption": "{total}件中{wishlist}件がウィッシュリスト",
+  "@statisticsWishlistCaption": {
+    "placeholders": {
+      "wishlist": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "statisticsItemsByTypeTitle": "種類別アイテム",
+  "@statisticsItemsByTypeTitle": {},
+  "statisticsItemsByConditionTitle": "状態別アイテム",
+  "@statisticsItemsByConditionTitle": {},
+  "statisticsTopValuedTitle": "高価値コレクション",
+  "@statisticsTopValuedTitle": {},
+  "statisticsLargestCollectionTitle": "最大のコレクション",
+  "@statisticsLargestCollectionTitle": {},
+  "statisticsRecentlyCreatedTitle": "最近作成",
+  "@statisticsRecentlyCreatedTitle": {},
+  "statisticsRecentCollectionSubtitle": "{itemCount}件 • {createdAt}",
+  "@statisticsRecentCollectionSubtitle": {
+    "placeholders": {
+      "itemCount": {
+        "type": "int"
+      },
+      "createdAt": {
+        "type": "String"
+      }
+    }
+  },
+  "statisticsNoChartData": "グラフデータがありません",
+  "@statisticsNoChartData": {},
+  "statisticsTotalLabel": "合計",
+  "@statisticsTotalLabel": {},
+  "relativeToday": "今日",
+  "@relativeToday": {},
+  "relativeYesterday": "昨日",
+  "@relativeYesterday": {},
+  "relativeDaysAgo": "{days}日前",
+  "@relativeDaysAgo": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "relativeWeeksAgo": "{weeks}週間前",
+  "@relativeWeeksAgo": {
+    "placeholders": {
+      "weeks": {
+        "type": "int"
+      }
+    }
+  },
+  "relativeMonthsAgo": "{months}か月前",
+  "@relativeMonthsAgo": {
+    "placeholders": {
+      "months": {
+        "type": "int"
+      }
+    }
+  },
+  "relativeYearsAgo": "{years}年前",
+  "@relativeYearsAgo": {
+    "placeholders": {
+      "years": {
+        "type": "int"
+      }
+    }
+  },
+  "collectionDetailsNotFoundTitle": "コレクションが見つかりません",
+  "@collectionDetailsNotFoundTitle": {},
+  "collectionDetailsNotFoundMessage": "選択したコレクションは利用できません。",
+  "@collectionDetailsNotFoundMessage": {},
+  "collectionDetailsCreatedLabel": "作成日",
+  "@collectionDetailsCreatedLabel": {},
+  "collectionDetailsUpdatedLabel": "最終更新",
+  "@collectionDetailsUpdatedLabel": {},
+  "collectionDetailsLoading": "コレクションを読み込み中...",
+  "@collectionDetailsLoading": {},
+  "collectionTypeBooks": "本",
+  "@collectionTypeBooks": {},
+  "collectionTypeGames": "ゲーム",
+  "@collectionTypeGames": {},
+  "collectionTypeMovies": "映画",
+  "@collectionTypeMovies": {},
+  "collectionTypeComics": "コミック",
+  "@collectionTypeComics": {},
+  "collectionTypeMusic": "音楽",
+  "@collectionTypeMusic": {},
+  "collectionTypeCustom": "カスタム",
+  "@collectionTypeCustom": {}
+}

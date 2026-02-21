@@ -1,4 +1,5 @@
 import 'package:collection_tracker/core/providers/providers.dart';
+import 'package:collection_tracker/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -12,14 +13,15 @@ class SettingsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final themeSummary = ref.watch(
-      themeSettingsProvider.select(
-        (s) => '${s.mode.name.toUpperCase()} - ${s.variant.label}',
-      ),
-    );
+    final l10n = context.l10n;
+    final themeSettings = ref.watch(themeSettingsProvider);
+    final currentLanguage = ref.watch(localeSettingsProvider);
+    final themeSummary =
+        '${_themeModeLabel(context, themeSettings.mode)} - ${themeSettings.variant.label}';
+    final languageSummary = _languageLabel(context, currentLanguage);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Settings')),
+      appBar: AppBar(title: Text(l10n.settingsTitle)),
       body: ListView(
         padding: const EdgeInsets.fromLTRB(
           AppSpacing.lg,
@@ -30,19 +32,19 @@ class SettingsScreen extends ConsumerWidget {
         children: [
           AppReveal(
             child: _SettingsSection(
-              title: 'General',
+              title: l10n.settingsSectionGeneral,
               children: [
                 _SettingsTile(
                   icon: Icons.palette,
-                  title: 'Theme',
+                  title: l10n.settingsThemeTitle,
                   subtitle: themeSummary,
                   onTap: () => _showThemeSelector(context, ref),
                 ),
                 _SettingsTile(
                   icon: Icons.language,
-                  title: 'Language',
-                  subtitle: 'English',
-                  onTap: () {},
+                  title: l10n.settingsLanguageTitle,
+                  subtitle: languageSummary,
+                  onTap: () => _showLanguageSelector(context, ref),
                 ),
               ],
             ),
@@ -51,36 +53,36 @@ class SettingsScreen extends ConsumerWidget {
           AppReveal(
             delay: AppMotion.stagger,
             child: _SettingsSection(
-              title: 'Data',
+              title: l10n.settingsSectionData,
               children: [
                 _SettingsTile(
                   icon: Icons.file_download,
-                  title: 'Export to JSON',
-                  subtitle: 'Export all data as JSON file',
+                  title: l10n.settingsExportJsonTitle,
+                  subtitle: l10n.settingsExportJsonSubtitle,
                   onTap: () => _handleExportJson(context, ref),
                 ),
                 _SettingsTile(
                   icon: Icons.table_chart,
-                  title: 'Export to CSV',
-                  subtitle: 'Export items as CSV spreadsheet',
+                  title: l10n.settingsExportCsvTitle,
+                  subtitle: l10n.settingsExportCsvSubtitle,
                   onTap: () => _handleExportCsv(context, ref),
                 ),
                 _SettingsTile(
                   icon: Icons.file_upload,
-                  title: 'Import from JSON',
-                  subtitle: 'Import data from JSON file',
+                  title: l10n.settingsImportJsonTitle,
+                  subtitle: l10n.settingsImportJsonSubtitle,
                   onTap: () => _handleImportJson(context, ref),
                 ),
                 _SettingsTile(
                   icon: Icons.cloud_upload,
-                  title: 'Cloud Sync',
-                  subtitle: 'Not configured',
+                  title: l10n.settingsCloudSyncTitle,
+                  subtitle: l10n.settingsCloudSyncSubtitle,
                   onTap: () {},
                 ),
                 _SettingsTile(
                   icon: Icons.sell_outlined,
-                  title: 'Manage Tags',
-                  subtitle: 'Rename, merge, and delete tags',
+                  title: l10n.settingsManageTagsTitle,
+                  subtitle: l10n.settingsManageTagsSubtitle,
                   onTap: () => context.push('/settings/tags'),
                 ),
               ],
@@ -90,21 +92,21 @@ class SettingsScreen extends ConsumerWidget {
           AppReveal(
             delay: AppMotion.stagger * 2,
             child: _SettingsSection(
-              title: 'About',
+              title: l10n.settingsSectionAbout,
               children: [
-                const _SettingsTile(
+                _SettingsTile(
                   icon: Icons.info,
-                  title: 'Version',
+                  title: l10n.settingsVersionTitle,
                   subtitle: '1.0.0',
                 ),
                 _SettingsTile(
                   icon: Icons.description,
-                  title: 'Privacy Policy',
+                  title: l10n.settingsPrivacyPolicyTitle,
                   onTap: () {},
                 ),
                 _SettingsTile(
                   icon: Icons.gavel,
-                  title: 'Terms of Service',
+                  title: l10n.settingsTermsTitle,
                   onTap: () {},
                 ),
               ],
@@ -116,10 +118,11 @@ class SettingsScreen extends ConsumerWidget {
   }
 
   Future<void> _handleExportJson(BuildContext context, WidgetRef ref) async {
+    final l10n = context.l10n;
     try {
       final messenger = ScaffoldMessenger.of(context);
       messenger.showSnackBar(
-        const SnackBar(content: Text('Exporting data...')),
+        SnackBar(content: Text(l10n.settingsExportingData)),
       );
 
       final filePath = await ref
@@ -131,8 +134,8 @@ class SettingsScreen extends ConsumerWidget {
 
       if (context.mounted) {
         messenger.showSnackBar(
-          const SnackBar(
-            content: Text('Data exported successfully!'),
+          SnackBar(
+            content: Text(l10n.settingsDataExportSuccess),
             backgroundColor: Colors.green,
           ),
         );
@@ -141,7 +144,7 @@ class SettingsScreen extends ConsumerWidget {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Export failed: $e'),
+            content: Text(l10n.settingsExportFailed('$e')),
             backgroundColor: Colors.red,
           ),
         );
@@ -150,10 +153,11 @@ class SettingsScreen extends ConsumerWidget {
   }
 
   Future<void> _handleExportCsv(BuildContext context, WidgetRef ref) async {
+    final l10n = context.l10n;
     try {
       final messenger = ScaffoldMessenger.of(context);
       messenger.showSnackBar(
-        const SnackBar(content: Text('Exporting data...')),
+        SnackBar(content: Text(l10n.settingsExportingData)),
       );
 
       final filePath = await ref
@@ -165,8 +169,8 @@ class SettingsScreen extends ConsumerWidget {
 
       if (context.mounted) {
         messenger.showSnackBar(
-          const SnackBar(
-            content: Text('Data exported successfully!'),
+          SnackBar(
+            content: Text(l10n.settingsDataExportSuccess),
             backgroundColor: Colors.green,
           ),
         );
@@ -175,7 +179,7 @@ class SettingsScreen extends ConsumerWidget {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Export failed: $e'),
+            content: Text(l10n.settingsExportFailed('$e')),
             backgroundColor: Colors.red,
           ),
         );
@@ -184,21 +188,19 @@ class SettingsScreen extends ConsumerWidget {
   }
 
   Future<void> _handleImportJson(BuildContext context, WidgetRef ref) async {
+    final l10n = context.l10n;
     final confirmed = await showAppDialog<bool>(
       context: context,
-      title: const Text('Import Data'),
-      content: const Text(
-        'This will import collections and items from a JSON file. '
-        'Existing data will not be deleted.\n\nContinue?',
-      ),
+      title: Text(l10n.settingsImportDataTitle),
+      content: Text(l10n.settingsImportDataMessage),
       actions: [
         AppButton(
-          label: 'Cancel',
+          label: l10n.actionCancel,
           variant: AppButtonVariant.ghost,
           onPressed: () => Navigator.pop(context, false),
         ),
         AppButton(
-          label: 'Import',
+          label: l10n.actionImport,
           onPressed: () => Navigator.pop(context, true),
         ),
       ],
@@ -209,15 +211,15 @@ class SettingsScreen extends ConsumerWidget {
     try {
       final messenger = ScaffoldMessenger.of(context);
       messenger.showSnackBar(
-        const SnackBar(content: Text('Importing data...')),
+        SnackBar(content: Text(l10n.settingsImportingData)),
       );
 
       await ref.read(exportImportViewModelProvider.notifier).importFromJson();
 
       if (context.mounted) {
         messenger.showSnackBar(
-          const SnackBar(
-            content: Text('Data imported successfully!'),
+          SnackBar(
+            content: Text(l10n.settingsDataImportSuccess),
             backgroundColor: Colors.green,
           ),
         );
@@ -226,7 +228,7 @@ class SettingsScreen extends ConsumerWidget {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Import failed: $e'),
+            content: Text(l10n.settingsImportFailed('$e')),
             backgroundColor: Colors.red,
           ),
         );
@@ -247,7 +249,7 @@ class SettingsScreen extends ConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Theme Mode',
+                  context.l10n.settingsThemeModeTitle,
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.w700,
                   ),
@@ -259,7 +261,7 @@ class SettingsScreen extends ConsumerWidget {
                   children: ThemeMode.values.map((mode) {
                     final isSelected = settings.mode == mode;
                     return ChoiceChip(
-                      label: Text(mode.name.toUpperCase()),
+                      label: Text(_themeModeLabel(context, mode)),
                       selected: isSelected,
                       onSelected: (selected) {
                         if (!selected) return;
@@ -272,7 +274,7 @@ class SettingsScreen extends ConsumerWidget {
                 ),
                 const SizedBox(height: AppSpacing.xl),
                 Text(
-                  'Color Variant',
+                  context.l10n.settingsThemeColorVariantTitle,
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.w700,
                   ),
@@ -322,10 +324,8 @@ class SettingsScreen extends ConsumerWidget {
                 const SizedBox(height: AppSpacing.lg),
                 SwitchListTile(
                   contentPadding: EdgeInsets.zero,
-                  title: const Text('Amoled Mode (Pure Black)'),
-                  subtitle: const Text(
-                    'Reduces battery consumption on OLED screens',
-                  ),
+                  title: Text(context.l10n.settingsAmoledTitle),
+                  subtitle: Text(context.l10n.settingsAmoledSubtitle),
                   value: settings.amoled,
                   onChanged: (value) {
                     ref.read(themeSettingsProvider.notifier).setAmoled(value);
@@ -337,6 +337,77 @@ class SettingsScreen extends ConsumerWidget {
         );
       },
     );
+  }
+
+  Future<void> _showLanguageSelector(
+    BuildContext context,
+    WidgetRef ref,
+  ) async {
+    await showAppSheet(
+      context: context,
+      builder: (context) {
+        return Consumer(
+          builder: (context, ref, _) {
+            final selectedLanguage = ref.watch(localeSettingsProvider);
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  context.l10n.settingsLanguageTitle,
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                const SizedBox(height: AppSpacing.sm),
+                ...AppLanguage.values.map((language) {
+                  final selected = selectedLanguage == language;
+                  return ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    title: Text(_languageLabel(context, language)),
+                    trailing: selected
+                        ? Icon(
+                            Icons.check_circle_rounded,
+                            color: Theme.of(context).colorScheme.primary,
+                          )
+                        : null,
+                    onTap: () {
+                      ref
+                          .read(localeSettingsProvider.notifier)
+                          .setLanguage(language);
+                      Navigator.pop(context);
+                    },
+                  );
+                }),
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
+
+  String _themeModeLabel(BuildContext context, ThemeMode mode) {
+    final l10n = context.l10n;
+    return switch (mode) {
+      ThemeMode.system => l10n.themeModeSystem,
+      ThemeMode.light => l10n.themeModeLight,
+      ThemeMode.dark => l10n.themeModeDark,
+    };
+  }
+
+  String _languageLabel(BuildContext context, AppLanguage language) {
+    final l10n = context.l10n;
+    return switch (language) {
+      AppLanguage.system => l10n.languageSystem,
+      AppLanguage.english => l10n.languageEnglish,
+      AppLanguage.spanish => l10n.languageSpanish,
+      AppLanguage.indonesian => l10n.languageIndonesian,
+      AppLanguage.japanese => l10n.languageJapanese,
+      AppLanguage.korean => l10n.languageKorean,
+      AppLanguage.chineseSimplified => l10n.languageChineseSimplified,
+      AppLanguage.burmese => l10n.languageBurmese,
+    };
   }
 }
 

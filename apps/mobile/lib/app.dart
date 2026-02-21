@@ -13,10 +13,12 @@ class CollectionTrackerApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final router = ref.watch(appRouterProvider);
     final themeSettings = ref.watch(themeSettingsProvider);
+    final language = ref.watch(localeSettingsProvider);
 
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
-      title: 'Collection Tracker',
+      onGenerateTitle: (context) => context.l10n.appTitle,
+      locale: language.locale,
 
       // Theme
       theme: AppTheme.light(variant: themeSettings.variant),

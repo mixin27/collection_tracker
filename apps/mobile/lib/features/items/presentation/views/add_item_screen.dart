@@ -1,8 +1,10 @@
 import 'dart:developer';
 
+import 'package:collection_tracker/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import 'package:storage/storage.dart';
 import 'package:ui/ui.dart';
 import 'package:collection_tracker/core/providers/metadata_providers.dart';
@@ -53,11 +55,12 @@ class _AddItemScreenState extends ConsumerState<AddItemScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     // Watch collection details so they are available for search/scan actions
     ref.watch(collectionDetailProvider(widget.collectionId));
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Add Item')),
+      appBar: AppBar(title: Text(l10n.addItemTitle)),
       body: Form(
         key: _formKey,
         child: ListView(
@@ -105,8 +108,8 @@ class _AddItemScreenState extends ConsumerState<AddItemScreen> {
                 children: [
                   AppInput(
                     controller: _titleController,
-                    labelText: 'Title',
-                    hintText: 'e.g., The Lord of the Rings',
+                    labelText: l10n.itemFormTitleLabel,
+                    hintText: l10n.addItemTitleHint,
                     prefixIcon: const Icon(Icons.title),
                     suffixIcon: IconButton(
                       icon: const Icon(Icons.search),
@@ -115,7 +118,7 @@ class _AddItemScreenState extends ConsumerState<AddItemScreen> {
                     textCapitalization: TextCapitalization.words,
                     validator: (value) {
                       if (value == null || value.trim().isEmpty) {
-                        return 'Please enter a title';
+                        return l10n.itemFormTitleRequired;
                       }
                       return null;
                     },
@@ -123,8 +126,8 @@ class _AddItemScreenState extends ConsumerState<AddItemScreen> {
                   const SizedBox(height: AppSpacing.md),
                   AppInput(
                     controller: _barcodeController,
-                    labelText: 'Barcode (optional)',
-                    hintText: 'ISBN, UPC, etc.',
+                    labelText: l10n.itemFormBarcodeLabelOptional,
+                    hintText: l10n.itemFormBarcodeHint,
                     prefixIcon: const Icon(Icons.qr_code),
                     suffixIcon: IconButton(
                       icon: const Icon(Icons.camera_alt),
@@ -147,7 +150,7 @@ class _AddItemScreenState extends ConsumerState<AddItemScreen> {
                     },
                   ),
                   if (_isFetchingMetadata)
-                    const Padding(
+                    Padding(
                       padding: EdgeInsets.only(top: AppSpacing.sm),
                       child: Center(
                         child: Row(
@@ -160,7 +163,7 @@ class _AddItemScreenState extends ConsumerState<AddItemScreen> {
                             ),
                             SizedBox(width: 8),
                             Text(
-                              'Fetching metadata...',
+                              l10n.addItemFetchingMetadata,
                               style: TextStyle(fontSize: 12),
                             ),
                           ],
@@ -170,8 +173,8 @@ class _AddItemScreenState extends ConsumerState<AddItemScreen> {
                   const SizedBox(height: AppSpacing.md),
                   AppInput(
                     controller: _descriptionController,
-                    labelText: 'Description (optional)',
-                    hintText: 'Add a description',
+                    labelText: l10n.itemFormDescriptionLabelOptional,
+                    hintText: l10n.itemFormDescriptionHint,
                     prefixIcon: const Icon(Icons.description),
                     maxLines: 4,
                     textCapitalization: TextCapitalization.sentences,
@@ -182,8 +185,8 @@ class _AddItemScreenState extends ConsumerState<AddItemScreen> {
                     onChanged: (tags) {
                       _tags = tags;
                     },
-                    label: 'Tags (optional)',
-                    hintText: 'e.g., Rare, Completed Set',
+                    label: l10n.itemFormTagsLabelOptional,
+                    hintText: l10n.addItemTagsHint,
                   ),
                   const SizedBox(height: AppSpacing.md),
                   Row(
@@ -191,8 +194,8 @@ class _AddItemScreenState extends ConsumerState<AddItemScreen> {
                       Expanded(
                         child: AppInput(
                           controller: _purchasePriceController,
-                          labelText: 'Purchase Price',
-                          prefixText: '\$',
+                          labelText: l10n.itemDetailPurchasePriceLabel,
+                          prefixText: _currencySymbol(context),
                           prefixIcon: const Icon(Icons.attach_money),
                           keyboardType: const TextInputType.numberWithOptions(
                             decimal: true,
@@ -204,8 +207,8 @@ class _AddItemScreenState extends ConsumerState<AddItemScreen> {
                       Expanded(
                         child: AppInput(
                           controller: _currentValueController,
-                          labelText: 'Current Value',
-                          prefixText: '\$',
+                          labelText: l10n.itemDetailCurrentValueLabel,
+                          prefixText: _currencySymbol(context),
                           prefixIcon: const Icon(Icons.show_chart),
                           keyboardType: const TextInputType.numberWithOptions(
                             decimal: true,
@@ -220,7 +223,7 @@ class _AddItemScreenState extends ConsumerState<AddItemScreen> {
                     controller: _purchaseDateController,
                     readOnly: true,
                     decoration: InputDecoration(
-                      labelText: 'Purchase Date (optional)',
+                      labelText: l10n.itemFormPurchaseDateLabelOptional,
                       prefixIcon: const Icon(Icons.calendar_today),
                       suffixIcon: _selectedPurchaseDate == null
                           ? null
@@ -243,7 +246,7 @@ class _AddItemScreenState extends ConsumerState<AddItemScreen> {
 
             // Add button
             AppButton(
-              label: 'Add Item',
+              label: l10n.addItemSubmit,
               isLoading: _isLoading,
               onPressed: _isLoading ? null : _handleAdd,
               expand: true,
@@ -267,6 +270,9 @@ class _AddItemScreenState extends ConsumerState<AddItemScreen> {
       delegate: MetadataSearchDelegate(
         ref: ref,
         collectionType: collection.type,
+        searchFieldLabelText: context.l10n.metadataSearchFieldLabel(
+          collection.type.name,
+        ),
       ),
       query: _titleController.text,
     );
@@ -318,7 +324,9 @@ class _AddItemScreenState extends ConsumerState<AddItemScreen> {
 
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: Text('Matched ${match.source} metadata'),
+                content: Text(
+                  context.l10n.addItemMatchedMetadata(match.source),
+                ),
                 duration: const Duration(seconds: 2),
               ),
             );
@@ -367,15 +375,15 @@ class _AddItemScreenState extends ConsumerState<AddItemScreen> {
 
       if (mounted) {
         context.pop();
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Item added successfully')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(context.l10n.addItemSuccess)));
       }
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Error adding item: $e'),
+            content: Text(context.l10n.addItemError('$e')),
             backgroundColor: Colors.red,
           ),
         );
@@ -392,8 +400,8 @@ class _AddItemScreenState extends ConsumerState<AddItemScreen> {
   String? _validatePriceInput(String? value) {
     if (value == null || value.trim().isEmpty) return null;
     final parsed = _parsePriceInput(value);
-    if (parsed == null) return 'Invalid price';
-    if (parsed < 0) return 'Must be positive';
+    if (parsed == null) return context.l10n.itemFormInvalidPrice;
+    if (parsed < 0) return context.l10n.itemFormMustBePositive;
     return null;
   }
 
@@ -419,8 +427,12 @@ class _AddItemScreenState extends ConsumerState<AddItemScreen> {
   }
 
   String _formatDate(DateTime date) {
-    final month = date.month.toString().padLeft(2, '0');
-    final day = date.day.toString().padLeft(2, '0');
-    return '${date.year}-$month-$day';
+    final locale = Localizations.localeOf(context).toLanguageTag();
+    return DateFormat.yMd(locale).format(date);
+  }
+
+  String _currencySymbol(BuildContext context) {
+    final locale = Localizations.localeOf(context).toLanguageTag();
+    return NumberFormat.simpleCurrency(locale: locale).currencySymbol;
   }
 }

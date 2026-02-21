@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:ui/ui.dart';
 
 import '../../../../core/providers/providers.dart';
+import '../../../../l10n/l10n.dart';
 import '../view_models/collections_view_model.dart';
 import '../widgets/collection_card.dart';
 import '../widgets/collection_grid_tile.dart';
@@ -20,17 +21,18 @@ class CollectionsScreen extends ConsumerStatefulWidget {
 class _CollectionsScreenState extends ConsumerState<CollectionsScreen> {
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     final collectionsAsync = ref.watch(collectionsViewModelProvider);
     final viewMode = ref.watch(collectionsViewModeProvider);
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('My Collections'),
+        title: Text(l10n.collectionsTitle),
         actions: [
           IconButton(
             tooltip: viewMode == CollectionsViewMode.list
-                ? 'Switch to grid'
-                : 'Switch to list',
+                ? l10n.actionSwitchToGrid
+                : l10n.actionSwitchToList,
             icon: Icon(
               viewMode == CollectionsViewMode.list
                   ? Icons.grid_view_rounded
@@ -96,7 +98,7 @@ class _CollectionsScreenState extends ConsumerState<CollectionsScreen> {
                               children: [
                                 Expanded(
                                   child: _Metric(
-                                    label: 'Collections',
+                                    label: l10n.collectionsCountLabel,
                                     value: '${collections.length}',
                                   ),
                                 ),
@@ -109,7 +111,7 @@ class _CollectionsScreenState extends ConsumerState<CollectionsScreen> {
                                 ),
                                 Expanded(
                                   child: _Metric(
-                                    label: 'Items',
+                                    label: l10n.itemsCountLabel,
                                     value: '$totalItems',
                                   ),
                                 ),
@@ -200,7 +202,7 @@ class _CollectionsScreenState extends ConsumerState<CollectionsScreen> {
           loading: () => const LoadingView(key: ValueKey('loading')),
           error: (error, stack) => ErrorView(
             key: const ValueKey('error'),
-            message: 'Error loading collections: $error',
+            message: context.l10n.collectionsErrorLoading('$error'),
             onRetry: () => ref.invalidate(collectionsViewModelProvider),
           ),
         ),
@@ -208,7 +210,7 @@ class _CollectionsScreenState extends ConsumerState<CollectionsScreen> {
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => context.push('/collections/create'),
         icon: const Icon(Icons.add_rounded),
-        label: const Text('New Collection'),
+        label: Text(l10n.collectionsNewButton),
       ),
     );
   }
@@ -220,18 +222,21 @@ class _CollectionsScreenState extends ConsumerState<CollectionsScreen> {
   ) async {
     final confirmed = await showAppDialog<bool>(
       context: context,
-      title: const Text('Delete Collection'),
+      title: Text(context.l10n.collectionsDeleteTitle),
       content: Text(
-        'Delete "${collection.name}" and ${collection.itemCount} items in this collection?',
+        context.l10n.collectionsDeleteMessage(
+          collection.name,
+          collection.itemCount,
+        ),
       ),
       actions: [
         AppButton(
-          label: 'Cancel',
+          label: context.l10n.actionCancel,
           variant: AppButtonVariant.ghost,
           onPressed: () => Navigator.pop(context, false),
         ),
         AppButton(
-          label: 'Delete',
+          label: context.l10n.actionDelete,
           variant: AppButtonVariant.danger,
           onPressed: () => Navigator.pop(context, true),
         ),
@@ -247,8 +252,11 @@ class _CollectionsScreenState extends ConsumerState<CollectionsScreen> {
     if (context.mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('${collection.name} deleted'),
-          action: SnackBarAction(label: 'Dismiss', onPressed: () {}),
+          content: Text(context.l10n.collectionsDeleted(collection.name)),
+          action: SnackBarAction(
+            label: context.l10n.actionDismiss,
+            onPressed: () {},
+          ),
         ),
       );
     }

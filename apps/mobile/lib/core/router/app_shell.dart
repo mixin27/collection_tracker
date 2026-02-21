@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ui/ui.dart';
 
+import '../../l10n/l10n.dart';
+
 class AppShell extends StatelessWidget {
   const AppShell({required this.navigationShell, Key? key})
     : super(key: key ?? const ValueKey('CollectionTrackerShell'));
@@ -18,12 +20,14 @@ class AppShell extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
+    final destinations = _buildDestinations(context);
 
     if (size.width < 600) {
       return _GlassBottomShell(
         body: navigationShell,
         currentIndex: navigationShell.currentIndex,
         onDestinationSelected: _goBranch,
+        destinations: destinations,
       );
     }
 
@@ -31,8 +35,35 @@ class AppShell extends StatelessWidget {
       body: navigationShell,
       currentIndex: navigationShell.currentIndex,
       onDestinationSelected: _goBranch,
+      destinations: destinations,
       extended: size.width >= 1200,
     );
+  }
+
+  List<_ShellDestination> _buildDestinations(BuildContext context) {
+    final l10n = context.l10n;
+    return [
+      _ShellDestination(
+        icon: Icons.inventory_2_outlined,
+        selectedIcon: Icons.inventory_2,
+        label: l10n.navHome,
+      ),
+      _ShellDestination(
+        icon: Icons.favorite_border,
+        selectedIcon: Icons.favorite,
+        label: l10n.navFavorites,
+      ),
+      _ShellDestination(
+        icon: Icons.bookmark_border,
+        selectedIcon: Icons.bookmark,
+        label: l10n.navWishlist,
+      ),
+      _ShellDestination(
+        icon: Icons.settings_outlined,
+        selectedIcon: Icons.settings,
+        label: l10n.navSettings,
+      ),
+    ];
   }
 }
 
@@ -48,47 +79,29 @@ class _ShellDestination {
   });
 }
 
-const _destinations = <_ShellDestination>[
-  _ShellDestination(
-    icon: Icons.inventory_2_outlined,
-    selectedIcon: Icons.inventory_2,
-    label: 'Home',
-  ),
-  _ShellDestination(
-    icon: Icons.favorite_border,
-    selectedIcon: Icons.favorite,
-    label: 'Favorites',
-  ),
-  _ShellDestination(
-    icon: Icons.bookmark_border,
-    selectedIcon: Icons.bookmark,
-    label: 'Wishlist',
-  ),
-  _ShellDestination(
-    icon: Icons.settings_outlined,
-    selectedIcon: Icons.settings,
-    label: 'Settings',
-  ),
-];
-
 class _GlassBottomShell extends StatelessWidget {
   const _GlassBottomShell({
     required this.body,
     required this.currentIndex,
     required this.onDestinationSelected,
+    required this.destinations,
   });
 
   final Widget body;
   final int currentIndex;
   final ValueChanged<int> onDestinationSelected;
+  final List<_ShellDestination> destinations;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final tokens = theme.extension<DesignTokens>() ?? const DesignTokens();
     final bottomInset = MediaQuery.paddingOf(context).bottom;
+    final textScale = MediaQuery.textScalerOf(context).scale(1.0);
+    final navHeight =
+        tokens.navBarHeight + (textScale > 1 ? (textScale - 1) * 18 : 0);
     final navReservedSpace =
-        tokens.navBarHeight + tokens.navBarBottomMargin + bottomInset + 4;
+        navHeight + tokens.navBarBottomMargin + bottomInset + 4;
 
     return Scaffold(
       extendBody: true,
@@ -114,9 +127,10 @@ class _GlassBottomShell extends StatelessWidget {
           Align(
             alignment: Alignment.bottomCenter,
             child: GlassSegmentedNavigationBar(
+              height: navHeight,
               selectedIndex: currentIndex,
               onDestinationSelected: onDestinationSelected,
-              destinations: _destinations
+              destinations: destinations
                   .map(
                     (destination) => GlassNavDestination(
                       icon: destination.icon,
@@ -138,12 +152,14 @@ class _RailShell extends StatelessWidget {
     required this.body,
     required this.currentIndex,
     required this.onDestinationSelected,
+    required this.destinations,
     this.extended = false,
   });
 
   final Widget body;
   final int currentIndex;
   final ValueChanged<int> onDestinationSelected;
+  final List<_ShellDestination> destinations;
   final bool extended;
 
   @override
@@ -205,7 +221,7 @@ class _RailShell extends StatelessWidget {
                       ],
                     ),
                   ),
-                  destinations: _destinations
+                  destinations: destinations
                       .map(
                         (destination) => NavigationRailDestination(
                           icon: Icon(destination.icon),

@@ -1,0 +1,862 @@
+{
+  "@@locale": "ko",
+  "appTitle": "컬렉션 트래커",
+  "@appTitle": {},
+  "navHome": "홈",
+  "@navHome": {},
+  "navFavorites": "즐겨찾기",
+  "@navFavorites": {},
+  "navWishlist": "위시리스트",
+  "@navWishlist": {},
+  "navSettings": "설정",
+  "@navSettings": {},
+  "actionApply": "적용",
+  "@actionApply": {},
+  "actionCancel": "취소",
+  "@actionCancel": {},
+  "actionDelete": "삭제",
+  "@actionDelete": {},
+  "actionDismiss": "닫기",
+  "@actionDismiss": {},
+  "actionEdit": "편집",
+  "@actionEdit": {},
+  "actionImport": "가져오기",
+  "@actionImport": {},
+  "actionRefresh": "새로고침",
+  "@actionRefresh": {},
+  "actionReset": "초기화",
+  "@actionReset": {},
+  "actionSave": "저장",
+  "@actionSave": {},
+  "actionSwitchToGrid": "그리드 보기",
+  "@actionSwitchToGrid": {},
+  "actionSwitchToList": "목록 보기",
+  "@actionSwitchToList": {},
+  "actionUpdate": "업데이트",
+  "@actionUpdate": {},
+  "settingsTitle": "설정",
+  "@settingsTitle": {},
+  "settingsSectionGeneral": "일반",
+  "@settingsSectionGeneral": {},
+  "settingsSectionData": "데이터",
+  "@settingsSectionData": {},
+  "settingsSectionAbout": "정보",
+  "@settingsSectionAbout": {},
+  "settingsThemeTitle": "테마",
+  "@settingsThemeTitle": {},
+  "settingsLanguageTitle": "언어",
+  "@settingsLanguageTitle": {},
+  "settingsExportJsonTitle": "JSON 내보내기",
+  "@settingsExportJsonTitle": {},
+  "settingsExportJsonSubtitle": "모든 데이터를 JSON 파일로 내보냅니다",
+  "@settingsExportJsonSubtitle": {},
+  "settingsExportCsvTitle": "CSV 내보내기",
+  "@settingsExportCsvTitle": {},
+  "settingsExportCsvSubtitle": "항목을 CSV 스프레드시트로 내보냅니다",
+  "@settingsExportCsvSubtitle": {},
+  "settingsImportJsonTitle": "JSON 가져오기",
+  "@settingsImportJsonTitle": {},
+  "settingsImportJsonSubtitle": "JSON 파일에서 데이터를 가져옵니다",
+  "@settingsImportJsonSubtitle": {},
+  "settingsCloudSyncTitle": "클라우드 동기화",
+  "@settingsCloudSyncTitle": {},
+  "settingsCloudSyncSubtitle": "설정되지 않음",
+  "@settingsCloudSyncSubtitle": {},
+  "settingsManageTagsTitle": "태그 관리",
+  "@settingsManageTagsTitle": {},
+  "settingsManageTagsSubtitle": "태그 이름 변경, 병합, 삭제",
+  "@settingsManageTagsSubtitle": {},
+  "settingsVersionTitle": "버전",
+  "@settingsVersionTitle": {},
+  "settingsPrivacyPolicyTitle": "개인정보 처리방침",
+  "@settingsPrivacyPolicyTitle": {},
+  "settingsTermsTitle": "이용 약관",
+  "@settingsTermsTitle": {},
+  "settingsExportingData": "데이터 내보내는 중...",
+  "@settingsExportingData": {},
+  "settingsDataExportSuccess": "데이터 내보내기 완료!",
+  "@settingsDataExportSuccess": {},
+  "settingsExportFailed": "내보내기 실패: {error}",
+  "@settingsExportFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsImportDataTitle": "데이터 가져오기",
+  "@settingsImportDataTitle": {},
+  "settingsImportDataMessage": "JSON 파일에서 컬렉션과 항목을 가져옵니다. 기존 데이터는 삭제되지 않습니다.\\n\\n계속할까요?",
+  "@settingsImportDataMessage": {},
+  "settingsImportingData": "데이터 가져오는 중...",
+  "@settingsImportingData": {},
+  "settingsDataImportSuccess": "데이터 가져오기 완료!",
+  "@settingsDataImportSuccess": {},
+  "settingsImportFailed": "가져오기 실패: {error}",
+  "@settingsImportFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsThemeModeTitle": "테마 모드",
+  "@settingsThemeModeTitle": {},
+  "settingsThemeColorVariantTitle": "색상 테마",
+  "@settingsThemeColorVariantTitle": {},
+  "settingsAmoledTitle": "아몰레드 모드 (순수 블랙)",
+  "@settingsAmoledTitle": {},
+  "settingsAmoledSubtitle": "OLED 화면에서 배터리 소모를 줄입니다",
+  "@settingsAmoledSubtitle": {},
+  "themeModeSystem": "시스템",
+  "@themeModeSystem": {},
+  "themeModeLight": "라이트",
+  "@themeModeLight": {},
+  "themeModeDark": "다크",
+  "@themeModeDark": {},
+  "languageSystem": "시스템 기본값",
+  "@languageSystem": {},
+  "languageEnglish": "영어",
+  "@languageEnglish": {},
+  "languageSpanish": "스페인어",
+  "@languageSpanish": {},
+  "languageIndonesian": "인도네시아어",
+  "@languageIndonesian": {},
+  "languageJapanese": "일본어",
+  "@languageJapanese": {},
+  "languageKorean": "한국어",
+  "@languageKorean": {},
+  "languageChineseSimplified": "중국어(간체)",
+  "@languageChineseSimplified": {},
+  "languageBurmese": "버마어",
+  "@languageBurmese": {},
+  "collectionsTitle": "내 컬렉션",
+  "@collectionsTitle": {},
+  "collectionsCountLabel": "컬렉션",
+  "@collectionsCountLabel": {},
+  "collectionsNewButton": "새 컬렉션",
+  "@collectionsNewButton": {},
+  "collectionsActionsTooltip": "컬렉션 작업",
+  "@collectionsActionsTooltip": {},
+  "collectionsOpenAction": "컬렉션 열기",
+  "@collectionsOpenAction": {},
+  "collectionsEditAction": "컬렉션 편집",
+  "@collectionsEditAction": {},
+  "collectionsDeleteTitle": "컬렉션 삭제",
+  "@collectionsDeleteTitle": {},
+  "collectionsDeleteMessage": "\"{name}\" 컬렉션과 항목 {itemCount}개를 삭제할까요?",
+  "@collectionsDeleteMessage": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "itemCount": {
+        "type": "int"
+      }
+    }
+  },
+  "collectionsDeleted": "{name} 삭제됨",
+  "@collectionsDeleted": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "collectionsErrorLoading": "컬렉션 로드 오류: {error}",
+  "@collectionsErrorLoading": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "itemsTitle": "항목",
+  "@itemsTitle": {},
+  "itemsCountLabel": "항목",
+  "@itemsCountLabel": {},
+  "itemsCountWithValue": "{count}개 항목",
+  "@itemsCountWithValue": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "itemsSearchHint": "항목 검색...",
+  "@itemsSearchHint": {},
+  "itemsNoMatchesTitle": "검색 결과 없음",
+  "@itemsNoMatchesTitle": {},
+  "itemsNoMatchesMessage": "필터나 키워드를 변경해 보세요.",
+  "@itemsNoMatchesMessage": {},
+  "itemsNoItemsTitle": "아직 항목이 없습니다",
+  "@itemsNoItemsTitle": {},
+  "itemsNoItemsMessage": "첫 번째 항목을 추가해 보세요.",
+  "@itemsNoItemsMessage": {},
+  "itemsAddButton": "항목 추가",
+  "@itemsAddButton": {},
+  "itemsLoadingMessage": "항목 불러오는 중...",
+  "@itemsLoadingMessage": {},
+  "itemsErrorLoading": "항목 로드 오류: {error}",
+  "@itemsErrorLoading": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "itemsDeleteTitle": "항목 삭제",
+  "@itemsDeleteTitle": {},
+  "itemsDeleteMessage": "\"{name}\"을(를) 삭제할까요?",
+  "@itemsDeleteMessage": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "itemsDeleted": "{name} 삭제됨",
+  "@itemsDeleted": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "itemsOverviewCount": "{count}개 항목",
+  "@itemsOverviewCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "itemsSortedBy": "정렬 기준: {sortLabel}",
+  "@itemsSortedBy": {
+    "placeholders": {
+      "sortLabel": {
+        "type": "String"
+      }
+    }
+  },
+  "itemsCollectionDetailsTooltip": "컬렉션 상세",
+  "@itemsCollectionDetailsTooltip": {},
+  "itemsFiltersTooltip": "필터",
+  "@itemsFiltersTooltip": {},
+  "itemsFilterTitle": "항목 필터",
+  "@itemsFilterTitle": {},
+  "itemsSortByTitle": "정렬 기준",
+  "@itemsSortByTitle": {},
+  "itemsFilterFavoritesOnly": "즐겨찾기만",
+  "@itemsFilterFavoritesOnly": {},
+  "itemsFilterWishlistOnly": "위시리스트만",
+  "@itemsFilterWishlistOnly": {},
+  "itemsFilterConditionsTitle": "상태",
+  "@itemsFilterConditionsTitle": {},
+  "itemsTagsTitle": "태그",
+  "@itemsTagsTitle": {},
+  "itemsQuantityLabel": "수량: {quantity}",
+  "@itemsQuantityLabel": {
+    "placeholders": {
+      "quantity": {
+        "type": "int"
+      }
+    }
+  },
+  "itemsQuantityShort": "x{quantity}",
+  "@itemsQuantityShort": {
+    "placeholders": {
+      "quantity": {
+        "type": "int"
+      }
+    }
+  },
+  "itemSortCustom": "사용자 지정 순서",
+  "@itemSortCustom": {},
+  "itemSortTitle": "제목",
+  "@itemSortTitle": {},
+  "itemSortCreatedAt": "추가일",
+  "@itemSortCreatedAt": {},
+  "itemSortPurchaseDate": "구매일",
+  "@itemSortPurchaseDate": {},
+  "itemSortCurrentValue": "현재 가치",
+  "@itemSortCurrentValue": {},
+  "itemSortQuantity": "수량",
+  "@itemSortQuantity": {},
+  "itemConditionMint": "최상",
+  "@itemConditionMint": {},
+  "itemConditionGood": "양호",
+  "@itemConditionGood": {},
+  "itemConditionFair": "보통",
+  "@itemConditionFair": {},
+  "itemConditionPoor": "불량",
+  "@itemConditionPoor": {},
+  "itemDetailNotFoundTitle": "항목을 찾을 수 없음",
+  "@itemDetailNotFoundTitle": {},
+  "itemDetailNotFoundMessage": "이 항목은 더 이상 존재하지 않습니다.",
+  "@itemDetailNotFoundMessage": {},
+  "itemDetailFavorited": "즐겨찾는 중",
+  "@itemDetailFavorited": {},
+  "itemDetailFavorite": "즐겨찾기",
+  "@itemDetailFavorite": {},
+  "itemDetailInWishlist": "위시리스트에 있음",
+  "@itemDetailInWishlist": {},
+  "itemDetailPriceTrackingTitle": "가격 추적",
+  "@itemDetailPriceTrackingTitle": {},
+  "itemDetailNoValueMessage": "현재 가치가 없습니다",
+  "@itemDetailNoValueMessage": {},
+  "itemDetailNoHistoryMessage": "가격 이력이 없습니다",
+  "@itemDetailNoHistoryMessage": {},
+  "itemDetailPriceHistoryError": "가격 이력을 불러올 수 없습니다",
+  "@itemDetailPriceHistoryError": {},
+  "itemDetailDetailsTitle": "상세 정보",
+  "@itemDetailDetailsTitle": {},
+  "itemDetailBarcodeLabel": "바코드",
+  "@itemDetailBarcodeLabel": {},
+  "itemDetailConditionLabel": "상태",
+  "@itemDetailConditionLabel": {},
+  "itemDetailQuantityLabel": "수량",
+  "@itemDetailQuantityLabel": {},
+  "itemDetailLocationLabel": "위치",
+  "@itemDetailLocationLabel": {},
+  "itemDetailPurchasePriceLabel": "구매 가격",
+  "@itemDetailPurchasePriceLabel": {},
+  "itemDetailCurrentValueLabel": "현재 가치",
+  "@itemDetailCurrentValueLabel": {},
+  "itemDetailPurchaseDateLabel": "구매일",
+  "@itemDetailPurchaseDateLabel": {},
+  "itemDetailNotesTitle": "메모",
+  "@itemDetailNotesTitle": {},
+  "itemDetailLoadingMessage": "항목 상세 불러오는 중...",
+  "@itemDetailLoadingMessage": {},
+  "itemDetailErrorLoading": "항목 상세 로드 오류: {error}",
+  "@itemDetailErrorLoading": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "itemDetailUpdateValueTitle": "현재 가치 업데이트",
+  "@itemDetailUpdateValueTitle": {},
+  "itemDetailCurrentValueUpdated": "현재 가치가 업데이트되었습니다",
+  "@itemDetailCurrentValueUpdated": {},
+  "itemDetailUpdateValueFailed": "가치 업데이트 실패: {error}",
+  "@itemDetailUpdateValueFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "addItemTitle": "항목 추가",
+  "@addItemTitle": {},
+  "addItemSubmit": "항목 추가",
+  "@addItemSubmit": {},
+  "addItemTitleHint": "예: 반지의 제왕",
+  "@addItemTitleHint": {},
+  "addItemFetchingMetadata": "메타데이터 가져오는 중...",
+  "@addItemFetchingMetadata": {},
+  "addItemMatchedMetadata": "{source} 메타데이터와 일치함",
+  "@addItemMatchedMetadata": {
+    "placeholders": {
+      "source": {
+        "type": "String"
+      }
+    }
+  },
+  "addItemTagsHint": "예: 희귀, 완성 세트",
+  "@addItemTagsHint": {},
+  "addItemSuccess": "항목이 추가되었습니다",
+  "@addItemSuccess": {},
+  "addItemError": "항목 추가 오류: {error}",
+  "@addItemError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "editItemTitle": "항목 편집",
+  "@editItemTitle": {},
+  "editItemLoading": "항목 불러오는 중...",
+  "@editItemLoading": {},
+  "editItemError": "오류: {error}",
+  "@editItemError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "editItemSaveChanges": "변경사항 저장",
+  "@editItemSaveChanges": {},
+  "editItemTagsHint": "예: 친필 서명, 초판",
+  "@editItemTagsHint": {},
+  "editItemSuccess": "항목이 업데이트되었습니다",
+  "@editItemSuccess": {},
+  "editItemUpdateError": "항목 업데이트 오류: {error}",
+  "@editItemUpdateError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "itemFormTitleLabel": "제목",
+  "@itemFormTitleLabel": {},
+  "itemFormTitleRequired": "제목을 입력해 주세요",
+  "@itemFormTitleRequired": {},
+  "itemFormBarcodeLabelOptional": "바코드 (선택)",
+  "@itemFormBarcodeLabelOptional": {},
+  "itemFormBarcodeHint": "ISBN, UPC 등",
+  "@itemFormBarcodeHint": {},
+  "itemFormDescriptionLabelOptional": "설명 (선택)",
+  "@itemFormDescriptionLabelOptional": {},
+  "itemFormDescriptionHint": "설명을 입력하세요",
+  "@itemFormDescriptionHint": {},
+  "itemFormTagsLabelOptional": "태그 (선택)",
+  "@itemFormTagsLabelOptional": {},
+  "itemFormPurchaseDateLabelOptional": "구매일 (선택)",
+  "@itemFormPurchaseDateLabelOptional": {},
+  "itemFormConditionLabelOptional": "상태 (선택)",
+  "@itemFormConditionLabelOptional": {},
+  "itemFormQuantityRequired": "수량을 입력해 주세요",
+  "@itemFormQuantityRequired": {},
+  "itemFormQuantityInvalid": "올바른 수량을 입력해 주세요",
+  "@itemFormQuantityInvalid": {},
+  "itemFormLocationLabelOptional": "위치 (선택)",
+  "@itemFormLocationLabelOptional": {},
+  "itemFormLocationHint": "예: 선반 A, 박스 3",
+  "@itemFormLocationHint": {},
+  "itemFormNotesLabelOptional": "메모 (선택)",
+  "@itemFormNotesLabelOptional": {},
+  "itemFormInvalidPrice": "잘못된 가격입니다",
+  "@itemFormInvalidPrice": {},
+  "itemFormMustBePositive": "0 이상이어야 합니다",
+  "@itemFormMustBePositive": {},
+  "itemTagsEditorHint": "태그 추가",
+  "@itemTagsEditorHint": {},
+  "itemTagsEditorAddTooltip": "태그 추가",
+  "@itemTagsEditorAddTooltip": {},
+  "itemTagsEditorEmptyMessage": "아직 태그가 없습니다. 태그를 추가해 항목을 더 빠르게 정리하세요.",
+  "@itemTagsEditorEmptyMessage": {},
+  "itemTagsEditorTooLong": "태그는 50자 이하여야 합니다",
+  "@itemTagsEditorTooLong": {},
+  "globalItemsLoading": "항목 불러오는 중...",
+  "@globalItemsLoading": {},
+  "globalItemsErrorLoading": "오류: {error}",
+  "@globalItemsErrorLoading": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "globalItemsNoFavoritesTitle": "즐겨찾기 항목이 없습니다",
+  "@globalItemsNoFavoritesTitle": {},
+  "globalItemsNoFavoritesMessage": "항목을 즐겨찾기로 표시하면 여기에 표시됩니다.",
+  "@globalItemsNoFavoritesMessage": {},
+  "globalItemsNoWishlistTitle": "위시리스트가 비어 있습니다",
+  "@globalItemsNoWishlistTitle": {},
+  "globalItemsNoWishlistMessage": "항목을 위시리스트에 저장하면 여기에 표시됩니다.",
+  "@globalItemsNoWishlistMessage": {},
+  "metadataSearchFieldLabel": "{collectionType} 제목으로 검색",
+  "@metadataSearchFieldLabel": {
+    "placeholders": {
+      "collectionType": {
+        "type": "String"
+      }
+    }
+  },
+  "metadataSearchEmptyTitle": "메타데이터 검색",
+  "@metadataSearchEmptyTitle": {},
+  "metadataSearchEmptyMessage": "검색할 제목을 입력하세요.",
+  "@metadataSearchEmptyMessage": {},
+  "metadataSearchLoading": "메타데이터 검색 중...",
+  "@metadataSearchLoading": {},
+  "metadataSearchError": "오류: {error}",
+  "@metadataSearchError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "metadataSearchNoResultsTitle": "결과 없음",
+  "@metadataSearchNoResultsTitle": {},
+  "metadataSearchNoResultsMessage": "이 제목의 메타데이터를 찾지 못했습니다.",
+  "@metadataSearchNoResultsMessage": {},
+  "metadataSearchSuggestionTitle": "제목으로 검색",
+  "@metadataSearchSuggestionTitle": {},
+  "metadataSearchSuggestionMessage": "메타데이터를 찾으려면 입력하세요.",
+  "@metadataSearchSuggestionMessage": {},
+  "tagItemsTitle": "태그: {tag}",
+  "@tagItemsTitle": {
+    "placeholders": {
+      "tag": {
+        "type": "String"
+      }
+    }
+  },
+  "tagItemsSortTooltip": "정렬",
+  "@tagItemsSortTooltip": {},
+  "tagItemsSortNewest": "정렬: 최신순",
+  "@tagItemsSortNewest": {},
+  "tagItemsSortOldest": "정렬: 오래된순",
+  "@tagItemsSortOldest": {},
+  "tagItemsSortTitle": "정렬: 제목순",
+  "@tagItemsSortTitle": {},
+  "tagItemsLoadingCollections": "컬렉션 불러오는 중...",
+  "@tagItemsLoadingCollections": {},
+  "tagItemsLoadingItems": "태그된 항목 불러오는 중...",
+  "@tagItemsLoadingItems": {},
+  "tagItemsError": "오류: {error}",
+  "@tagItemsError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "tagItemsEmptyTitle": "항목이 없습니다",
+  "@tagItemsEmptyTitle": {},
+  "tagItemsEmptyMessage": "현재 이 태그를 사용하는 컬렉션 항목이 없습니다.",
+  "@tagItemsEmptyMessage": {},
+  "tagItemsUnknownCollection": "알 수 없음",
+  "@tagItemsUnknownCollection": {},
+  "tagItemsOpenCollectionTooltip": "컬렉션 열기",
+  "@tagItemsOpenCollectionTooltip": {},
+  "tagItemsDeleteFailed": "삭제 실패: {error}",
+  "@tagItemsDeleteFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "tagManagementTitle": "태그 관리",
+  "@tagManagementTitle": {},
+  "tagManagementSelectedCount": "{count}개 선택됨",
+  "@tagManagementSelectedCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "tagManagementCancelSelectionTooltip": "선택 취소",
+  "@tagManagementCancelSelectionTooltip": {},
+  "tagManagementSelectTagsTooltip": "태그 선택",
+  "@tagManagementSelectTagsTooltip": {},
+  "tagManagementSearchHint": "태그 검색...",
+  "@tagManagementSearchHint": {},
+  "tagManagementEmptyTitle": "생성된 태그가 없습니다",
+  "@tagManagementEmptyTitle": {},
+  "tagManagementNoMatch": "\"{query}\"에 일치하는 태그가 없습니다",
+  "@tagManagementNoMatch": {
+    "placeholders": {
+      "query": {
+        "type": "String"
+      }
+    }
+  },
+  "tagManagementSelectVisible": "표시 항목 선택",
+  "@tagManagementSelectVisible": {},
+  "tagManagementSelectAllMatches": "일치 항목 모두 선택",
+  "@tagManagementSelectAllMatches": {},
+  "tagManagementClearSelection": "선택 해제",
+  "@tagManagementClearSelection": {},
+  "tagManagementScrollMore": "스크롤하여 태그 {remaining}개 더 불러오기",
+  "@tagManagementScrollMore": {
+    "placeholders": {
+      "remaining": {
+        "type": "int"
+      }
+    }
+  },
+  "tagManagementUsedInOne": "1개 항목에서 사용됨",
+  "@tagManagementUsedInOne": {},
+  "tagManagementUsedInMany": "{count}개 항목에서 사용됨",
+  "@tagManagementUsedInMany": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "tagManagementRenameAction": "이름 변경",
+  "@tagManagementRenameAction": {},
+  "tagManagementMergeAction": "병합",
+  "@tagManagementMergeAction": {},
+  "tagManagementMergeIntoAction": "다음으로 병합...",
+  "@tagManagementMergeIntoAction": {},
+  "tagManagementLoadError": "태그를 불러오지 못했습니다: {error}",
+  "@tagManagementLoadError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "tagManagementRenameTitle": "태그 이름 변경",
+  "@tagManagementRenameTitle": {},
+  "tagManagementNewNameLabel": "새 이름",
+  "@tagManagementNewNameLabel": {},
+  "tagManagementRenameSuccess": "\"{oldName}\"이(가) \"{newName}\"(으)로 변경되었습니다",
+  "@tagManagementRenameSuccess": {
+    "placeholders": {
+      "oldName": {
+        "type": "String"
+      },
+      "newName": {
+        "type": "String"
+      }
+    }
+  },
+  "tagManagementMergeSelectedTitle": "선택한 태그 병합",
+  "@tagManagementMergeSelectedTitle": {},
+  "tagManagementChooseDestination": "대상 태그를 선택하세요:",
+  "@tagManagementChooseDestination": {},
+  "tagManagementMergeSelectedSuccess": "{count}개 태그를 \"{destination}\"(으)로 병합했습니다",
+  "@tagManagementMergeSelectedSuccess": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "destination": {
+        "type": "String"
+      }
+    }
+  },
+  "tagManagementDeleteSelectedTitle": "선택한 태그 삭제",
+  "@tagManagementDeleteSelectedTitle": {},
+  "tagManagementDeleteSelectedMessage": "모든 항목에서 선택한 태그 {count}개를 삭제할까요?\\n\\n이 작업은 되돌릴 수 없습니다.",
+  "@tagManagementDeleteSelectedMessage": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "tagManagementDeleteSelectedSuccess": "태그 {count}개를 삭제했습니다",
+  "@tagManagementDeleteSelectedSuccess": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "tagManagementMergeIntoTitle": "다음으로 병합",
+  "@tagManagementMergeIntoTitle": {},
+  "tagManagementMergeSuccess": "\"{source}\"을(를) \"{target}\"(으)로 병합했습니다",
+  "@tagManagementMergeSuccess": {
+    "placeholders": {
+      "source": {
+        "type": "String"
+      },
+      "target": {
+        "type": "String"
+      }
+    }
+  },
+  "tagManagementDeleteTitle": "태그 삭제",
+  "@tagManagementDeleteTitle": {},
+  "tagManagementDeleteMessage": "모든 항목에서 \"{tagName}\"을(를) 삭제할까요?\\n\\n이 작업은 되돌릴 수 없습니다.",
+  "@tagManagementDeleteMessage": {
+    "placeholders": {
+      "tagName": {
+        "type": "String"
+      }
+    }
+  },
+  "tagManagementDeleteSuccess": "\"{tagName}\"을(를) 삭제했습니다",
+  "@tagManagementDeleteSuccess": {
+    "placeholders": {
+      "tagName": {
+        "type": "String"
+      }
+    }
+  },
+  "tagManagementMutationError": "태그 업데이트 실패: {error}",
+  "@tagManagementMutationError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "statisticsTitle": "통계",
+  "@statisticsTitle": {},
+  "statisticsEmptyTitle": "아직 통계가 없습니다",
+  "@statisticsEmptyTitle": {},
+  "statisticsEmptyMessage": "컬렉션과 항목을 추가하면 인사이트를 볼 수 있습니다.",
+  "@statisticsEmptyMessage": {},
+  "statisticsLoadingMessage": "통계 불러오는 중...",
+  "@statisticsLoadingMessage": {},
+  "statisticsErrorLoading": "통계 로드 오류: {error}",
+  "@statisticsErrorLoading": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "statisticsPortfolioValueTitle": "포트폴리오 가치",
+  "@statisticsPortfolioValueTitle": {},
+  "statisticsAveragePricedItem": "평균 가격 항목: {value}",
+  "@statisticsAveragePricedItem": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "statisticsPricedItemsBadge": "가격 입력 항목: {priced}/{total}",
+  "@statisticsPricedItemsBadge": {
+    "placeholders": {
+      "priced": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "statisticsQuantityTitle": "총 수량",
+  "@statisticsQuantityTitle": {},
+  "statisticsFavoritesTitle": "즐겨찾기",
+  "@statisticsFavoritesTitle": {},
+  "statisticsPercentOfItems": "전체 항목의 {percent}%",
+  "@statisticsPercentOfItems": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "statisticsInventoryHealthTitle": "인벤토리 상태",
+  "@statisticsInventoryHealthTitle": {},
+  "statisticsValuationCoverageLabel": "가치 입력 비율",
+  "@statisticsValuationCoverageLabel": {},
+  "statisticsPricedCaption": "{priced}/{total} 항목에 가격이 있습니다",
+  "@statisticsPricedCaption": {
+    "placeholders": {
+      "priced": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "statisticsFavoritesCoverageLabel": "즐겨찾기 비율",
+  "@statisticsFavoritesCoverageLabel": {},
+  "statisticsFavoritesCaption": "{favorites}/{total} 항목이 즐겨찾기입니다",
+  "@statisticsFavoritesCaption": {
+    "placeholders": {
+      "favorites": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "statisticsWishlistCoverageLabel": "위시리스트 비율",
+  "@statisticsWishlistCoverageLabel": {},
+  "statisticsWishlistCaption": "{wishlist}/{total} 항목이 위시리스트입니다",
+  "@statisticsWishlistCaption": {
+    "placeholders": {
+      "wishlist": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "statisticsItemsByTypeTitle": "유형별 항목",
+  "@statisticsItemsByTypeTitle": {},
+  "statisticsItemsByConditionTitle": "상태별 항목",
+  "@statisticsItemsByConditionTitle": {},
+  "statisticsTopValuedTitle": "가치가 높은 컬렉션",
+  "@statisticsTopValuedTitle": {},
+  "statisticsLargestCollectionTitle": "가장 큰 컬렉션",
+  "@statisticsLargestCollectionTitle": {},
+  "statisticsRecentlyCreatedTitle": "최근 생성",
+  "@statisticsRecentlyCreatedTitle": {},
+  "statisticsRecentCollectionSubtitle": "{itemCount}개 항목 • {createdAt}",
+  "@statisticsRecentCollectionSubtitle": {
+    "placeholders": {
+      "itemCount": {
+        "type": "int"
+      },
+      "createdAt": {
+        "type": "String"
+      }
+    }
+  },
+  "statisticsNoChartData": "차트 데이터가 없습니다",
+  "@statisticsNoChartData": {},
+  "statisticsTotalLabel": "합계",
+  "@statisticsTotalLabel": {},
+  "relativeToday": "오늘",
+  "@relativeToday": {},
+  "relativeYesterday": "어제",
+  "@relativeYesterday": {},
+  "relativeDaysAgo": "{days}일 전",
+  "@relativeDaysAgo": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "relativeWeeksAgo": "{weeks}주 전",
+  "@relativeWeeksAgo": {
+    "placeholders": {
+      "weeks": {
+        "type": "int"
+      }
+    }
+  },
+  "relativeMonthsAgo": "{months}개월 전",
+  "@relativeMonthsAgo": {
+    "placeholders": {
+      "months": {
+        "type": "int"
+      }
+    }
+  },
+  "relativeYearsAgo": "{years}년 전",
+  "@relativeYearsAgo": {
+    "placeholders": {
+      "years": {
+        "type": "int"
+      }
+    }
+  },
+  "collectionDetailsNotFoundTitle": "컬렉션을 찾을 수 없음",
+  "@collectionDetailsNotFoundTitle": {},
+  "collectionDetailsNotFoundMessage": "선택한 컬렉션을 사용할 수 없습니다.",
+  "@collectionDetailsNotFoundMessage": {},
+  "collectionDetailsCreatedLabel": "생성일",
+  "@collectionDetailsCreatedLabel": {},
+  "collectionDetailsUpdatedLabel": "최근 업데이트",
+  "@collectionDetailsUpdatedLabel": {},
+  "collectionDetailsLoading": "컬렉션 불러오는 중...",
+  "@collectionDetailsLoading": {},
+  "collectionTypeBooks": "도서",
+  "@collectionTypeBooks": {},
+  "collectionTypeGames": "게임",
+  "@collectionTypeGames": {},
+  "collectionTypeMovies": "영화",
+  "@collectionTypeMovies": {},
+  "collectionTypeComics": "만화",
+  "@collectionTypeComics": {},
+  "collectionTypeMusic": "음악",
+  "@collectionTypeMusic": {},
+  "collectionTypeCustom": "사용자 지정",
+  "@collectionTypeCustom": {}
+}

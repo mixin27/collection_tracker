@@ -1,4 +1,5 @@
 import 'package:domain/domain.dart';
+import 'package:collection_tracker/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -16,7 +17,10 @@ class GlobalItemsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final title = type == GlobalItemsType.favorites ? 'Favorites' : 'Wishlist';
+    final l10n = context.l10n;
+    final title = type == GlobalItemsType.favorites
+        ? l10n.navFavorites
+        : l10n.navWishlist;
     final streamProvider = type == GlobalItemsType.favorites
         ? allFavoriteItemsProvider
         : allWishlistItemsProvider;
@@ -34,11 +38,11 @@ class GlobalItemsScreen extends ConsumerWidget {
                     ? Icons.favorite_border
                     : Icons.bookmark_border,
                 title: type == GlobalItemsType.favorites
-                    ? 'No favorite items yet'
-                    : 'Your wishlist is empty',
+                    ? l10n.globalItemsNoFavoritesTitle
+                    : l10n.globalItemsNoWishlistTitle,
                 message: type == GlobalItemsType.favorites
-                    ? 'Mark items as favorite to see them here.'
-                    : 'Save items to wishlist and access them here.',
+                    ? l10n.globalItemsNoFavoritesMessage
+                    : l10n.globalItemsNoWishlistMessage,
               );
             }
 
@@ -65,8 +69,9 @@ class GlobalItemsScreen extends ConsumerWidget {
               },
             );
           },
-          loading: () => const LoadingView(),
-          error: (error, stack) => ErrorView(message: 'Error: $error'),
+          loading: () => LoadingView(message: l10n.globalItemsLoading),
+          error: (error, stack) =>
+              ErrorView(message: l10n.globalItemsErrorLoading('$error')),
         ),
       ),
     );

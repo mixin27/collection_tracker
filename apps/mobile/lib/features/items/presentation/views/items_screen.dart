@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ui/ui.dart';
 
+import '../../../../l10n/l10n.dart';
 import '../../../collections/presentation/view_models/collections_view_model.dart';
 import '../../../collections/presentation/widgets/collection_details_sheet.dart';
 import '../view_models/items_view_model.dart';
@@ -35,6 +36,7 @@ class _ItemsScreenState extends ConsumerState<ItemsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     final itemsAsync = ref.watch(
       filteredItemsListProvider(widget.collectionId),
     );
@@ -43,7 +45,8 @@ class _ItemsScreenState extends ConsumerState<ItemsScreen> {
     );
     final viewMode = ref.watch(itemsViewModeProvider);
     final filter = ref.watch(itemFilterProvider);
-    final collectionName = collectionAsync.asData?.value?.name ?? 'Items';
+    final collectionName =
+        collectionAsync.asData?.value?.name ?? l10n.itemsTitle;
 
     // Use optimistic items if available, otherwise use stream data
     // Clear optimistic items when stream data matches the expected order
@@ -84,8 +87,8 @@ class _ItemsScreenState extends ConsumerState<ItemsScreen> {
             ? AppInput(
                 controller: _searchController,
                 autofocus: true,
-                decoration: const InputDecoration(
-                  hintText: 'Search items...',
+                decoration: InputDecoration(
+                  hintText: l10n.itemsSearchHint,
                   border: InputBorder.none,
                 ),
                 onChanged: (value) {
@@ -130,22 +133,22 @@ class _ItemsScreenState extends ConsumerState<ItemsScreen> {
                             filter.conditions.isNotEmpty ||
                             filter.tags.isNotEmpty ||
                             filter.showOnlyFavorites)
-                    ? 'No matches found'
-                    : 'No items yet',
+                    ? l10n.itemsNoMatchesTitle
+                    : l10n.itemsNoItemsTitle,
                 message:
                     _isSearching ||
                         filter.conditions.isNotEmpty ||
                         filter.tags.isNotEmpty ||
                         filter.showOnlyFavorites
-                    ? 'Try adjusting your filters'
-                    : 'Add your first item to get started',
+                    ? l10n.itemsNoMatchesMessage
+                    : l10n.itemsNoItemsMessage,
                 action:
                     !_isSearching &&
                         filter.conditions.isEmpty &&
                         filter.tags.isEmpty &&
                         !filter.showOnlyFavorites
                     ? AppButton(
-                        label: 'Add Item',
+                        label: l10n.itemsAddButton,
                         icon: const Icon(Icons.add),
                         onPressed: () => context.push(
                           '/collections/${widget.collectionId}/add-item',
@@ -313,13 +316,13 @@ class _ItemsScreenState extends ConsumerState<ItemsScreen> {
               );
             }
           },
-          loading: () => const LoadingView(
-            key: ValueKey('loading'),
-            message: 'Loading items...',
+          loading: () => LoadingView(
+            key: const ValueKey('loading'),
+            message: l10n.itemsLoadingMessage,
           ),
           error: (error, stack) => ErrorView(
             key: const ValueKey('error'),
-            message: 'Error loading items: $error',
+            message: l10n.itemsErrorLoading('$error'),
             onRetry: () {
               ref.invalidate(filteredItemsListProvider(widget.collectionId));
             },
@@ -356,18 +359,19 @@ class _ItemsScreenState extends ConsumerState<ItemsScreen> {
     WidgetRef ref,
     Item item,
   ) async {
+    final l10n = context.l10n;
     final confirmed = await showAppDialog<bool>(
       context: context,
-      title: const Text('Delete Item'),
-      content: Text('Are you sure you want to delete "${item.title}"?'),
+      title: Text(l10n.itemsDeleteTitle),
+      content: Text(l10n.itemsDeleteMessage(item.title)),
       actions: [
         AppButton(
-          label: 'Cancel',
+          label: l10n.actionCancel,
           variant: AppButtonVariant.ghost,
           onPressed: () => Navigator.pop(context, false),
         ),
         AppButton(
-          label: 'Delete',
+          label: l10n.actionDelete,
           variant: AppButtonVariant.danger,
           onPressed: () => Navigator.pop(context, true),
         ),
@@ -380,7 +384,7 @@ class _ItemsScreenState extends ConsumerState<ItemsScreen> {
       if (context.mounted) {
         ScaffoldMessenger.of(
           context,
-        ).showSnackBar(SnackBar(content: Text('${item.title} deleted')));
+        ).showSnackBar(SnackBar(content: Text(l10n.itemsDeleted(item.title))));
       }
     }
   }
@@ -420,63 +424,85 @@ class _ItemsOverviewBar extends StatelessWidget {
           horizontal: AppSpacing.md,
           vertical: AppSpacing.sm,
         ),
-        child: Row(
-          children: [
-            Container(
-              padding: const EdgeInsets.symmetric(
-                horizontal: AppSpacing.sm,
-                vertical: 6,
-              ),
-              decoration: BoxDecoration(
-                color: theme.colorScheme.primary.withValues(alpha: 0.10),
-                borderRadius: BorderRadius.circular(AppRadii.pill),
-              ),
-              child: Text(
-                '$itemCount items',
-                style: theme.textTheme.labelMedium?.copyWith(
-                  color: theme.colorScheme.primary,
-                  fontWeight: FontWeight.w700,
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            final compact = constraints.maxWidth < 430;
+            return Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: AppSpacing.sm,
+                    vertical: 6,
+                  ),
+                  decoration: BoxDecoration(
+                    color: theme.colorScheme.primary.withValues(alpha: 0.10),
+                    borderRadius: BorderRadius.circular(AppRadii.pill),
+                  ),
+                  child: Text(
+                    context.l10n.itemsOverviewCount(itemCount),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: theme.textTheme.labelMedium?.copyWith(
+                      color: theme.colorScheme.primary,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
                 ),
-              ),
-            ),
-            const SizedBox(width: AppSpacing.sm),
-            Expanded(
-              child: Text(
-                'Sorted by ${sortBy.label}',
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: theme.textTheme.bodySmall?.copyWith(
-                  color: theme.colorScheme.onSurfaceVariant,
+                if (!compact) ...[
+                  const SizedBox(width: AppSpacing.sm),
+                  Expanded(
+                    child: Text(
+                      context.l10n.itemsSortedBy(_sortLabel(context, sortBy)),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: theme.colorScheme.onSurfaceVariant,
+                      ),
+                    ),
+                  ),
+                ] else
+                  const Spacer(),
+                IconButton(
+                  tooltip: context.l10n.itemsCollectionDetailsTooltip,
+                  onPressed: onOpenDetails,
+                  icon: const Icon(Icons.info_outline_rounded),
                 ),
-              ),
-            ),
-            IconButton(
-              tooltip: 'Collection details',
-              onPressed: onOpenDetails,
-              icon: const Icon(Icons.info_outline_rounded),
-            ),
-            IconButton(
-              tooltip: viewMode == ItemsViewMode.list
-                  ? 'Switch to grid'
-                  : 'Switch to list',
-              onPressed: onToggleViewMode,
-              icon: Icon(
-                viewMode == ItemsViewMode.list
-                    ? Icons.grid_view_rounded
-                    : Icons.view_agenda_rounded,
-              ),
-            ),
-            IconButton(
-              tooltip: 'Open filters',
-              onPressed: onOpenFilter,
-              icon: Badge(
-                isLabelVisible: hasActiveFilters,
-                child: const Icon(Icons.tune_rounded),
-              ),
-            ),
-          ],
+                IconButton(
+                  tooltip: viewMode == ItemsViewMode.list
+                      ? context.l10n.actionSwitchToGrid
+                      : context.l10n.actionSwitchToList,
+                  onPressed: onToggleViewMode,
+                  icon: Icon(
+                    viewMode == ItemsViewMode.list
+                        ? Icons.grid_view_rounded
+                        : Icons.view_agenda_rounded,
+                  ),
+                ),
+                IconButton(
+                  tooltip: context.l10n.itemsFiltersTooltip,
+                  onPressed: onOpenFilter,
+                  icon: Badge(
+                    isLabelVisible: hasActiveFilters,
+                    child: const Icon(Icons.tune_rounded),
+                  ),
+                ),
+              ],
+            );
+          },
         ),
       ),
     );
+  }
+
+  String _sortLabel(BuildContext context, ItemSortBy sortBy) {
+    final l10n = context.l10n;
+    return switch (sortBy) {
+      ItemSortBy.custom => l10n.itemSortCustom,
+      ItemSortBy.title => l10n.itemSortTitle,
+      ItemSortBy.createdAt => l10n.itemSortCreatedAt,
+      ItemSortBy.purchaseDate => l10n.itemSortPurchaseDate,
+      ItemSortBy.currentValue => l10n.itemSortCurrentValue,
+      ItemSortBy.quantity => l10n.itemSortQuantity,
+    };
   }
 }

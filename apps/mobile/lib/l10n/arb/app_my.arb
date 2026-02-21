@@ -1,7 +1,862 @@
 {
-    "@@locale": "my",
-    "counterAppBarTitle": "Counter",
-    "@counterAppBarTitle": {
-        "description": "Text shown in the AppBar of the Counter Page"
+  "@@locale": "my",
+  "appTitle": "Collection Tracker",
+  "@appTitle": {},
+  "navHome": "ပင်မ",
+  "@navHome": {},
+  "navFavorites": "အကြိုက်",
+  "@navFavorites": {},
+  "navWishlist": "ဆန္ဒ",
+  "@navWishlist": {},
+  "navSettings": "ဆက်တင်",
+  "@navSettings": {},
+  "actionApply": "Apply",
+  "@actionApply": {},
+  "actionCancel": "မလုပ်တော့",
+  "@actionCancel": {},
+  "actionDelete": "ဖျက်မည်",
+  "@actionDelete": {},
+  "actionDismiss": "ပိတ်မည်",
+  "@actionDismiss": {},
+  "actionEdit": "Edit",
+  "@actionEdit": {},
+  "actionImport": "ထည့်သွင်း",
+  "@actionImport": {},
+  "actionRefresh": "Refresh",
+  "@actionRefresh": {},
+  "actionReset": "Reset",
+  "@actionReset": {},
+  "actionSave": "Save",
+  "@actionSave": {},
+  "actionSwitchToGrid": "Grid သို့ ပြောင်းရန်",
+  "@actionSwitchToGrid": {},
+  "actionSwitchToList": "List သို့ ပြောင်းရန်",
+  "@actionSwitchToList": {},
+  "actionUpdate": "Update",
+  "@actionUpdate": {},
+  "settingsTitle": "ဆက်တင်",
+  "@settingsTitle": {},
+  "settingsSectionGeneral": "အထွေထွေ",
+  "@settingsSectionGeneral": {},
+  "settingsSectionData": "ဒေတာ",
+  "@settingsSectionData": {},
+  "settingsSectionAbout": "အကြောင်းအရာ",
+  "@settingsSectionAbout": {},
+  "settingsThemeTitle": "အပြင်အဆင်",
+  "@settingsThemeTitle": {},
+  "settingsLanguageTitle": "ဘာသာစကား",
+  "@settingsLanguageTitle": {},
+  "settingsExportJsonTitle": "JSON သို့ Export",
+  "@settingsExportJsonTitle": {},
+  "settingsExportJsonSubtitle": "ဒေတာအားလုံးကို JSON ဖိုင်အဖြစ် ထုတ်ယူမည်",
+  "@settingsExportJsonSubtitle": {},
+  "settingsExportCsvTitle": "CSV သို့ Export",
+  "@settingsExportCsvTitle": {},
+  "settingsExportCsvSubtitle": "ပစ္စည်းများကို CSV စာရင်းဇယားအဖြစ် ထုတ်ယူမည်",
+  "@settingsExportCsvSubtitle": {},
+  "settingsImportJsonTitle": "JSON မှ Import",
+  "@settingsImportJsonTitle": {},
+  "settingsImportJsonSubtitle": "JSON ဖိုင်မှ ဒေတာ ထည့်သွင်းမည်",
+  "@settingsImportJsonSubtitle": {},
+  "settingsCloudSyncTitle": "Cloud Sync",
+  "@settingsCloudSyncTitle": {},
+  "settingsCloudSyncSubtitle": "မသတ်မှတ်ရသေး",
+  "@settingsCloudSyncSubtitle": {},
+  "settingsManageTagsTitle": "Tag များ စီမံရန်",
+  "@settingsManageTagsTitle": {},
+  "settingsManageTagsSubtitle": "Tag အမည်ပြောင်း၊ ပေါင်းစည်း၊ ဖျက်နိုင်သည်",
+  "@settingsManageTagsSubtitle": {},
+  "settingsVersionTitle": "ဗားရှင်း",
+  "@settingsVersionTitle": {},
+  "settingsPrivacyPolicyTitle": "ကိုယ်ရေးကိုယ်တာ မူဝါဒ",
+  "@settingsPrivacyPolicyTitle": {},
+  "settingsTermsTitle": "အသုံးပြုမှု စည်းမျဉ်းများ",
+  "@settingsTermsTitle": {},
+  "settingsExportingData": "ဒေတာ ထုတ်ယူနေသည်...",
+  "@settingsExportingData": {},
+  "settingsDataExportSuccess": "ဒေတာ ထုတ်ယူမှု အောင်မြင်သည်!",
+  "@settingsDataExportSuccess": {},
+  "settingsExportFailed": "ထုတ်ယူမှု မအောင်မြင်ပါ: {error}",
+  "@settingsExportFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
     }
+  },
+  "settingsImportDataTitle": "ဒေတာ ထည့်သွင်းရန်",
+  "@settingsImportDataTitle": {},
+  "settingsImportDataMessage": "ဤလုပ်ဆောင်မှုသည် JSON ဖိုင်မှ collection များနှင့် item များကို ထည့်သွင်းမည်ဖြစ်သည်။ ရှိပြီးသားဒေတာ မဖျက်ပါ။\\n\\nဆက်လုပ်မလား?",
+  "@settingsImportDataMessage": {},
+  "settingsImportingData": "ဒေတာ ထည့်သွင်းနေသည်...",
+  "@settingsImportingData": {},
+  "settingsDataImportSuccess": "ဒေတာ ထည့်သွင်းမှု အောင်မြင်သည်!",
+  "@settingsDataImportSuccess": {},
+  "settingsImportFailed": "ထည့်သွင်းမှု မအောင်မြင်ပါ: {error}",
+  "@settingsImportFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsThemeModeTitle": "Theme Mode",
+  "@settingsThemeModeTitle": {},
+  "settingsThemeColorVariantTitle": "အရောင် အမျိုးအစား",
+  "@settingsThemeColorVariantTitle": {},
+  "settingsAmoledTitle": "Amoled Mode (အနက်စင်)",
+  "@settingsAmoledTitle": {},
+  "settingsAmoledSubtitle": "OLED မျက်နှာပြင်တွင် ဘက်ထရီသုံးစွဲမှု လျှော့ချပေးသည်",
+  "@settingsAmoledSubtitle": {},
+  "themeModeSystem": "စနစ်အတိုင်း",
+  "@themeModeSystem": {},
+  "themeModeLight": "အလင်း",
+  "@themeModeLight": {},
+  "themeModeDark": "အမှောင်",
+  "@themeModeDark": {},
+  "languageSystem": "စနစ်ပုံမှန်",
+  "@languageSystem": {},
+  "languageEnglish": "အင်္ဂလိပ်",
+  "@languageEnglish": {},
+  "languageSpanish": "စပိန်",
+  "@languageSpanish": {},
+  "languageIndonesian": "အင်ဒိုနီးရှား",
+  "@languageIndonesian": {},
+  "languageJapanese": "ဂျပန်",
+  "@languageJapanese": {},
+  "languageKorean": "ကိုရီးယား",
+  "@languageKorean": {},
+  "languageChineseSimplified": "တရုတ် (ရိုးရှင်း)",
+  "@languageChineseSimplified": {},
+  "languageBurmese": "မြန်မာ",
+  "@languageBurmese": {},
+  "collectionsTitle": "ကျွန်ုပ်၏ Collection များ",
+  "@collectionsTitle": {},
+  "collectionsCountLabel": "Collections",
+  "@collectionsCountLabel": {},
+  "collectionsNewButton": "Collection အသစ်",
+  "@collectionsNewButton": {},
+  "collectionsActionsTooltip": "Collection လုပ်ဆောင်ချက်များ",
+  "@collectionsActionsTooltip": {},
+  "collectionsOpenAction": "Collection ဖွင့်မည်",
+  "@collectionsOpenAction": {},
+  "collectionsEditAction": "Collection ပြင်မည်",
+  "@collectionsEditAction": {},
+  "collectionsDeleteTitle": "Collection ဖျက်ရန်",
+  "@collectionsDeleteTitle": {},
+  "collectionsDeleteMessage": "\"{name}\" နှင့် ဤ collection အတွင်းရှိ items {itemCount} ခုကို ဖျက်မလား?",
+  "@collectionsDeleteMessage": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "itemCount": {
+        "type": "int"
+      }
+    }
+  },
+  "collectionsDeleted": "{name} ကို ဖျက်ပြီး",
+  "@collectionsDeleted": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "collectionsErrorLoading": "Error loading collections: {error}",
+  "@collectionsErrorLoading": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "itemsTitle": "Items",
+  "@itemsTitle": {},
+  "itemsCountLabel": "Items",
+  "@itemsCountLabel": {},
+  "itemsCountWithValue": "{count} items",
+  "@itemsCountWithValue": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "itemsSearchHint": "Search items...",
+  "@itemsSearchHint": {},
+  "itemsNoMatchesTitle": "No matches found",
+  "@itemsNoMatchesTitle": {},
+  "itemsNoMatchesMessage": "Try changing filters or keywords.",
+  "@itemsNoMatchesMessage": {},
+  "itemsNoItemsTitle": "No items yet",
+  "@itemsNoItemsTitle": {},
+  "itemsNoItemsMessage": "Start by adding your first item.",
+  "@itemsNoItemsMessage": {},
+  "itemsAddButton": "Add Item",
+  "@itemsAddButton": {},
+  "itemsLoadingMessage": "Loading items...",
+  "@itemsLoadingMessage": {},
+  "itemsErrorLoading": "Error loading items: {error}",
+  "@itemsErrorLoading": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "itemsDeleteTitle": "Delete Item",
+  "@itemsDeleteTitle": {},
+  "itemsDeleteMessage": "Delete \"{name}\"?",
+  "@itemsDeleteMessage": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "itemsDeleted": "{name} deleted",
+  "@itemsDeleted": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "itemsOverviewCount": "{count} items",
+  "@itemsOverviewCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "itemsSortedBy": "Sorted by {sortLabel}",
+  "@itemsSortedBy": {
+    "placeholders": {
+      "sortLabel": {
+        "type": "String"
+      }
+    }
+  },
+  "itemsCollectionDetailsTooltip": "Collection details",
+  "@itemsCollectionDetailsTooltip": {},
+  "itemsFiltersTooltip": "Filters",
+  "@itemsFiltersTooltip": {},
+  "itemsFilterTitle": "Filter Items",
+  "@itemsFilterTitle": {},
+  "itemsSortByTitle": "Sort by",
+  "@itemsSortByTitle": {},
+  "itemsFilterFavoritesOnly": "Favorites only",
+  "@itemsFilterFavoritesOnly": {},
+  "itemsFilterWishlistOnly": "Wishlist only",
+  "@itemsFilterWishlistOnly": {},
+  "itemsFilterConditionsTitle": "Condition",
+  "@itemsFilterConditionsTitle": {},
+  "itemsTagsTitle": "Tags",
+  "@itemsTagsTitle": {},
+  "itemsQuantityLabel": "Qty: {quantity}",
+  "@itemsQuantityLabel": {
+    "placeholders": {
+      "quantity": {
+        "type": "int"
+      }
+    }
+  },
+  "itemsQuantityShort": "x{quantity}",
+  "@itemsQuantityShort": {
+    "placeholders": {
+      "quantity": {
+        "type": "int"
+      }
+    }
+  },
+  "itemSortCustom": "Custom order",
+  "@itemSortCustom": {},
+  "itemSortTitle": "Title",
+  "@itemSortTitle": {},
+  "itemSortCreatedAt": "Date added",
+  "@itemSortCreatedAt": {},
+  "itemSortPurchaseDate": "Purchase date",
+  "@itemSortPurchaseDate": {},
+  "itemSortCurrentValue": "Current value",
+  "@itemSortCurrentValue": {},
+  "itemSortQuantity": "Quantity",
+  "@itemSortQuantity": {},
+  "itemConditionMint": "Mint",
+  "@itemConditionMint": {},
+  "itemConditionGood": "Good",
+  "@itemConditionGood": {},
+  "itemConditionFair": "Fair",
+  "@itemConditionFair": {},
+  "itemConditionPoor": "Poor",
+  "@itemConditionPoor": {},
+  "itemDetailNotFoundTitle": "Item not found",
+  "@itemDetailNotFoundTitle": {},
+  "itemDetailNotFoundMessage": "This item no longer exists.",
+  "@itemDetailNotFoundMessage": {},
+  "itemDetailFavorited": "Favorited",
+  "@itemDetailFavorited": {},
+  "itemDetailFavorite": "Favorite",
+  "@itemDetailFavorite": {},
+  "itemDetailInWishlist": "In Wishlist",
+  "@itemDetailInWishlist": {},
+  "itemDetailPriceTrackingTitle": "Price tracking",
+  "@itemDetailPriceTrackingTitle": {},
+  "itemDetailNoValueMessage": "No current value available",
+  "@itemDetailNoValueMessage": {},
+  "itemDetailNoHistoryMessage": "No price history yet",
+  "@itemDetailNoHistoryMessage": {},
+  "itemDetailPriceHistoryError": "Unable to load price history",
+  "@itemDetailPriceHistoryError": {},
+  "itemDetailDetailsTitle": "Details",
+  "@itemDetailDetailsTitle": {},
+  "itemDetailBarcodeLabel": "Barcode",
+  "@itemDetailBarcodeLabel": {},
+  "itemDetailConditionLabel": "Condition",
+  "@itemDetailConditionLabel": {},
+  "itemDetailQuantityLabel": "Quantity",
+  "@itemDetailQuantityLabel": {},
+  "itemDetailLocationLabel": "Location",
+  "@itemDetailLocationLabel": {},
+  "itemDetailPurchasePriceLabel": "Purchase price",
+  "@itemDetailPurchasePriceLabel": {},
+  "itemDetailCurrentValueLabel": "Current value",
+  "@itemDetailCurrentValueLabel": {},
+  "itemDetailPurchaseDateLabel": "Purchase date",
+  "@itemDetailPurchaseDateLabel": {},
+  "itemDetailNotesTitle": "Notes",
+  "@itemDetailNotesTitle": {},
+  "itemDetailLoadingMessage": "Loading item details...",
+  "@itemDetailLoadingMessage": {},
+  "itemDetailErrorLoading": "Error loading item details: {error}",
+  "@itemDetailErrorLoading": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "itemDetailUpdateValueTitle": "Update current value",
+  "@itemDetailUpdateValueTitle": {},
+  "itemDetailCurrentValueUpdated": "Current value updated",
+  "@itemDetailCurrentValueUpdated": {},
+  "itemDetailUpdateValueFailed": "Failed to update value: {error}",
+  "@itemDetailUpdateValueFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "addItemTitle": "Add Item",
+  "@addItemTitle": {},
+  "addItemSubmit": "Add Item",
+  "@addItemSubmit": {},
+  "addItemTitleHint": "e.g., The Lord of the Rings",
+  "@addItemTitleHint": {},
+  "addItemFetchingMetadata": "Fetching metadata...",
+  "@addItemFetchingMetadata": {},
+  "addItemMatchedMetadata": "Matched {source} metadata",
+  "@addItemMatchedMetadata": {
+    "placeholders": {
+      "source": {
+        "type": "String"
+      }
+    }
+  },
+  "addItemTagsHint": "e.g., Rare, Completed Set",
+  "@addItemTagsHint": {},
+  "addItemSuccess": "Item added successfully",
+  "@addItemSuccess": {},
+  "addItemError": "Error adding item: {error}",
+  "@addItemError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "editItemTitle": "Edit Item",
+  "@editItemTitle": {},
+  "editItemLoading": "Loading item...",
+  "@editItemLoading": {},
+  "editItemError": "Error: {error}",
+  "@editItemError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "editItemSaveChanges": "Save Changes",
+  "@editItemSaveChanges": {},
+  "editItemTagsHint": "e.g., Signed, First Edition",
+  "@editItemTagsHint": {},
+  "editItemSuccess": "Item updated successfully",
+  "@editItemSuccess": {},
+  "editItemUpdateError": "Error updating item: {error}",
+  "@editItemUpdateError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "itemFormTitleLabel": "Title",
+  "@itemFormTitleLabel": {},
+  "itemFormTitleRequired": "Please enter a title",
+  "@itemFormTitleRequired": {},
+  "itemFormBarcodeLabelOptional": "Barcode (optional)",
+  "@itemFormBarcodeLabelOptional": {},
+  "itemFormBarcodeHint": "ISBN, UPC, etc.",
+  "@itemFormBarcodeHint": {},
+  "itemFormDescriptionLabelOptional": "Description (optional)",
+  "@itemFormDescriptionLabelOptional": {},
+  "itemFormDescriptionHint": "Add a description",
+  "@itemFormDescriptionHint": {},
+  "itemFormTagsLabelOptional": "Tags (optional)",
+  "@itemFormTagsLabelOptional": {},
+  "itemFormPurchaseDateLabelOptional": "Purchase Date (optional)",
+  "@itemFormPurchaseDateLabelOptional": {},
+  "itemFormConditionLabelOptional": "Condition (optional)",
+  "@itemFormConditionLabelOptional": {},
+  "itemFormQuantityRequired": "Please enter quantity",
+  "@itemFormQuantityRequired": {},
+  "itemFormQuantityInvalid": "Please enter a valid quantity",
+  "@itemFormQuantityInvalid": {},
+  "itemFormLocationLabelOptional": "Location (optional)",
+  "@itemFormLocationLabelOptional": {},
+  "itemFormLocationHint": "e.g., Shelf A, Box 3",
+  "@itemFormLocationHint": {},
+  "itemFormNotesLabelOptional": "Notes (optional)",
+  "@itemFormNotesLabelOptional": {},
+  "itemFormInvalidPrice": "Invalid price",
+  "@itemFormInvalidPrice": {},
+  "itemFormMustBePositive": "Must be positive",
+  "@itemFormMustBePositive": {},
+  "itemTagsEditorHint": "Add a tag",
+  "@itemTagsEditorHint": {},
+  "itemTagsEditorAddTooltip": "Add tag",
+  "@itemTagsEditorAddTooltip": {},
+  "itemTagsEditorEmptyMessage": "No tags yet. Add tags to organize items faster.",
+  "@itemTagsEditorEmptyMessage": {},
+  "itemTagsEditorTooLong": "Tags must be 50 characters or less",
+  "@itemTagsEditorTooLong": {},
+  "globalItemsLoading": "Loading items...",
+  "@globalItemsLoading": {},
+  "globalItemsErrorLoading": "Error: {error}",
+  "@globalItemsErrorLoading": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "globalItemsNoFavoritesTitle": "No favorite items yet",
+  "@globalItemsNoFavoritesTitle": {},
+  "globalItemsNoFavoritesMessage": "Mark items as favorite to see them here.",
+  "@globalItemsNoFavoritesMessage": {},
+  "globalItemsNoWishlistTitle": "Your wishlist is empty",
+  "@globalItemsNoWishlistTitle": {},
+  "globalItemsNoWishlistMessage": "Save items to wishlist and access them here.",
+  "@globalItemsNoWishlistMessage": {},
+  "metadataSearchFieldLabel": "Search {collectionType} by title",
+  "@metadataSearchFieldLabel": {
+    "placeholders": {
+      "collectionType": {
+        "type": "String"
+      }
+    }
+  },
+  "metadataSearchEmptyTitle": "Search metadata",
+  "@metadataSearchEmptyTitle": {},
+  "metadataSearchEmptyMessage": "Enter a title to search.",
+  "@metadataSearchEmptyMessage": {},
+  "metadataSearchLoading": "Searching metadata...",
+  "@metadataSearchLoading": {},
+  "metadataSearchError": "Error: {error}",
+  "@metadataSearchError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "metadataSearchNoResultsTitle": "No results",
+  "@metadataSearchNoResultsTitle": {},
+  "metadataSearchNoResultsMessage": "No metadata found for this title.",
+  "@metadataSearchNoResultsMessage": {},
+  "metadataSearchSuggestionTitle": "Search by title",
+  "@metadataSearchSuggestionTitle": {},
+  "metadataSearchSuggestionMessage": "Start typing to look up metadata.",
+  "@metadataSearchSuggestionMessage": {},
+  "tagItemsTitle": "Tag: {tag}",
+  "@tagItemsTitle": {
+    "placeholders": {
+      "tag": {
+        "type": "String"
+      }
+    }
+  },
+  "tagItemsSortTooltip": "Sort",
+  "@tagItemsSortTooltip": {},
+  "tagItemsSortNewest": "Sort: Newest",
+  "@tagItemsSortNewest": {},
+  "tagItemsSortOldest": "Sort: Oldest",
+  "@tagItemsSortOldest": {},
+  "tagItemsSortTitle": "Sort: Title",
+  "@tagItemsSortTitle": {},
+  "tagItemsLoadingCollections": "Loading collections...",
+  "@tagItemsLoadingCollections": {},
+  "tagItemsLoadingItems": "Loading tagged items...",
+  "@tagItemsLoadingItems": {},
+  "tagItemsError": "Error: {error}",
+  "@tagItemsError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "tagItemsEmptyTitle": "No items found",
+  "@tagItemsEmptyTitle": {},
+  "tagItemsEmptyMessage": "No collection items currently use this tag.",
+  "@tagItemsEmptyMessage": {},
+  "tagItemsUnknownCollection": "Unknown",
+  "@tagItemsUnknownCollection": {},
+  "tagItemsOpenCollectionTooltip": "Open collection",
+  "@tagItemsOpenCollectionTooltip": {},
+  "tagItemsDeleteFailed": "Delete failed: {error}",
+  "@tagItemsDeleteFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "tagManagementTitle": "Manage Tags",
+  "@tagManagementTitle": {},
+  "tagManagementSelectedCount": "{count} selected",
+  "@tagManagementSelectedCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "tagManagementCancelSelectionTooltip": "Cancel selection",
+  "@tagManagementCancelSelectionTooltip": {},
+  "tagManagementSelectTagsTooltip": "Select tags",
+  "@tagManagementSelectTagsTooltip": {},
+  "tagManagementSearchHint": "Search tags...",
+  "@tagManagementSearchHint": {},
+  "tagManagementEmptyTitle": "No tags created yet",
+  "@tagManagementEmptyTitle": {},
+  "tagManagementNoMatch": "No tags match \"{query}\"",
+  "@tagManagementNoMatch": {
+    "placeholders": {
+      "query": {
+        "type": "String"
+      }
+    }
+  },
+  "tagManagementSelectVisible": "Select visible",
+  "@tagManagementSelectVisible": {},
+  "tagManagementSelectAllMatches": "Select all matches",
+  "@tagManagementSelectAllMatches": {},
+  "tagManagementClearSelection": "Clear selection",
+  "@tagManagementClearSelection": {},
+  "tagManagementScrollMore": "Scroll to load {remaining} more tags",
+  "@tagManagementScrollMore": {
+    "placeholders": {
+      "remaining": {
+        "type": "int"
+      }
+    }
+  },
+  "tagManagementUsedInOne": "Used in 1 item",
+  "@tagManagementUsedInOne": {},
+  "tagManagementUsedInMany": "Used in {count} items",
+  "@tagManagementUsedInMany": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "tagManagementRenameAction": "Rename",
+  "@tagManagementRenameAction": {},
+  "tagManagementMergeAction": "Merge",
+  "@tagManagementMergeAction": {},
+  "tagManagementMergeIntoAction": "Merge Into...",
+  "@tagManagementMergeIntoAction": {},
+  "tagManagementLoadError": "Failed to load tags: {error}",
+  "@tagManagementLoadError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "tagManagementRenameTitle": "Rename Tag",
+  "@tagManagementRenameTitle": {},
+  "tagManagementNewNameLabel": "New name",
+  "@tagManagementNewNameLabel": {},
+  "tagManagementRenameSuccess": "\"{oldName}\" renamed to \"{newName}\"",
+  "@tagManagementRenameSuccess": {
+    "placeholders": {
+      "oldName": {
+        "type": "String"
+      },
+      "newName": {
+        "type": "String"
+      }
+    }
+  },
+  "tagManagementMergeSelectedTitle": "Merge Selected Tags",
+  "@tagManagementMergeSelectedTitle": {},
+  "tagManagementChooseDestination": "Choose destination tag:",
+  "@tagManagementChooseDestination": {},
+  "tagManagementMergeSelectedSuccess": "Merged {count} tags into \"{destination}\"",
+  "@tagManagementMergeSelectedSuccess": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "destination": {
+        "type": "String"
+      }
+    }
+  },
+  "tagManagementDeleteSelectedTitle": "Delete Selected Tags",
+  "@tagManagementDeleteSelectedTitle": {},
+  "tagManagementDeleteSelectedMessage": "Delete {count} selected tags from all items?\\n\\nThis cannot be undone.",
+  "@tagManagementDeleteSelectedMessage": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "tagManagementDeleteSelectedSuccess": "Deleted {count} tags",
+  "@tagManagementDeleteSelectedSuccess": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "tagManagementMergeIntoTitle": "Merge Into",
+  "@tagManagementMergeIntoTitle": {},
+  "tagManagementMergeSuccess": "\"{source}\" merged into \"{target}\"",
+  "@tagManagementMergeSuccess": {
+    "placeholders": {
+      "source": {
+        "type": "String"
+      },
+      "target": {
+        "type": "String"
+      }
+    }
+  },
+  "tagManagementDeleteTitle": "Delete Tag",
+  "@tagManagementDeleteTitle": {},
+  "tagManagementDeleteMessage": "Delete \"{tagName}\" from all items?\\n\\nThis cannot be undone.",
+  "@tagManagementDeleteMessage": {
+    "placeholders": {
+      "tagName": {
+        "type": "String"
+      }
+    }
+  },
+  "tagManagementDeleteSuccess": "\"{tagName}\" deleted",
+  "@tagManagementDeleteSuccess": {
+    "placeholders": {
+      "tagName": {
+        "type": "String"
+      }
+    }
+  },
+  "tagManagementMutationError": "Tag update failed: {error}",
+  "@tagManagementMutationError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "statisticsTitle": "စာရင်းအင်း",
+  "@statisticsTitle": {},
+  "statisticsEmptyTitle": "No statistics yet",
+  "@statisticsEmptyTitle": {},
+  "statisticsEmptyMessage": "Add collections and items to see insights.",
+  "@statisticsEmptyMessage": {},
+  "statisticsLoadingMessage": "Loading statistics...",
+  "@statisticsLoadingMessage": {},
+  "statisticsErrorLoading": "Error loading statistics: {error}",
+  "@statisticsErrorLoading": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "statisticsPortfolioValueTitle": "Portfolio value",
+  "@statisticsPortfolioValueTitle": {},
+  "statisticsAveragePricedItem": "Avg priced item: {value}",
+  "@statisticsAveragePricedItem": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "statisticsPricedItemsBadge": "Priced items: {priced}/{total}",
+  "@statisticsPricedItemsBadge": {
+    "placeholders": {
+      "priced": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "statisticsQuantityTitle": "Total quantity",
+  "@statisticsQuantityTitle": {},
+  "statisticsFavoritesTitle": "Favorites",
+  "@statisticsFavoritesTitle": {},
+  "statisticsPercentOfItems": "{percent}% of items",
+  "@statisticsPercentOfItems": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "statisticsInventoryHealthTitle": "Inventory health",
+  "@statisticsInventoryHealthTitle": {},
+  "statisticsValuationCoverageLabel": "Valuation coverage",
+  "@statisticsValuationCoverageLabel": {},
+  "statisticsPricedCaption": "{priced} of {total} items have prices",
+  "@statisticsPricedCaption": {
+    "placeholders": {
+      "priced": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "statisticsFavoritesCoverageLabel": "Favorites coverage",
+  "@statisticsFavoritesCoverageLabel": {},
+  "statisticsFavoritesCaption": "{favorites} of {total} items are favorites",
+  "@statisticsFavoritesCaption": {
+    "placeholders": {
+      "favorites": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "statisticsWishlistCoverageLabel": "Wishlist coverage",
+  "@statisticsWishlistCoverageLabel": {},
+  "statisticsWishlistCaption": "{wishlist} of {total} items are on wishlist",
+  "@statisticsWishlistCaption": {
+    "placeholders": {
+      "wishlist": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "statisticsItemsByTypeTitle": "Items by type",
+  "@statisticsItemsByTypeTitle": {},
+  "statisticsItemsByConditionTitle": "Items by condition",
+  "@statisticsItemsByConditionTitle": {},
+  "statisticsTopValuedTitle": "Top valued collections",
+  "@statisticsTopValuedTitle": {},
+  "statisticsLargestCollectionTitle": "Largest collection",
+  "@statisticsLargestCollectionTitle": {},
+  "statisticsRecentlyCreatedTitle": "Recently created",
+  "@statisticsRecentlyCreatedTitle": {},
+  "statisticsRecentCollectionSubtitle": "{itemCount} items • {createdAt}",
+  "@statisticsRecentCollectionSubtitle": {
+    "placeholders": {
+      "itemCount": {
+        "type": "int"
+      },
+      "createdAt": {
+        "type": "String"
+      }
+    }
+  },
+  "statisticsNoChartData": "No chart data available",
+  "@statisticsNoChartData": {},
+  "statisticsTotalLabel": "Total",
+  "@statisticsTotalLabel": {},
+  "relativeToday": "Today",
+  "@relativeToday": {},
+  "relativeYesterday": "Yesterday",
+  "@relativeYesterday": {},
+  "relativeDaysAgo": "{days} days ago",
+  "@relativeDaysAgo": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "relativeWeeksAgo": "{weeks} weeks ago",
+  "@relativeWeeksAgo": {
+    "placeholders": {
+      "weeks": {
+        "type": "int"
+      }
+    }
+  },
+  "relativeMonthsAgo": "{months} months ago",
+  "@relativeMonthsAgo": {
+    "placeholders": {
+      "months": {
+        "type": "int"
+      }
+    }
+  },
+  "relativeYearsAgo": "{years} years ago",
+  "@relativeYearsAgo": {
+    "placeholders": {
+      "years": {
+        "type": "int"
+      }
+    }
+  },
+  "collectionDetailsNotFoundTitle": "Collection မတွေ့ပါ",
+  "@collectionDetailsNotFoundTitle": {},
+  "collectionDetailsNotFoundMessage": "ရွေးချယ်ထားသော collection ကို မရနိုင်ပါ။",
+  "@collectionDetailsNotFoundMessage": {},
+  "collectionDetailsCreatedLabel": "ဖန်တီးသည့်ရက်",
+  "@collectionDetailsCreatedLabel": {},
+  "collectionDetailsUpdatedLabel": "နောက်ဆုံးပြင်ဆင်ချိန်",
+  "@collectionDetailsUpdatedLabel": {},
+  "collectionDetailsLoading": "Collection တင်နေသည်...",
+  "@collectionDetailsLoading": {},
+  "collectionTypeBooks": "စာအုပ်များ",
+  "@collectionTypeBooks": {},
+  "collectionTypeGames": "ဂိမ်းများ",
+  "@collectionTypeGames": {},
+  "collectionTypeMovies": "ရုပ်ရှင်များ",
+  "@collectionTypeMovies": {},
+  "collectionTypeComics": "ကွန်မစ်များ",
+  "@collectionTypeComics": {},
+  "collectionTypeMusic": "ဂီတ",
+  "@collectionTypeMusic": {},
+  "collectionTypeCustom": "စိတ်ကြိုက်",
+  "@collectionTypeCustom": {}
 }

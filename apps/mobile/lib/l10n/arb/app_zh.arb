@@ -1,26 +1,26 @@
 {
-  "@@locale": "en",
+  "@@locale": "zh",
   "appTitle": "Collection Tracker",
   "@appTitle": {},
-  "navHome": "Home",
+  "navHome": "首页",
   "@navHome": {},
-  "navFavorites": "Favorites",
+  "navFavorites": "收藏",
   "@navFavorites": {},
-  "navWishlist": "Wishlist",
+  "navWishlist": "愿望单",
   "@navWishlist": {},
-  "navSettings": "Settings",
+  "navSettings": "设置",
   "@navSettings": {},
   "actionApply": "Apply",
   "@actionApply": {},
-  "actionCancel": "Cancel",
+  "actionCancel": "取消",
   "@actionCancel": {},
-  "actionDelete": "Delete",
+  "actionDelete": "删除",
   "@actionDelete": {},
-  "actionDismiss": "Dismiss",
+  "actionDismiss": "关闭",
   "@actionDismiss": {},
   "actionEdit": "Edit",
   "@actionEdit": {},
-  "actionImport": "Import",
+  "actionImport": "导入",
   "@actionImport": {},
   "actionRefresh": "Refresh",
   "@actionRefresh": {},
@@ -28,55 +28,55 @@
   "@actionReset": {},
   "actionSave": "Save",
   "@actionSave": {},
-  "actionSwitchToGrid": "Switch to grid",
+  "actionSwitchToGrid": "切换为网格",
   "@actionSwitchToGrid": {},
-  "actionSwitchToList": "Switch to list",
+  "actionSwitchToList": "切换为列表",
   "@actionSwitchToList": {},
   "actionUpdate": "Update",
   "@actionUpdate": {},
-  "settingsTitle": "Settings",
+  "settingsTitle": "设置",
   "@settingsTitle": {},
-  "settingsSectionGeneral": "General",
+  "settingsSectionGeneral": "通用",
   "@settingsSectionGeneral": {},
-  "settingsSectionData": "Data",
+  "settingsSectionData": "数据",
   "@settingsSectionData": {},
-  "settingsSectionAbout": "About",
+  "settingsSectionAbout": "关于",
   "@settingsSectionAbout": {},
-  "settingsThemeTitle": "Theme",
+  "settingsThemeTitle": "主题",
   "@settingsThemeTitle": {},
-  "settingsLanguageTitle": "Language",
+  "settingsLanguageTitle": "语言",
   "@settingsLanguageTitle": {},
-  "settingsExportJsonTitle": "Export to JSON",
+  "settingsExportJsonTitle": "导出为 JSON",
   "@settingsExportJsonTitle": {},
-  "settingsExportJsonSubtitle": "Export all data as JSON file",
+  "settingsExportJsonSubtitle": "将所有数据导出为 JSON 文件",
   "@settingsExportJsonSubtitle": {},
-  "settingsExportCsvTitle": "Export to CSV",
+  "settingsExportCsvTitle": "导出为 CSV",
   "@settingsExportCsvTitle": {},
-  "settingsExportCsvSubtitle": "Export items as CSV spreadsheet",
+  "settingsExportCsvSubtitle": "将项目导出为 CSV 表格",
   "@settingsExportCsvSubtitle": {},
-  "settingsImportJsonTitle": "Import from JSON",
+  "settingsImportJsonTitle": "从 JSON 导入",
   "@settingsImportJsonTitle": {},
-  "settingsImportJsonSubtitle": "Import data from JSON file",
+  "settingsImportJsonSubtitle": "从 JSON 文件导入数据",
   "@settingsImportJsonSubtitle": {},
-  "settingsCloudSyncTitle": "Cloud Sync",
+  "settingsCloudSyncTitle": "云同步",
   "@settingsCloudSyncTitle": {},
-  "settingsCloudSyncSubtitle": "Not configured",
+  "settingsCloudSyncSubtitle": "未配置",
   "@settingsCloudSyncSubtitle": {},
-  "settingsManageTagsTitle": "Manage Tags",
+  "settingsManageTagsTitle": "管理标签",
   "@settingsManageTagsTitle": {},
-  "settingsManageTagsSubtitle": "Rename, merge, and delete tags",
+  "settingsManageTagsSubtitle": "重命名、合并和删除标签",
   "@settingsManageTagsSubtitle": {},
-  "settingsVersionTitle": "Version",
+  "settingsVersionTitle": "版本",
   "@settingsVersionTitle": {},
-  "settingsPrivacyPolicyTitle": "Privacy Policy",
+  "settingsPrivacyPolicyTitle": "隐私政策",
   "@settingsPrivacyPolicyTitle": {},
-  "settingsTermsTitle": "Terms of Service",
+  "settingsTermsTitle": "服务条款",
   "@settingsTermsTitle": {},
-  "settingsExportingData": "Exporting data...",
+  "settingsExportingData": "正在导出数据...",
   "@settingsExportingData": {},
-  "settingsDataExportSuccess": "Data exported successfully!",
+  "settingsDataExportSuccess": "数据导出成功！",
   "@settingsDataExportSuccess": {},
-  "settingsExportFailed": "Export failed: {error}",
+  "settingsExportFailed": "导出失败：{error}",
   "@settingsExportFailed": {
     "placeholders": {
       "error": {
@@ -84,15 +84,15 @@
       }
     }
   },
-  "settingsImportDataTitle": "Import Data",
+  "settingsImportDataTitle": "导入数据",
   "@settingsImportDataTitle": {},
-  "settingsImportDataMessage": "This will import collections and items from a JSON file. Existing data will not be deleted.\\n\\nContinue?",
+  "settingsImportDataMessage": "这将从 JSON 文件导入集合和条目。现有数据不会被删除。\\n\\n是否继续？",
   "@settingsImportDataMessage": {},
-  "settingsImportingData": "Importing data...",
+  "settingsImportingData": "正在导入数据...",
   "@settingsImportingData": {},
-  "settingsDataImportSuccess": "Data imported successfully!",
+  "settingsDataImportSuccess": "数据导入成功！",
   "@settingsDataImportSuccess": {},
-  "settingsImportFailed": "Import failed: {error}",
+  "settingsImportFailed": "导入失败：{error}",
   "@settingsImportFailed": {
     "placeholders": {
       "error": {
@@ -100,51 +100,51 @@
       }
     }
   },
-  "settingsThemeModeTitle": "Theme Mode",
+  "settingsThemeModeTitle": "主题模式",
   "@settingsThemeModeTitle": {},
-  "settingsThemeColorVariantTitle": "Color Variant",
+  "settingsThemeColorVariantTitle": "配色",
   "@settingsThemeColorVariantTitle": {},
-  "settingsAmoledTitle": "Amoled Mode (Pure Black)",
+  "settingsAmoledTitle": "Amoled 模式（纯黑）",
   "@settingsAmoledTitle": {},
-  "settingsAmoledSubtitle": "Reduces battery consumption on OLED screens",
+  "settingsAmoledSubtitle": "在 OLED 屏幕上可降低电量消耗",
   "@settingsAmoledSubtitle": {},
-  "themeModeSystem": "System",
+  "themeModeSystem": "跟随系统",
   "@themeModeSystem": {},
-  "themeModeLight": "Light",
+  "themeModeLight": "浅色",
   "@themeModeLight": {},
-  "themeModeDark": "Dark",
+  "themeModeDark": "深色",
   "@themeModeDark": {},
-  "languageSystem": "System Default",
+  "languageSystem": "系统默认",
   "@languageSystem": {},
-  "languageEnglish": "English",
+  "languageEnglish": "英语",
   "@languageEnglish": {},
-  "languageSpanish": "Español",
+  "languageSpanish": "西班牙语",
   "@languageSpanish": {},
-  "languageIndonesian": "Bahasa Indonesia",
+  "languageIndonesian": "印尼语",
   "@languageIndonesian": {},
-  "languageJapanese": "日本語",
+  "languageJapanese": "日语",
   "@languageJapanese": {},
-  "languageKorean": "한국어",
+  "languageKorean": "韩语",
   "@languageKorean": {},
   "languageChineseSimplified": "简体中文",
   "@languageChineseSimplified": {},
-  "languageBurmese": "မြန်မာ",
+  "languageBurmese": "缅甸语",
   "@languageBurmese": {},
-  "collectionsTitle": "My Collections",
+  "collectionsTitle": "我的收藏集",
   "@collectionsTitle": {},
-  "collectionsCountLabel": "Collections",
+  "collectionsCountLabel": "收藏集",
   "@collectionsCountLabel": {},
-  "collectionsNewButton": "New Collection",
+  "collectionsNewButton": "新建收藏集",
   "@collectionsNewButton": {},
-  "collectionsActionsTooltip": "Collection actions",
+  "collectionsActionsTooltip": "收藏集操作",
   "@collectionsActionsTooltip": {},
-  "collectionsOpenAction": "Open Collection",
+  "collectionsOpenAction": "打开收藏集",
   "@collectionsOpenAction": {},
-  "collectionsEditAction": "Edit Collection",
+  "collectionsEditAction": "编辑收藏集",
   "@collectionsEditAction": {},
-  "collectionsDeleteTitle": "Delete Collection",
+  "collectionsDeleteTitle": "删除收藏集",
   "@collectionsDeleteTitle": {},
-  "collectionsDeleteMessage": "Delete \"{name}\" and {itemCount} items in this collection?",
+  "collectionsDeleteMessage": "要删除\"{name}\"以及此收藏集中的 {itemCount} 个条目吗？",
   "@collectionsDeleteMessage": {
     "placeholders": {
       "name": {
@@ -155,7 +155,7 @@
       }
     }
   },
-  "collectionsDeleted": "{name} deleted",
+  "collectionsDeleted": "已删除 {name}",
   "@collectionsDeleted": {
     "placeholders": {
       "name": {
@@ -171,11 +171,11 @@
       }
     }
   },
-  "itemsTitle": "Items",
+  "itemsTitle": "条目",
   "@itemsTitle": {},
-  "itemsCountLabel": "Items",
+  "itemsCountLabel": "条目",
   "@itemsCountLabel": {},
-  "itemsCountWithValue": "{count} items",
+  "itemsCountWithValue": "{count}个条目",
   "@itemsCountWithValue": {
     "placeholders": {
       "count": {
@@ -183,21 +183,21 @@
       }
     }
   },
-  "itemsSearchHint": "Search items...",
+  "itemsSearchHint": "搜索条目...",
   "@itemsSearchHint": {},
-  "itemsNoMatchesTitle": "No matches found",
+  "itemsNoMatchesTitle": "未找到匹配项",
   "@itemsNoMatchesTitle": {},
-  "itemsNoMatchesMessage": "Try changing filters or keywords.",
+  "itemsNoMatchesMessage": "请尝试更改筛选条件或关键词。",
   "@itemsNoMatchesMessage": {},
-  "itemsNoItemsTitle": "No items yet",
+  "itemsNoItemsTitle": "还没有条目",
   "@itemsNoItemsTitle": {},
-  "itemsNoItemsMessage": "Start by adding your first item.",
+  "itemsNoItemsMessage": "先添加第一个条目开始。",
   "@itemsNoItemsMessage": {},
-  "itemsAddButton": "Add Item",
+  "itemsAddButton": "添加条目",
   "@itemsAddButton": {},
-  "itemsLoadingMessage": "Loading items...",
+  "itemsLoadingMessage": "正在加载条目...",
   "@itemsLoadingMessage": {},
-  "itemsErrorLoading": "Error loading items: {error}",
+  "itemsErrorLoading": "加载条目失败：{error}",
   "@itemsErrorLoading": {
     "placeholders": {
       "error": {
@@ -205,9 +205,9 @@
       }
     }
   },
-  "itemsDeleteTitle": "Delete Item",
+  "itemsDeleteTitle": "删除条目",
   "@itemsDeleteTitle": {},
-  "itemsDeleteMessage": "Delete \"{name}\"?",
+  "itemsDeleteMessage": "要删除“{name}”吗？",
   "@itemsDeleteMessage": {
     "placeholders": {
       "name": {
@@ -215,7 +215,7 @@
       }
     }
   },
-  "itemsDeleted": "{name} deleted",
+  "itemsDeleted": "已删除 {name}",
   "@itemsDeleted": {
     "placeholders": {
       "name": {
@@ -223,7 +223,7 @@
       }
     }
   },
-  "itemsOverviewCount": "{count} items",
+  "itemsOverviewCount": "{count}个条目",
   "@itemsOverviewCount": {
     "placeholders": {
       "count": {
@@ -231,7 +231,7 @@
       }
     }
   },
-  "itemsSortedBy": "Sorted by {sortLabel}",
+  "itemsSortedBy": "排序方式：{sortLabel}",
   "@itemsSortedBy": {
     "placeholders": {
       "sortLabel": {
@@ -239,23 +239,23 @@
       }
     }
   },
-  "itemsCollectionDetailsTooltip": "Collection details",
+  "itemsCollectionDetailsTooltip": "收藏集详情",
   "@itemsCollectionDetailsTooltip": {},
-  "itemsFiltersTooltip": "Filters",
+  "itemsFiltersTooltip": "筛选",
   "@itemsFiltersTooltip": {},
-  "itemsFilterTitle": "Filter Items",
+  "itemsFilterTitle": "筛选条目",
   "@itemsFilterTitle": {},
-  "itemsSortByTitle": "Sort by",
+  "itemsSortByTitle": "排序方式",
   "@itemsSortByTitle": {},
-  "itemsFilterFavoritesOnly": "Favorites only",
+  "itemsFilterFavoritesOnly": "仅收藏",
   "@itemsFilterFavoritesOnly": {},
-  "itemsFilterWishlistOnly": "Wishlist only",
+  "itemsFilterWishlistOnly": "仅愿望单",
   "@itemsFilterWishlistOnly": {},
-  "itemsFilterConditionsTitle": "Condition",
+  "itemsFilterConditionsTitle": "状态",
   "@itemsFilterConditionsTitle": {},
-  "itemsTagsTitle": "Tags",
+  "itemsTagsTitle": "标签",
   "@itemsTagsTitle": {},
-  "itemsQuantityLabel": "Qty: {quantity}",
+  "itemsQuantityLabel": "数量：{quantity}",
   "@itemsQuantityLabel": {
     "placeholders": {
       "quantity": {
@@ -271,65 +271,65 @@
       }
     }
   },
-  "itemSortCustom": "Custom order",
+  "itemSortCustom": "自定义顺序",
   "@itemSortCustom": {},
-  "itemSortTitle": "Title",
+  "itemSortTitle": "标题",
   "@itemSortTitle": {},
-  "itemSortCreatedAt": "Date added",
+  "itemSortCreatedAt": "添加日期",
   "@itemSortCreatedAt": {},
-  "itemSortPurchaseDate": "Purchase date",
+  "itemSortPurchaseDate": "购买日期",
   "@itemSortPurchaseDate": {},
-  "itemSortCurrentValue": "Current value",
+  "itemSortCurrentValue": "当前价值",
   "@itemSortCurrentValue": {},
-  "itemSortQuantity": "Quantity",
+  "itemSortQuantity": "数量",
   "@itemSortQuantity": {},
-  "itemConditionMint": "Mint",
+  "itemConditionMint": "全新",
   "@itemConditionMint": {},
-  "itemConditionGood": "Good",
+  "itemConditionGood": "良好",
   "@itemConditionGood": {},
-  "itemConditionFair": "Fair",
+  "itemConditionFair": "一般",
   "@itemConditionFair": {},
-  "itemConditionPoor": "Poor",
+  "itemConditionPoor": "较差",
   "@itemConditionPoor": {},
-  "itemDetailNotFoundTitle": "Item not found",
+  "itemDetailNotFoundTitle": "未找到条目",
   "@itemDetailNotFoundTitle": {},
-  "itemDetailNotFoundMessage": "This item no longer exists.",
+  "itemDetailNotFoundMessage": "此条目已不存在。",
   "@itemDetailNotFoundMessage": {},
-  "itemDetailFavorited": "Favorited",
+  "itemDetailFavorited": "已收藏",
   "@itemDetailFavorited": {},
-  "itemDetailFavorite": "Favorite",
+  "itemDetailFavorite": "收藏",
   "@itemDetailFavorite": {},
-  "itemDetailInWishlist": "In Wishlist",
+  "itemDetailInWishlist": "在愿望单中",
   "@itemDetailInWishlist": {},
-  "itemDetailPriceTrackingTitle": "Price tracking",
+  "itemDetailPriceTrackingTitle": "价格追踪",
   "@itemDetailPriceTrackingTitle": {},
-  "itemDetailNoValueMessage": "No current value available",
+  "itemDetailNoValueMessage": "暂无当前价值",
   "@itemDetailNoValueMessage": {},
-  "itemDetailNoHistoryMessage": "No price history yet",
+  "itemDetailNoHistoryMessage": "暂无价格历史",
   "@itemDetailNoHistoryMessage": {},
-  "itemDetailPriceHistoryError": "Unable to load price history",
+  "itemDetailPriceHistoryError": "无法加载价格历史",
   "@itemDetailPriceHistoryError": {},
-  "itemDetailDetailsTitle": "Details",
+  "itemDetailDetailsTitle": "详情",
   "@itemDetailDetailsTitle": {},
-  "itemDetailBarcodeLabel": "Barcode",
+  "itemDetailBarcodeLabel": "条形码",
   "@itemDetailBarcodeLabel": {},
-  "itemDetailConditionLabel": "Condition",
+  "itemDetailConditionLabel": "状态",
   "@itemDetailConditionLabel": {},
-  "itemDetailQuantityLabel": "Quantity",
+  "itemDetailQuantityLabel": "数量",
   "@itemDetailQuantityLabel": {},
-  "itemDetailLocationLabel": "Location",
+  "itemDetailLocationLabel": "位置",
   "@itemDetailLocationLabel": {},
-  "itemDetailPurchasePriceLabel": "Purchase price",
+  "itemDetailPurchasePriceLabel": "购买价格",
   "@itemDetailPurchasePriceLabel": {},
-  "itemDetailCurrentValueLabel": "Current value",
+  "itemDetailCurrentValueLabel": "当前价值",
   "@itemDetailCurrentValueLabel": {},
-  "itemDetailPurchaseDateLabel": "Purchase date",
+  "itemDetailPurchaseDateLabel": "购买日期",
   "@itemDetailPurchaseDateLabel": {},
-  "itemDetailNotesTitle": "Notes",
+  "itemDetailNotesTitle": "备注",
   "@itemDetailNotesTitle": {},
-  "itemDetailLoadingMessage": "Loading item details...",
+  "itemDetailLoadingMessage": "正在加载条目详情...",
   "@itemDetailLoadingMessage": {},
-  "itemDetailErrorLoading": "Error loading item details: {error}",
+  "itemDetailErrorLoading": "加载条目详情失败：{error}",
   "@itemDetailErrorLoading": {
     "placeholders": {
       "error": {
@@ -337,11 +337,11 @@
       }
     }
   },
-  "itemDetailUpdateValueTitle": "Update current value",
+  "itemDetailUpdateValueTitle": "更新当前价值",
   "@itemDetailUpdateValueTitle": {},
-  "itemDetailCurrentValueUpdated": "Current value updated",
+  "itemDetailCurrentValueUpdated": "当前价值已更新",
   "@itemDetailCurrentValueUpdated": {},
-  "itemDetailUpdateValueFailed": "Failed to update value: {error}",
+  "itemDetailUpdateValueFailed": "更新价值失败：{error}",
   "@itemDetailUpdateValueFailed": {
     "placeholders": {
       "error": {
@@ -349,15 +349,15 @@
       }
     }
   },
-  "addItemTitle": "Add Item",
+  "addItemTitle": "添加条目",
   "@addItemTitle": {},
-  "addItemSubmit": "Add Item",
+  "addItemSubmit": "添加条目",
   "@addItemSubmit": {},
-  "addItemTitleHint": "e.g., The Lord of the Rings",
+  "addItemTitleHint": "例如：《指环王》",
   "@addItemTitleHint": {},
-  "addItemFetchingMetadata": "Fetching metadata...",
+  "addItemFetchingMetadata": "正在获取元数据...",
   "@addItemFetchingMetadata": {},
-  "addItemMatchedMetadata": "Matched {source} metadata",
+  "addItemMatchedMetadata": "已匹配 {source} 元数据",
   "@addItemMatchedMetadata": {
     "placeholders": {
       "source": {
@@ -365,11 +365,11 @@
       }
     }
   },
-  "addItemTagsHint": "e.g., Rare, Completed Set",
+  "addItemTagsHint": "例如：稀有、完整套装",
   "@addItemTagsHint": {},
-  "addItemSuccess": "Item added successfully",
+  "addItemSuccess": "条目添加成功",
   "@addItemSuccess": {},
-  "addItemError": "Error adding item: {error}",
+  "addItemError": "添加条目失败：{error}",
   "@addItemError": {
     "placeholders": {
       "error": {
@@ -377,11 +377,11 @@
       }
     }
   },
-  "editItemTitle": "Edit Item",
+  "editItemTitle": "编辑条目",
   "@editItemTitle": {},
-  "editItemLoading": "Loading item...",
+  "editItemLoading": "正在加载条目...",
   "@editItemLoading": {},
-  "editItemError": "Error: {error}",
+  "editItemError": "错误：{error}",
   "@editItemError": {
     "placeholders": {
       "error": {
@@ -389,13 +389,13 @@
       }
     }
   },
-  "editItemSaveChanges": "Save Changes",
+  "editItemSaveChanges": "保存更改",
   "@editItemSaveChanges": {},
-  "editItemTagsHint": "e.g., Signed, First Edition",
+  "editItemTagsHint": "例如：签名版、初版",
   "@editItemTagsHint": {},
-  "editItemSuccess": "Item updated successfully",
+  "editItemSuccess": "条目更新成功",
   "@editItemSuccess": {},
-  "editItemUpdateError": "Error updating item: {error}",
+  "editItemUpdateError": "更新条目失败：{error}",
   "@editItemUpdateError": {
     "placeholders": {
       "error": {
@@ -403,49 +403,49 @@
       }
     }
   },
-  "itemFormTitleLabel": "Title",
+  "itemFormTitleLabel": "标题",
   "@itemFormTitleLabel": {},
-  "itemFormTitleRequired": "Please enter a title",
+  "itemFormTitleRequired": "请输入标题",
   "@itemFormTitleRequired": {},
-  "itemFormBarcodeLabelOptional": "Barcode (optional)",
+  "itemFormBarcodeLabelOptional": "条形码（可选）",
   "@itemFormBarcodeLabelOptional": {},
-  "itemFormBarcodeHint": "ISBN, UPC, etc.",
+  "itemFormBarcodeHint": "ISBN、UPC 等",
   "@itemFormBarcodeHint": {},
-  "itemFormDescriptionLabelOptional": "Description (optional)",
+  "itemFormDescriptionLabelOptional": "描述（可选）",
   "@itemFormDescriptionLabelOptional": {},
-  "itemFormDescriptionHint": "Add a description",
+  "itemFormDescriptionHint": "添加描述",
   "@itemFormDescriptionHint": {},
-  "itemFormTagsLabelOptional": "Tags (optional)",
+  "itemFormTagsLabelOptional": "标签（可选）",
   "@itemFormTagsLabelOptional": {},
-  "itemFormPurchaseDateLabelOptional": "Purchase Date (optional)",
+  "itemFormPurchaseDateLabelOptional": "购买日期（可选）",
   "@itemFormPurchaseDateLabelOptional": {},
-  "itemFormConditionLabelOptional": "Condition (optional)",
+  "itemFormConditionLabelOptional": "状态（可选）",
   "@itemFormConditionLabelOptional": {},
-  "itemFormQuantityRequired": "Please enter quantity",
+  "itemFormQuantityRequired": "请输入数量",
   "@itemFormQuantityRequired": {},
-  "itemFormQuantityInvalid": "Please enter a valid quantity",
+  "itemFormQuantityInvalid": "请输入有效数量",
   "@itemFormQuantityInvalid": {},
-  "itemFormLocationLabelOptional": "Location (optional)",
+  "itemFormLocationLabelOptional": "位置（可选）",
   "@itemFormLocationLabelOptional": {},
-  "itemFormLocationHint": "e.g., Shelf A, Box 3",
+  "itemFormLocationHint": "例如：A架，3号箱",
   "@itemFormLocationHint": {},
-  "itemFormNotesLabelOptional": "Notes (optional)",
+  "itemFormNotesLabelOptional": "备注（可选）",
   "@itemFormNotesLabelOptional": {},
-  "itemFormInvalidPrice": "Invalid price",
+  "itemFormInvalidPrice": "价格无效",
   "@itemFormInvalidPrice": {},
-  "itemFormMustBePositive": "Must be positive",
+  "itemFormMustBePositive": "必须为正数",
   "@itemFormMustBePositive": {},
-  "itemTagsEditorHint": "Add a tag",
+  "itemTagsEditorHint": "添加标签",
   "@itemTagsEditorHint": {},
-  "itemTagsEditorAddTooltip": "Add tag",
+  "itemTagsEditorAddTooltip": "添加标签",
   "@itemTagsEditorAddTooltip": {},
-  "itemTagsEditorEmptyMessage": "No tags yet. Add tags to organize items faster.",
+  "itemTagsEditorEmptyMessage": "还没有标签。添加标签可更快整理条目。",
   "@itemTagsEditorEmptyMessage": {},
-  "itemTagsEditorTooLong": "Tags must be 50 characters or less",
+  "itemTagsEditorTooLong": "标签最多 50 个字符",
   "@itemTagsEditorTooLong": {},
-  "globalItemsLoading": "Loading items...",
+  "globalItemsLoading": "正在加载条目...",
   "@globalItemsLoading": {},
-  "globalItemsErrorLoading": "Error: {error}",
+  "globalItemsErrorLoading": "错误：{error}",
   "@globalItemsErrorLoading": {
     "placeholders": {
       "error": {
@@ -453,15 +453,15 @@
       }
     }
   },
-  "globalItemsNoFavoritesTitle": "No favorite items yet",
+  "globalItemsNoFavoritesTitle": "还没有收藏条目",
   "@globalItemsNoFavoritesTitle": {},
-  "globalItemsNoFavoritesMessage": "Mark items as favorite to see them here.",
+  "globalItemsNoFavoritesMessage": "将条目标记为收藏后会显示在这里。",
   "@globalItemsNoFavoritesMessage": {},
-  "globalItemsNoWishlistTitle": "Your wishlist is empty",
+  "globalItemsNoWishlistTitle": "你的愿望单是空的",
   "@globalItemsNoWishlistTitle": {},
-  "globalItemsNoWishlistMessage": "Save items to wishlist and access them here.",
+  "globalItemsNoWishlistMessage": "将条目保存到愿望单后可在这里查看。",
   "@globalItemsNoWishlistMessage": {},
-  "metadataSearchFieldLabel": "Search {collectionType} by title",
+  "metadataSearchFieldLabel": "按标题搜索 {collectionType}",
   "@metadataSearchFieldLabel": {
     "placeholders": {
       "collectionType": {
@@ -469,13 +469,13 @@
       }
     }
   },
-  "metadataSearchEmptyTitle": "Search metadata",
+  "metadataSearchEmptyTitle": "搜索元数据",
   "@metadataSearchEmptyTitle": {},
-  "metadataSearchEmptyMessage": "Enter a title to search.",
+  "metadataSearchEmptyMessage": "输入标题以搜索。",
   "@metadataSearchEmptyMessage": {},
-  "metadataSearchLoading": "Searching metadata...",
+  "metadataSearchLoading": "正在搜索元数据...",
   "@metadataSearchLoading": {},
-  "metadataSearchError": "Error: {error}",
+  "metadataSearchError": "错误：{error}",
   "@metadataSearchError": {
     "placeholders": {
       "error": {
@@ -483,15 +483,15 @@
       }
     }
   },
-  "metadataSearchNoResultsTitle": "No results",
+  "metadataSearchNoResultsTitle": "无结果",
   "@metadataSearchNoResultsTitle": {},
-  "metadataSearchNoResultsMessage": "No metadata found for this title.",
+  "metadataSearchNoResultsMessage": "未找到该标题的元数据。",
   "@metadataSearchNoResultsMessage": {},
-  "metadataSearchSuggestionTitle": "Search by title",
+  "metadataSearchSuggestionTitle": "按标题搜索",
   "@metadataSearchSuggestionTitle": {},
-  "metadataSearchSuggestionMessage": "Start typing to look up metadata.",
+  "metadataSearchSuggestionMessage": "开始输入以查找元数据。",
   "@metadataSearchSuggestionMessage": {},
-  "tagItemsTitle": "Tag: {tag}",
+  "tagItemsTitle": "标签：{tag}",
   "@tagItemsTitle": {
     "placeholders": {
       "tag": {
@@ -499,19 +499,19 @@
       }
     }
   },
-  "tagItemsSortTooltip": "Sort",
+  "tagItemsSortTooltip": "排序",
   "@tagItemsSortTooltip": {},
-  "tagItemsSortNewest": "Sort: Newest",
+  "tagItemsSortNewest": "排序：最新",
   "@tagItemsSortNewest": {},
-  "tagItemsSortOldest": "Sort: Oldest",
+  "tagItemsSortOldest": "排序：最早",
   "@tagItemsSortOldest": {},
-  "tagItemsSortTitle": "Sort: Title",
+  "tagItemsSortTitle": "排序：标题",
   "@tagItemsSortTitle": {},
-  "tagItemsLoadingCollections": "Loading collections...",
+  "tagItemsLoadingCollections": "正在加载收藏集...",
   "@tagItemsLoadingCollections": {},
-  "tagItemsLoadingItems": "Loading tagged items...",
+  "tagItemsLoadingItems": "正在加载带标签条目...",
   "@tagItemsLoadingItems": {},
-  "tagItemsError": "Error: {error}",
+  "tagItemsError": "错误：{error}",
   "@tagItemsError": {
     "placeholders": {
       "error": {
@@ -519,15 +519,15 @@
       }
     }
   },
-  "tagItemsEmptyTitle": "No items found",
+  "tagItemsEmptyTitle": "未找到条目",
   "@tagItemsEmptyTitle": {},
-  "tagItemsEmptyMessage": "No collection items currently use this tag.",
+  "tagItemsEmptyMessage": "当前没有条目使用此标签。",
   "@tagItemsEmptyMessage": {},
-  "tagItemsUnknownCollection": "Unknown",
+  "tagItemsUnknownCollection": "未知",
   "@tagItemsUnknownCollection": {},
-  "tagItemsOpenCollectionTooltip": "Open collection",
+  "tagItemsOpenCollectionTooltip": "打开收藏集",
   "@tagItemsOpenCollectionTooltip": {},
-  "tagItemsDeleteFailed": "Delete failed: {error}",
+  "tagItemsDeleteFailed": "删除失败：{error}",
   "@tagItemsDeleteFailed": {
     "placeholders": {
       "error": {
@@ -535,9 +535,9 @@
       }
     }
   },
-  "tagManagementTitle": "Manage Tags",
+  "tagManagementTitle": "管理标签",
   "@tagManagementTitle": {},
-  "tagManagementSelectedCount": "{count} selected",
+  "tagManagementSelectedCount": "已选择 {count} 个",
   "@tagManagementSelectedCount": {
     "placeholders": {
       "count": {
@@ -545,15 +545,15 @@
       }
     }
   },
-  "tagManagementCancelSelectionTooltip": "Cancel selection",
+  "tagManagementCancelSelectionTooltip": "取消选择",
   "@tagManagementCancelSelectionTooltip": {},
-  "tagManagementSelectTagsTooltip": "Select tags",
+  "tagManagementSelectTagsTooltip": "选择标签",
   "@tagManagementSelectTagsTooltip": {},
-  "tagManagementSearchHint": "Search tags...",
+  "tagManagementSearchHint": "搜索标签...",
   "@tagManagementSearchHint": {},
-  "tagManagementEmptyTitle": "No tags created yet",
+  "tagManagementEmptyTitle": "还没有创建标签",
   "@tagManagementEmptyTitle": {},
-  "tagManagementNoMatch": "No tags match \"{query}\"",
+  "tagManagementNoMatch": "没有与“{query}”匹配的标签",
   "@tagManagementNoMatch": {
     "placeholders": {
       "query": {
@@ -561,13 +561,13 @@
       }
     }
   },
-  "tagManagementSelectVisible": "Select visible",
+  "tagManagementSelectVisible": "选择可见项",
   "@tagManagementSelectVisible": {},
-  "tagManagementSelectAllMatches": "Select all matches",
+  "tagManagementSelectAllMatches": "选择全部匹配项",
   "@tagManagementSelectAllMatches": {},
-  "tagManagementClearSelection": "Clear selection",
+  "tagManagementClearSelection": "清除选择",
   "@tagManagementClearSelection": {},
-  "tagManagementScrollMore": "Scroll to load {remaining} more tags",
+  "tagManagementScrollMore": "滚动以加载另外 {remaining} 个标签",
   "@tagManagementScrollMore": {
     "placeholders": {
       "remaining": {
@@ -575,9 +575,9 @@
       }
     }
   },
-  "tagManagementUsedInOne": "Used in 1 item",
+  "tagManagementUsedInOne": "用于 1 个条目",
   "@tagManagementUsedInOne": {},
-  "tagManagementUsedInMany": "Used in {count} items",
+  "tagManagementUsedInMany": "用于 {count} 个条目",
   "@tagManagementUsedInMany": {
     "placeholders": {
       "count": {
@@ -585,13 +585,13 @@
       }
     }
   },
-  "tagManagementRenameAction": "Rename",
+  "tagManagementRenameAction": "重命名",
   "@tagManagementRenameAction": {},
-  "tagManagementMergeAction": "Merge",
+  "tagManagementMergeAction": "合并",
   "@tagManagementMergeAction": {},
-  "tagManagementMergeIntoAction": "Merge Into...",
+  "tagManagementMergeIntoAction": "合并到...",
   "@tagManagementMergeIntoAction": {},
-  "tagManagementLoadError": "Failed to load tags: {error}",
+  "tagManagementLoadError": "加载标签失败：{error}",
   "@tagManagementLoadError": {
     "placeholders": {
       "error": {
@@ -599,11 +599,11 @@
       }
     }
   },
-  "tagManagementRenameTitle": "Rename Tag",
+  "tagManagementRenameTitle": "重命名标签",
   "@tagManagementRenameTitle": {},
-  "tagManagementNewNameLabel": "New name",
+  "tagManagementNewNameLabel": "新名称",
   "@tagManagementNewNameLabel": {},
-  "tagManagementRenameSuccess": "\"{oldName}\" renamed to \"{newName}\"",
+  "tagManagementRenameSuccess": "“{oldName}”已重命名为“{newName}”",
   "@tagManagementRenameSuccess": {
     "placeholders": {
       "oldName": {
@@ -614,11 +614,11 @@
       }
     }
   },
-  "tagManagementMergeSelectedTitle": "Merge Selected Tags",
+  "tagManagementMergeSelectedTitle": "合并所选标签",
   "@tagManagementMergeSelectedTitle": {},
-  "tagManagementChooseDestination": "Choose destination tag:",
+  "tagManagementChooseDestination": "选择目标标签：",
   "@tagManagementChooseDestination": {},
-  "tagManagementMergeSelectedSuccess": "Merged {count} tags into \"{destination}\"",
+  "tagManagementMergeSelectedSuccess": "已将 {count} 个标签合并到“{destination}”",
   "@tagManagementMergeSelectedSuccess": {
     "placeholders": {
       "count": {
@@ -629,9 +629,9 @@
       }
     }
   },
-  "tagManagementDeleteSelectedTitle": "Delete Selected Tags",
+  "tagManagementDeleteSelectedTitle": "删除所选标签",
   "@tagManagementDeleteSelectedTitle": {},
-  "tagManagementDeleteSelectedMessage": "Delete {count} selected tags from all items?\\n\\nThis cannot be undone.",
+  "tagManagementDeleteSelectedMessage": "要从所有条目中删除所选的 {count} 个标签吗？\\n\\n此操作无法撤销。",
   "@tagManagementDeleteSelectedMessage": {
     "placeholders": {
       "count": {
@@ -639,7 +639,7 @@
       }
     }
   },
-  "tagManagementDeleteSelectedSuccess": "Deleted {count} tags",
+  "tagManagementDeleteSelectedSuccess": "已删除 {count} 个标签",
   "@tagManagementDeleteSelectedSuccess": {
     "placeholders": {
       "count": {
@@ -647,9 +647,9 @@
       }
     }
   },
-  "tagManagementMergeIntoTitle": "Merge Into",
+  "tagManagementMergeIntoTitle": "合并到",
   "@tagManagementMergeIntoTitle": {},
-  "tagManagementMergeSuccess": "\"{source}\" merged into \"{target}\"",
+  "tagManagementMergeSuccess": "已将“{source}”合并到“{target}”",
   "@tagManagementMergeSuccess": {
     "placeholders": {
       "source": {
@@ -660,9 +660,9 @@
       }
     }
   },
-  "tagManagementDeleteTitle": "Delete Tag",
+  "tagManagementDeleteTitle": "删除标签",
   "@tagManagementDeleteTitle": {},
-  "tagManagementDeleteMessage": "Delete \"{tagName}\" from all items?\\n\\nThis cannot be undone.",
+  "tagManagementDeleteMessage": "要从所有条目中删除“{tagName}”吗？\\n\\n此操作无法撤销。",
   "@tagManagementDeleteMessage": {
     "placeholders": {
       "tagName": {
@@ -670,7 +670,7 @@
       }
     }
   },
-  "tagManagementDeleteSuccess": "\"{tagName}\" deleted",
+  "tagManagementDeleteSuccess": "已删除“{tagName}”",
   "@tagManagementDeleteSuccess": {
     "placeholders": {
       "tagName": {
@@ -678,7 +678,7 @@
       }
     }
   },
-  "tagManagementMutationError": "Tag update failed: {error}",
+  "tagManagementMutationError": "标签更新失败：{error}",
   "@tagManagementMutationError": {
     "placeholders": {
       "error": {
@@ -686,15 +686,15 @@
       }
     }
   },
-  "statisticsTitle": "Statistics",
+  "statisticsTitle": "统计",
   "@statisticsTitle": {},
-  "statisticsEmptyTitle": "No statistics yet",
+  "statisticsEmptyTitle": "暂无统计",
   "@statisticsEmptyTitle": {},
-  "statisticsEmptyMessage": "Add collections and items to see insights.",
+  "statisticsEmptyMessage": "添加收藏集和条目后即可查看洞察。",
   "@statisticsEmptyMessage": {},
-  "statisticsLoadingMessage": "Loading statistics...",
+  "statisticsLoadingMessage": "正在加载统计...",
   "@statisticsLoadingMessage": {},
-  "statisticsErrorLoading": "Error loading statistics: {error}",
+  "statisticsErrorLoading": "加载统计失败：{error}",
   "@statisticsErrorLoading": {
     "placeholders": {
       "error": {
@@ -702,9 +702,9 @@
       }
     }
   },
-  "statisticsPortfolioValueTitle": "Portfolio value",
+  "statisticsPortfolioValueTitle": "资产总价值",
   "@statisticsPortfolioValueTitle": {},
-  "statisticsAveragePricedItem": "Avg priced item: {value}",
+  "statisticsAveragePricedItem": "已估值条目均值：{value}",
   "@statisticsAveragePricedItem": {
     "placeholders": {
       "value": {
@@ -712,7 +712,7 @@
       }
     }
   },
-  "statisticsPricedItemsBadge": "Priced items: {priced}/{total}",
+  "statisticsPricedItemsBadge": "已估值条目：{priced}/{total}",
   "@statisticsPricedItemsBadge": {
     "placeholders": {
       "priced": {
@@ -723,11 +723,11 @@
       }
     }
   },
-  "statisticsQuantityTitle": "Total quantity",
+  "statisticsQuantityTitle": "总数量",
   "@statisticsQuantityTitle": {},
-  "statisticsFavoritesTitle": "Favorites",
+  "statisticsFavoritesTitle": "收藏",
   "@statisticsFavoritesTitle": {},
-  "statisticsPercentOfItems": "{percent}% of items",
+  "statisticsPercentOfItems": "占条目 {percent}%",
   "@statisticsPercentOfItems": {
     "placeholders": {
       "percent": {
@@ -735,11 +735,11 @@
       }
     }
   },
-  "statisticsInventoryHealthTitle": "Inventory health",
+  "statisticsInventoryHealthTitle": "库存健康度",
   "@statisticsInventoryHealthTitle": {},
-  "statisticsValuationCoverageLabel": "Valuation coverage",
+  "statisticsValuationCoverageLabel": "估值覆盖率",
   "@statisticsValuationCoverageLabel": {},
-  "statisticsPricedCaption": "{priced} of {total} items have prices",
+  "statisticsPricedCaption": "{total}个条目中有{priced}个已设价格",
   "@statisticsPricedCaption": {
     "placeholders": {
       "priced": {
@@ -750,9 +750,9 @@
       }
     }
   },
-  "statisticsFavoritesCoverageLabel": "Favorites coverage",
+  "statisticsFavoritesCoverageLabel": "收藏覆盖率",
   "@statisticsFavoritesCoverageLabel": {},
-  "statisticsFavoritesCaption": "{favorites} of {total} items are favorites",
+  "statisticsFavoritesCaption": "{total}个条目中有{favorites}个为收藏",
   "@statisticsFavoritesCaption": {
     "placeholders": {
       "favorites": {
@@ -763,9 +763,9 @@
       }
     }
   },
-  "statisticsWishlistCoverageLabel": "Wishlist coverage",
+  "statisticsWishlistCoverageLabel": "愿望单覆盖率",
   "@statisticsWishlistCoverageLabel": {},
-  "statisticsWishlistCaption": "{wishlist} of {total} items are on wishlist",
+  "statisticsWishlistCaption": "{total}个条目中有{wishlist}个在愿望单",
   "@statisticsWishlistCaption": {
     "placeholders": {
       "wishlist": {
@@ -776,17 +776,17 @@
       }
     }
   },
-  "statisticsItemsByTypeTitle": "Items by type",
+  "statisticsItemsByTypeTitle": "按类型统计条目",
   "@statisticsItemsByTypeTitle": {},
-  "statisticsItemsByConditionTitle": "Items by condition",
+  "statisticsItemsByConditionTitle": "按状态统计条目",
   "@statisticsItemsByConditionTitle": {},
-  "statisticsTopValuedTitle": "Top valued collections",
+  "statisticsTopValuedTitle": "高价值收藏集",
   "@statisticsTopValuedTitle": {},
-  "statisticsLargestCollectionTitle": "Largest collection",
+  "statisticsLargestCollectionTitle": "最大收藏集",
   "@statisticsLargestCollectionTitle": {},
-  "statisticsRecentlyCreatedTitle": "Recently created",
+  "statisticsRecentlyCreatedTitle": "最近创建",
   "@statisticsRecentlyCreatedTitle": {},
-  "statisticsRecentCollectionSubtitle": "{itemCount} items • {createdAt}",
+  "statisticsRecentCollectionSubtitle": "{itemCount}个条目 • {createdAt}",
   "@statisticsRecentCollectionSubtitle": {
     "placeholders": {
       "itemCount": {
@@ -797,15 +797,15 @@
       }
     }
   },
-  "statisticsNoChartData": "No chart data available",
+  "statisticsNoChartData": "暂无图表数据",
   "@statisticsNoChartData": {},
-  "statisticsTotalLabel": "Total",
+  "statisticsTotalLabel": "总计",
   "@statisticsTotalLabel": {},
-  "relativeToday": "Today",
+  "relativeToday": "今天",
   "@relativeToday": {},
-  "relativeYesterday": "Yesterday",
+  "relativeYesterday": "昨天",
   "@relativeYesterday": {},
-  "relativeDaysAgo": "{days} days ago",
+  "relativeDaysAgo": "{days}天前",
   "@relativeDaysAgo": {
     "placeholders": {
       "days": {
@@ -813,7 +813,7 @@
       }
     }
   },
-  "relativeWeeksAgo": "{weeks} weeks ago",
+  "relativeWeeksAgo": "{weeks}周前",
   "@relativeWeeksAgo": {
     "placeholders": {
       "weeks": {
@@ -821,7 +821,7 @@
       }
     }
   },
-  "relativeMonthsAgo": "{months} months ago",
+  "relativeMonthsAgo": "{months}个月前",
   "@relativeMonthsAgo": {
     "placeholders": {
       "months": {
@@ -829,7 +829,7 @@
       }
     }
   },
-  "relativeYearsAgo": "{years} years ago",
+  "relativeYearsAgo": "{years}年前",
   "@relativeYearsAgo": {
     "placeholders": {
       "years": {
@@ -837,26 +837,26 @@
       }
     }
   },
-  "collectionDetailsNotFoundTitle": "Collection not found",
+  "collectionDetailsNotFoundTitle": "未找到收藏集",
   "@collectionDetailsNotFoundTitle": {},
-  "collectionDetailsNotFoundMessage": "The selected collection is not available.",
+  "collectionDetailsNotFoundMessage": "所选收藏集不可用。",
   "@collectionDetailsNotFoundMessage": {},
-  "collectionDetailsCreatedLabel": "Created",
+  "collectionDetailsCreatedLabel": "创建时间",
   "@collectionDetailsCreatedLabel": {},
-  "collectionDetailsUpdatedLabel": "Last Updated",
+  "collectionDetailsUpdatedLabel": "最后更新",
   "@collectionDetailsUpdatedLabel": {},
-  "collectionDetailsLoading": "Loading collection...",
+  "collectionDetailsLoading": "正在加载收藏集...",
   "@collectionDetailsLoading": {},
-  "collectionTypeBooks": "Books",
+  "collectionTypeBooks": "图书",
   "@collectionTypeBooks": {},
-  "collectionTypeGames": "Games",
+  "collectionTypeGames": "游戏",
   "@collectionTypeGames": {},
-  "collectionTypeMovies": "Movies",
+  "collectionTypeMovies": "电影",
   "@collectionTypeMovies": {},
-  "collectionTypeComics": "Comics",
+  "collectionTypeComics": "漫画",
   "@collectionTypeComics": {},
-  "collectionTypeMusic": "Music",
+  "collectionTypeMusic": "音乐",
   "@collectionTypeMusic": {},
-  "collectionTypeCustom": "Custom",
+  "collectionTypeCustom": "自定义",
   "@collectionTypeCustom": {}
 }

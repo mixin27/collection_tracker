@@ -1,26 +1,26 @@
 {
-  "@@locale": "en",
+  "@@locale": "es",
   "appTitle": "Collection Tracker",
   "@appTitle": {},
-  "navHome": "Home",
+  "navHome": "Inicio",
   "@navHome": {},
-  "navFavorites": "Favorites",
+  "navFavorites": "Favoritos",
   "@navFavorites": {},
-  "navWishlist": "Wishlist",
+  "navWishlist": "Deseados",
   "@navWishlist": {},
-  "navSettings": "Settings",
+  "navSettings": "Ajustes",
   "@navSettings": {},
   "actionApply": "Apply",
   "@actionApply": {},
-  "actionCancel": "Cancel",
+  "actionCancel": "Cancelar",
   "@actionCancel": {},
-  "actionDelete": "Delete",
+  "actionDelete": "Eliminar",
   "@actionDelete": {},
-  "actionDismiss": "Dismiss",
+  "actionDismiss": "Cerrar",
   "@actionDismiss": {},
   "actionEdit": "Edit",
   "@actionEdit": {},
-  "actionImport": "Import",
+  "actionImport": "Importar",
   "@actionImport": {},
   "actionRefresh": "Refresh",
   "@actionRefresh": {},
@@ -28,55 +28,55 @@
   "@actionReset": {},
   "actionSave": "Save",
   "@actionSave": {},
-  "actionSwitchToGrid": "Switch to grid",
+  "actionSwitchToGrid": "Cambiar a cuadrícula",
   "@actionSwitchToGrid": {},
-  "actionSwitchToList": "Switch to list",
+  "actionSwitchToList": "Cambiar a lista",
   "@actionSwitchToList": {},
   "actionUpdate": "Update",
   "@actionUpdate": {},
-  "settingsTitle": "Settings",
+  "settingsTitle": "Ajustes",
   "@settingsTitle": {},
   "settingsSectionGeneral": "General",
   "@settingsSectionGeneral": {},
-  "settingsSectionData": "Data",
+  "settingsSectionData": "Datos",
   "@settingsSectionData": {},
-  "settingsSectionAbout": "About",
+  "settingsSectionAbout": "Acerca de",
   "@settingsSectionAbout": {},
-  "settingsThemeTitle": "Theme",
+  "settingsThemeTitle": "Tema",
   "@settingsThemeTitle": {},
-  "settingsLanguageTitle": "Language",
+  "settingsLanguageTitle": "Idioma",
   "@settingsLanguageTitle": {},
-  "settingsExportJsonTitle": "Export to JSON",
+  "settingsExportJsonTitle": "Exportar a JSON",
   "@settingsExportJsonTitle": {},
-  "settingsExportJsonSubtitle": "Export all data as JSON file",
+  "settingsExportJsonSubtitle": "Exportar todos los datos como JSON",
   "@settingsExportJsonSubtitle": {},
-  "settingsExportCsvTitle": "Export to CSV",
+  "settingsExportCsvTitle": "Exportar a CSV",
   "@settingsExportCsvTitle": {},
-  "settingsExportCsvSubtitle": "Export items as CSV spreadsheet",
+  "settingsExportCsvSubtitle": "Exportar artículos como hoja CSV",
   "@settingsExportCsvSubtitle": {},
-  "settingsImportJsonTitle": "Import from JSON",
+  "settingsImportJsonTitle": "Importar desde JSON",
   "@settingsImportJsonTitle": {},
-  "settingsImportJsonSubtitle": "Import data from JSON file",
+  "settingsImportJsonSubtitle": "Importar datos desde archivo JSON",
   "@settingsImportJsonSubtitle": {},
-  "settingsCloudSyncTitle": "Cloud Sync",
+  "settingsCloudSyncTitle": "Sincronización en la nube",
   "@settingsCloudSyncTitle": {},
-  "settingsCloudSyncSubtitle": "Not configured",
+  "settingsCloudSyncSubtitle": "No configurado",
   "@settingsCloudSyncSubtitle": {},
-  "settingsManageTagsTitle": "Manage Tags",
+  "settingsManageTagsTitle": "Gestionar etiquetas",
   "@settingsManageTagsTitle": {},
-  "settingsManageTagsSubtitle": "Rename, merge, and delete tags",
+  "settingsManageTagsSubtitle": "Renombrar, combinar y eliminar etiquetas",
   "@settingsManageTagsSubtitle": {},
-  "settingsVersionTitle": "Version",
+  "settingsVersionTitle": "Versión",
   "@settingsVersionTitle": {},
-  "settingsPrivacyPolicyTitle": "Privacy Policy",
+  "settingsPrivacyPolicyTitle": "Política de privacidad",
   "@settingsPrivacyPolicyTitle": {},
-  "settingsTermsTitle": "Terms of Service",
+  "settingsTermsTitle": "Términos de servicio",
   "@settingsTermsTitle": {},
-  "settingsExportingData": "Exporting data...",
+  "settingsExportingData": "Exportando datos...",
   "@settingsExportingData": {},
-  "settingsDataExportSuccess": "Data exported successfully!",
+  "settingsDataExportSuccess": "¡Datos exportados correctamente!",
   "@settingsDataExportSuccess": {},
-  "settingsExportFailed": "Export failed: {error}",
+  "settingsExportFailed": "Error de exportación: {error}",
   "@settingsExportFailed": {
     "placeholders": {
       "error": {
@@ -84,15 +84,15 @@
       }
     }
   },
-  "settingsImportDataTitle": "Import Data",
+  "settingsImportDataTitle": "Importar datos",
   "@settingsImportDataTitle": {},
-  "settingsImportDataMessage": "This will import collections and items from a JSON file. Existing data will not be deleted.\\n\\nContinue?",
+  "settingsImportDataMessage": "Esto importará colecciones y artículos desde un archivo JSON. Los datos existentes no se eliminarán.\\n\\n¿Continuar?",
   "@settingsImportDataMessage": {},
-  "settingsImportingData": "Importing data...",
+  "settingsImportingData": "Importando datos...",
   "@settingsImportingData": {},
-  "settingsDataImportSuccess": "Data imported successfully!",
+  "settingsDataImportSuccess": "¡Datos importados correctamente!",
   "@settingsDataImportSuccess": {},
-  "settingsImportFailed": "Import failed: {error}",
+  "settingsImportFailed": "Error de importación: {error}",
   "@settingsImportFailed": {
     "placeholders": {
       "error": {
@@ -100,51 +100,51 @@
       }
     }
   },
-  "settingsThemeModeTitle": "Theme Mode",
+  "settingsThemeModeTitle": "Modo de tema",
   "@settingsThemeModeTitle": {},
-  "settingsThemeColorVariantTitle": "Color Variant",
+  "settingsThemeColorVariantTitle": "Variante de color",
   "@settingsThemeColorVariantTitle": {},
-  "settingsAmoledTitle": "Amoled Mode (Pure Black)",
+  "settingsAmoledTitle": "Modo Amoled (negro puro)",
   "@settingsAmoledTitle": {},
-  "settingsAmoledSubtitle": "Reduces battery consumption on OLED screens",
+  "settingsAmoledSubtitle": "Reduce el consumo de batería en pantallas OLED",
   "@settingsAmoledSubtitle": {},
-  "themeModeSystem": "System",
+  "themeModeSystem": "Sistema",
   "@themeModeSystem": {},
-  "themeModeLight": "Light",
+  "themeModeLight": "Claro",
   "@themeModeLight": {},
-  "themeModeDark": "Dark",
+  "themeModeDark": "Oscuro",
   "@themeModeDark": {},
-  "languageSystem": "System Default",
+  "languageSystem": "Predeterminado del sistema",
   "@languageSystem": {},
-  "languageEnglish": "English",
+  "languageEnglish": "Inglés",
   "@languageEnglish": {},
   "languageSpanish": "Español",
   "@languageSpanish": {},
-  "languageIndonesian": "Bahasa Indonesia",
+  "languageIndonesian": "Indonesio",
   "@languageIndonesian": {},
-  "languageJapanese": "日本語",
+  "languageJapanese": "Japonés",
   "@languageJapanese": {},
-  "languageKorean": "한국어",
+  "languageKorean": "Coreano",
   "@languageKorean": {},
-  "languageChineseSimplified": "简体中文",
+  "languageChineseSimplified": "Chino simplificado",
   "@languageChineseSimplified": {},
-  "languageBurmese": "မြန်မာ",
+  "languageBurmese": "Birmano",
   "@languageBurmese": {},
-  "collectionsTitle": "My Collections",
+  "collectionsTitle": "Mis colecciones",
   "@collectionsTitle": {},
-  "collectionsCountLabel": "Collections",
+  "collectionsCountLabel": "Colecciones",
   "@collectionsCountLabel": {},
-  "collectionsNewButton": "New Collection",
+  "collectionsNewButton": "Nueva colección",
   "@collectionsNewButton": {},
-  "collectionsActionsTooltip": "Collection actions",
+  "collectionsActionsTooltip": "Acciones de la colección",
   "@collectionsActionsTooltip": {},
-  "collectionsOpenAction": "Open Collection",
+  "collectionsOpenAction": "Abrir colección",
   "@collectionsOpenAction": {},
-  "collectionsEditAction": "Edit Collection",
+  "collectionsEditAction": "Editar colección",
   "@collectionsEditAction": {},
-  "collectionsDeleteTitle": "Delete Collection",
+  "collectionsDeleteTitle": "Eliminar colección",
   "@collectionsDeleteTitle": {},
-  "collectionsDeleteMessage": "Delete \"{name}\" and {itemCount} items in this collection?",
+  "collectionsDeleteMessage": "¿Eliminar \"{name}\" y {itemCount} artículos de esta colección?",
   "@collectionsDeleteMessage": {
     "placeholders": {
       "name": {
@@ -155,7 +155,7 @@
       }
     }
   },
-  "collectionsDeleted": "{name} deleted",
+  "collectionsDeleted": "{name} eliminada",
   "@collectionsDeleted": {
     "placeholders": {
       "name": {
@@ -171,11 +171,11 @@
       }
     }
   },
-  "itemsTitle": "Items",
+  "itemsTitle": "Artículos",
   "@itemsTitle": {},
-  "itemsCountLabel": "Items",
+  "itemsCountLabel": "Artículos",
   "@itemsCountLabel": {},
-  "itemsCountWithValue": "{count} items",
+  "itemsCountWithValue": "{count} artículos",
   "@itemsCountWithValue": {
     "placeholders": {
       "count": {
@@ -183,21 +183,21 @@
       }
     }
   },
-  "itemsSearchHint": "Search items...",
+  "itemsSearchHint": "Buscar artículos...",
   "@itemsSearchHint": {},
-  "itemsNoMatchesTitle": "No matches found",
+  "itemsNoMatchesTitle": "No se encontraron coincidencias",
   "@itemsNoMatchesTitle": {},
-  "itemsNoMatchesMessage": "Try changing filters or keywords.",
+  "itemsNoMatchesMessage": "Prueba a cambiar los filtros o las palabras clave.",
   "@itemsNoMatchesMessage": {},
-  "itemsNoItemsTitle": "No items yet",
+  "itemsNoItemsTitle": "Aún no hay artículos",
   "@itemsNoItemsTitle": {},
-  "itemsNoItemsMessage": "Start by adding your first item.",
+  "itemsNoItemsMessage": "Comienza añadiendo tu primer artículo.",
   "@itemsNoItemsMessage": {},
-  "itemsAddButton": "Add Item",
+  "itemsAddButton": "Añadir artículo",
   "@itemsAddButton": {},
-  "itemsLoadingMessage": "Loading items...",
+  "itemsLoadingMessage": "Cargando artículos...",
   "@itemsLoadingMessage": {},
-  "itemsErrorLoading": "Error loading items: {error}",
+  "itemsErrorLoading": "Error al cargar artículos: {error}",
   "@itemsErrorLoading": {
     "placeholders": {
       "error": {
@@ -205,9 +205,9 @@
       }
     }
   },
-  "itemsDeleteTitle": "Delete Item",
+  "itemsDeleteTitle": "Eliminar artículo",
   "@itemsDeleteTitle": {},
-  "itemsDeleteMessage": "Delete \"{name}\"?",
+  "itemsDeleteMessage": "¿Eliminar \"{name}\"?",
   "@itemsDeleteMessage": {
     "placeholders": {
       "name": {
@@ -215,7 +215,7 @@
       }
     }
   },
-  "itemsDeleted": "{name} deleted",
+  "itemsDeleted": "{name} eliminado",
   "@itemsDeleted": {
     "placeholders": {
       "name": {
@@ -223,7 +223,7 @@
       }
     }
   },
-  "itemsOverviewCount": "{count} items",
+  "itemsOverviewCount": "{count} artículos",
   "@itemsOverviewCount": {
     "placeholders": {
       "count": {
@@ -231,7 +231,7 @@
       }
     }
   },
-  "itemsSortedBy": "Sorted by {sortLabel}",
+  "itemsSortedBy": "Ordenado por {sortLabel}",
   "@itemsSortedBy": {
     "placeholders": {
       "sortLabel": {
@@ -239,23 +239,23 @@
       }
     }
   },
-  "itemsCollectionDetailsTooltip": "Collection details",
+  "itemsCollectionDetailsTooltip": "Detalles de la colección",
   "@itemsCollectionDetailsTooltip": {},
-  "itemsFiltersTooltip": "Filters",
+  "itemsFiltersTooltip": "Filtros",
   "@itemsFiltersTooltip": {},
-  "itemsFilterTitle": "Filter Items",
+  "itemsFilterTitle": "Filtrar artículos",
   "@itemsFilterTitle": {},
-  "itemsSortByTitle": "Sort by",
+  "itemsSortByTitle": "Ordenar por",
   "@itemsSortByTitle": {},
-  "itemsFilterFavoritesOnly": "Favorites only",
+  "itemsFilterFavoritesOnly": "Solo favoritos",
   "@itemsFilterFavoritesOnly": {},
-  "itemsFilterWishlistOnly": "Wishlist only",
+  "itemsFilterWishlistOnly": "Solo lista de deseos",
   "@itemsFilterWishlistOnly": {},
-  "itemsFilterConditionsTitle": "Condition",
+  "itemsFilterConditionsTitle": "Estado",
   "@itemsFilterConditionsTitle": {},
-  "itemsTagsTitle": "Tags",
+  "itemsTagsTitle": "Etiquetas",
   "@itemsTagsTitle": {},
-  "itemsQuantityLabel": "Qty: {quantity}",
+  "itemsQuantityLabel": "Cant.: {quantity}",
   "@itemsQuantityLabel": {
     "placeholders": {
       "quantity": {
@@ -271,65 +271,65 @@
       }
     }
   },
-  "itemSortCustom": "Custom order",
+  "itemSortCustom": "Orden personalizado",
   "@itemSortCustom": {},
-  "itemSortTitle": "Title",
+  "itemSortTitle": "Título",
   "@itemSortTitle": {},
-  "itemSortCreatedAt": "Date added",
+  "itemSortCreatedAt": "Fecha de creación",
   "@itemSortCreatedAt": {},
-  "itemSortPurchaseDate": "Purchase date",
+  "itemSortPurchaseDate": "Fecha de compra",
   "@itemSortPurchaseDate": {},
-  "itemSortCurrentValue": "Current value",
+  "itemSortCurrentValue": "Valor actual",
   "@itemSortCurrentValue": {},
-  "itemSortQuantity": "Quantity",
+  "itemSortQuantity": "Cantidad",
   "@itemSortQuantity": {},
-  "itemConditionMint": "Mint",
+  "itemConditionMint": "Excelente",
   "@itemConditionMint": {},
-  "itemConditionGood": "Good",
+  "itemConditionGood": "Bueno",
   "@itemConditionGood": {},
-  "itemConditionFair": "Fair",
+  "itemConditionFair": "Aceptable",
   "@itemConditionFair": {},
-  "itemConditionPoor": "Poor",
+  "itemConditionPoor": "Malo",
   "@itemConditionPoor": {},
-  "itemDetailNotFoundTitle": "Item not found",
+  "itemDetailNotFoundTitle": "Artículo no encontrado",
   "@itemDetailNotFoundTitle": {},
-  "itemDetailNotFoundMessage": "This item no longer exists.",
+  "itemDetailNotFoundMessage": "Este artículo ya no existe.",
   "@itemDetailNotFoundMessage": {},
-  "itemDetailFavorited": "Favorited",
+  "itemDetailFavorited": "En favoritos",
   "@itemDetailFavorited": {},
-  "itemDetailFavorite": "Favorite",
+  "itemDetailFavorite": "Favorito",
   "@itemDetailFavorite": {},
-  "itemDetailInWishlist": "In Wishlist",
+  "itemDetailInWishlist": "En lista de deseos",
   "@itemDetailInWishlist": {},
-  "itemDetailPriceTrackingTitle": "Price tracking",
+  "itemDetailPriceTrackingTitle": "Seguimiento de precio",
   "@itemDetailPriceTrackingTitle": {},
-  "itemDetailNoValueMessage": "No current value available",
+  "itemDetailNoValueMessage": "No hay valor actual disponible",
   "@itemDetailNoValueMessage": {},
-  "itemDetailNoHistoryMessage": "No price history yet",
+  "itemDetailNoHistoryMessage": "Aún no hay historial de precios",
   "@itemDetailNoHistoryMessage": {},
-  "itemDetailPriceHistoryError": "Unable to load price history",
+  "itemDetailPriceHistoryError": "No se pudo cargar el historial de precios",
   "@itemDetailPriceHistoryError": {},
-  "itemDetailDetailsTitle": "Details",
+  "itemDetailDetailsTitle": "Detalles",
   "@itemDetailDetailsTitle": {},
-  "itemDetailBarcodeLabel": "Barcode",
+  "itemDetailBarcodeLabel": "Código de barras",
   "@itemDetailBarcodeLabel": {},
-  "itemDetailConditionLabel": "Condition",
+  "itemDetailConditionLabel": "Estado",
   "@itemDetailConditionLabel": {},
-  "itemDetailQuantityLabel": "Quantity",
+  "itemDetailQuantityLabel": "Cantidad",
   "@itemDetailQuantityLabel": {},
-  "itemDetailLocationLabel": "Location",
+  "itemDetailLocationLabel": "Ubicación",
   "@itemDetailLocationLabel": {},
-  "itemDetailPurchasePriceLabel": "Purchase price",
+  "itemDetailPurchasePriceLabel": "Precio de compra",
   "@itemDetailPurchasePriceLabel": {},
-  "itemDetailCurrentValueLabel": "Current value",
+  "itemDetailCurrentValueLabel": "Valor actual",
   "@itemDetailCurrentValueLabel": {},
-  "itemDetailPurchaseDateLabel": "Purchase date",
+  "itemDetailPurchaseDateLabel": "Fecha de compra",
   "@itemDetailPurchaseDateLabel": {},
-  "itemDetailNotesTitle": "Notes",
+  "itemDetailNotesTitle": "Notas",
   "@itemDetailNotesTitle": {},
-  "itemDetailLoadingMessage": "Loading item details...",
+  "itemDetailLoadingMessage": "Cargando detalles del artículo...",
   "@itemDetailLoadingMessage": {},
-  "itemDetailErrorLoading": "Error loading item details: {error}",
+  "itemDetailErrorLoading": "Error al cargar detalles del artículo: {error}",
   "@itemDetailErrorLoading": {
     "placeholders": {
       "error": {
@@ -337,11 +337,11 @@
       }
     }
   },
-  "itemDetailUpdateValueTitle": "Update current value",
+  "itemDetailUpdateValueTitle": "Actualizar valor actual",
   "@itemDetailUpdateValueTitle": {},
-  "itemDetailCurrentValueUpdated": "Current value updated",
+  "itemDetailCurrentValueUpdated": "Valor actual actualizado",
   "@itemDetailCurrentValueUpdated": {},
-  "itemDetailUpdateValueFailed": "Failed to update value: {error}",
+  "itemDetailUpdateValueFailed": "Error al actualizar el valor: {error}",
   "@itemDetailUpdateValueFailed": {
     "placeholders": {
       "error": {
@@ -349,15 +349,15 @@
       }
     }
   },
-  "addItemTitle": "Add Item",
+  "addItemTitle": "Añadir artículo",
   "@addItemTitle": {},
-  "addItemSubmit": "Add Item",
+  "addItemSubmit": "Añadir artículo",
   "@addItemSubmit": {},
-  "addItemTitleHint": "e.g., The Lord of the Rings",
+  "addItemTitleHint": "p. ej., El Señor de los Anillos",
   "@addItemTitleHint": {},
-  "addItemFetchingMetadata": "Fetching metadata...",
+  "addItemFetchingMetadata": "Obteniendo metadatos...",
   "@addItemFetchingMetadata": {},
-  "addItemMatchedMetadata": "Matched {source} metadata",
+  "addItemMatchedMetadata": "Metadatos de {source} coincidentes",
   "@addItemMatchedMetadata": {
     "placeholders": {
       "source": {
@@ -365,11 +365,11 @@
       }
     }
   },
-  "addItemTagsHint": "e.g., Rare, Completed Set",
+  "addItemTagsHint": "p. ej., Raro, Colección completa",
   "@addItemTagsHint": {},
-  "addItemSuccess": "Item added successfully",
+  "addItemSuccess": "Artículo añadido correctamente",
   "@addItemSuccess": {},
-  "addItemError": "Error adding item: {error}",
+  "addItemError": "Error al añadir artículo: {error}",
   "@addItemError": {
     "placeholders": {
       "error": {
@@ -377,9 +377,9 @@
       }
     }
   },
-  "editItemTitle": "Edit Item",
+  "editItemTitle": "Editar artículo",
   "@editItemTitle": {},
-  "editItemLoading": "Loading item...",
+  "editItemLoading": "Cargando artículo...",
   "@editItemLoading": {},
   "editItemError": "Error: {error}",
   "@editItemError": {
@@ -389,13 +389,13 @@
       }
     }
   },
-  "editItemSaveChanges": "Save Changes",
+  "editItemSaveChanges": "Guardar cambios",
   "@editItemSaveChanges": {},
-  "editItemTagsHint": "e.g., Signed, First Edition",
+  "editItemTagsHint": "p. ej., Firmado, Primera edición",
   "@editItemTagsHint": {},
-  "editItemSuccess": "Item updated successfully",
+  "editItemSuccess": "Artículo actualizado correctamente",
   "@editItemSuccess": {},
-  "editItemUpdateError": "Error updating item: {error}",
+  "editItemUpdateError": "Error al actualizar artículo: {error}",
   "@editItemUpdateError": {
     "placeholders": {
       "error": {
@@ -403,47 +403,47 @@
       }
     }
   },
-  "itemFormTitleLabel": "Title",
+  "itemFormTitleLabel": "Título",
   "@itemFormTitleLabel": {},
-  "itemFormTitleRequired": "Please enter a title",
+  "itemFormTitleRequired": "Introduce un título",
   "@itemFormTitleRequired": {},
-  "itemFormBarcodeLabelOptional": "Barcode (optional)",
+  "itemFormBarcodeLabelOptional": "Código de barras (opcional)",
   "@itemFormBarcodeLabelOptional": {},
   "itemFormBarcodeHint": "ISBN, UPC, etc.",
   "@itemFormBarcodeHint": {},
-  "itemFormDescriptionLabelOptional": "Description (optional)",
+  "itemFormDescriptionLabelOptional": "Descripción (opcional)",
   "@itemFormDescriptionLabelOptional": {},
-  "itemFormDescriptionHint": "Add a description",
+  "itemFormDescriptionHint": "Añade una descripción",
   "@itemFormDescriptionHint": {},
-  "itemFormTagsLabelOptional": "Tags (optional)",
+  "itemFormTagsLabelOptional": "Etiquetas (opcional)",
   "@itemFormTagsLabelOptional": {},
-  "itemFormPurchaseDateLabelOptional": "Purchase Date (optional)",
+  "itemFormPurchaseDateLabelOptional": "Fecha de compra (opcional)",
   "@itemFormPurchaseDateLabelOptional": {},
-  "itemFormConditionLabelOptional": "Condition (optional)",
+  "itemFormConditionLabelOptional": "Estado (opcional)",
   "@itemFormConditionLabelOptional": {},
-  "itemFormQuantityRequired": "Please enter quantity",
+  "itemFormQuantityRequired": "Introduce la cantidad",
   "@itemFormQuantityRequired": {},
-  "itemFormQuantityInvalid": "Please enter a valid quantity",
+  "itemFormQuantityInvalid": "Introduce una cantidad válida",
   "@itemFormQuantityInvalid": {},
-  "itemFormLocationLabelOptional": "Location (optional)",
+  "itemFormLocationLabelOptional": "Ubicación (opcional)",
   "@itemFormLocationLabelOptional": {},
-  "itemFormLocationHint": "e.g., Shelf A, Box 3",
+  "itemFormLocationHint": "p. ej., Estante A, Caja 3",
   "@itemFormLocationHint": {},
-  "itemFormNotesLabelOptional": "Notes (optional)",
+  "itemFormNotesLabelOptional": "Notas (opcional)",
   "@itemFormNotesLabelOptional": {},
-  "itemFormInvalidPrice": "Invalid price",
+  "itemFormInvalidPrice": "Precio no válido",
   "@itemFormInvalidPrice": {},
-  "itemFormMustBePositive": "Must be positive",
+  "itemFormMustBePositive": "Debe ser positivo",
   "@itemFormMustBePositive": {},
-  "itemTagsEditorHint": "Add a tag",
+  "itemTagsEditorHint": "Añadir una etiqueta",
   "@itemTagsEditorHint": {},
-  "itemTagsEditorAddTooltip": "Add tag",
+  "itemTagsEditorAddTooltip": "Añadir etiqueta",
   "@itemTagsEditorAddTooltip": {},
-  "itemTagsEditorEmptyMessage": "No tags yet. Add tags to organize items faster.",
+  "itemTagsEditorEmptyMessage": "Aún no hay etiquetas. Añade etiquetas para organizar más rápido.",
   "@itemTagsEditorEmptyMessage": {},
-  "itemTagsEditorTooLong": "Tags must be 50 characters or less",
+  "itemTagsEditorTooLong": "Las etiquetas deben tener 50 caracteres o menos",
   "@itemTagsEditorTooLong": {},
-  "globalItemsLoading": "Loading items...",
+  "globalItemsLoading": "Cargando artículos...",
   "@globalItemsLoading": {},
   "globalItemsErrorLoading": "Error: {error}",
   "@globalItemsErrorLoading": {
@@ -453,15 +453,15 @@
       }
     }
   },
-  "globalItemsNoFavoritesTitle": "No favorite items yet",
+  "globalItemsNoFavoritesTitle": "Aún no hay favoritos",
   "@globalItemsNoFavoritesTitle": {},
-  "globalItemsNoFavoritesMessage": "Mark items as favorite to see them here.",
+  "globalItemsNoFavoritesMessage": "Marca artículos como favoritos para verlos aquí.",
   "@globalItemsNoFavoritesMessage": {},
-  "globalItemsNoWishlistTitle": "Your wishlist is empty",
+  "globalItemsNoWishlistTitle": "Tu lista de deseos está vacía",
   "@globalItemsNoWishlistTitle": {},
-  "globalItemsNoWishlistMessage": "Save items to wishlist and access them here.",
+  "globalItemsNoWishlistMessage": "Guarda artículos en la lista de deseos para verlos aquí.",
   "@globalItemsNoWishlistMessage": {},
-  "metadataSearchFieldLabel": "Search {collectionType} by title",
+  "metadataSearchFieldLabel": "Buscar {collectionType} por título",
   "@metadataSearchFieldLabel": {
     "placeholders": {
       "collectionType": {
@@ -469,11 +469,11 @@
       }
     }
   },
-  "metadataSearchEmptyTitle": "Search metadata",
+  "metadataSearchEmptyTitle": "Buscar metadatos",
   "@metadataSearchEmptyTitle": {},
-  "metadataSearchEmptyMessage": "Enter a title to search.",
+  "metadataSearchEmptyMessage": "Introduce un título para buscar.",
   "@metadataSearchEmptyMessage": {},
-  "metadataSearchLoading": "Searching metadata...",
+  "metadataSearchLoading": "Buscando metadatos...",
   "@metadataSearchLoading": {},
   "metadataSearchError": "Error: {error}",
   "@metadataSearchError": {
@@ -483,15 +483,15 @@
       }
     }
   },
-  "metadataSearchNoResultsTitle": "No results",
+  "metadataSearchNoResultsTitle": "Sin resultados",
   "@metadataSearchNoResultsTitle": {},
-  "metadataSearchNoResultsMessage": "No metadata found for this title.",
+  "metadataSearchNoResultsMessage": "No se encontraron metadatos para este título.",
   "@metadataSearchNoResultsMessage": {},
-  "metadataSearchSuggestionTitle": "Search by title",
+  "metadataSearchSuggestionTitle": "Buscar por título",
   "@metadataSearchSuggestionTitle": {},
-  "metadataSearchSuggestionMessage": "Start typing to look up metadata.",
+  "metadataSearchSuggestionMessage": "Empieza a escribir para buscar metadatos.",
   "@metadataSearchSuggestionMessage": {},
-  "tagItemsTitle": "Tag: {tag}",
+  "tagItemsTitle": "Etiqueta: {tag}",
   "@tagItemsTitle": {
     "placeholders": {
       "tag": {
@@ -499,17 +499,17 @@
       }
     }
   },
-  "tagItemsSortTooltip": "Sort",
+  "tagItemsSortTooltip": "Ordenar",
   "@tagItemsSortTooltip": {},
-  "tagItemsSortNewest": "Sort: Newest",
+  "tagItemsSortNewest": "Ordenar: más recientes",
   "@tagItemsSortNewest": {},
-  "tagItemsSortOldest": "Sort: Oldest",
+  "tagItemsSortOldest": "Ordenar: más antiguos",
   "@tagItemsSortOldest": {},
-  "tagItemsSortTitle": "Sort: Title",
+  "tagItemsSortTitle": "Ordenar: título",
   "@tagItemsSortTitle": {},
-  "tagItemsLoadingCollections": "Loading collections...",
+  "tagItemsLoadingCollections": "Cargando colecciones...",
   "@tagItemsLoadingCollections": {},
-  "tagItemsLoadingItems": "Loading tagged items...",
+  "tagItemsLoadingItems": "Cargando artículos etiquetados...",
   "@tagItemsLoadingItems": {},
   "tagItemsError": "Error: {error}",
   "@tagItemsError": {
@@ -519,15 +519,15 @@
       }
     }
   },
-  "tagItemsEmptyTitle": "No items found",
+  "tagItemsEmptyTitle": "No se encontraron artículos",
   "@tagItemsEmptyTitle": {},
-  "tagItemsEmptyMessage": "No collection items currently use this tag.",
+  "tagItemsEmptyMessage": "Ningún artículo usa actualmente esta etiqueta.",
   "@tagItemsEmptyMessage": {},
-  "tagItemsUnknownCollection": "Unknown",
+  "tagItemsUnknownCollection": "Desconocido",
   "@tagItemsUnknownCollection": {},
-  "tagItemsOpenCollectionTooltip": "Open collection",
+  "tagItemsOpenCollectionTooltip": "Abrir colección",
   "@tagItemsOpenCollectionTooltip": {},
-  "tagItemsDeleteFailed": "Delete failed: {error}",
+  "tagItemsDeleteFailed": "Error al eliminar: {error}",
   "@tagItemsDeleteFailed": {
     "placeholders": {
       "error": {
@@ -535,9 +535,9 @@
       }
     }
   },
-  "tagManagementTitle": "Manage Tags",
+  "tagManagementTitle": "Gestionar etiquetas",
   "@tagManagementTitle": {},
-  "tagManagementSelectedCount": "{count} selected",
+  "tagManagementSelectedCount": "{count} seleccionadas",
   "@tagManagementSelectedCount": {
     "placeholders": {
       "count": {
@@ -545,15 +545,15 @@
       }
     }
   },
-  "tagManagementCancelSelectionTooltip": "Cancel selection",
+  "tagManagementCancelSelectionTooltip": "Cancelar selección",
   "@tagManagementCancelSelectionTooltip": {},
-  "tagManagementSelectTagsTooltip": "Select tags",
+  "tagManagementSelectTagsTooltip": "Seleccionar etiquetas",
   "@tagManagementSelectTagsTooltip": {},
-  "tagManagementSearchHint": "Search tags...",
+  "tagManagementSearchHint": "Buscar etiquetas...",
   "@tagManagementSearchHint": {},
-  "tagManagementEmptyTitle": "No tags created yet",
+  "tagManagementEmptyTitle": "Aún no hay etiquetas",
   "@tagManagementEmptyTitle": {},
-  "tagManagementNoMatch": "No tags match \"{query}\"",
+  "tagManagementNoMatch": "No hay etiquetas que coincidan con \"{query}\"",
   "@tagManagementNoMatch": {
     "placeholders": {
       "query": {
@@ -561,13 +561,13 @@
       }
     }
   },
-  "tagManagementSelectVisible": "Select visible",
+  "tagManagementSelectVisible": "Seleccionar visibles",
   "@tagManagementSelectVisible": {},
-  "tagManagementSelectAllMatches": "Select all matches",
+  "tagManagementSelectAllMatches": "Seleccionar todas las coincidencias",
   "@tagManagementSelectAllMatches": {},
-  "tagManagementClearSelection": "Clear selection",
+  "tagManagementClearSelection": "Limpiar selección",
   "@tagManagementClearSelection": {},
-  "tagManagementScrollMore": "Scroll to load {remaining} more tags",
+  "tagManagementScrollMore": "Desplázate para cargar {remaining} etiquetas más",
   "@tagManagementScrollMore": {
     "placeholders": {
       "remaining": {
@@ -575,9 +575,9 @@
       }
     }
   },
-  "tagManagementUsedInOne": "Used in 1 item",
+  "tagManagementUsedInOne": "Usada en 1 artículo",
   "@tagManagementUsedInOne": {},
-  "tagManagementUsedInMany": "Used in {count} items",
+  "tagManagementUsedInMany": "Usada en {count} artículos",
   "@tagManagementUsedInMany": {
     "placeholders": {
       "count": {
@@ -585,13 +585,13 @@
       }
     }
   },
-  "tagManagementRenameAction": "Rename",
+  "tagManagementRenameAction": "Renombrar",
   "@tagManagementRenameAction": {},
-  "tagManagementMergeAction": "Merge",
+  "tagManagementMergeAction": "Fusionar",
   "@tagManagementMergeAction": {},
-  "tagManagementMergeIntoAction": "Merge Into...",
+  "tagManagementMergeIntoAction": "Fusionar en...",
   "@tagManagementMergeIntoAction": {},
-  "tagManagementLoadError": "Failed to load tags: {error}",
+  "tagManagementLoadError": "Error al cargar etiquetas: {error}",
   "@tagManagementLoadError": {
     "placeholders": {
       "error": {
@@ -599,11 +599,11 @@
       }
     }
   },
-  "tagManagementRenameTitle": "Rename Tag",
+  "tagManagementRenameTitle": "Renombrar etiqueta",
   "@tagManagementRenameTitle": {},
-  "tagManagementNewNameLabel": "New name",
+  "tagManagementNewNameLabel": "Nuevo nombre",
   "@tagManagementNewNameLabel": {},
-  "tagManagementRenameSuccess": "\"{oldName}\" renamed to \"{newName}\"",
+  "tagManagementRenameSuccess": "\"{oldName}\" renombrada a \"{newName}\"",
   "@tagManagementRenameSuccess": {
     "placeholders": {
       "oldName": {
@@ -614,11 +614,11 @@
       }
     }
   },
-  "tagManagementMergeSelectedTitle": "Merge Selected Tags",
+  "tagManagementMergeSelectedTitle": "Fusionar etiquetas seleccionadas",
   "@tagManagementMergeSelectedTitle": {},
-  "tagManagementChooseDestination": "Choose destination tag:",
+  "tagManagementChooseDestination": "Elige la etiqueta de destino:",
   "@tagManagementChooseDestination": {},
-  "tagManagementMergeSelectedSuccess": "Merged {count} tags into \"{destination}\"",
+  "tagManagementMergeSelectedSuccess": "{count} etiquetas fusionadas en \"{destination}\"",
   "@tagManagementMergeSelectedSuccess": {
     "placeholders": {
       "count": {
@@ -629,9 +629,9 @@
       }
     }
   },
-  "tagManagementDeleteSelectedTitle": "Delete Selected Tags",
+  "tagManagementDeleteSelectedTitle": "Eliminar etiquetas seleccionadas",
   "@tagManagementDeleteSelectedTitle": {},
-  "tagManagementDeleteSelectedMessage": "Delete {count} selected tags from all items?\\n\\nThis cannot be undone.",
+  "tagManagementDeleteSelectedMessage": "¿Eliminar {count} etiquetas seleccionadas de todos los artículos?\\n\\nEsto no se puede deshacer.",
   "@tagManagementDeleteSelectedMessage": {
     "placeholders": {
       "count": {
@@ -639,7 +639,7 @@
       }
     }
   },
-  "tagManagementDeleteSelectedSuccess": "Deleted {count} tags",
+  "tagManagementDeleteSelectedSuccess": "{count} etiquetas eliminadas",
   "@tagManagementDeleteSelectedSuccess": {
     "placeholders": {
       "count": {
@@ -647,9 +647,9 @@
       }
     }
   },
-  "tagManagementMergeIntoTitle": "Merge Into",
+  "tagManagementMergeIntoTitle": "Fusionar en",
   "@tagManagementMergeIntoTitle": {},
-  "tagManagementMergeSuccess": "\"{source}\" merged into \"{target}\"",
+  "tagManagementMergeSuccess": "\"{source}\" fusionada en \"{target}\"",
   "@tagManagementMergeSuccess": {
     "placeholders": {
       "source": {
@@ -660,9 +660,9 @@
       }
     }
   },
-  "tagManagementDeleteTitle": "Delete Tag",
+  "tagManagementDeleteTitle": "Eliminar etiqueta",
   "@tagManagementDeleteTitle": {},
-  "tagManagementDeleteMessage": "Delete \"{tagName}\" from all items?\\n\\nThis cannot be undone.",
+  "tagManagementDeleteMessage": "¿Eliminar \"{tagName}\" de todos los artículos?\\n\\nEsto no se puede deshacer.",
   "@tagManagementDeleteMessage": {
     "placeholders": {
       "tagName": {
@@ -670,7 +670,7 @@
       }
     }
   },
-  "tagManagementDeleteSuccess": "\"{tagName}\" deleted",
+  "tagManagementDeleteSuccess": "\"{tagName}\" eliminada",
   "@tagManagementDeleteSuccess": {
     "placeholders": {
       "tagName": {
@@ -678,7 +678,7 @@
       }
     }
   },
-  "tagManagementMutationError": "Tag update failed: {error}",
+  "tagManagementMutationError": "Error al actualizar etiquetas: {error}",
   "@tagManagementMutationError": {
     "placeholders": {
       "error": {
@@ -686,15 +686,15 @@
       }
     }
   },
-  "statisticsTitle": "Statistics",
+  "statisticsTitle": "Estadísticas",
   "@statisticsTitle": {},
-  "statisticsEmptyTitle": "No statistics yet",
+  "statisticsEmptyTitle": "Aún no hay estadísticas",
   "@statisticsEmptyTitle": {},
-  "statisticsEmptyMessage": "Add collections and items to see insights.",
+  "statisticsEmptyMessage": "Añade colecciones y artículos para ver información.",
   "@statisticsEmptyMessage": {},
-  "statisticsLoadingMessage": "Loading statistics...",
+  "statisticsLoadingMessage": "Cargando estadísticas...",
   "@statisticsLoadingMessage": {},
-  "statisticsErrorLoading": "Error loading statistics: {error}",
+  "statisticsErrorLoading": "Error al cargar estadísticas: {error}",
   "@statisticsErrorLoading": {
     "placeholders": {
       "error": {
@@ -702,9 +702,9 @@
       }
     }
   },
-  "statisticsPortfolioValueTitle": "Portfolio value",
+  "statisticsPortfolioValueTitle": "Valor del portafolio",
   "@statisticsPortfolioValueTitle": {},
-  "statisticsAveragePricedItem": "Avg priced item: {value}",
+  "statisticsAveragePricedItem": "Precio medio por artículo: {value}",
   "@statisticsAveragePricedItem": {
     "placeholders": {
       "value": {
@@ -712,7 +712,7 @@
       }
     }
   },
-  "statisticsPricedItemsBadge": "Priced items: {priced}/{total}",
+  "statisticsPricedItemsBadge": "Artículos con precio: {priced}/{total}",
   "@statisticsPricedItemsBadge": {
     "placeholders": {
       "priced": {
@@ -723,11 +723,11 @@
       }
     }
   },
-  "statisticsQuantityTitle": "Total quantity",
+  "statisticsQuantityTitle": "Cantidad total",
   "@statisticsQuantityTitle": {},
-  "statisticsFavoritesTitle": "Favorites",
+  "statisticsFavoritesTitle": "Favoritos",
   "@statisticsFavoritesTitle": {},
-  "statisticsPercentOfItems": "{percent}% of items",
+  "statisticsPercentOfItems": "{percent}% de los artículos",
   "@statisticsPercentOfItems": {
     "placeholders": {
       "percent": {
@@ -735,11 +735,11 @@
       }
     }
   },
-  "statisticsInventoryHealthTitle": "Inventory health",
+  "statisticsInventoryHealthTitle": "Estado del inventario",
   "@statisticsInventoryHealthTitle": {},
-  "statisticsValuationCoverageLabel": "Valuation coverage",
+  "statisticsValuationCoverageLabel": "Cobertura de valoración",
   "@statisticsValuationCoverageLabel": {},
-  "statisticsPricedCaption": "{priced} of {total} items have prices",
+  "statisticsPricedCaption": "{priced} de {total} artículos tienen precio",
   "@statisticsPricedCaption": {
     "placeholders": {
       "priced": {
@@ -750,9 +750,9 @@
       }
     }
   },
-  "statisticsFavoritesCoverageLabel": "Favorites coverage",
+  "statisticsFavoritesCoverageLabel": "Cobertura de favoritos",
   "@statisticsFavoritesCoverageLabel": {},
-  "statisticsFavoritesCaption": "{favorites} of {total} items are favorites",
+  "statisticsFavoritesCaption": "{favorites} de {total} artículos son favoritos",
   "@statisticsFavoritesCaption": {
     "placeholders": {
       "favorites": {
@@ -763,9 +763,9 @@
       }
     }
   },
-  "statisticsWishlistCoverageLabel": "Wishlist coverage",
+  "statisticsWishlistCoverageLabel": "Cobertura de lista de deseos",
   "@statisticsWishlistCoverageLabel": {},
-  "statisticsWishlistCaption": "{wishlist} of {total} items are on wishlist",
+  "statisticsWishlistCaption": "{wishlist} de {total} artículos están en la lista de deseos",
   "@statisticsWishlistCaption": {
     "placeholders": {
       "wishlist": {
@@ -776,17 +776,17 @@
       }
     }
   },
-  "statisticsItemsByTypeTitle": "Items by type",
+  "statisticsItemsByTypeTitle": "Artículos por tipo",
   "@statisticsItemsByTypeTitle": {},
-  "statisticsItemsByConditionTitle": "Items by condition",
+  "statisticsItemsByConditionTitle": "Artículos por estado",
   "@statisticsItemsByConditionTitle": {},
-  "statisticsTopValuedTitle": "Top valued collections",
+  "statisticsTopValuedTitle": "Colecciones con mayor valor",
   "@statisticsTopValuedTitle": {},
-  "statisticsLargestCollectionTitle": "Largest collection",
+  "statisticsLargestCollectionTitle": "Colección más grande",
   "@statisticsLargestCollectionTitle": {},
-  "statisticsRecentlyCreatedTitle": "Recently created",
+  "statisticsRecentlyCreatedTitle": "Creadas recientemente",
   "@statisticsRecentlyCreatedTitle": {},
-  "statisticsRecentCollectionSubtitle": "{itemCount} items • {createdAt}",
+  "statisticsRecentCollectionSubtitle": "{itemCount} artículos • {createdAt}",
   "@statisticsRecentCollectionSubtitle": {
     "placeholders": {
       "itemCount": {
@@ -797,15 +797,15 @@
       }
     }
   },
-  "statisticsNoChartData": "No chart data available",
+  "statisticsNoChartData": "No hay datos de gráfico disponibles",
   "@statisticsNoChartData": {},
   "statisticsTotalLabel": "Total",
   "@statisticsTotalLabel": {},
-  "relativeToday": "Today",
+  "relativeToday": "Hoy",
   "@relativeToday": {},
-  "relativeYesterday": "Yesterday",
+  "relativeYesterday": "Ayer",
   "@relativeYesterday": {},
-  "relativeDaysAgo": "{days} days ago",
+  "relativeDaysAgo": "Hace {days} días",
   "@relativeDaysAgo": {
     "placeholders": {
       "days": {
@@ -813,7 +813,7 @@
       }
     }
   },
-  "relativeWeeksAgo": "{weeks} weeks ago",
+  "relativeWeeksAgo": "Hace {weeks} semanas",
   "@relativeWeeksAgo": {
     "placeholders": {
       "weeks": {
@@ -821,7 +821,7 @@
       }
     }
   },
-  "relativeMonthsAgo": "{months} months ago",
+  "relativeMonthsAgo": "Hace {months} meses",
   "@relativeMonthsAgo": {
     "placeholders": {
       "months": {
@@ -829,7 +829,7 @@
       }
     }
   },
-  "relativeYearsAgo": "{years} years ago",
+  "relativeYearsAgo": "Hace {years} años",
   "@relativeYearsAgo": {
     "placeholders": {
       "years": {
@@ -837,26 +837,26 @@
       }
     }
   },
-  "collectionDetailsNotFoundTitle": "Collection not found",
+  "collectionDetailsNotFoundTitle": "Colección no encontrada",
   "@collectionDetailsNotFoundTitle": {},
-  "collectionDetailsNotFoundMessage": "The selected collection is not available.",
+  "collectionDetailsNotFoundMessage": "La colección seleccionada no está disponible.",
   "@collectionDetailsNotFoundMessage": {},
-  "collectionDetailsCreatedLabel": "Created",
+  "collectionDetailsCreatedLabel": "Creada",
   "@collectionDetailsCreatedLabel": {},
-  "collectionDetailsUpdatedLabel": "Last Updated",
+  "collectionDetailsUpdatedLabel": "Última actualización",
   "@collectionDetailsUpdatedLabel": {},
-  "collectionDetailsLoading": "Loading collection...",
+  "collectionDetailsLoading": "Cargando colección...",
   "@collectionDetailsLoading": {},
-  "collectionTypeBooks": "Books",
+  "collectionTypeBooks": "Libros",
   "@collectionTypeBooks": {},
-  "collectionTypeGames": "Games",
+  "collectionTypeGames": "Juegos",
   "@collectionTypeGames": {},
-  "collectionTypeMovies": "Movies",
+  "collectionTypeMovies": "Películas",
   "@collectionTypeMovies": {},
-  "collectionTypeComics": "Comics",
+  "collectionTypeComics": "Cómics",
   "@collectionTypeComics": {},
-  "collectionTypeMusic": "Music",
+  "collectionTypeMusic": "Música",
   "@collectionTypeMusic": {},
-  "collectionTypeCustom": "Custom",
+  "collectionTypeCustom": "Personalizada",
   "@collectionTypeCustom": {}
 }

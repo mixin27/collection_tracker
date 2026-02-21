@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 
 import '../theme/design_tokens.dart';
@@ -35,11 +37,15 @@ class GlassSegmentedNavigationBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final tokens = theme.extension<DesignTokens>() ?? const DesignTokens();
+    final textScale = MediaQuery.textScalerOf(context).scale(1.0);
+    final effectiveHeight =
+        (height ?? tokens.navBarHeight) +
+        (textScale > 1 ? (textScale - 1) * 18 : 0);
 
     return SafeArea(
       top: false,
       child: Container(
-        height: height ?? tokens.navBarHeight,
+        height: effectiveHeight,
         margin:
             margin ??
             EdgeInsets.fromLTRB(
@@ -84,6 +90,10 @@ class _GlassNavItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final textScale = MediaQuery.textScalerOf(context).scale(1.0);
+    final iconSize = textScale > 1.1 ? 18.0 : 20.0;
+    final labelSize = textScale > 1.1 ? 10.5 : 11.0;
+    final maxTextScale = math.min(textScale, 1.15);
 
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
@@ -91,14 +101,8 @@ class _GlassNavItem extends StatelessWidget {
       child: AnimatedContainer(
         duration: AppMotion.medium,
         curve: AppMotion.emphasized,
-        margin: const EdgeInsets.symmetric(
-          horizontal: AppSpacing.xs,
-          vertical: AppSpacing.sm,
-        ),
-        padding: const EdgeInsets.symmetric(
-          horizontal: AppSpacing.sm,
-          vertical: AppSpacing.sm,
-        ),
+        margin: const EdgeInsets.symmetric(horizontal: 2, vertical: 3),
+        padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 5),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(AppRadii.lg),
           color: selected
@@ -114,37 +118,50 @@ class _GlassNavItem extends StatelessWidget {
           duration: AppMotion.fast,
           curve: AppMotion.emphasized,
           scale: selected ? 1 : 0.97,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              AnimatedSwitcher(
-                duration: AppMotion.fast,
-                transitionBuilder: (child, animation) => FadeTransition(
-                  opacity: animation,
-                  child: ScaleTransition(scale: animation, child: child),
-                ),
-                child: Icon(
-                  selected ? destination.selectedIcon : destination.icon,
-                  key: ValueKey<bool>(selected),
-                  size: 20,
-                  color: selected
-                      ? theme.colorScheme.primary
-                      : theme.colorScheme.onSurfaceVariant,
-                ),
-              ),
-              const SizedBox(height: 4),
-              Text(
-                destination.label,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: theme.textTheme.labelSmall?.copyWith(
-                  fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
-                  color: selected
-                      ? theme.colorScheme.primary
-                      : theme.colorScheme.onSurfaceVariant,
-                ),
-              ),
-            ],
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              final isTight = constraints.maxHeight < 52;
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  AnimatedSwitcher(
+                    duration: AppMotion.fast,
+                    transitionBuilder: (child, animation) => FadeTransition(
+                      opacity: animation,
+                      child: ScaleTransition(scale: animation, child: child),
+                    ),
+                    child: Icon(
+                      selected ? destination.selectedIcon : destination.icon,
+                      key: ValueKey<bool>(selected),
+                      size: iconSize,
+                      color: selected
+                          ? theme.colorScheme.primary
+                          : theme.colorScheme.onSurfaceVariant,
+                    ),
+                  ),
+                  SizedBox(height: isTight ? 2 : 3),
+                  Flexible(
+                    child: Text(
+                      destination.label,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.center,
+                      textScaler: TextScaler.linear(maxTextScale),
+                      style: theme.textTheme.labelSmall?.copyWith(
+                        fontSize: labelSize,
+                        height: 1.0,
+                        fontWeight: selected
+                            ? FontWeight.w700
+                            : FontWeight.w500,
+                        color: selected
+                            ? theme.colorScheme.primary
+                            : theme.colorScheme.onSurfaceVariant,
+                      ),
+                    ),
+                  ),
+                ],
+              );
+            },
           ),
         ),
       ),

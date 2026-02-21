@@ -1,9 +1,11 @@
 import 'dart:io';
 
+import 'package:collection_tracker/l10n/l10n.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import 'package:ui/ui.dart';
 
 class ItemCard extends StatelessWidget {
@@ -83,15 +85,16 @@ class ItemCard extends StatelessWidget {
                   ),
                 ],
                 const SizedBox(height: 4),
-                Row(
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 4,
                   children: [
                     if (item.condition != null) ...[
                       _ConditionBadge(condition: item.condition!),
-                      const SizedBox(width: 8),
                     ],
                     if (item.quantity > 1)
                       Text(
-                        'Qty: ${item.quantity}',
+                        context.l10n.itemsQuantityLabel(item.quantity),
                         style: theme.textTheme.bodySmall,
                       ),
                   ],
@@ -133,7 +136,7 @@ class ItemCard extends StatelessWidget {
                 if (item.currentValue != null) ...[
                   const SizedBox(height: AppSpacing.sm),
                   Text(
-                    '\$${item.currentValue!.toStringAsFixed(2)}',
+                    _formatCurrency(context, item.currentValue!),
                     style: theme.textTheme.labelLarge?.copyWith(
                       color: theme.colorScheme.primary,
                       fontWeight: FontWeight.w700,
@@ -199,7 +202,7 @@ class ItemCard extends StatelessWidget {
           children: [
             ListTile(
               leading: const Icon(Icons.edit),
-              title: const Text('Edit'),
+              title: Text(context.l10n.actionEdit),
               onTap: () {
                 Navigator.pop(context);
                 context.push('/items/${item.id}/edit');
@@ -207,7 +210,10 @@ class ItemCard extends StatelessWidget {
             ),
             ListTile(
               leading: const Icon(Icons.delete, color: Colors.red),
-              title: const Text('Delete', style: TextStyle(color: Colors.red)),
+              title: Text(
+                context.l10n.actionDelete,
+                style: const TextStyle(color: Colors.red),
+              ),
               onTap: () {
                 Navigator.pop(context);
                 onDelete();
@@ -218,6 +224,11 @@ class ItemCard extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  String _formatCurrency(BuildContext context, double value) {
+    final locale = Localizations.localeOf(context).toLanguageTag();
+    return NumberFormat.simpleCurrency(locale: locale).format(value);
   }
 }
 
@@ -230,6 +241,12 @@ class _ConditionBadge extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final color = _getColorForCondition(condition);
+    final label = switch (condition) {
+      ItemCondition.mint => context.l10n.itemConditionMint,
+      ItemCondition.good => context.l10n.itemConditionGood,
+      ItemCondition.fair => context.l10n.itemConditionFair,
+      ItemCondition.poor => context.l10n.itemConditionPoor,
+    };
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
@@ -239,7 +256,9 @@ class _ConditionBadge extends StatelessWidget {
         border: Border.all(color: color, width: 1),
       ),
       child: Text(
-        condition.name.toUpperCase(),
+        label,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
         style: theme.textTheme.labelSmall?.copyWith(
           color: color,
           fontWeight: FontWeight.bold,
