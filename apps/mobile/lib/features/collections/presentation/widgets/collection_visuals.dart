@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 IconData collectionTypeIcon(CollectionType type) {
   return switch (type) {
-    CollectionType.book => Icons.book_rounded,
+    CollectionType.book => Icons.library_books_rounded,
     CollectionType.game => Icons.sports_esports_rounded,
     CollectionType.movie => Icons.movie_creation_rounded,
     CollectionType.comic => Icons.menu_book_rounded,

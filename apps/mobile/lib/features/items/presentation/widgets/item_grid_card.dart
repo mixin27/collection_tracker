@@ -26,6 +26,7 @@ class ItemGridCard extends StatelessWidget {
     final conditionColor = item.condition == null
         ? theme.colorScheme.onSurfaceVariant
         : _conditionColor(item.condition!);
+    final effectiveValue = item.currentValue ?? item.purchasePrice;
 
     return AppCard(
       padding: EdgeInsets.zero,
@@ -135,6 +136,16 @@ class ItemGridCard extends StatelessWidget {
                           ),
                       ],
                     ),
+                    if (effectiveValue != null) ...[
+                      const SizedBox(height: AppSpacing.sm),
+                      Text(
+                        '\$${effectiveValue.toStringAsFixed(2)}',
+                        style: theme.textTheme.labelLarge?.copyWith(
+                          color: theme.colorScheme.primary,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ],
                   ],
                 ),
               ),

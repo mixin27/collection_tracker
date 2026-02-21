@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'design_tokens.dart';
 
@@ -59,6 +60,11 @@ class AppTheme {
         elevation: 0,
         backgroundColor: Colors.transparent,
         foregroundColor: colorScheme.onSurface,
+        systemOverlayStyle: SystemUiOverlayStyle.dark.copyWith(
+          statusBarColor: Colors.transparent,
+          statusBarIconBrightness: Brightness.dark,
+          statusBarBrightness: Brightness.light,
+        ),
         titleTextStyle: _editorialTextTheme(
           Brightness.light,
           colorScheme.onSurface,
@@ -180,6 +186,11 @@ class AppTheme {
         elevation: 0,
         backgroundColor: Colors.transparent,
         foregroundColor: colorScheme.onSurface,
+        systemOverlayStyle: SystemUiOverlayStyle.light.copyWith(
+          statusBarColor: Colors.transparent,
+          statusBarIconBrightness: Brightness.light,
+          statusBarBrightness: Brightness.dark,
+        ),
         titleTextStyle: _editorialTextTheme(
           Brightness.dark,
           colorScheme.onSurface,

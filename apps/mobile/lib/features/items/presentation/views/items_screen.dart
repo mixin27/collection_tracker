@@ -94,38 +94,6 @@ class _ItemsScreenState extends ConsumerState<ItemsScreen> {
               )
             : Text(collectionName),
         actions: [
-          if (!_isSearching) ...[
-            IconButton(
-              icon: const Icon(Icons.info_outline),
-              onPressed: () => _showCollectionDetails(context),
-            ),
-            IconButton(
-              icon: Icon(
-                viewMode == ItemsViewMode.list
-                    ? Icons.grid_view
-                    : Icons.view_list,
-              ),
-              onPressed: () {
-                ref.read(itemsViewModeProvider.notifier).toggle();
-              },
-            ),
-            IconButton(
-              icon: Badge(
-                isLabelVisible:
-                    filter.conditions.isNotEmpty ||
-                    filter.tags.isNotEmpty ||
-                    filter.showOnlyFavorites ||
-                    filter.sortBy != ItemSortBy.createdAt,
-                child: const Icon(Icons.filter_list),
-              ),
-              onPressed: () => _showFilterSheet(context),
-            ),
-            IconButton(
-              icon: const Icon(Icons.sell_outlined),
-              tooltip: 'Manage tags',
-              onPressed: () => context.push('/settings/tags'),
-            ),
-          ],
           IconButton(
             icon: Icon(_isSearching ? Icons.close : Icons.search),
             onPressed: () {
@@ -205,6 +173,7 @@ class _ItemsScreenState extends ConsumerState<ItemsScreen> {
                     onToggleViewMode: () =>
                         ref.read(itemsViewModeProvider.notifier).toggle(),
                     onOpenFilter: () => _showFilterSheet(context),
+                    onOpenDetails: () => _showCollectionDetails(context),
                   ),
                   Expanded(
                     child: canReorder
@@ -290,6 +259,7 @@ class _ItemsScreenState extends ConsumerState<ItemsScreen> {
                     onToggleViewMode: () =>
                         ref.read(itemsViewModeProvider.notifier).toggle(),
                     onOpenFilter: () => _showFilterSheet(context),
+                    onOpenDetails: () => _showCollectionDetails(context),
                   ),
                   Expanded(
                     child: LayoutBuilder(
@@ -337,9 +307,9 @@ class _ItemsScreenState extends ConsumerState<ItemsScreen> {
               );
             }
           },
-          loading: () => const Center(
+          loading: () => const LoadingView(
             key: ValueKey('loading'),
-            child: CircularProgressIndicator(),
+            message: 'Loading items...',
           ),
           error: (error, stack) => ErrorView(
             key: const ValueKey('error'),
@@ -417,6 +387,7 @@ class _ItemsOverviewBar extends StatelessWidget {
   final bool hasActiveFilters;
   final VoidCallback onToggleViewMode;
   final VoidCallback onOpenFilter;
+  final VoidCallback onOpenDetails;
 
   const _ItemsOverviewBar({
     required this.itemCount,
@@ -425,6 +396,7 @@ class _ItemsOverviewBar extends StatelessWidget {
     required this.hasActiveFilters,
     required this.onToggleViewMode,
     required this.onOpenFilter,
+    required this.onOpenDetails,
   });
 
   @override
@@ -471,6 +443,11 @@ class _ItemsOverviewBar extends StatelessWidget {
                   color: theme.colorScheme.onSurfaceVariant,
                 ),
               ),
+            ),
+            IconButton(
+              tooltip: 'Collection details',
+              onPressed: onOpenDetails,
+              icon: const Icon(Icons.info_outline_rounded),
             ),
             IconButton(
               tooltip: viewMode == ItemsViewMode.list

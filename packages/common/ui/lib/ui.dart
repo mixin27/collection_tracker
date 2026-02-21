@@ -4,6 +4,7 @@ export 'src/theme/design_tokens.dart';
 export 'src/widgets/empty_state.dart';
 export 'src/widgets/error_view.dart';
 export 'src/widgets/loading_view.dart';
+export 'src/widgets/app_loading_indicator.dart';
 export 'src/widgets/image_picker_widget.dart';
 export 'src/widgets/app_animated_switcher.dart';
 export 'src/widgets/app_button.dart';

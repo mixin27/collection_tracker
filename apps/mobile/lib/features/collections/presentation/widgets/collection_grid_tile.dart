@@ -1,5 +1,6 @@
 import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:ui/ui.dart';
 
 import 'collection_visuals.dart';
@@ -7,11 +8,13 @@ import 'collection_visuals.dart';
 class CollectionGridTile extends StatelessWidget {
   final Collection collection;
   final VoidCallback onTap;
+  final VoidCallback onEdit;
   final VoidCallback onDelete;
 
   const CollectionGridTile({
     required this.collection,
     required this.onTap,
+    required this.onEdit,
     required this.onDelete,
     super.key,
   });
@@ -25,6 +28,7 @@ class CollectionGridTile extends StatelessWidget {
       padding: EdgeInsets.zero,
       borderRadius: BorderRadius.circular(AppRadii.lg),
       onTap: onTap,
+      onLongPress: () => _showActions(context),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(AppRadii.lg - 1),
         child: Column(
@@ -67,26 +71,13 @@ class CollectionGridTile extends StatelessWidget {
                     ),
                   ),
                   const Spacer(),
-                  PopupMenuButton<String>(
+                  IconButton(
+                    tooltip: 'Collection actions',
+                    onPressed: () => _showActions(context),
                     icon: Icon(
-                      Icons.more_horiz,
+                      Icons.more_horiz_rounded,
                       color: theme.colorScheme.onSurfaceVariant,
                     ),
-                    itemBuilder: (context) => const [
-                      PopupMenuItem(
-                        value: 'delete',
-                        child: Row(
-                          children: [
-                            Icon(Icons.delete_outline, color: Colors.red),
-                            SizedBox(width: AppSpacing.sm),
-                            Text('Delete'),
-                          ],
-                        ),
-                      ),
-                    ],
-                    onSelected: (value) {
-                      if (value == 'delete') onDelete();
-                    },
                   ),
                 ],
               ),
@@ -137,6 +128,49 @@ class CollectionGridTile extends StatelessWidget {
                 ),
               ),
             ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _showActions(BuildContext context) {
+    HapticFeedback.lightImpact();
+    showAppSheet(
+      context: context,
+      builder: (context) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(
+              leading: const Icon(Icons.open_in_new_rounded),
+              title: const Text('Open Collection'),
+              onTap: () {
+                Navigator.pop(context);
+                onTap();
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.edit_outlined),
+              title: const Text('Edit Collection'),
+              onTap: () {
+                Navigator.pop(context);
+                onEdit();
+              },
+            ),
+            ListTile(
+              leading: const Icon(
+                Icons.delete_outline_rounded,
+                color: Colors.red,
+              ),
+              title: const Text('Delete', style: TextStyle(color: Colors.red)),
+              onTap: () {
+                HapticFeedback.lightImpact();
+                Navigator.pop(context);
+                onDelete();
+              },
+            ),
+            const SizedBox(height: AppSpacing.sm),
           ],
         ),
       ),

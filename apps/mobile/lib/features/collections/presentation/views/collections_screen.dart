@@ -50,10 +50,6 @@ class _CollectionsScreenState extends ConsumerState<CollectionsScreen> {
             icon: const Icon(Icons.bar_chart_rounded),
             onPressed: () => context.push('/statistics'),
           ),
-          IconButton(
-            icon: const Icon(Icons.settings_rounded),
-            onPressed: () => context.go('/settings'),
-          ),
         ],
       ),
       body: AppAnimatedSwitcher(
@@ -137,6 +133,9 @@ class _CollectionsScreenState extends ConsumerState<CollectionsScreen> {
                                   onTap: () => context.push(
                                     '/collections/${collection.id}',
                                   ),
+                                  onEdit: () => context.push(
+                                    '/collections/${collection.id}/edit',
+                                  ),
                                   onDelete: () => _showDeleteDialog(
                                     context,
                                     ref,
@@ -174,6 +173,9 @@ class _CollectionsScreenState extends ConsumerState<CollectionsScreen> {
                                   collection: collection,
                                   onTap: () => context.push(
                                     '/collections/${collection.id}',
+                                  ),
+                                  onEdit: () => context.push(
+                                    '/collections/${collection.id}/edit',
                                   ),
                                   onDelete: () => _showDeleteDialog(
                                     context,

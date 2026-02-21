@@ -1,5 +1,6 @@
 import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:ui/ui.dart';
 
 import 'collection_visuals.dart';
@@ -7,11 +8,13 @@ import 'collection_visuals.dart';
 class CollectionCard extends StatelessWidget {
   final Collection collection;
   final VoidCallback onTap;
+  final VoidCallback onEdit;
   final VoidCallback onDelete;
 
   const CollectionCard({
     required this.collection,
     required this.onTap,
+    required this.onEdit,
     required this.onDelete,
     super.key,
   });
@@ -26,6 +29,7 @@ class CollectionCard extends StatelessWidget {
       padding: const EdgeInsets.all(AppSpacing.md),
       borderRadius: BorderRadius.circular(AppRadii.lg),
       onTap: onTap,
+      onLongPress: () => _showActions(context),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -96,25 +100,55 @@ class CollectionCard extends StatelessWidget {
               ],
             ),
           ),
-          PopupMenuButton<String>(
+          IconButton(
             tooltip: 'Collection actions',
-            itemBuilder: (context) => const [
-              PopupMenuItem(
-                value: 'delete',
-                child: Row(
-                  children: [
-                    Icon(Icons.delete_outline, color: Colors.red),
-                    SizedBox(width: AppSpacing.sm),
-                    Text('Delete'),
-                  ],
-                ),
-              ),
-            ],
-            onSelected: (value) {
-              if (value == 'delete') onDelete();
-            },
+            onPressed: () => _showActions(context),
+            icon: const Icon(Icons.more_horiz_rounded),
           ),
         ],
+      ),
+    );
+  }
+
+  void _showActions(BuildContext context) {
+    HapticFeedback.lightImpact();
+    showAppSheet(
+      context: context,
+      builder: (context) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(
+              leading: const Icon(Icons.open_in_new_rounded),
+              title: const Text('Open Collection'),
+              onTap: () {
+                Navigator.pop(context);
+                onTap();
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.edit_outlined),
+              title: const Text('Edit Collection'),
+              onTap: () {
+                Navigator.pop(context);
+                onEdit();
+              },
+            ),
+            ListTile(
+              leading: const Icon(
+                Icons.delete_outline_rounded,
+                color: Colors.red,
+              ),
+              title: const Text('Delete', style: TextStyle(color: Colors.red)),
+              onTap: () {
+                HapticFeedback.lightImpact();
+                Navigator.pop(context);
+                onDelete();
+              },
+            ),
+            const SizedBox(height: AppSpacing.sm),
+          ],
+        ),
       ),
     );
   }

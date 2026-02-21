@@ -88,17 +88,28 @@ class _GlassBottomShell extends StatelessWidget {
     final tokens = theme.extension<DesignTokens>() ?? const DesignTokens();
     final bottomInset = MediaQuery.paddingOf(context).bottom;
     final navReservedSpace =
-        tokens.navBarHeight + tokens.navBarBottomMargin + bottomInset + 12;
+        tokens.navBarHeight + tokens.navBarBottomMargin + bottomInset + 4;
 
     return Scaffold(
+      extendBody: true,
       body: Stack(
         fit: StackFit.expand,
         children: [
-          AnimatedPadding(
-            duration: AppMotion.medium,
-            curve: AppMotion.emphasized,
-            padding: EdgeInsets.only(bottom: navReservedSpace),
-            child: body,
+          Builder(
+            builder: (context) {
+              final media = MediaQuery.of(context);
+              return MediaQuery(
+                data: media.copyWith(
+                  padding: media.padding.copyWith(
+                    bottom: media.padding.bottom + navReservedSpace,
+                  ),
+                  viewPadding: media.viewPadding.copyWith(
+                    bottom: media.viewPadding.bottom + navReservedSpace,
+                  ),
+                ),
+                child: body,
+              );
+            },
           ),
           Align(
             alignment: Alignment.bottomCenter,
