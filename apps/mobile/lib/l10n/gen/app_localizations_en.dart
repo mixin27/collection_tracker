@@ -75,6 +75,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsSectionAbout => 'About';
 
   @override
+  String get settingsSectionDeveloper => 'Developer';
+
+  @override
   String get settingsThemeTitle => 'Theme';
 
   @override
@@ -118,6 +121,29 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get settingsTermsTitle => 'Terms of Service';
+
+  @override
+  String get settingsCrashlyticsTestTitle => 'Test Crashlytics';
+
+  @override
+  String get settingsCrashlyticsTestSubtitle => 'Intentionally crash the app to verify crash reporting';
+
+  @override
+  String get settingsCrashlyticsTestConfirmTitle => 'Trigger test crash?';
+
+  @override
+  String get settingsCrashlyticsTestConfirmMessage => 'The app will crash immediately. Re-open the app to verify the crash in Firebase Crashlytics.';
+
+  @override
+  String get settingsCrashlyticsTestConfirmAction => 'Crash Now';
+
+  @override
+  String get settingsCrashlyticsTestTriggered => 'Triggering test crash...';
+
+  @override
+  String settingsCrashlyticsTestFailed(String error) {
+    return 'Failed to trigger crash test: $error';
+  }
 
   @override
   String get settingsExportingData => 'Exporting data...';

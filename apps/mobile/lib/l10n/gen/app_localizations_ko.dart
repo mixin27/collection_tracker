@@ -75,6 +75,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get settingsSectionAbout => '정보';
 
   @override
+  String get settingsSectionDeveloper => '개발자';
+
+  @override
   String get settingsThemeTitle => '테마';
 
   @override
@@ -118,6 +121,29 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get settingsTermsTitle => '이용 약관';
+
+  @override
+  String get settingsCrashlyticsTestTitle => 'Crashlytics 테스트';
+
+  @override
+  String get settingsCrashlyticsTestSubtitle => '크래시 보고 확인을 위해 앱을 의도적으로 종료합니다';
+
+  @override
+  String get settingsCrashlyticsTestConfirmTitle => '테스트 크래시를 실행할까요?';
+
+  @override
+  String get settingsCrashlyticsTestConfirmMessage => '앱이 즉시 종료됩니다. 앱을 다시 열어 Firebase Crashlytics에서 크래시를 확인하세요.';
+
+  @override
+  String get settingsCrashlyticsTestConfirmAction => '지금 크래시';
+
+  @override
+  String get settingsCrashlyticsTestTriggered => '테스트 크래시를 실행하는 중...';
+
+  @override
+  String settingsCrashlyticsTestFailed(String error) {
+    return '테스트 크래시 실행 실패: $error';
+  }
 
   @override
   String get settingsExportingData => '데이터 내보내는 중...';

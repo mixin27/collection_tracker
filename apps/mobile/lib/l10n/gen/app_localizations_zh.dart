@@ -75,6 +75,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get settingsSectionAbout => '关于';
 
   @override
+  String get settingsSectionDeveloper => '开发者';
+
+  @override
   String get settingsThemeTitle => '主题';
 
   @override
@@ -118,6 +121,29 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get settingsTermsTitle => '服务条款';
+
+  @override
+  String get settingsCrashlyticsTestTitle => '测试 Crashlytics';
+
+  @override
+  String get settingsCrashlyticsTestSubtitle => '故意让应用崩溃以验证崩溃上报';
+
+  @override
+  String get settingsCrashlyticsTestConfirmTitle => '触发测试崩溃？';
+
+  @override
+  String get settingsCrashlyticsTestConfirmMessage => '应用将立即崩溃。请重新打开应用，并在 Firebase Crashlytics 中确认该崩溃。';
+
+  @override
+  String get settingsCrashlyticsTestConfirmAction => '立即崩溃';
+
+  @override
+  String get settingsCrashlyticsTestTriggered => '正在触发测试崩溃...';
+
+  @override
+  String settingsCrashlyticsTestFailed(String error) {
+    return '触发测试崩溃失败：$error';
+  }
 
   @override
   String get settingsExportingData => '正在导出数据...';

@@ -75,6 +75,9 @@ class AppLocalizationsMy extends AppLocalizations {
   String get settingsSectionAbout => 'အကြောင်းအရာ';
 
   @override
+  String get settingsSectionDeveloper => 'ဆော့ဖ်ဝဲရေးသားသူ';
+
+  @override
   String get settingsThemeTitle => 'အပြင်အဆင်';
 
   @override
@@ -118,6 +121,29 @@ class AppLocalizationsMy extends AppLocalizations {
 
   @override
   String get settingsTermsTitle => 'အသုံးပြုမှု စည်းမျဉ်းများ';
+
+  @override
+  String get settingsCrashlyticsTestTitle => 'Crashlytics စမ်းသပ်ရန်';
+
+  @override
+  String get settingsCrashlyticsTestSubtitle => 'Crash report ပို့မှုကို စစ်ဆေးရန် အက်ပ်ကို ရည်ရွယ်ချက်ရှိစွာ crash လုပ်မည်';
+
+  @override
+  String get settingsCrashlyticsTestConfirmTitle => 'စမ်းသပ် crash ကို စတင်မလား?';
+
+  @override
+  String get settingsCrashlyticsTestConfirmMessage => 'အက်ပ်သည် ချက်ချင်းပိတ်သွားမည်။ Firebase Crashlytics တွင် crash ကို စစ်ဆေးရန် အက်ပ်ကို ပြန်ဖွင့်ပါ။';
+
+  @override
+  String get settingsCrashlyticsTestConfirmAction => 'ယခုပဲ Crash လုပ်မည်';
+
+  @override
+  String get settingsCrashlyticsTestTriggered => 'စမ်းသပ် crash စတင်နေသည်...';
+
+  @override
+  String settingsCrashlyticsTestFailed(String error) {
+    return 'စမ်းသပ် crash စတင်မရပါ: $error';
+  }
 
   @override
   String get settingsExportingData => 'ဒေတာ ထုတ်ယူနေသည်...';

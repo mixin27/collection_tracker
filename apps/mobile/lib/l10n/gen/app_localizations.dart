@@ -233,6 +233,12 @@ abstract class AppLocalizations {
   /// **'About'**
   String get settingsSectionAbout;
 
+  /// No description provided for @settingsSectionDeveloper.
+  ///
+  /// In en, this message translates to:
+  /// **'Developer'**
+  String get settingsSectionDeveloper;
+
   /// No description provided for @settingsThemeTitle.
   ///
   /// In en, this message translates to:
@@ -322,6 +328,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Terms of Service'**
   String get settingsTermsTitle;
+
+  /// No description provided for @settingsCrashlyticsTestTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Test Crashlytics'**
+  String get settingsCrashlyticsTestTitle;
+
+  /// No description provided for @settingsCrashlyticsTestSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Intentionally crash the app to verify crash reporting'**
+  String get settingsCrashlyticsTestSubtitle;
+
+  /// No description provided for @settingsCrashlyticsTestConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Trigger test crash?'**
+  String get settingsCrashlyticsTestConfirmTitle;
+
+  /// No description provided for @settingsCrashlyticsTestConfirmMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'The app will crash immediately. Re-open the app to verify the crash in Firebase Crashlytics.'**
+  String get settingsCrashlyticsTestConfirmMessage;
+
+  /// No description provided for @settingsCrashlyticsTestConfirmAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Crash Now'**
+  String get settingsCrashlyticsTestConfirmAction;
+
+  /// No description provided for @settingsCrashlyticsTestTriggered.
+  ///
+  /// In en, this message translates to:
+  /// **'Triggering test crash...'**
+  String get settingsCrashlyticsTestTriggered;
+
+  /// No description provided for @settingsCrashlyticsTestFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to trigger crash test: {error}'**
+  String settingsCrashlyticsTestFailed(String error);
 
   /// No description provided for @settingsExportingData.
   ///

@@ -44,7 +44,10 @@ abstract final class AppBootstrap {
     final config = AnalyticsConfig(
       environment: AnalyticsEnvironment.development,
       enableLogging: true,
-      providers: [ConsoleAnalyticsProvider(prettyPrint: true)],
+      providers: [
+        ConsoleAnalyticsProvider(prettyPrint: true),
+        FirebaseAnalyticsProvider(),
+      ],
       middleware: [
         QueueMiddleware(),
         PIIFilterMiddleware(),

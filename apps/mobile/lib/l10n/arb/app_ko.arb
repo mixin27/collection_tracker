@@ -42,6 +42,8 @@
   "@settingsSectionData": {},
   "settingsSectionAbout": "정보",
   "@settingsSectionAbout": {},
+  "settingsSectionDeveloper": "개발자",
+  "@settingsSectionDeveloper": {},
   "settingsThemeTitle": "테마",
   "@settingsThemeTitle": {},
   "settingsLanguageTitle": "언어",
@@ -72,6 +74,26 @@
   "@settingsPrivacyPolicyTitle": {},
   "settingsTermsTitle": "이용 약관",
   "@settingsTermsTitle": {},
+  "settingsCrashlyticsTestTitle": "Crashlytics 테스트",
+  "@settingsCrashlyticsTestTitle": {},
+  "settingsCrashlyticsTestSubtitle": "크래시 보고 확인을 위해 앱을 의도적으로 종료합니다",
+  "@settingsCrashlyticsTestSubtitle": {},
+  "settingsCrashlyticsTestConfirmTitle": "테스트 크래시를 실행할까요?",
+  "@settingsCrashlyticsTestConfirmTitle": {},
+  "settingsCrashlyticsTestConfirmMessage": "앱이 즉시 종료됩니다. 앱을 다시 열어 Firebase Crashlytics에서 크래시를 확인하세요.",
+  "@settingsCrashlyticsTestConfirmMessage": {},
+  "settingsCrashlyticsTestConfirmAction": "지금 크래시",
+  "@settingsCrashlyticsTestConfirmAction": {},
+  "settingsCrashlyticsTestTriggered": "테스트 크래시를 실행하는 중...",
+  "@settingsCrashlyticsTestTriggered": {},
+  "settingsCrashlyticsTestFailed": "테스트 크래시 실행 실패: {error}",
+  "@settingsCrashlyticsTestFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
   "settingsExportingData": "데이터 내보내는 중...",
   "@settingsExportingData": {},
   "settingsDataExportSuccess": "데이터 내보내기 완료!",

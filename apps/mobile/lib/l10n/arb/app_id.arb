@@ -42,6 +42,8 @@
   "@settingsSectionData": {},
   "settingsSectionAbout": "Tentang",
   "@settingsSectionAbout": {},
+  "settingsSectionDeveloper": "Pengembang",
+  "@settingsSectionDeveloper": {},
   "settingsThemeTitle": "Tema",
   "@settingsThemeTitle": {},
   "settingsLanguageTitle": "Bahasa",
@@ -72,6 +74,26 @@
   "@settingsPrivacyPolicyTitle": {},
   "settingsTermsTitle": "Ketentuan Layanan",
   "@settingsTermsTitle": {},
+  "settingsCrashlyticsTestTitle": "Uji Crashlytics",
+  "@settingsCrashlyticsTestTitle": {},
+  "settingsCrashlyticsTestSubtitle": "Sengaja membuat aplikasi crash untuk memverifikasi pelaporan crash",
+  "@settingsCrashlyticsTestSubtitle": {},
+  "settingsCrashlyticsTestConfirmTitle": "Picu crash uji coba?",
+  "@settingsCrashlyticsTestConfirmTitle": {},
+  "settingsCrashlyticsTestConfirmMessage": "Aplikasi akan langsung crash. Buka kembali aplikasi untuk memverifikasi crash di Firebase Crashlytics.",
+  "@settingsCrashlyticsTestConfirmMessage": {},
+  "settingsCrashlyticsTestConfirmAction": "Crash Sekarang",
+  "@settingsCrashlyticsTestConfirmAction": {},
+  "settingsCrashlyticsTestTriggered": "Memicu crash uji coba...",
+  "@settingsCrashlyticsTestTriggered": {},
+  "settingsCrashlyticsTestFailed": "Gagal memicu uji crash: {error}",
+  "@settingsCrashlyticsTestFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
   "settingsExportingData": "Mengekspor data...",
   "@settingsExportingData": {},
   "settingsDataExportSuccess": "Data berhasil diekspor!",

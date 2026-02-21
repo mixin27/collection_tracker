@@ -42,6 +42,8 @@
   "@settingsSectionData": {},
   "settingsSectionAbout": "关于",
   "@settingsSectionAbout": {},
+  "settingsSectionDeveloper": "开发者",
+  "@settingsSectionDeveloper": {},
   "settingsThemeTitle": "主题",
   "@settingsThemeTitle": {},
   "settingsLanguageTitle": "语言",
@@ -72,6 +74,26 @@
   "@settingsPrivacyPolicyTitle": {},
   "settingsTermsTitle": "服务条款",
   "@settingsTermsTitle": {},
+  "settingsCrashlyticsTestTitle": "测试 Crashlytics",
+  "@settingsCrashlyticsTestTitle": {},
+  "settingsCrashlyticsTestSubtitle": "故意让应用崩溃以验证崩溃上报",
+  "@settingsCrashlyticsTestSubtitle": {},
+  "settingsCrashlyticsTestConfirmTitle": "触发测试崩溃？",
+  "@settingsCrashlyticsTestConfirmTitle": {},
+  "settingsCrashlyticsTestConfirmMessage": "应用将立即崩溃。请重新打开应用，并在 Firebase Crashlytics 中确认该崩溃。",
+  "@settingsCrashlyticsTestConfirmMessage": {},
+  "settingsCrashlyticsTestConfirmAction": "立即崩溃",
+  "@settingsCrashlyticsTestConfirmAction": {},
+  "settingsCrashlyticsTestTriggered": "正在触发测试崩溃...",
+  "@settingsCrashlyticsTestTriggered": {},
+  "settingsCrashlyticsTestFailed": "触发测试崩溃失败：{error}",
+  "@settingsCrashlyticsTestFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
   "settingsExportingData": "正在导出数据...",
   "@settingsExportingData": {},
   "settingsDataExportSuccess": "数据导出成功！",

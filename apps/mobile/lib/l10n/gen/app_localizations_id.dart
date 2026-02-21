@@ -75,6 +75,9 @@ class AppLocalizationsId extends AppLocalizations {
   String get settingsSectionAbout => 'Tentang';
 
   @override
+  String get settingsSectionDeveloper => 'Pengembang';
+
+  @override
   String get settingsThemeTitle => 'Tema';
 
   @override
@@ -118,6 +121,29 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get settingsTermsTitle => 'Ketentuan Layanan';
+
+  @override
+  String get settingsCrashlyticsTestTitle => 'Uji Crashlytics';
+
+  @override
+  String get settingsCrashlyticsTestSubtitle => 'Sengaja membuat aplikasi crash untuk memverifikasi pelaporan crash';
+
+  @override
+  String get settingsCrashlyticsTestConfirmTitle => 'Picu crash uji coba?';
+
+  @override
+  String get settingsCrashlyticsTestConfirmMessage => 'Aplikasi akan langsung crash. Buka kembali aplikasi untuk memverifikasi crash di Firebase Crashlytics.';
+
+  @override
+  String get settingsCrashlyticsTestConfirmAction => 'Crash Sekarang';
+
+  @override
+  String get settingsCrashlyticsTestTriggered => 'Memicu crash uji coba...';
+
+  @override
+  String settingsCrashlyticsTestFailed(String error) {
+    return 'Gagal memicu uji crash: $error';
+  }
 
   @override
   String get settingsExportingData => 'Mengekspor data...';

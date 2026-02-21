@@ -75,6 +75,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get settingsSectionAbout => '情報';
 
   @override
+  String get settingsSectionDeveloper => '開発者';
+
+  @override
   String get settingsThemeTitle => 'テーマ';
 
   @override
@@ -118,6 +121,29 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get settingsTermsTitle => '利用規約';
+
+  @override
+  String get settingsCrashlyticsTestTitle => 'Crashlytics をテスト';
+
+  @override
+  String get settingsCrashlyticsTestSubtitle => 'クラッシュレポートを確認するため、意図的にアプリをクラッシュさせます';
+
+  @override
+  String get settingsCrashlyticsTestConfirmTitle => 'テストクラッシュを実行しますか？';
+
+  @override
+  String get settingsCrashlyticsTestConfirmMessage => 'アプリはすぐにクラッシュします。再起動して Firebase Crashlytics でクラッシュを確認してください。';
+
+  @override
+  String get settingsCrashlyticsTestConfirmAction => '今すぐクラッシュ';
+
+  @override
+  String get settingsCrashlyticsTestTriggered => 'テストクラッシュを実行しています...';
+
+  @override
+  String settingsCrashlyticsTestFailed(String error) {
+    return 'テストクラッシュの実行に失敗しました: $error';
+  }
 
   @override
   String get settingsExportingData => 'データをエクスポート中...';

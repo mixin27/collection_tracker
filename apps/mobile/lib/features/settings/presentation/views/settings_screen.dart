@@ -1,5 +1,8 @@
+import 'package:app_logger/app_logger.dart';
 import 'package:collection_tracker/core/providers/providers.dart';
 import 'package:collection_tracker/l10n/l10n.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -112,6 +115,23 @@ class SettingsScreen extends ConsumerWidget {
               ],
             ),
           ),
+          if (kDebugMode) ...[
+            const SizedBox(height: AppSpacing.lg),
+            AppReveal(
+              delay: AppMotion.stagger * 3,
+              child: _SettingsSection(
+                title: l10n.settingsSectionDeveloper,
+                children: [
+                  _SettingsTile(
+                    icon: Icons.bug_report_outlined,
+                    title: l10n.settingsCrashlyticsTestTitle,
+                    subtitle: l10n.settingsCrashlyticsTestSubtitle,
+                    onTap: () => _handleCrashlyticsTest(context),
+                  ),
+                ],
+              ),
+            ),
+          ],
         ],
       ),
     );
@@ -337,6 +357,59 @@ class SettingsScreen extends ConsumerWidget {
         );
       },
     );
+  }
+
+  Future<void> _handleCrashlyticsTest(BuildContext context) async {
+    final l10n = context.l10n;
+    final shouldCrash = await showAppDialog<bool>(
+      context: context,
+      title: Text(l10n.settingsCrashlyticsTestConfirmTitle),
+      content: Text(l10n.settingsCrashlyticsTestConfirmMessage),
+      actions: [
+        AppButton(
+          label: l10n.actionCancel,
+          variant: AppButtonVariant.ghost,
+          onPressed: () => Navigator.pop(context, false),
+        ),
+        AppButton(
+          label: l10n.settingsCrashlyticsTestConfirmAction,
+          variant: AppButtonVariant.danger,
+          onPressed: () => Navigator.pop(context, true),
+        ),
+      ],
+    );
+
+    if (shouldCrash != true || !context.mounted) return;
+
+    try {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(l10n.settingsCrashlyticsTestTriggered)),
+      );
+
+      await FirebaseCrashlytics.instance.log(
+        'Manual Crashlytics test from debug settings action.',
+      );
+      await FirebaseCrashlytics.instance.setCustomKey(
+        'debug_action',
+        'settings_crashlytics_test',
+      );
+
+      await Future<void>.delayed(const Duration(milliseconds: 350));
+      FirebaseCrashlytics.instance.crash();
+    } catch (error, stackTrace) {
+      Logger.error(
+        'Failed to trigger Crashlytics test crash.',
+        error,
+        stackTrace,
+      );
+      if (!context.mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(l10n.settingsCrashlyticsTestFailed('$error')),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
   }
 
   Future<void> _showLanguageSelector(

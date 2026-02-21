@@ -42,6 +42,8 @@
   "@settingsSectionData": {},
   "settingsSectionAbout": "Acerca de",
   "@settingsSectionAbout": {},
+  "settingsSectionDeveloper": "Desarrollador",
+  "@settingsSectionDeveloper": {},
   "settingsThemeTitle": "Tema",
   "@settingsThemeTitle": {},
   "settingsLanguageTitle": "Idioma",
@@ -72,6 +74,26 @@
   "@settingsPrivacyPolicyTitle": {},
   "settingsTermsTitle": "Términos de servicio",
   "@settingsTermsTitle": {},
+  "settingsCrashlyticsTestTitle": "Probar Crashlytics",
+  "@settingsCrashlyticsTestTitle": {},
+  "settingsCrashlyticsTestSubtitle": "Bloquea la app intencionalmente para verificar los reportes de fallos",
+  "@settingsCrashlyticsTestSubtitle": {},
+  "settingsCrashlyticsTestConfirmTitle": "¿Activar bloqueo de prueba?",
+  "@settingsCrashlyticsTestConfirmTitle": {},
+  "settingsCrashlyticsTestConfirmMessage": "La aplicación se cerrará inmediatamente. Ábrela de nuevo para verificar el fallo en Firebase Crashlytics.",
+  "@settingsCrashlyticsTestConfirmMessage": {},
+  "settingsCrashlyticsTestConfirmAction": "Bloquear ahora",
+  "@settingsCrashlyticsTestConfirmAction": {},
+  "settingsCrashlyticsTestTriggered": "Iniciando bloqueo de prueba...",
+  "@settingsCrashlyticsTestTriggered": {},
+  "settingsCrashlyticsTestFailed": "No se pudo iniciar la prueba de bloqueo: {error}",
+  "@settingsCrashlyticsTestFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
   "settingsExportingData": "Exportando datos...",
   "@settingsExportingData": {},
   "settingsDataExportSuccess": "¡Datos exportados correctamente!",

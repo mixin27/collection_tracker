@@ -4,7 +4,10 @@
             "name": "Flutter",
             "type": "dart",
             "request": "launch",
-            "program": "apps/mobile/lib/main.dart"
+            "program": "apps/mobile/lib/main.dart",
+            "args": [
+                "--dart-define=ENABLE_CRASHLYTICS_IN_DEBUG=true"
+            ]
         }
     ]
 }

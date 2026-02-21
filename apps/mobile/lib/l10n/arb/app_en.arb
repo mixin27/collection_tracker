@@ -42,6 +42,8 @@
   "@settingsSectionData": {},
   "settingsSectionAbout": "About",
   "@settingsSectionAbout": {},
+  "settingsSectionDeveloper": "Developer",
+  "@settingsSectionDeveloper": {},
   "settingsThemeTitle": "Theme",
   "@settingsThemeTitle": {},
   "settingsLanguageTitle": "Language",
@@ -72,6 +74,26 @@
   "@settingsPrivacyPolicyTitle": {},
   "settingsTermsTitle": "Terms of Service",
   "@settingsTermsTitle": {},
+  "settingsCrashlyticsTestTitle": "Test Crashlytics",
+  "@settingsCrashlyticsTestTitle": {},
+  "settingsCrashlyticsTestSubtitle": "Intentionally crash the app to verify crash reporting",
+  "@settingsCrashlyticsTestSubtitle": {},
+  "settingsCrashlyticsTestConfirmTitle": "Trigger test crash?",
+  "@settingsCrashlyticsTestConfirmTitle": {},
+  "settingsCrashlyticsTestConfirmMessage": "The app will crash immediately. Re-open the app to verify the crash in Firebase Crashlytics.",
+  "@settingsCrashlyticsTestConfirmMessage": {},
+  "settingsCrashlyticsTestConfirmAction": "Crash Now",
+  "@settingsCrashlyticsTestConfirmAction": {},
+  "settingsCrashlyticsTestTriggered": "Triggering test crash...",
+  "@settingsCrashlyticsTestTriggered": {},
+  "settingsCrashlyticsTestFailed": "Failed to trigger crash test: {error}",
+  "@settingsCrashlyticsTestFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
   "settingsExportingData": "Exporting data...",
   "@settingsExportingData": {},
   "settingsDataExportSuccess": "Data exported successfully!",

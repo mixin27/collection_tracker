@@ -42,6 +42,8 @@
   "@settingsSectionData": {},
   "settingsSectionAbout": "情報",
   "@settingsSectionAbout": {},
+  "settingsSectionDeveloper": "開発者",
+  "@settingsSectionDeveloper": {},
   "settingsThemeTitle": "テーマ",
   "@settingsThemeTitle": {},
   "settingsLanguageTitle": "言語",
@@ -72,6 +74,26 @@
   "@settingsPrivacyPolicyTitle": {},
   "settingsTermsTitle": "利用規約",
   "@settingsTermsTitle": {},
+  "settingsCrashlyticsTestTitle": "Crashlytics をテスト",
+  "@settingsCrashlyticsTestTitle": {},
+  "settingsCrashlyticsTestSubtitle": "クラッシュレポートを確認するため、意図的にアプリをクラッシュさせます",
+  "@settingsCrashlyticsTestSubtitle": {},
+  "settingsCrashlyticsTestConfirmTitle": "テストクラッシュを実行しますか？",
+  "@settingsCrashlyticsTestConfirmTitle": {},
+  "settingsCrashlyticsTestConfirmMessage": "アプリはすぐにクラッシュします。再起動して Firebase Crashlytics でクラッシュを確認してください。",
+  "@settingsCrashlyticsTestConfirmMessage": {},
+  "settingsCrashlyticsTestConfirmAction": "今すぐクラッシュ",
+  "@settingsCrashlyticsTestConfirmAction": {},
+  "settingsCrashlyticsTestTriggered": "テストクラッシュを実行しています...",
+  "@settingsCrashlyticsTestTriggered": {},
+  "settingsCrashlyticsTestFailed": "テストクラッシュの実行に失敗しました: {error}",
+  "@settingsCrashlyticsTestFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
   "settingsExportingData": "データをエクスポート中...",
   "@settingsExportingData": {},
   "settingsDataExportSuccess": "データのエクスポートに成功しました！",

@@ -75,6 +75,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get settingsSectionAbout => 'Acerca de';
 
   @override
+  String get settingsSectionDeveloper => 'Desarrollador';
+
+  @override
   String get settingsThemeTitle => 'Tema';
 
   @override
@@ -118,6 +121,29 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get settingsTermsTitle => 'Términos de servicio';
+
+  @override
+  String get settingsCrashlyticsTestTitle => 'Probar Crashlytics';
+
+  @override
+  String get settingsCrashlyticsTestSubtitle => 'Bloquea la app intencionalmente para verificar los reportes de fallos';
+
+  @override
+  String get settingsCrashlyticsTestConfirmTitle => '¿Activar bloqueo de prueba?';
+
+  @override
+  String get settingsCrashlyticsTestConfirmMessage => 'La aplicación se cerrará inmediatamente. Ábrela de nuevo para verificar el fallo en Firebase Crashlytics.';
+
+  @override
+  String get settingsCrashlyticsTestConfirmAction => 'Bloquear ahora';
+
+  @override
+  String get settingsCrashlyticsTestTriggered => 'Iniciando bloqueo de prueba...';
+
+  @override
+  String settingsCrashlyticsTestFailed(String error) {
+    return 'No se pudo iniciar la prueba de bloqueo: $error';
+  }
 
   @override
   String get settingsExportingData => 'Exportando datos...';
