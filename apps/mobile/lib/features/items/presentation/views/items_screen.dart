@@ -1,16 +1,17 @@
 import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:go_router/go_router.dart';
+import 'package:ui/ui.dart';
 
+import '../../../collections/presentation/view_models/collections_view_model.dart';
+import '../../../collections/presentation/widgets/collection_details_sheet.dart';
 import '../view_models/items_view_model.dart';
 import '../../../../core/providers/providers.dart';
 import '../providers/items_filter_provider.dart';
 import '../widgets/item_card.dart';
 import '../widgets/item_grid_card.dart';
 import '../widgets/item_filter_sheet.dart';
-import '../../../collections/presentation/widgets/collection_details_sheet.dart';
 
 class ItemsScreen extends ConsumerStatefulWidget {
   final String collectionId;
@@ -37,8 +38,12 @@ class _ItemsScreenState extends ConsumerState<ItemsScreen> {
     final itemsAsync = ref.watch(
       filteredItemsListProvider(widget.collectionId),
     );
+    final collectionAsync = ref.watch(
+      collectionDetailProvider(widget.collectionId),
+    );
     final viewMode = ref.watch(itemsViewModeProvider);
     final filter = ref.watch(itemFilterProvider);
+    final collectionName = collectionAsync.asData?.value?.name ?? 'Items';
 
     // Use optimistic items if available, otherwise use stream data
     // Clear optimistic items when stream data matches the expected order
@@ -76,7 +81,7 @@ class _ItemsScreenState extends ConsumerState<ItemsScreen> {
     return Scaffold(
       appBar: AppBar(
         title: _isSearching
-            ? TextField(
+            ? AppInput(
                 controller: _searchController,
                 autofocus: true,
                 decoration: const InputDecoration(
@@ -87,40 +92,8 @@ class _ItemsScreenState extends ConsumerState<ItemsScreen> {
                   ref.read(itemFilterProvider.notifier).setSearchQuery(value);
                 },
               )
-            : const Text('Items'),
+            : Text(collectionName),
         actions: [
-          if (!_isSearching) ...[
-            IconButton(
-              icon: const Icon(Icons.info_outline),
-              onPressed: () => _showCollectionDetails(context),
-            ),
-            IconButton(
-              icon: Icon(
-                viewMode == ItemsViewMode.list
-                    ? Icons.grid_view
-                    : Icons.view_list,
-              ),
-              onPressed: () {
-                ref.read(itemsViewModeProvider.notifier).toggle();
-              },
-            ),
-            IconButton(
-              icon: Badge(
-                isLabelVisible:
-                    filter.conditions.isNotEmpty ||
-                    filter.tags.isNotEmpty ||
-                    filter.showOnlyFavorites ||
-                    filter.sortBy != ItemSortBy.createdAt,
-                child: const Icon(Icons.filter_list),
-              ),
-              onPressed: () => _showFilterSheet(context),
-            ),
-            IconButton(
-              icon: const Icon(Icons.sell_outlined),
-              tooltip: 'Manage tags',
-              onPressed: () => context.push('/settings/tags'),
-            ),
-          ],
           IconButton(
             icon: Icon(_isSearching ? Icons.close : Icons.search),
             onPressed: () {
@@ -137,98 +110,191 @@ class _ItemsScreenState extends ConsumerState<ItemsScreen> {
           ),
         ],
       ),
-      body: AnimatedSwitcher(
-        duration: 300.ms,
+      body: AppAnimatedSwitcher(
+        duration: AppMotion.medium,
         child: displayItemsAsync.when(
           data: (items) {
             if (items.isEmpty) {
-              return Center(
+              return EmptyState(
                 key: const ValueKey('empty'),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      _isSearching ||
-                              filter.conditions.isNotEmpty ||
-                              filter.tags.isNotEmpty ||
-                              filter.showOnlyFavorites
-                          ? Icons.search_off
-                          : Icons.inventory_2_outlined,
-                      size: 80,
-                      color: Theme.of(
-                        context,
-                      ).colorScheme.primary.withValues(alpha: 0.3),
-                    ),
-                    const SizedBox(height: 16),
-                    Text(
-                      items.isEmpty &&
-                              (_isSearching ||
-                                  filter.conditions.isNotEmpty ||
-                                  filter.tags.isNotEmpty ||
-                                  filter.showOnlyFavorites)
-                          ? 'No matches found'
-                          : 'No items yet',
-                      style: Theme.of(context).textTheme.headlineSmall,
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      _isSearching ||
-                              filter.conditions.isNotEmpty ||
-                              filter.tags.isNotEmpty ||
-                              filter.showOnlyFavorites
-                          ? 'Try adjusting your filters'
-                          : 'Add your first item to get started',
-                    ),
-                    if (!_isSearching &&
+                icon:
+                    _isSearching ||
+                        filter.conditions.isNotEmpty ||
+                        filter.tags.isNotEmpty ||
+                        filter.showOnlyFavorites
+                    ? Icons.search_off
+                    : Icons.inventory_2_outlined,
+                title:
+                    items.isEmpty &&
+                        (_isSearching ||
+                            filter.conditions.isNotEmpty ||
+                            filter.tags.isNotEmpty ||
+                            filter.showOnlyFavorites)
+                    ? 'No matches found'
+                    : 'No items yet',
+                message:
+                    _isSearching ||
+                        filter.conditions.isNotEmpty ||
+                        filter.tags.isNotEmpty ||
+                        filter.showOnlyFavorites
+                    ? 'Try adjusting your filters'
+                    : 'Add your first item to get started',
+                action:
+                    !_isSearching &&
                         filter.conditions.isEmpty &&
                         filter.tags.isEmpty &&
-                        !filter.showOnlyFavorites) ...[
-                      const SizedBox(height: 24),
-                      FilledButton.icon(
+                        !filter.showOnlyFavorites
+                    ? AppButton(
+                        label: 'Add Item',
+                        icon: const Icon(Icons.add),
                         onPressed: () => context.push(
                           '/collections/${widget.collectionId}/add-item',
                         ),
-                        icon: const Icon(Icons.add),
-                        label: const Text('Add Item'),
-                      ),
-                    ],
-                  ],
-                ),
+                      )
+                    : null,
               );
             }
 
             if (viewMode == ItemsViewMode.list) {
               final canReorder = filter.sortBy == ItemSortBy.custom;
+              return Column(
+                key: const ValueKey('list-layout'),
+                children: [
+                  _ItemsOverviewBar(
+                    itemCount: items.length,
+                    viewMode: viewMode,
+                    sortBy: filter.sortBy,
+                    hasActiveFilters:
+                        filter.conditions.isNotEmpty ||
+                        filter.tags.isNotEmpty ||
+                        filter.showOnlyFavorites ||
+                        filter.showOnlyWishlist ||
+                        filter.searchQuery.trim().isNotEmpty,
+                    onToggleViewMode: () =>
+                        ref.read(itemsViewModeProvider.notifier).toggle(),
+                    onOpenFilter: () => _showFilterSheet(context),
+                    onOpenDetails: () => _showCollectionDetails(context),
+                  ),
+                  Expanded(
+                    child: canReorder
+                        ? ReorderableListView.builder(
+                            key: const ValueKey('list-reorder'),
+                            physics: const AlwaysScrollableScrollPhysics(
+                              parent: BouncingScrollPhysics(),
+                            ),
+                            padding: const EdgeInsets.all(AppSpacing.lg),
+                            itemCount: items.length,
+                            onReorder: (oldIndex, newIndex) {
+                              if (oldIndex < newIndex) {
+                                newIndex -= 1;
+                              }
+                              final reorderedItems = List<Item>.from(items);
+                              final item = reorderedItems.removeAt(oldIndex);
+                              reorderedItems.insert(newIndex, item);
 
-              if (canReorder) {
-                return ReorderableListView.builder(
-                  key: const ValueKey('list'),
-                  padding: const EdgeInsets.all(16),
-                  itemCount: items.length,
-                  onReorder: (oldIndex, newIndex) {
-                    if (oldIndex < newIndex) {
-                      newIndex -= 1;
-                    }
-                    final reorderedItems = List<Item>.from(items);
-                    final item = reorderedItems.removeAt(oldIndex);
-                    reorderedItems.insert(newIndex, item);
+                              // Optimistically update UI immediately
+                              setState(() {
+                                _optimisticItems = reorderedItems;
+                              });
 
-                    // Optimistically update UI immediately
-                    setState(() {
-                      _optimisticItems = reorderedItems;
-                    });
+                              // Persist to database in background
+                              final itemIds = reorderedItems
+                                  .map((e) => e.id)
+                                  .toList();
+                              ref.read(reorderItemsProvider(itemIds).future);
+                            },
+                            itemBuilder: (context, index) {
+                              final item = items[index];
+                              final heroTag = 'collection_items_${item.id}';
+                              return AppReveal(
+                                key: ValueKey(item.id),
+                                delay: AppMotion.stagger * index,
+                                child: ItemCard(
+                                  item: item,
+                                  heroTag: heroTag,
+                                  onTap: () => context.push(
+                                    '/items/${item.id}?heroTag=$heroTag',
+                                  ),
+                                  onDelete: () =>
+                                      _showDeleteDialog(context, ref, item),
+                                ),
+                              );
+                            },
+                          )
+                        : ListView.builder(
+                            key: const ValueKey('list'),
+                            padding: const EdgeInsets.all(AppSpacing.lg),
+                            itemCount: items.length,
+                            itemBuilder: (context, index) {
+                              final item = items[index];
+                              final heroTag = 'collection_items_${item.id}';
+                              return AppReveal(
+                                delay: AppMotion.stagger * index,
+                                child: ItemCard(
+                                  item: item,
+                                  heroTag: heroTag,
+                                  onTap: () => context.push(
+                                    '/items/${item.id}?heroTag=$heroTag',
+                                  ),
+                                  onDelete: () =>
+                                      _showDeleteDialog(context, ref, item),
+                                ),
+                              );
+                            },
+                          ),
+                  ),
+                ],
+              );
+            } else {
+              return Column(
+                key: const ValueKey('grid-layout'),
+                children: [
+                  _ItemsOverviewBar(
+                    itemCount: items.length,
+                    viewMode: viewMode,
+                    sortBy: filter.sortBy,
+                    hasActiveFilters:
+                        filter.conditions.isNotEmpty ||
+                        filter.tags.isNotEmpty ||
+                        filter.showOnlyFavorites ||
+                        filter.showOnlyWishlist ||
+                        filter.searchQuery.trim().isNotEmpty,
+                    onToggleViewMode: () =>
+                        ref.read(itemsViewModeProvider.notifier).toggle(),
+                    onOpenFilter: () => _showFilterSheet(context),
+                    onOpenDetails: () => _showCollectionDetails(context),
+                  ),
+                  Expanded(
+                    child: LayoutBuilder(
+                      builder: (context, constraints) {
+                        final crossAxisCount = constraints.maxWidth > 1080
+                            ? 4
+                            : constraints.maxWidth > 760
+                            ? 3
+                            : 2;
 
-                    // Persist to database in background
-                    final itemIds = reorderedItems.map((e) => e.id).toList();
-                    ref.read(reorderItemsProvider(itemIds).future);
-                  },
-                  itemBuilder: (context, index) {
-                    final item = items[index];
-                    final heroTag = 'collection_items_${item.id}';
-                    return Container(
-                      key: ValueKey(item.id),
-                      child:
-                          ItemCard(
+                        return GridView.builder(
+                          key: const ValueKey('grid'),
+                          physics: const AlwaysScrollableScrollPhysics(
+                            parent: BouncingScrollPhysics(),
+                          ),
+                          padding: const EdgeInsets.all(AppSpacing.lg),
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: crossAxisCount,
+                                childAspectRatio: 0.72,
+                                crossAxisSpacing: AppSpacing.md,
+                                mainAxisSpacing: AppSpacing.md,
+                              ),
+                          itemCount: items.length,
+                          itemBuilder: (context, index) {
+                            final item = items[index];
+                            final heroTag = 'collection_items_${item.id}';
+                            return AppReveal(
+                              delay: AppMotion.stagger * index,
+                              beginOffsetY: 0.02,
+                              beginScale: 0.94,
+                              child: ItemGridCard(
                                 item: item,
                                 heroTag: heroTag,
                                 onTap: () => context.push(
@@ -236,101 +302,27 @@ class _ItemsScreenState extends ConsumerState<ItemsScreen> {
                                 ),
                                 onDelete: () =>
                                     _showDeleteDialog(context, ref, item),
-                              )
-                              .animate(delay: (index * 50).ms)
-                              .fadeIn(duration: 400.ms, curve: Curves.easeOut)
-                              .slideY(
-                                begin: 0.1,
-                                end: 0,
-                                duration: 400.ms,
-                                curve: Curves.easeOut,
                               ),
-                    );
-                  },
-                );
-              } else {
-                return ListView.builder(
-                  key: const ValueKey('list'),
-                  padding: const EdgeInsets.all(16),
-                  itemCount: items.length,
-                  itemBuilder: (context, index) {
-                    final item = items[index];
-                    final heroTag = 'collection_items_${item.id}';
-                    return ItemCard(
-                          item: item,
-                          heroTag: heroTag,
-                          onTap: () => context.push(
-                            '/items/${item.id}?heroTag=$heroTag',
-                          ),
-                          onDelete: () => _showDeleteDialog(context, ref, item),
-                        )
-                        .animate(delay: (index * 50).ms)
-                        .fadeIn(duration: 400.ms, curve: Curves.easeOut)
-                        .slideY(
-                          begin: 0.1,
-                          end: 0,
-                          duration: 400.ms,
-                          curve: Curves.easeOut,
+                            );
+                          },
                         );
-                  },
-                );
-              }
-            } else {
-              return GridView.builder(
-                key: const ValueKey('grid'),
-                padding: const EdgeInsets.all(16),
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  childAspectRatio: 0.75,
-                  crossAxisSpacing: 12,
-                  mainAxisSpacing: 12,
-                ),
-                itemCount: items.length,
-                itemBuilder: (context, index) {
-                  final item = items[index];
-                  final heroTag = 'collection_items_${item.id}';
-                  return ItemGridCard(
-                        item: item,
-                        heroTag: heroTag,
-                        onTap: () =>
-                            context.push('/items/${item.id}?heroTag=$heroTag'),
-                        onDelete: () => _showDeleteDialog(context, ref, item),
-                      )
-                      .animate(delay: (index * 50).ms)
-                      .fadeIn(duration: 400.ms, curve: Curves.easeOut)
-                      .scale(
-                        begin: const Offset(0.9, 0.9),
-                        end: const Offset(1, 1),
-                        duration: 400.ms,
-                        curve: Curves.easeOut,
-                      );
-                },
+                      },
+                    ),
+                  ),
+                ],
               );
             }
           },
-          loading: () => const Center(
+          loading: () => const LoadingView(
             key: ValueKey('loading'),
-            child: CircularProgressIndicator(),
+            message: 'Loading items...',
           ),
-          error: (error, stack) => Center(
+          error: (error, stack) => ErrorView(
             key: const ValueKey('error'),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Icon(Icons.error_outline, size: 64, color: Colors.red),
-                const SizedBox(height: 16),
-                Text('Error loading items: $error'),
-                const SizedBox(height: 16),
-                ElevatedButton(
-                  onPressed: () {
-                    ref.invalidate(
-                      filteredItemsListProvider(widget.collectionId),
-                    );
-                  },
-                  child: const Text('Retry'),
-                ),
-              ],
-            ),
+            message: 'Error loading items: $error',
+            onRetry: () {
+              ref.invalidate(filteredItemsListProvider(widget.collectionId));
+            },
           ),
         ),
       ),
@@ -343,7 +335,7 @@ class _ItemsScreenState extends ConsumerState<ItemsScreen> {
   }
 
   void _showFilterSheet(BuildContext context) {
-    showModalBottomSheet(
+    showAppSheet(
       context: context,
       isScrollControlled: true,
       builder: (context) => ItemFilterSheet(collectionId: widget.collectionId),
@@ -351,10 +343,9 @@ class _ItemsScreenState extends ConsumerState<ItemsScreen> {
   }
 
   void _showCollectionDetails(BuildContext context) {
-    showModalBottomSheet(
+    showAppSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: Colors.transparent,
       builder: (context) =>
           CollectionDetailsSheet(collectionId: widget.collectionId),
     );
@@ -365,23 +356,22 @@ class _ItemsScreenState extends ConsumerState<ItemsScreen> {
     WidgetRef ref,
     Item item,
   ) async {
-    final confirmed = await showDialog<bool>(
+    final confirmed = await showAppDialog<bool>(
       context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Delete Item'),
-        content: Text('Are you sure you want to delete "${item.title}"?'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context, false),
-            child: const Text('Cancel'),
-          ),
-          FilledButton(
-            onPressed: () => Navigator.pop(context, true),
-            style: FilledButton.styleFrom(backgroundColor: Colors.red),
-            child: const Text('Delete'),
-          ),
-        ],
-      ),
+      title: const Text('Delete Item'),
+      content: Text('Are you sure you want to delete "${item.title}"?'),
+      actions: [
+        AppButton(
+          label: 'Cancel',
+          variant: AppButtonVariant.ghost,
+          onPressed: () => Navigator.pop(context, false),
+        ),
+        AppButton(
+          label: 'Delete',
+          variant: AppButtonVariant.danger,
+          onPressed: () => Navigator.pop(context, true),
+        ),
+      ],
     );
 
     if (confirmed == true && context.mounted) {
@@ -393,5 +383,100 @@ class _ItemsScreenState extends ConsumerState<ItemsScreen> {
         ).showSnackBar(SnackBar(content: Text('${item.title} deleted')));
       }
     }
+  }
+}
+
+class _ItemsOverviewBar extends StatelessWidget {
+  final int itemCount;
+  final ItemSortBy sortBy;
+  final ItemsViewMode viewMode;
+  final bool hasActiveFilters;
+  final VoidCallback onToggleViewMode;
+  final VoidCallback onOpenFilter;
+  final VoidCallback onOpenDetails;
+
+  const _ItemsOverviewBar({
+    required this.itemCount,
+    required this.sortBy,
+    required this.viewMode,
+    required this.hasActiveFilters,
+    required this.onToggleViewMode,
+    required this.onOpenFilter,
+    required this.onOpenDetails,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(
+        AppSpacing.lg,
+        AppSpacing.md,
+        AppSpacing.lg,
+        0,
+      ),
+      child: AppCard(
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppSpacing.md,
+          vertical: AppSpacing.sm,
+        ),
+        child: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.symmetric(
+                horizontal: AppSpacing.sm,
+                vertical: 6,
+              ),
+              decoration: BoxDecoration(
+                color: theme.colorScheme.primary.withValues(alpha: 0.10),
+                borderRadius: BorderRadius.circular(AppRadii.pill),
+              ),
+              child: Text(
+                '$itemCount items',
+                style: theme.textTheme.labelMedium?.copyWith(
+                  color: theme.colorScheme.primary,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ),
+            const SizedBox(width: AppSpacing.sm),
+            Expanded(
+              child: Text(
+                'Sorted by ${sortBy.label}',
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: theme.textTheme.bodySmall?.copyWith(
+                  color: theme.colorScheme.onSurfaceVariant,
+                ),
+              ),
+            ),
+            IconButton(
+              tooltip: 'Collection details',
+              onPressed: onOpenDetails,
+              icon: const Icon(Icons.info_outline_rounded),
+            ),
+            IconButton(
+              tooltip: viewMode == ItemsViewMode.list
+                  ? 'Switch to grid'
+                  : 'Switch to list',
+              onPressed: onToggleViewMode,
+              icon: Icon(
+                viewMode == ItemsViewMode.list
+                    ? Icons.grid_view_rounded
+                    : Icons.view_agenda_rounded,
+              ),
+            ),
+            IconButton(
+              tooltip: 'Open filters',
+              onPressed: onOpenFilter,
+              icon: Badge(
+                isLabelVisible: hasActiveFilters,
+                child: const Icon(Icons.tune_rounded),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

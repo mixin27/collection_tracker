@@ -3,6 +3,7 @@ import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:ui/ui.dart';
 
 import '../view_models/items_view_model.dart';
 import '../view_models/tag_items_view_model.dart';
@@ -59,11 +60,11 @@ class _TagItemsScreenState extends ConsumerState<TagItemsScreen> {
         data: (items) => collectionsAsync.when(
           data: (collections) =>
               _buildContent(context, ref, items, collections),
-          loading: () => const Center(child: CircularProgressIndicator()),
-          error: (error, _) => Center(child: Text('Error: $error')),
+          loading: () => const LoadingView(message: 'Loading collections...'),
+          error: (error, _) => ErrorView(message: 'Error: $error'),
         ),
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (error, _) => Center(child: Text('Error: $error')),
+        loading: () => const LoadingView(message: 'Loading tagged items...'),
+        error: (error, _) => ErrorView(message: 'Error: $error'),
       ),
     );
   }
@@ -75,22 +76,10 @@ class _TagItemsScreenState extends ConsumerState<TagItemsScreen> {
     List<Collection> collections,
   ) {
     if (items.isEmpty) {
-      return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              Icons.search_off,
-              size: 72,
-              color: Theme.of(context).colorScheme.outline,
-            ),
-            const SizedBox(height: 12),
-            Text(
-              'No items found for this tag',
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
-          ],
-        ),
+      return const EmptyState(
+        icon: Icons.search_off,
+        title: 'No items found',
+        message: 'No collection items currently use this tag.',
       );
     }
 
@@ -109,6 +98,9 @@ class _TagItemsScreenState extends ConsumerState<TagItemsScreen> {
       });
 
     return ListView.builder(
+      physics: const AlwaysScrollableScrollPhysics(
+        parent: BouncingScrollPhysics(),
+      ),
       padding: const EdgeInsets.fromLTRB(16, 12, 16, 20),
       itemCount: sortedCollectionIds.length,
       itemBuilder: (context, sectionIndex) {
@@ -120,56 +112,63 @@ class _TagItemsScreenState extends ConsumerState<TagItemsScreen> {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            InkWell(
-              borderRadius: BorderRadius.circular(12),
+            AppCard(
+              padding: const EdgeInsets.fromLTRB(8, 8, 4, 8),
+              borderRadius: BorderRadius.circular(AppRadii.md),
               onTap: () => _toggleCollectionCollapse(collectionId),
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(8, 8, 4, 8),
-                child: Row(
-                  children: [
-                    Icon(isCollapsed ? Icons.expand_more : Icons.expand_less),
-                    const SizedBox(width: 4),
-                    Expanded(
-                      child: Text(
-                        collectionName,
-                        style: Theme.of(context).textTheme.titleMedium
-                            ?.copyWith(fontWeight: FontWeight.w700),
+              child: Row(
+                children: [
+                  Icon(isCollapsed ? Icons.expand_more : Icons.expand_less),
+                  const SizedBox(width: 4),
+                  Expanded(
+                    child: Text(
+                      collectionName,
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.w700,
                       ),
                     ),
-                    Text(
-                      '(${sectionItems.length})',
-                      style: Theme.of(context).textTheme.bodySmall,
-                    ),
-                    IconButton(
-                      tooltip: 'Open collection',
-                      icon: const Icon(Icons.open_in_new, size: 20),
-                      onPressed: () => context.go('/collections/$collectionId'),
-                    ),
-                  ],
-                ),
+                  ),
+                  Text(
+                    '(${sectionItems.length})',
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
+                  IconButton(
+                    tooltip: 'Open collection',
+                    icon: const Icon(Icons.open_in_new, size: 20),
+                    onPressed: () => context.go('/collections/$collectionId'),
+                  ),
+                ],
               ),
             ),
-            AnimatedSwitcher(
-              duration: const Duration(milliseconds: 220),
+            const SizedBox(height: AppSpacing.xs),
+            AppAnimatedSwitcher(
+              duration: AppMotion.medium,
               child: isCollapsed
                   ? const SizedBox.shrink()
                   : Column(
                       key: ValueKey(collectionId),
-                      children: sectionItems.map((item) {
+                      children: sectionItems.asMap().entries.map((entry) {
+                        final index = entry.key;
+                        final item = entry.value;
                         final heroTag = 'tag_${widget.tagName}_${item.id}';
-                        return ItemCard(
-                          item: item,
-                          heroTag: heroTag,
-                          onTap: () => context.pushNamed(
-                            'item-detail',
-                            pathParameters: {'id': item.id},
-                            queryParameters: {'heroTag': heroTag},
+                        return AppReveal(
+                          delay: AppMotion.stagger * index,
+                          child: ItemCard(
+                            item: item,
+                            heroTag: heroTag,
+                            onTap: () => context.pushNamed(
+                              'item-detail',
+                              pathParameters: {'id': item.id},
+                              queryParameters: {'heroTag': heroTag},
+                            ),
+                            onDelete: () =>
+                                _showDeleteDialog(context, ref, item),
                           ),
-                          onDelete: () => _showDeleteDialog(context, ref, item),
                         );
                       }).toList(),
                     ),
             ),
+            const SizedBox(height: AppSpacing.sm),
           ],
         );
       },
@@ -205,23 +204,22 @@ class _TagItemsScreenState extends ConsumerState<TagItemsScreen> {
     WidgetRef ref,
     Item item,
   ) async {
-    final confirmed = await showDialog<bool>(
+    final confirmed = await showAppDialog<bool>(
       context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Delete Item'),
-        content: Text('Delete "${item.title}"?'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context, false),
-            child: const Text('Cancel'),
-          ),
-          FilledButton(
-            onPressed: () => Navigator.pop(context, true),
-            style: FilledButton.styleFrom(backgroundColor: Colors.red),
-            child: const Text('Delete'),
-          ),
-        ],
-      ),
+      title: const Text('Delete Item'),
+      content: Text('Delete "${item.title}"?'),
+      actions: [
+        AppButton(
+          label: 'Cancel',
+          variant: AppButtonVariant.ghost,
+          onPressed: () => Navigator.pop(context, false),
+        ),
+        AppButton(
+          label: 'Delete',
+          variant: AppButtonVariant.danger,
+          onPressed: () => Navigator.pop(context, true),
+        ),
+      ],
     );
 
     if (confirmed != true || !context.mounted) return;

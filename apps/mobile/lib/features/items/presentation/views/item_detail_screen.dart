@@ -6,6 +6,7 @@ import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:ui/ui.dart';
 
 import '../providers/price_tracking_provider.dart';
 import '../view_models/items_view_model.dart';
@@ -25,169 +26,159 @@ class ItemDetailScreen extends ConsumerWidget {
         if (item == null) {
           return Scaffold(
             appBar: AppBar(),
-            body: const Center(child: Text('Item not found')),
+            body: const EmptyState(
+              icon: Icons.inventory_2_outlined,
+              title: 'Item not found',
+              message: 'This item may have been deleted.',
+            ),
           );
         }
 
         final theme = Theme.of(context);
         final priceHistoryAsync = ref.watch(itemPriceHistoryProvider(item.id));
+        final effectiveValue = item.currentValue ?? item.purchasePrice;
 
         return Scaffold(
           appBar: AppBar(
-            title: Text(item.title),
+            title: Text(
+              item.title,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
             actions: [
               IconButton(
-                tooltip: 'Add to favorites',
-                icon: Icon(
-                  item.isFavorite ? Icons.favorite : Icons.favorite_border,
-                  color: item.isFavorite ? Colors.red : null,
-                ),
-                onPressed: () {
-                  ref.read(toggleFavoriteProvider(item));
-                },
-              ),
-              IconButton(
-                tooltip: 'Add to wishlist',
-                icon: Icon(
-                  item.isWishlist ? Icons.bookmark : Icons.bookmark_border,
-                  color: item.isWishlist ? theme.colorScheme.primary : null,
-                ),
-                onPressed: () {
-                  ref.read(toggleWishlistProvider(item));
-                },
-              ),
-              IconButton(
-                icon: const Icon(Icons.edit),
+                icon: const Icon(Icons.edit_rounded),
                 tooltip: 'Edit item',
-                onPressed: () {
-                  context.push('/items/${item.id}/edit');
-                },
+                onPressed: () => context.push('/items/${item.id}/edit'),
               ),
             ],
           ),
           body: ListView(
+            physics: const BouncingScrollPhysics(),
             children: [
-              // Cover Image
-              if (item.coverImagePath != null)
-                Hero(
-                  tag: heroTag ?? 'item_${item.id}',
-                  child: SizedBox(
-                    height: 300,
-                    width: double.infinity,
-                    child: Image.file(
-                      File(item.coverImagePath!),
-                      fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) => Container(
-                        color: theme.colorScheme.surfaceContainerHighest,
-                        child: Icon(
-                          Icons.image_not_supported,
-                          size: 80,
-                          color: theme.colorScheme.onSurfaceVariant,
-                        ),
-                      ),
-                    ),
-                  ),
-                )
-              else if (item.coverImageUrl != null)
-                Hero(
-                  tag: heroTag ?? 'item_${item.id}',
-                  child: SizedBox(
-                    height: 300,
-                    width: double.infinity,
-                    child: CachedNetworkImage(
-                      imageUrl: item.coverImageUrl!,
-                      fit: BoxFit.cover,
-                      placeholder: (context, url) =>
-                          const Center(child: CircularProgressIndicator()),
-                      errorWidget: (context, url, error) => Container(
-                        color: theme.colorScheme.surfaceContainerHighest,
-                        child: Icon(
-                          Icons.image_not_supported,
-                          size: 80,
-                          color: theme.colorScheme.onSurfaceVariant,
-                        ),
-                      ),
-                    ),
-                  ),
-                )
-              else
-                Hero(
-                  tag: heroTag ?? 'item_${item.id}',
-                  child: Container(
-                    height: 200,
-                    width: double.infinity,
-                    color: theme.colorScheme.surfaceContainerHighest,
-                    child: Icon(
-                      Icons.image_not_supported,
-                      size: 80,
-                      color: theme.colorScheme.onSurfaceVariant,
-                    ),
-                  ),
-                ),
-
+              _ItemHeroBanner(
+                item: item,
+                heroTag: heroTag,
+                effectiveValue: effectiveValue,
+                formatCurrency: _formatCurrency,
+              ),
               Padding(
-                padding: const EdgeInsets.all(16),
+                padding: const EdgeInsets.fromLTRB(
+                  AppSpacing.lg,
+                  AppSpacing.lg,
+                  AppSpacing.lg,
+                  AppSpacing.xxl,
+                ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Title
-                    Text(
-                      item.title,
-                      style: theme.textTheme.headlineSmall?.copyWith(
-                        fontWeight: FontWeight.bold,
+                    AppReveal(
+                      child: AppCard(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              item.title,
+                              style: theme.textTheme.headlineSmall?.copyWith(
+                                fontWeight: FontWeight.w800,
+                              ),
+                            ),
+                            if (item.description != null &&
+                                item.description!.trim().isNotEmpty) ...[
+                              const SizedBox(height: AppSpacing.sm),
+                              Text(
+                                item.description!,
+                                style: theme.textTheme.bodyMedium?.copyWith(
+                                  color: theme.colorScheme.onSurfaceVariant,
+                                  height: 1.35,
+                                ),
+                              ),
+                            ],
+                            const SizedBox(height: AppSpacing.md),
+                            Wrap(
+                              spacing: AppSpacing.sm,
+                              runSpacing: AppSpacing.sm,
+                              children: [
+                                _QuickActionChip(
+                                  icon: item.isFavorite
+                                      ? Icons.favorite_rounded
+                                      : Icons.favorite_border_rounded,
+                                  label: item.isFavorite
+                                      ? 'Favorited'
+                                      : 'Favorite',
+                                  active: item.isFavorite,
+                                  onTap: () =>
+                                      ref.read(toggleFavoriteProvider(item)),
+                                ),
+                                _QuickActionChip(
+                                  icon: item.isWishlist
+                                      ? Icons.bookmark_rounded
+                                      : Icons.bookmark_border_rounded,
+                                  label: item.isWishlist
+                                      ? 'In wishlist'
+                                      : 'Wishlist',
+                                  active: item.isWishlist,
+                                  onTap: () =>
+                                      ref.read(toggleWishlistProvider(item)),
+                                ),
+                                _QuickActionChip(
+                                  icon: Icons.edit_rounded,
+                                  label: 'Edit item',
+                                  onTap: () =>
+                                      context.push('/items/${item.id}/edit'),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                    const SizedBox(height: 16),
-
-                    // Description
-                    if (item.description != null &&
-                        item.description!.isNotEmpty) ...[
-                      Text(
-                        'Description',
-                        style: theme.textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      Text(item.description!, style: theme.textTheme.bodyLarge),
-                      const SizedBox(height: 16),
-                    ],
-
                     if (item.tags.isNotEmpty) ...[
-                      Text(
-                        'Tags',
-                        style: theme.textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      AnimatedSize(
-                        duration: const Duration(milliseconds: 240),
-                        curve: Curves.easeOutCubic,
-                        child: Wrap(
-                          spacing: 8,
-                          runSpacing: 8,
-                          children: item.tags
-                              .map(
-                                (tag) => ActionChip(
-                                  label: Text(tag),
-                                  backgroundColor:
-                                      theme.colorScheme.secondaryContainer,
-                                  onPressed: () => context.pushNamed(
-                                    'tag-items',
-                                    queryParameters: {'tag': tag},
-                                  ),
+                      const SizedBox(height: AppSpacing.md),
+                      AppReveal(
+                        delay: AppMotion.stagger,
+                        child: AppCard(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Tags',
+                                style: theme.textTheme.titleMedium?.copyWith(
+                                  fontWeight: FontWeight.w700,
                                 ),
-                              )
-                              .toList(),
+                              ),
+                              const SizedBox(height: AppSpacing.sm),
+                              AnimatedSize(
+                                duration: AppMotion.medium,
+                                curve: AppMotion.emphasized,
+                                child: Wrap(
+                                  spacing: AppSpacing.sm,
+                                  runSpacing: AppSpacing.sm,
+                                  children: item.tags
+                                      .map(
+                                        (tag) => ActionChip(
+                                          label: Text(tag),
+                                          backgroundColor: theme
+                                              .colorScheme
+                                              .secondaryContainer,
+                                          onPressed: () => context.pushNamed(
+                                            'tag-items',
+                                            queryParameters: {'tag': tag},
+                                          ),
+                                        ),
+                                      )
+                                      .toList(),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                      const SizedBox(height: 16),
                     ],
-
-                    Card(
-                      child: Padding(
-                        padding: const EdgeInsets.all(16),
+                    const SizedBox(height: AppSpacing.md),
+                    AppReveal(
+                      delay: AppMotion.stagger * 2,
+                      child: AppCard(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -196,98 +187,116 @@ class ItemDetailScreen extends ConsumerWidget {
                                 Text(
                                   'Price Tracking',
                                   style: theme.textTheme.titleMedium?.copyWith(
-                                    fontWeight: FontWeight.bold,
+                                    fontWeight: FontWeight.w700,
                                   ),
                                 ),
                                 const Spacer(),
-                                TextButton.icon(
+                                AppButton(
+                                  label: 'Update',
+                                  icon: const Icon(Icons.show_chart, size: 18),
+                                  variant: AppButtonVariant.ghost,
                                   onPressed: () =>
                                       _showUpdateCurrentValueDialog(
                                         context,
                                         ref,
                                         item,
                                       ),
-                                  icon: const Icon(Icons.show_chart),
-                                  label: const Text('Update'),
                                 ),
                               ],
                             ),
-                            if (item.currentValue != null) ...[
-                              const SizedBox(height: 4),
+                            if (effectiveValue != null) ...[
+                              const SizedBox(height: 2),
                               Text(
-                                _formatCurrency(item.currentValue!),
+                                _formatCurrency(effectiveValue),
                                 style: theme.textTheme.headlineSmall?.copyWith(
-                                  fontWeight: FontWeight.w700,
+                                  fontWeight: FontWeight.w800,
                                   color: theme.colorScheme.primary,
                                 ),
                               ),
+                              if (item.purchasePrice != null &&
+                                  item.currentValue != null) ...[
+                                const SizedBox(height: 4),
+                                _ValueDelta(
+                                  purchasePrice: item.purchasePrice!,
+                                  currentValue: item.currentValue!,
+                                ),
+                              ],
                             ] else ...[
                               const SizedBox(height: 4),
                               Text(
-                                'No current value set',
+                                'No value set yet',
                                 style: theme.textTheme.bodyMedium?.copyWith(
                                   color: theme.colorScheme.onSurfaceVariant,
                                 ),
                               ),
                             ],
-                            const SizedBox(height: 12),
-                            priceHistoryAsync.when(
-                              data: (history) {
-                                if (history.isEmpty) {
-                                  return Text(
-                                    'No historical points yet. Update current value to start tracking.',
-                                    style: theme.textTheme.bodySmall?.copyWith(
-                                      color: theme.colorScheme.onSurfaceVariant,
-                                    ),
-                                  );
-                                }
+                            const SizedBox(height: AppSpacing.md),
+                            AppAnimatedSwitcher(
+                              child: priceHistoryAsync.when(
+                                data: (history) {
+                                  if (history.isEmpty) {
+                                    return Text(
+                                      'No historical points yet. Update the current value to begin tracking.',
+                                      key: const ValueKey('history-empty'),
+                                      style: theme.textTheme.bodySmall
+                                          ?.copyWith(
+                                            color: theme
+                                                .colorScheme
+                                                .onSurfaceVariant,
+                                          ),
+                                    );
+                                  }
 
-                                final recent = history.reversed
-                                    .take(5)
-                                    .toList();
-                                return Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    _PriceHistoryChart(points: history),
-                                    const SizedBox(height: 12),
-                                    ...recent.map(
-                                      (entry) => Padding(
-                                        padding: const EdgeInsets.only(
-                                          bottom: 6,
-                                        ),
-                                        child: Row(
-                                          children: [
-                                            Text(
-                                              _formatDate(entry.$1),
-                                              style: theme.textTheme.bodySmall,
-                                            ),
-                                            const Spacer(),
-                                            Text(
-                                              _formatCurrency(entry.$2),
-                                              style: theme.textTheme.bodyMedium
-                                                  ?.copyWith(
-                                                    fontWeight: FontWeight.w600,
-                                                  ),
-                                            ),
-                                          ],
+                                  final recent = history.reversed
+                                      .take(5)
+                                      .toList();
+                                  return Column(
+                                    key: const ValueKey('history-data'),
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      _PriceHistoryChart(points: history),
+                                      const SizedBox(height: AppSpacing.md),
+                                      ...recent.map(
+                                        (entry) => Padding(
+                                          padding: const EdgeInsets.only(
+                                            bottom: AppSpacing.xs,
+                                          ),
+                                          child: Row(
+                                            children: [
+                                              Text(
+                                                _formatDate(entry.$1),
+                                                style:
+                                                    theme.textTheme.bodySmall,
+                                              ),
+                                              const Spacer(),
+                                              Text(
+                                                _formatCurrency(entry.$2),
+                                                style: theme
+                                                    .textTheme
+                                                    .bodyMedium
+                                                    ?.copyWith(
+                                                      fontWeight:
+                                                          FontWeight.w700,
+                                                    ),
+                                              ),
+                                            ],
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                  ],
-                                );
-                              },
-                              loading: () => const SizedBox(
-                                height: 80,
-                                child: Center(
-                                  child: CircularProgressIndicator(
-                                    strokeWidth: 2,
-                                  ),
+                                    ],
+                                  );
+                                },
+                                loading: () => const SizedBox(
+                                  height: 84,
+                                  child: LoadingView(indicatorSize: 36),
                                 ),
-                              ),
-                              error: (_, _) => Text(
-                                'Unable to load price history',
-                                style: theme.textTheme.bodySmall?.copyWith(
-                                  color: theme.colorScheme.error,
+                                error: (_, _) => Text(
+                                  'Unable to load price history',
+                                  key: const ValueKey('history-error'),
+                                  style: theme.textTheme.bodySmall?.copyWith(
+                                    color: theme.colorScheme.error,
+                                  ),
                                 ),
                               ),
                             ),
@@ -295,55 +304,58 @@ class ItemDetailScreen extends ConsumerWidget {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 16),
-
-                    // Details Card
-                    Card(
-                      child: Padding(
-                        padding: const EdgeInsets.all(16),
+                    const SizedBox(height: AppSpacing.md),
+                    AppReveal(
+                      delay: AppMotion.stagger * 3,
+                      child: AppCard(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
                               'Details',
                               style: theme.textTheme.titleMedium?.copyWith(
-                                fontWeight: FontWeight.bold,
+                                fontWeight: FontWeight.w700,
                               ),
                             ),
-                            const SizedBox(height: 12),
+                            const SizedBox(height: AppSpacing.md),
                             if (item.barcode != null)
                               _DetailRow(
+                                icon: Icons.qr_code_rounded,
                                 label: 'Barcode',
                                 value: item.barcode!,
                               ),
                             if (item.condition != null)
                               _DetailRow(
+                                icon: Icons.verified_rounded,
                                 label: 'Condition',
                                 value: item.condition!.name.toUpperCase(),
                               ),
                             _DetailRow(
+                              icon: Icons.layers_rounded,
                               label: 'Quantity',
                               value: '${item.quantity}',
                             ),
                             if (item.location != null)
                               _DetailRow(
+                                icon: Icons.location_on_rounded,
                                 label: 'Location',
                                 value: item.location!,
                               ),
                             if (item.purchasePrice != null)
                               _DetailRow(
+                                icon: Icons.attach_money_rounded,
                                 label: 'Purchase Price',
-                                value:
-                                    '\$${item.purchasePrice!.toStringAsFixed(2)}',
+                                value: _formatCurrency(item.purchasePrice!),
                               ),
                             if (item.currentValue != null)
                               _DetailRow(
+                                icon: Icons.show_chart_rounded,
                                 label: 'Current Value',
-                                value:
-                                    '\$${item.currentValue!.toStringAsFixed(2)}',
+                                value: _formatCurrency(item.currentValue!),
                               ),
                             if (item.purchaseDate != null)
                               _DetailRow(
+                                icon: Icons.event_rounded,
                                 label: 'Purchase Date',
                                 value: _formatDate(item.purchaseDate!),
                               ),
@@ -351,26 +363,27 @@ class ItemDetailScreen extends ConsumerWidget {
                         ),
                       ),
                     ),
-
-                    // Notes
-                    if (item.notes != null && item.notes!.isNotEmpty) ...[
-                      const SizedBox(height: 16),
-                      Card(
-                        child: Padding(
-                          padding: const EdgeInsets.all(16),
+                    if (item.notes != null &&
+                        item.notes!.trim().isNotEmpty) ...[
+                      const SizedBox(height: AppSpacing.md),
+                      AppReveal(
+                        delay: AppMotion.stagger * 4,
+                        child: AppCard(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
                                 'Notes',
                                 style: theme.textTheme.titleMedium?.copyWith(
-                                  fontWeight: FontWeight.bold,
+                                  fontWeight: FontWeight.w700,
                                 ),
                               ),
-                              const SizedBox(height: 8),
+                              const SizedBox(height: AppSpacing.sm),
                               Text(
                                 item.notes!,
-                                style: theme.textTheme.bodyMedium,
+                                style: theme.textTheme.bodyMedium?.copyWith(
+                                  height: 1.35,
+                                ),
                               ),
                             ],
                           ),
@@ -384,19 +397,22 @@ class ItemDetailScreen extends ConsumerWidget {
           ),
         );
       },
-      loading: () => Scaffold(
-        appBar: AppBar(),
-        body: const Center(child: CircularProgressIndicator()),
-      ),
+      loading: () =>
+          const Scaffold(body: LoadingView(message: 'Loading item details...')),
       error: (error, stack) => Scaffold(
         appBar: AppBar(),
-        body: Center(child: Text('Error: $error')),
+        body: ErrorView(
+          message: 'Error loading item details: $error',
+          onRetry: () => ref.invalidate(itemDetailProvider(itemId)),
+        ),
       ),
     );
   }
 
   String _formatDate(DateTime date) {
-    return '${date.day}/${date.month}/${date.year}';
+    final month = date.month.toString().padLeft(2, '0');
+    final day = date.day.toString().padLeft(2, '0');
+    return '${date.year}-$month-$day';
   }
 
   String _formatCurrency(double value) {
@@ -410,38 +426,35 @@ class ItemDetailScreen extends ConsumerWidget {
   ) async {
     var draftValue = item.currentValue?.toStringAsFixed(2) ?? '';
 
-    final value = await showDialog<double>(
+    final value = await showAppDialog<double>(
       context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Update Current Value'),
-        content: TextFormField(
-          initialValue: draftValue,
-          autofocus: true,
-          keyboardType: const TextInputType.numberWithOptions(decimal: true),
-          decoration: const InputDecoration(
-            labelText: 'Current value',
-            prefixText: '\$',
-            hintText: '0.00',
-          ),
-          onChanged: (value) {
-            draftValue = value;
+      title: const Text('Update Current Value'),
+      content: AppInput(
+        initialValue: draftValue,
+        autofocus: true,
+        keyboardType: const TextInputType.numberWithOptions(decimal: true),
+        labelText: 'Current value',
+        prefixText: '\$',
+        hintText: '0.00',
+        onChanged: (value) {
+          draftValue = value;
+        },
+      ),
+      actions: [
+        AppButton(
+          label: 'Cancel',
+          variant: AppButtonVariant.ghost,
+          onPressed: () => Navigator.pop(context),
+        ),
+        AppButton(
+          label: 'Save',
+          onPressed: () {
+            final parsed = double.tryParse(draftValue.trim());
+            if (parsed == null || parsed < 0) return;
+            Navigator.pop(context, parsed);
           },
         ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
-          ),
-          FilledButton(
-            onPressed: () {
-              final parsed = double.tryParse(draftValue.trim());
-              if (parsed == null || parsed < 0) return;
-              Navigator.pop(context, parsed);
-            },
-            child: const Text('Save'),
-          ),
-        ],
-      ),
+      ],
     );
 
     if (value == null || !context.mounted) return;
@@ -465,6 +478,237 @@ class ItemDetailScreen extends ConsumerWidget {
         );
       }
     }
+  }
+}
+
+class _ItemHeroBanner extends StatelessWidget {
+  final Item item;
+  final String? heroTag;
+  final double? effectiveValue;
+  final String Function(double value) formatCurrency;
+
+  const _ItemHeroBanner({
+    required this.item,
+    required this.heroTag,
+    required this.effectiveValue,
+    required this.formatCurrency,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return SizedBox(
+      height: 300,
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          Hero(tag: heroTag ?? 'item_${item.id}', child: _buildCover(theme)),
+          DecoratedBox(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  Colors.transparent,
+                  Colors.black.withValues(alpha: 0.35),
+                ],
+              ),
+            ),
+          ),
+          Positioned(
+            left: AppSpacing.md,
+            right: AppSpacing.md,
+            bottom: AppSpacing.md,
+            child: Wrap(
+              spacing: AppSpacing.sm,
+              runSpacing: AppSpacing.sm,
+              children: [
+                if (item.condition != null)
+                  _HeroBadge(
+                    icon: Icons.verified_rounded,
+                    label: item.condition!.name.toUpperCase(),
+                  ),
+                if (item.quantity > 1)
+                  _HeroBadge(
+                    icon: Icons.layers_rounded,
+                    label: 'Qty ${item.quantity}',
+                  ),
+                if (effectiveValue != null)
+                  _HeroBadge(
+                    icon: Icons.attach_money_rounded,
+                    label: formatCurrency(effectiveValue!),
+                  ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCover(ThemeData theme) {
+    if (item.coverImagePath != null) {
+      return Image.file(
+        File(item.coverImagePath!),
+        fit: BoxFit.cover,
+        errorBuilder: (context, error, stackTrace) => _fallback(theme),
+      );
+    } else if (item.coverImageUrl != null) {
+      return CachedNetworkImage(
+        imageUrl: item.coverImageUrl!,
+        fit: BoxFit.cover,
+        placeholder: (context, url) => const LoadingView(indicatorSize: 38),
+        errorWidget: (context, url, error) => _fallback(theme),
+      );
+    } else {
+      return _fallback(theme);
+    }
+  }
+
+  Widget _fallback(ThemeData theme) {
+    return Container(
+      color: theme.colorScheme.surfaceContainerHighest,
+      child: Icon(
+        Icons.image_not_supported_rounded,
+        size: 76,
+        color: theme.colorScheme.onSurfaceVariant,
+      ),
+    );
+  }
+}
+
+class _HeroBadge extends StatelessWidget {
+  final IconData icon;
+  final String label;
+
+  const _HeroBadge({required this.icon, required this.label});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+      decoration: BoxDecoration(
+        color: Colors.black.withValues(alpha: 0.45),
+        borderRadius: BorderRadius.circular(AppRadii.pill),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.18)),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, size: 13, color: Colors.white),
+          const SizedBox(width: 4),
+          Text(
+            label,
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _QuickActionChip extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final bool active;
+  final VoidCallback onTap;
+
+  const _QuickActionChip({
+    required this.icon,
+    required this.label,
+    required this.onTap,
+    this.active = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        borderRadius: BorderRadius.circular(AppRadii.pill),
+        onTap: onTap,
+        child: AnimatedContainer(
+          duration: AppMotion.fast,
+          curve: AppMotion.emphasized,
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
+          decoration: BoxDecoration(
+            color: active
+                ? theme.colorScheme.primary.withValues(alpha: 0.15)
+                : theme.colorScheme.surface,
+            borderRadius: BorderRadius.circular(AppRadii.pill),
+            border: Border.all(
+              color: active
+                  ? theme.colorScheme.primary.withValues(alpha: 0.4)
+                  : theme.colorScheme.outlineVariant,
+            ),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                icon,
+                size: 16,
+                color: active
+                    ? theme.colorScheme.primary
+                    : theme.colorScheme.onSurfaceVariant,
+              ),
+              const SizedBox(width: 6),
+              Text(
+                label,
+                style: theme.textTheme.labelMedium?.copyWith(
+                  color: active
+                      ? theme.colorScheme.primary
+                      : theme.colorScheme.onSurfaceVariant,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _ValueDelta extends StatelessWidget {
+  final double purchasePrice;
+  final double currentValue;
+
+  const _ValueDelta({required this.purchasePrice, required this.currentValue});
+
+  @override
+  Widget build(BuildContext context) {
+    if (purchasePrice == 0) return const SizedBox.shrink();
+    final delta = currentValue - purchasePrice;
+    final ratio = (delta / purchasePrice) * 100;
+    final isPositive = delta >= 0;
+    final color = isPositive
+        ? const Color(0xFF199A6C)
+        : const Color(0xFFD64545);
+
+    return Row(
+      children: [
+        Icon(
+          isPositive ? Icons.north_east_rounded : Icons.south_east_rounded,
+          size: 16,
+          color: color,
+        ),
+        const SizedBox(width: 4),
+        Text(
+          '${isPositive ? '+' : ''}\$${delta.toStringAsFixed(2)} (${ratio.toStringAsFixed(1)}%)',
+          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+            color: color,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+      ],
+    );
   }
 }
 
@@ -573,26 +817,33 @@ class _PriceHistoryPainter extends CustomPainter {
 }
 
 class _DetailRow extends StatelessWidget {
+  final IconData icon;
   final String label;
   final String value;
 
-  const _DetailRow({required this.label, required this.value});
+  const _DetailRow({
+    required this.icon,
+    required this.label,
+    required this.value,
+  });
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
     return Padding(
-      padding: const EdgeInsets.only(bottom: 8),
+      padding: const EdgeInsets.only(bottom: AppSpacing.sm),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Icon(icon, size: 16, color: theme.colorScheme.onSurfaceVariant),
+          const SizedBox(width: 8),
           SizedBox(
-            width: 120,
+            width: 112,
             child: Text(
               label,
               style: theme.textTheme.bodyMedium?.copyWith(
-                color: theme.textTheme.bodySmall?.color,
+                color: theme.colorScheme.onSurfaceVariant,
               ),
             ),
           ),
@@ -600,7 +851,7 @@ class _DetailRow extends StatelessWidget {
             child: Text(
               value,
               style: theme.textTheme.bodyMedium?.copyWith(
-                fontWeight: FontWeight.w500,
+                fontWeight: FontWeight.w600,
               ),
             ),
           ),

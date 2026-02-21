@@ -1,36 +1,52 @@
 import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:go_router/go_router.dart';
+import 'package:ui/ui.dart';
 
+import '../../../../core/providers/providers.dart';
 import '../view_models/collections_view_model.dart';
 import '../widgets/collection_card.dart';
+import '../widgets/collection_grid_tile.dart';
 import '../widgets/empty_collections_view.dart';
 
-class CollectionsScreen extends ConsumerWidget {
+class CollectionsScreen extends ConsumerStatefulWidget {
   const CollectionsScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<CollectionsScreen> createState() => _CollectionsScreenState();
+}
+
+class _CollectionsScreenState extends ConsumerState<CollectionsScreen> {
+  @override
+  Widget build(BuildContext context) {
     final collectionsAsync = ref.watch(collectionsViewModelProvider);
+    final viewMode = ref.watch(collectionsViewModeProvider);
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('My Collections'),
         actions: [
           IconButton(
-            icon: const Icon(Icons.bar_chart),
-            onPressed: () => context.push('/statistics'),
+            tooltip: viewMode == CollectionsViewMode.list
+                ? 'Switch to grid'
+                : 'Switch to list',
+            icon: Icon(
+              viewMode == CollectionsViewMode.list
+                  ? Icons.grid_view_rounded
+                  : Icons.view_agenda_rounded,
+            ),
+            onPressed: () =>
+                ref.read(collectionsViewModeProvider.notifier).toggle(),
           ),
           IconButton(
-            icon: const Icon(Icons.settings),
-            onPressed: () => context.go('/settings'),
+            icon: const Icon(Icons.bar_chart_rounded),
+            onPressed: () => context.push('/statistics'),
           ),
         ],
       ),
-      body: AnimatedSwitcher(
-        duration: 300.ms,
+      body: AppAnimatedSwitcher(
+        duration: AppMotion.medium,
         child: collectionsAsync.when(
           data: (collections) {
             if (collections.isEmpty) {
@@ -42,67 +58,156 @@ class CollectionsScreen extends ConsumerWidget {
               onRefresh: () async {
                 ref.invalidate(collectionsViewModelProvider);
               },
-              child: ListView.builder(
-                padding: const EdgeInsets.all(16),
-                itemCount: collections.length,
-                itemBuilder: (context, index) {
-                  final collection = collections[index];
-                  return CollectionCard(
-                        collection: collection,
-                        onTap: () =>
-                            context.push('/collections/${collection.id}'),
-                        onDelete: () =>
-                            _showDeleteDialog(context, ref, collection),
-                      )
-                      .animate(delay: (index * 50).ms)
-                      .fadeIn(duration: 400.ms, curve: Curves.easeOut)
-                      .slideY(
-                        begin: 0.2,
-                        end: 0,
-                        duration: 400.ms,
-                        curve: Curves.easeOut,
-                      );
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  final crossAxisCount = constraints.maxWidth > 1160
+                      ? 4
+                      : constraints.maxWidth > 860
+                      ? 3
+                      : 2;
+                  final textScale = MediaQuery.textScalerOf(context).scale(1.0);
+                  final gridTileHeight = switch (crossAxisCount) {
+                    4 => 264.0,
+                    3 => 250.0,
+                    _ =>
+                      constraints.maxWidth < 390 || textScale > 1.0
+                          ? 240.0
+                          : 254.0,
+                  };
+                  final totalItems = collections
+                      .map((collection) => collection.itemCount)
+                      .fold<int>(0, (sum, value) => sum + value);
+
+                  return CustomScrollView(
+                    physics: const AlwaysScrollableScrollPhysics(
+                      parent: BouncingScrollPhysics(),
+                    ),
+                    slivers: [
+                      SliverToBoxAdapter(
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(
+                            AppSpacing.lg,
+                            AppSpacing.md,
+                            AppSpacing.lg,
+                            AppSpacing.md,
+                          ),
+                          child: AppCard(
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: _Metric(
+                                    label: 'Collections',
+                                    value: '${collections.length}',
+                                  ),
+                                ),
+                                Container(
+                                  width: 1,
+                                  height: 38,
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.outlineVariant,
+                                ),
+                                Expanded(
+                                  child: _Metric(
+                                    label: 'Items',
+                                    value: '$totalItems',
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      if (viewMode == CollectionsViewMode.list)
+                        SliverPadding(
+                          padding: const EdgeInsets.fromLTRB(
+                            AppSpacing.lg,
+                            0,
+                            AppSpacing.lg,
+                            AppSpacing.xxl * 2,
+                          ),
+                          sliver: SliverList.builder(
+                            itemCount: collections.length,
+                            itemBuilder: (context, index) {
+                              final collection = collections[index];
+                              return AppReveal(
+                                delay: AppMotion.stagger * index,
+                                child: CollectionCard(
+                                  collection: collection,
+                                  onTap: () => context.push(
+                                    '/collections/${collection.id}',
+                                  ),
+                                  onEdit: () => context.push(
+                                    '/collections/${collection.id}/edit',
+                                  ),
+                                  onDelete: () => _showDeleteDialog(
+                                    context,
+                                    ref,
+                                    collection,
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        )
+                      else
+                        SliverPadding(
+                          padding: const EdgeInsets.fromLTRB(
+                            AppSpacing.lg,
+                            0,
+                            AppSpacing.lg,
+                            AppSpacing.xxl * 2,
+                          ),
+                          sliver: SliverGrid.builder(
+                            itemCount: collections.length,
+                            gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: crossAxisCount,
+                                  crossAxisSpacing: AppSpacing.md,
+                                  mainAxisSpacing: AppSpacing.md,
+                                  mainAxisExtent: gridTileHeight,
+                                ),
+                            itemBuilder: (context, index) {
+                              final collection = collections[index];
+                              return AppReveal(
+                                delay: AppMotion.stagger * index,
+                                beginOffsetY: 0.02,
+                                beginScale: 0.96,
+                                child: CollectionGridTile(
+                                  collection: collection,
+                                  onTap: () => context.push(
+                                    '/collections/${collection.id}',
+                                  ),
+                                  onEdit: () => context.push(
+                                    '/collections/${collection.id}/edit',
+                                  ),
+                                  onDelete: () => _showDeleteDialog(
+                                    context,
+                                    ref,
+                                    collection,
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                    ],
+                  );
                 },
               ),
             );
           },
-          loading: () => const Center(
-            key: ValueKey('loading'),
-            child: CircularProgressIndicator(),
-          ),
-          error: (error, stack) => Center(
+          loading: () => const LoadingView(key: ValueKey('loading')),
+          error: (error, stack) => ErrorView(
             key: const ValueKey('error'),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Icon(Icons.error_outline, size: 64, color: Colors.red),
-                const SizedBox(height: 16),
-                Text(
-                  'Error loading collections',
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  error.toString(),
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.bodyMedium,
-                ),
-                const SizedBox(height: 16),
-                ElevatedButton.icon(
-                  onPressed: () {
-                    ref.invalidate(collectionsViewModelProvider);
-                  },
-                  icon: const Icon(Icons.refresh),
-                  label: const Text('Retry'),
-                ),
-              ],
-            ),
+            message: 'Error loading collections: $error',
+            onRetry: () => ref.invalidate(collectionsViewModelProvider),
           ),
         ),
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => context.push('/collections/create'),
-        icon: const Icon(Icons.add),
+        icon: const Icon(Icons.add_rounded),
         label: const Text('New Collection'),
       ),
     );
@@ -113,41 +218,69 @@ class CollectionsScreen extends ConsumerWidget {
     WidgetRef ref,
     Collection collection,
   ) async {
-    final confirmed = await showDialog<bool>(
+    final confirmed = await showAppDialog<bool>(
       context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Delete Collection'),
-        content: Text(
-          'Are you sure you want to delete "${collection.name}"? '
-          'This will also delete all ${collection.itemCount} items in this collection.',
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context, false),
-            child: const Text('Cancel'),
-          ),
-          FilledButton(
-            onPressed: () => Navigator.pop(context, true),
-            style: FilledButton.styleFrom(backgroundColor: Colors.red),
-            child: const Text('Delete'),
-          ),
-        ],
+      title: const Text('Delete Collection'),
+      content: Text(
+        'Delete "${collection.name}" and ${collection.itemCount} items in this collection?',
       ),
+      actions: [
+        AppButton(
+          label: 'Cancel',
+          variant: AppButtonVariant.ghost,
+          onPressed: () => Navigator.pop(context, false),
+        ),
+        AppButton(
+          label: 'Delete',
+          variant: AppButtonVariant.danger,
+          onPressed: () => Navigator.pop(context, true),
+        ),
+      ],
     );
 
-    if (confirmed == true && context.mounted) {
-      await ref
-          .read(collectionsViewModelProvider.notifier)
-          .deleteCollection(collection.id);
+    if (confirmed != true || !context.mounted) return;
 
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('${collection.name} deleted'),
-            action: SnackBarAction(label: 'Dismiss', onPressed: () {}),
-          ),
-        );
-      }
+    await ref
+        .read(collectionsViewModelProvider.notifier)
+        .deleteCollection(collection.id);
+
+    if (context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('${collection.name} deleted'),
+          action: SnackBarAction(label: 'Dismiss', onPressed: () {}),
+        ),
+      );
     }
+  }
+}
+
+class _Metric extends StatelessWidget {
+  final String label;
+  final String value;
+
+  const _Metric({required this.label, required this.value});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Text(
+          value,
+          style: theme.textTheme.headlineSmall?.copyWith(
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          label,
+          style: theme.textTheme.labelMedium?.copyWith(
+            color: theme.colorScheme.onSurfaceVariant,
+          ),
+        ),
+      ],
+    );
   }
 }

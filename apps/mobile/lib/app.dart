@@ -2,6 +2,7 @@ import 'package:collection_tracker/core/providers/providers.dart';
 import 'package:collection_tracker/core/router/app_router.dart';
 import 'package:collection_tracker/l10n/l10n.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ui/ui.dart';
 
@@ -31,6 +32,31 @@ class CollectionTrackerApp extends ConsumerWidget {
 
       // Routing and navigation
       routerConfig: router,
+      builder: (context, child) {
+        final mediaBrightness = MediaQuery.platformBrightnessOf(context);
+        final resolvedBrightness = switch (themeSettings.mode) {
+          ThemeMode.light => Brightness.light,
+          ThemeMode.dark => Brightness.dark,
+          ThemeMode.system => mediaBrightness,
+        };
+        final isDark = resolvedBrightness == Brightness.dark;
+        final overlay = isDark
+            ? SystemUiOverlayStyle.light.copyWith(
+                statusBarColor: Colors.transparent,
+                statusBarIconBrightness: Brightness.light,
+                statusBarBrightness: Brightness.dark,
+              )
+            : SystemUiOverlayStyle.dark.copyWith(
+                statusBarColor: Colors.transparent,
+                statusBarIconBrightness: Brightness.dark,
+                statusBarBrightness: Brightness.light,
+              );
+
+        return AnnotatedRegion<SystemUiOverlayStyle>(
+          value: overlay,
+          child: child ?? const SizedBox.shrink(),
+        );
+      },
     );
   }
 }
