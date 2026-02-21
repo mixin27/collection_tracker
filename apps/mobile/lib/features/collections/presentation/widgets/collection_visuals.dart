@@ -1,4 +1,5 @@
 import 'package:domain/domain.dart';
+import 'package:collection_tracker/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 
 IconData collectionTypeIcon(CollectionType type) {
@@ -12,14 +13,15 @@ IconData collectionTypeIcon(CollectionType type) {
   };
 }
 
-String collectionTypeLabel(CollectionType type) {
+String collectionTypeLabel(BuildContext context, CollectionType type) {
+  final l10n = context.l10n;
   return switch (type) {
-    CollectionType.book => 'Books',
-    CollectionType.game => 'Games',
-    CollectionType.movie => 'Movies',
-    CollectionType.comic => 'Comics',
-    CollectionType.music => 'Music',
-    CollectionType.custom => 'Custom',
+    CollectionType.book => l10n.collectionTypeBooks,
+    CollectionType.game => l10n.collectionTypeGames,
+    CollectionType.movie => l10n.collectionTypeMovies,
+    CollectionType.comic => l10n.collectionTypeComics,
+    CollectionType.music => l10n.collectionTypeMusic,
+    CollectionType.custom => l10n.collectionTypeCustom,
   };
 }
 

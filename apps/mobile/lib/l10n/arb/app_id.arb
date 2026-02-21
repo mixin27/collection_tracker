@@ -1,26 +1,26 @@
 {
-  "@@locale": "en",
+  "@@locale": "id",
   "appTitle": "Collection Tracker",
   "@appTitle": {},
-  "navHome": "Home",
+  "navHome": "Beranda",
   "@navHome": {},
-  "navFavorites": "Favorites",
+  "navFavorites": "Favorit",
   "@navFavorites": {},
   "navWishlist": "Wishlist",
   "@navWishlist": {},
-  "navSettings": "Settings",
+  "navSettings": "Pengaturan",
   "@navSettings": {},
   "actionApply": "Apply",
   "@actionApply": {},
-  "actionCancel": "Cancel",
+  "actionCancel": "Batal",
   "@actionCancel": {},
-  "actionDelete": "Delete",
+  "actionDelete": "Hapus",
   "@actionDelete": {},
-  "actionDismiss": "Dismiss",
+  "actionDismiss": "Tutup",
   "@actionDismiss": {},
   "actionEdit": "Edit",
   "@actionEdit": {},
-  "actionImport": "Import",
+  "actionImport": "Impor",
   "@actionImport": {},
   "actionRefresh": "Refresh",
   "@actionRefresh": {},
@@ -28,55 +28,55 @@
   "@actionReset": {},
   "actionSave": "Save",
   "@actionSave": {},
-  "actionSwitchToGrid": "Switch to grid",
+  "actionSwitchToGrid": "Ubah ke grid",
   "@actionSwitchToGrid": {},
-  "actionSwitchToList": "Switch to list",
+  "actionSwitchToList": "Ubah ke daftar",
   "@actionSwitchToList": {},
   "actionUpdate": "Update",
   "@actionUpdate": {},
-  "settingsTitle": "Settings",
+  "settingsTitle": "Pengaturan",
   "@settingsTitle": {},
-  "settingsSectionGeneral": "General",
+  "settingsSectionGeneral": "Umum",
   "@settingsSectionGeneral": {},
   "settingsSectionData": "Data",
   "@settingsSectionData": {},
-  "settingsSectionAbout": "About",
+  "settingsSectionAbout": "Tentang",
   "@settingsSectionAbout": {},
-  "settingsThemeTitle": "Theme",
+  "settingsThemeTitle": "Tema",
   "@settingsThemeTitle": {},
-  "settingsLanguageTitle": "Language",
+  "settingsLanguageTitle": "Bahasa",
   "@settingsLanguageTitle": {},
-  "settingsExportJsonTitle": "Export to JSON",
+  "settingsExportJsonTitle": "Ekspor ke JSON",
   "@settingsExportJsonTitle": {},
-  "settingsExportJsonSubtitle": "Export all data as JSON file",
+  "settingsExportJsonSubtitle": "Ekspor semua data sebagai file JSON",
   "@settingsExportJsonSubtitle": {},
-  "settingsExportCsvTitle": "Export to CSV",
+  "settingsExportCsvTitle": "Ekspor ke CSV",
   "@settingsExportCsvTitle": {},
-  "settingsExportCsvSubtitle": "Export items as CSV spreadsheet",
+  "settingsExportCsvSubtitle": "Ekspor item sebagai lembar CSV",
   "@settingsExportCsvSubtitle": {},
-  "settingsImportJsonTitle": "Import from JSON",
+  "settingsImportJsonTitle": "Impor dari JSON",
   "@settingsImportJsonTitle": {},
-  "settingsImportJsonSubtitle": "Import data from JSON file",
+  "settingsImportJsonSubtitle": "Impor data dari file JSON",
   "@settingsImportJsonSubtitle": {},
-  "settingsCloudSyncTitle": "Cloud Sync",
+  "settingsCloudSyncTitle": "Sinkronisasi Cloud",
   "@settingsCloudSyncTitle": {},
-  "settingsCloudSyncSubtitle": "Not configured",
+  "settingsCloudSyncSubtitle": "Belum dikonfigurasi",
   "@settingsCloudSyncSubtitle": {},
-  "settingsManageTagsTitle": "Manage Tags",
+  "settingsManageTagsTitle": "Kelola Tag",
   "@settingsManageTagsTitle": {},
-  "settingsManageTagsSubtitle": "Rename, merge, and delete tags",
+  "settingsManageTagsSubtitle": "Ubah nama, gabungkan, dan hapus tag",
   "@settingsManageTagsSubtitle": {},
-  "settingsVersionTitle": "Version",
+  "settingsVersionTitle": "Versi",
   "@settingsVersionTitle": {},
-  "settingsPrivacyPolicyTitle": "Privacy Policy",
+  "settingsPrivacyPolicyTitle": "Kebijakan Privasi",
   "@settingsPrivacyPolicyTitle": {},
-  "settingsTermsTitle": "Terms of Service",
+  "settingsTermsTitle": "Ketentuan Layanan",
   "@settingsTermsTitle": {},
-  "settingsExportingData": "Exporting data...",
+  "settingsExportingData": "Mengekspor data...",
   "@settingsExportingData": {},
-  "settingsDataExportSuccess": "Data exported successfully!",
+  "settingsDataExportSuccess": "Data berhasil diekspor!",
   "@settingsDataExportSuccess": {},
-  "settingsExportFailed": "Export failed: {error}",
+  "settingsExportFailed": "Ekspor gagal: {error}",
   "@settingsExportFailed": {
     "placeholders": {
       "error": {
@@ -84,15 +84,15 @@
       }
     }
   },
-  "settingsImportDataTitle": "Import Data",
+  "settingsImportDataTitle": "Impor Data",
   "@settingsImportDataTitle": {},
-  "settingsImportDataMessage": "This will import collections and items from a JSON file. Existing data will not be deleted.\\n\\nContinue?",
+  "settingsImportDataMessage": "Ini akan mengimpor koleksi dan item dari file JSON. Data yang sudah ada tidak akan dihapus.\\n\\nLanjutkan?",
   "@settingsImportDataMessage": {},
-  "settingsImportingData": "Importing data...",
+  "settingsImportingData": "Mengimpor data...",
   "@settingsImportingData": {},
-  "settingsDataImportSuccess": "Data imported successfully!",
+  "settingsDataImportSuccess": "Data berhasil diimpor!",
   "@settingsDataImportSuccess": {},
-  "settingsImportFailed": "Import failed: {error}",
+  "settingsImportFailed": "Impor gagal: {error}",
   "@settingsImportFailed": {
     "placeholders": {
       "error": {
@@ -100,51 +100,51 @@
       }
     }
   },
-  "settingsThemeModeTitle": "Theme Mode",
+  "settingsThemeModeTitle": "Mode Tema",
   "@settingsThemeModeTitle": {},
-  "settingsThemeColorVariantTitle": "Color Variant",
+  "settingsThemeColorVariantTitle": "Varian Warna",
   "@settingsThemeColorVariantTitle": {},
-  "settingsAmoledTitle": "Amoled Mode (Pure Black)",
+  "settingsAmoledTitle": "Mode Amoled (Hitam Pekat)",
   "@settingsAmoledTitle": {},
-  "settingsAmoledSubtitle": "Reduces battery consumption on OLED screens",
+  "settingsAmoledSubtitle": "Mengurangi konsumsi baterai pada layar OLED",
   "@settingsAmoledSubtitle": {},
-  "themeModeSystem": "System",
+  "themeModeSystem": "Sistem",
   "@themeModeSystem": {},
-  "themeModeLight": "Light",
+  "themeModeLight": "Terang",
   "@themeModeLight": {},
-  "themeModeDark": "Dark",
+  "themeModeDark": "Gelap",
   "@themeModeDark": {},
-  "languageSystem": "System Default",
+  "languageSystem": "Ikuti Sistem",
   "@languageSystem": {},
-  "languageEnglish": "English",
+  "languageEnglish": "Inggris",
   "@languageEnglish": {},
-  "languageSpanish": "Español",
+  "languageSpanish": "Spanyol",
   "@languageSpanish": {},
   "languageIndonesian": "Bahasa Indonesia",
   "@languageIndonesian": {},
-  "languageJapanese": "日本語",
+  "languageJapanese": "Jepang",
   "@languageJapanese": {},
-  "languageKorean": "한국어",
+  "languageKorean": "Bahasa Korea",
   "@languageKorean": {},
-  "languageChineseSimplified": "简体中文",
+  "languageChineseSimplified": "Tionghoa Sederhana",
   "@languageChineseSimplified": {},
-  "languageBurmese": "မြန်မာ",
+  "languageBurmese": "Burma",
   "@languageBurmese": {},
-  "collectionsTitle": "My Collections",
+  "collectionsTitle": "Koleksi Saya",
   "@collectionsTitle": {},
-  "collectionsCountLabel": "Collections",
+  "collectionsCountLabel": "Koleksi",
   "@collectionsCountLabel": {},
-  "collectionsNewButton": "New Collection",
+  "collectionsNewButton": "Koleksi Baru",
   "@collectionsNewButton": {},
-  "collectionsActionsTooltip": "Collection actions",
+  "collectionsActionsTooltip": "Aksi koleksi",
   "@collectionsActionsTooltip": {},
-  "collectionsOpenAction": "Open Collection",
+  "collectionsOpenAction": "Buka koleksi",
   "@collectionsOpenAction": {},
-  "collectionsEditAction": "Edit Collection",
+  "collectionsEditAction": "Edit koleksi",
   "@collectionsEditAction": {},
-  "collectionsDeleteTitle": "Delete Collection",
+  "collectionsDeleteTitle": "Hapus Koleksi",
   "@collectionsDeleteTitle": {},
-  "collectionsDeleteMessage": "Delete \"{name}\" and {itemCount} items in this collection?",
+  "collectionsDeleteMessage": "Hapus \"{name}\" dan {itemCount} item di koleksi ini?",
   "@collectionsDeleteMessage": {
     "placeholders": {
       "name": {
@@ -155,7 +155,7 @@
       }
     }
   },
-  "collectionsDeleted": "{name} deleted",
+  "collectionsDeleted": "{name} dihapus",
   "@collectionsDeleted": {
     "placeholders": {
       "name": {
@@ -171,11 +171,11 @@
       }
     }
   },
-  "itemsTitle": "Items",
+  "itemsTitle": "Item",
   "@itemsTitle": {},
-  "itemsCountLabel": "Items",
+  "itemsCountLabel": "Item",
   "@itemsCountLabel": {},
-  "itemsCountWithValue": "{count} items",
+  "itemsCountWithValue": "{count} item",
   "@itemsCountWithValue": {
     "placeholders": {
       "count": {
@@ -183,21 +183,21 @@
       }
     }
   },
-  "itemsSearchHint": "Search items...",
+  "itemsSearchHint": "Cari item...",
   "@itemsSearchHint": {},
-  "itemsNoMatchesTitle": "No matches found",
+  "itemsNoMatchesTitle": "Tidak ada hasil",
   "@itemsNoMatchesTitle": {},
-  "itemsNoMatchesMessage": "Try changing filters or keywords.",
+  "itemsNoMatchesMessage": "Coba ubah filter atau kata kunci.",
   "@itemsNoMatchesMessage": {},
-  "itemsNoItemsTitle": "No items yet",
+  "itemsNoItemsTitle": "Belum ada item",
   "@itemsNoItemsTitle": {},
-  "itemsNoItemsMessage": "Start by adding your first item.",
+  "itemsNoItemsMessage": "Mulai dengan menambahkan item pertamamu.",
   "@itemsNoItemsMessage": {},
-  "itemsAddButton": "Add Item",
+  "itemsAddButton": "Tambah Item",
   "@itemsAddButton": {},
-  "itemsLoadingMessage": "Loading items...",
+  "itemsLoadingMessage": "Memuat item...",
   "@itemsLoadingMessage": {},
-  "itemsErrorLoading": "Error loading items: {error}",
+  "itemsErrorLoading": "Gagal memuat item: {error}",
   "@itemsErrorLoading": {
     "placeholders": {
       "error": {
@@ -205,9 +205,9 @@
       }
     }
   },
-  "itemsDeleteTitle": "Delete Item",
+  "itemsDeleteTitle": "Hapus Item",
   "@itemsDeleteTitle": {},
-  "itemsDeleteMessage": "Delete \"{name}\"?",
+  "itemsDeleteMessage": "Hapus \"{name}\"?",
   "@itemsDeleteMessage": {
     "placeholders": {
       "name": {
@@ -215,7 +215,7 @@
       }
     }
   },
-  "itemsDeleted": "{name} deleted",
+  "itemsDeleted": "{name} dihapus",
   "@itemsDeleted": {
     "placeholders": {
       "name": {
@@ -223,7 +223,7 @@
       }
     }
   },
-  "itemsOverviewCount": "{count} items",
+  "itemsOverviewCount": "{count} item",
   "@itemsOverviewCount": {
     "placeholders": {
       "count": {
@@ -231,7 +231,7 @@
       }
     }
   },
-  "itemsSortedBy": "Sorted by {sortLabel}",
+  "itemsSortedBy": "Diurutkan berdasarkan {sortLabel}",
   "@itemsSortedBy": {
     "placeholders": {
       "sortLabel": {
@@ -239,23 +239,23 @@
       }
     }
   },
-  "itemsCollectionDetailsTooltip": "Collection details",
+  "itemsCollectionDetailsTooltip": "Detail koleksi",
   "@itemsCollectionDetailsTooltip": {},
-  "itemsFiltersTooltip": "Filters",
+  "itemsFiltersTooltip": "Filter",
   "@itemsFiltersTooltip": {},
-  "itemsFilterTitle": "Filter Items",
+  "itemsFilterTitle": "Filter Item",
   "@itemsFilterTitle": {},
-  "itemsSortByTitle": "Sort by",
+  "itemsSortByTitle": "Urutkan berdasarkan",
   "@itemsSortByTitle": {},
-  "itemsFilterFavoritesOnly": "Favorites only",
+  "itemsFilterFavoritesOnly": "Hanya favorit",
   "@itemsFilterFavoritesOnly": {},
-  "itemsFilterWishlistOnly": "Wishlist only",
+  "itemsFilterWishlistOnly": "Hanya wishlist",
   "@itemsFilterWishlistOnly": {},
-  "itemsFilterConditionsTitle": "Condition",
+  "itemsFilterConditionsTitle": "Kondisi",
   "@itemsFilterConditionsTitle": {},
-  "itemsTagsTitle": "Tags",
+  "itemsTagsTitle": "Tag",
   "@itemsTagsTitle": {},
-  "itemsQuantityLabel": "Qty: {quantity}",
+  "itemsQuantityLabel": "Jml: {quantity}",
   "@itemsQuantityLabel": {
     "placeholders": {
       "quantity": {
@@ -271,65 +271,65 @@
       }
     }
   },
-  "itemSortCustom": "Custom order",
+  "itemSortCustom": "Urutan kustom",
   "@itemSortCustom": {},
-  "itemSortTitle": "Title",
+  "itemSortTitle": "Judul",
   "@itemSortTitle": {},
-  "itemSortCreatedAt": "Date added",
+  "itemSortCreatedAt": "Tanggal ditambahkan",
   "@itemSortCreatedAt": {},
-  "itemSortPurchaseDate": "Purchase date",
+  "itemSortPurchaseDate": "Tanggal beli",
   "@itemSortPurchaseDate": {},
-  "itemSortCurrentValue": "Current value",
+  "itemSortCurrentValue": "Nilai saat ini",
   "@itemSortCurrentValue": {},
-  "itemSortQuantity": "Quantity",
+  "itemSortQuantity": "Jumlah",
   "@itemSortQuantity": {},
-  "itemConditionMint": "Mint",
+  "itemConditionMint": "Sempurna",
   "@itemConditionMint": {},
-  "itemConditionGood": "Good",
+  "itemConditionGood": "Baik",
   "@itemConditionGood": {},
-  "itemConditionFair": "Fair",
+  "itemConditionFair": "Cukup",
   "@itemConditionFair": {},
-  "itemConditionPoor": "Poor",
+  "itemConditionPoor": "Buruk",
   "@itemConditionPoor": {},
-  "itemDetailNotFoundTitle": "Item not found",
+  "itemDetailNotFoundTitle": "Item tidak ditemukan",
   "@itemDetailNotFoundTitle": {},
-  "itemDetailNotFoundMessage": "This item no longer exists.",
+  "itemDetailNotFoundMessage": "Item ini sudah tidak ada.",
   "@itemDetailNotFoundMessage": {},
-  "itemDetailFavorited": "Favorited",
+  "itemDetailFavorited": "Difavoritkan",
   "@itemDetailFavorited": {},
-  "itemDetailFavorite": "Favorite",
+  "itemDetailFavorite": "Favorit",
   "@itemDetailFavorite": {},
-  "itemDetailInWishlist": "In Wishlist",
+  "itemDetailInWishlist": "Di Wishlist",
   "@itemDetailInWishlist": {},
-  "itemDetailPriceTrackingTitle": "Price tracking",
+  "itemDetailPriceTrackingTitle": "Pelacakan harga",
   "@itemDetailPriceTrackingTitle": {},
-  "itemDetailNoValueMessage": "No current value available",
+  "itemDetailNoValueMessage": "Belum ada nilai saat ini",
   "@itemDetailNoValueMessage": {},
-  "itemDetailNoHistoryMessage": "No price history yet",
+  "itemDetailNoHistoryMessage": "Belum ada riwayat harga",
   "@itemDetailNoHistoryMessage": {},
-  "itemDetailPriceHistoryError": "Unable to load price history",
+  "itemDetailPriceHistoryError": "Gagal memuat riwayat harga",
   "@itemDetailPriceHistoryError": {},
-  "itemDetailDetailsTitle": "Details",
+  "itemDetailDetailsTitle": "Detail",
   "@itemDetailDetailsTitle": {},
   "itemDetailBarcodeLabel": "Barcode",
   "@itemDetailBarcodeLabel": {},
-  "itemDetailConditionLabel": "Condition",
+  "itemDetailConditionLabel": "Kondisi",
   "@itemDetailConditionLabel": {},
-  "itemDetailQuantityLabel": "Quantity",
+  "itemDetailQuantityLabel": "Jumlah",
   "@itemDetailQuantityLabel": {},
-  "itemDetailLocationLabel": "Location",
+  "itemDetailLocationLabel": "Lokasi",
   "@itemDetailLocationLabel": {},
-  "itemDetailPurchasePriceLabel": "Purchase price",
+  "itemDetailPurchasePriceLabel": "Harga beli",
   "@itemDetailPurchasePriceLabel": {},
-  "itemDetailCurrentValueLabel": "Current value",
+  "itemDetailCurrentValueLabel": "Nilai saat ini",
   "@itemDetailCurrentValueLabel": {},
-  "itemDetailPurchaseDateLabel": "Purchase date",
+  "itemDetailPurchaseDateLabel": "Tanggal beli",
   "@itemDetailPurchaseDateLabel": {},
-  "itemDetailNotesTitle": "Notes",
+  "itemDetailNotesTitle": "Catatan",
   "@itemDetailNotesTitle": {},
-  "itemDetailLoadingMessage": "Loading item details...",
+  "itemDetailLoadingMessage": "Memuat detail item...",
   "@itemDetailLoadingMessage": {},
-  "itemDetailErrorLoading": "Error loading item details: {error}",
+  "itemDetailErrorLoading": "Gagal memuat detail item: {error}",
   "@itemDetailErrorLoading": {
     "placeholders": {
       "error": {
@@ -337,11 +337,11 @@
       }
     }
   },
-  "itemDetailUpdateValueTitle": "Update current value",
+  "itemDetailUpdateValueTitle": "Perbarui nilai saat ini",
   "@itemDetailUpdateValueTitle": {},
-  "itemDetailCurrentValueUpdated": "Current value updated",
+  "itemDetailCurrentValueUpdated": "Nilai saat ini diperbarui",
   "@itemDetailCurrentValueUpdated": {},
-  "itemDetailUpdateValueFailed": "Failed to update value: {error}",
+  "itemDetailUpdateValueFailed": "Gagal memperbarui nilai: {error}",
   "@itemDetailUpdateValueFailed": {
     "placeholders": {
       "error": {
@@ -349,15 +349,15 @@
       }
     }
   },
-  "addItemTitle": "Add Item",
+  "addItemTitle": "Tambah Item",
   "@addItemTitle": {},
-  "addItemSubmit": "Add Item",
+  "addItemSubmit": "Tambah Item",
   "@addItemSubmit": {},
-  "addItemTitleHint": "e.g., The Lord of the Rings",
+  "addItemTitleHint": "contoh: The Lord of the Rings",
   "@addItemTitleHint": {},
-  "addItemFetchingMetadata": "Fetching metadata...",
+  "addItemFetchingMetadata": "Mengambil metadata...",
   "@addItemFetchingMetadata": {},
-  "addItemMatchedMetadata": "Matched {source} metadata",
+  "addItemMatchedMetadata": "Metadata {source} ditemukan",
   "@addItemMatchedMetadata": {
     "placeholders": {
       "source": {
@@ -365,11 +365,11 @@
       }
     }
   },
-  "addItemTagsHint": "e.g., Rare, Completed Set",
+  "addItemTagsHint": "contoh: Langka, Set Lengkap",
   "@addItemTagsHint": {},
-  "addItemSuccess": "Item added successfully",
+  "addItemSuccess": "Item berhasil ditambahkan",
   "@addItemSuccess": {},
-  "addItemError": "Error adding item: {error}",
+  "addItemError": "Gagal menambahkan item: {error}",
   "@addItemError": {
     "placeholders": {
       "error": {
@@ -379,9 +379,9 @@
   },
   "editItemTitle": "Edit Item",
   "@editItemTitle": {},
-  "editItemLoading": "Loading item...",
+  "editItemLoading": "Memuat item...",
   "@editItemLoading": {},
-  "editItemError": "Error: {error}",
+  "editItemError": "Kesalahan: {error}",
   "@editItemError": {
     "placeholders": {
       "error": {
@@ -389,13 +389,13 @@
       }
     }
   },
-  "editItemSaveChanges": "Save Changes",
+  "editItemSaveChanges": "Simpan Perubahan",
   "@editItemSaveChanges": {},
-  "editItemTagsHint": "e.g., Signed, First Edition",
+  "editItemTagsHint": "contoh: Bertanda tangan, Edisi Pertama",
   "@editItemTagsHint": {},
-  "editItemSuccess": "Item updated successfully",
+  "editItemSuccess": "Item berhasil diperbarui",
   "@editItemSuccess": {},
-  "editItemUpdateError": "Error updating item: {error}",
+  "editItemUpdateError": "Gagal memperbarui item: {error}",
   "@editItemUpdateError": {
     "placeholders": {
       "error": {
@@ -403,49 +403,49 @@
       }
     }
   },
-  "itemFormTitleLabel": "Title",
+  "itemFormTitleLabel": "Judul",
   "@itemFormTitleLabel": {},
-  "itemFormTitleRequired": "Please enter a title",
+  "itemFormTitleRequired": "Silakan masukkan judul",
   "@itemFormTitleRequired": {},
-  "itemFormBarcodeLabelOptional": "Barcode (optional)",
+  "itemFormBarcodeLabelOptional": "Barcode (opsional)",
   "@itemFormBarcodeLabelOptional": {},
-  "itemFormBarcodeHint": "ISBN, UPC, etc.",
+  "itemFormBarcodeHint": "ISBN, UPC, dll.",
   "@itemFormBarcodeHint": {},
-  "itemFormDescriptionLabelOptional": "Description (optional)",
+  "itemFormDescriptionLabelOptional": "Deskripsi (opsional)",
   "@itemFormDescriptionLabelOptional": {},
-  "itemFormDescriptionHint": "Add a description",
+  "itemFormDescriptionHint": "Tambahkan deskripsi",
   "@itemFormDescriptionHint": {},
-  "itemFormTagsLabelOptional": "Tags (optional)",
+  "itemFormTagsLabelOptional": "Tag (opsional)",
   "@itemFormTagsLabelOptional": {},
-  "itemFormPurchaseDateLabelOptional": "Purchase Date (optional)",
+  "itemFormPurchaseDateLabelOptional": "Tanggal beli (opsional)",
   "@itemFormPurchaseDateLabelOptional": {},
-  "itemFormConditionLabelOptional": "Condition (optional)",
+  "itemFormConditionLabelOptional": "Kondisi (opsional)",
   "@itemFormConditionLabelOptional": {},
-  "itemFormQuantityRequired": "Please enter quantity",
+  "itemFormQuantityRequired": "Silakan masukkan jumlah",
   "@itemFormQuantityRequired": {},
-  "itemFormQuantityInvalid": "Please enter a valid quantity",
+  "itemFormQuantityInvalid": "Masukkan jumlah yang valid",
   "@itemFormQuantityInvalid": {},
-  "itemFormLocationLabelOptional": "Location (optional)",
+  "itemFormLocationLabelOptional": "Lokasi (opsional)",
   "@itemFormLocationLabelOptional": {},
-  "itemFormLocationHint": "e.g., Shelf A, Box 3",
+  "itemFormLocationHint": "contoh: Rak A, Kotak 3",
   "@itemFormLocationHint": {},
-  "itemFormNotesLabelOptional": "Notes (optional)",
+  "itemFormNotesLabelOptional": "Catatan (opsional)",
   "@itemFormNotesLabelOptional": {},
-  "itemFormInvalidPrice": "Invalid price",
+  "itemFormInvalidPrice": "Harga tidak valid",
   "@itemFormInvalidPrice": {},
-  "itemFormMustBePositive": "Must be positive",
+  "itemFormMustBePositive": "Harus bernilai positif",
   "@itemFormMustBePositive": {},
-  "itemTagsEditorHint": "Add a tag",
+  "itemTagsEditorHint": "Tambahkan tag",
   "@itemTagsEditorHint": {},
-  "itemTagsEditorAddTooltip": "Add tag",
+  "itemTagsEditorAddTooltip": "Tambah tag",
   "@itemTagsEditorAddTooltip": {},
-  "itemTagsEditorEmptyMessage": "No tags yet. Add tags to organize items faster.",
+  "itemTagsEditorEmptyMessage": "Belum ada tag. Tambahkan tag agar item lebih mudah diatur.",
   "@itemTagsEditorEmptyMessage": {},
-  "itemTagsEditorTooLong": "Tags must be 50 characters or less",
+  "itemTagsEditorTooLong": "Tag harus 50 karakter atau kurang",
   "@itemTagsEditorTooLong": {},
-  "globalItemsLoading": "Loading items...",
+  "globalItemsLoading": "Memuat item...",
   "@globalItemsLoading": {},
-  "globalItemsErrorLoading": "Error: {error}",
+  "globalItemsErrorLoading": "Kesalahan: {error}",
   "@globalItemsErrorLoading": {
     "placeholders": {
       "error": {
@@ -453,15 +453,15 @@
       }
     }
   },
-  "globalItemsNoFavoritesTitle": "No favorite items yet",
+  "globalItemsNoFavoritesTitle": "Belum ada item favorit",
   "@globalItemsNoFavoritesTitle": {},
-  "globalItemsNoFavoritesMessage": "Mark items as favorite to see them here.",
+  "globalItemsNoFavoritesMessage": "Tandai item sebagai favorit agar muncul di sini.",
   "@globalItemsNoFavoritesMessage": {},
-  "globalItemsNoWishlistTitle": "Your wishlist is empty",
+  "globalItemsNoWishlistTitle": "Wishlist kamu kosong",
   "@globalItemsNoWishlistTitle": {},
-  "globalItemsNoWishlistMessage": "Save items to wishlist and access them here.",
+  "globalItemsNoWishlistMessage": "Simpan item ke wishlist untuk melihatnya di sini.",
   "@globalItemsNoWishlistMessage": {},
-  "metadataSearchFieldLabel": "Search {collectionType} by title",
+  "metadataSearchFieldLabel": "Cari {collectionType} berdasarkan judul",
   "@metadataSearchFieldLabel": {
     "placeholders": {
       "collectionType": {
@@ -469,13 +469,13 @@
       }
     }
   },
-  "metadataSearchEmptyTitle": "Search metadata",
+  "metadataSearchEmptyTitle": "Cari metadata",
   "@metadataSearchEmptyTitle": {},
-  "metadataSearchEmptyMessage": "Enter a title to search.",
+  "metadataSearchEmptyMessage": "Masukkan judul untuk mencari.",
   "@metadataSearchEmptyMessage": {},
-  "metadataSearchLoading": "Searching metadata...",
+  "metadataSearchLoading": "Mencari metadata...",
   "@metadataSearchLoading": {},
-  "metadataSearchError": "Error: {error}",
+  "metadataSearchError": "Kesalahan: {error}",
   "@metadataSearchError": {
     "placeholders": {
       "error": {
@@ -483,13 +483,13 @@
       }
     }
   },
-  "metadataSearchNoResultsTitle": "No results",
+  "metadataSearchNoResultsTitle": "Tidak ada hasil",
   "@metadataSearchNoResultsTitle": {},
-  "metadataSearchNoResultsMessage": "No metadata found for this title.",
+  "metadataSearchNoResultsMessage": "Tidak ada metadata ditemukan untuk judul ini.",
   "@metadataSearchNoResultsMessage": {},
-  "metadataSearchSuggestionTitle": "Search by title",
+  "metadataSearchSuggestionTitle": "Cari berdasarkan judul",
   "@metadataSearchSuggestionTitle": {},
-  "metadataSearchSuggestionMessage": "Start typing to look up metadata.",
+  "metadataSearchSuggestionMessage": "Mulai mengetik untuk mencari metadata.",
   "@metadataSearchSuggestionMessage": {},
   "tagItemsTitle": "Tag: {tag}",
   "@tagItemsTitle": {
@@ -499,19 +499,19 @@
       }
     }
   },
-  "tagItemsSortTooltip": "Sort",
+  "tagItemsSortTooltip": "Urutkan",
   "@tagItemsSortTooltip": {},
-  "tagItemsSortNewest": "Sort: Newest",
+  "tagItemsSortNewest": "Urutkan: Terbaru",
   "@tagItemsSortNewest": {},
-  "tagItemsSortOldest": "Sort: Oldest",
+  "tagItemsSortOldest": "Urutkan: Terlama",
   "@tagItemsSortOldest": {},
-  "tagItemsSortTitle": "Sort: Title",
+  "tagItemsSortTitle": "Urutkan: Judul",
   "@tagItemsSortTitle": {},
-  "tagItemsLoadingCollections": "Loading collections...",
+  "tagItemsLoadingCollections": "Memuat koleksi...",
   "@tagItemsLoadingCollections": {},
-  "tagItemsLoadingItems": "Loading tagged items...",
+  "tagItemsLoadingItems": "Memuat item bertag...",
   "@tagItemsLoadingItems": {},
-  "tagItemsError": "Error: {error}",
+  "tagItemsError": "Kesalahan: {error}",
   "@tagItemsError": {
     "placeholders": {
       "error": {
@@ -519,15 +519,15 @@
       }
     }
   },
-  "tagItemsEmptyTitle": "No items found",
+  "tagItemsEmptyTitle": "Tidak ada item ditemukan",
   "@tagItemsEmptyTitle": {},
-  "tagItemsEmptyMessage": "No collection items currently use this tag.",
+  "tagItemsEmptyMessage": "Belum ada item koleksi yang menggunakan tag ini.",
   "@tagItemsEmptyMessage": {},
-  "tagItemsUnknownCollection": "Unknown",
+  "tagItemsUnknownCollection": "Tidak diketahui",
   "@tagItemsUnknownCollection": {},
-  "tagItemsOpenCollectionTooltip": "Open collection",
+  "tagItemsOpenCollectionTooltip": "Buka koleksi",
   "@tagItemsOpenCollectionTooltip": {},
-  "tagItemsDeleteFailed": "Delete failed: {error}",
+  "tagItemsDeleteFailed": "Gagal menghapus: {error}",
   "@tagItemsDeleteFailed": {
     "placeholders": {
       "error": {
@@ -535,9 +535,9 @@
       }
     }
   },
-  "tagManagementTitle": "Manage Tags",
+  "tagManagementTitle": "Kelola Tag",
   "@tagManagementTitle": {},
-  "tagManagementSelectedCount": "{count} selected",
+  "tagManagementSelectedCount": "{count} dipilih",
   "@tagManagementSelectedCount": {
     "placeholders": {
       "count": {
@@ -545,15 +545,15 @@
       }
     }
   },
-  "tagManagementCancelSelectionTooltip": "Cancel selection",
+  "tagManagementCancelSelectionTooltip": "Batalkan pilihan",
   "@tagManagementCancelSelectionTooltip": {},
-  "tagManagementSelectTagsTooltip": "Select tags",
+  "tagManagementSelectTagsTooltip": "Pilih tag",
   "@tagManagementSelectTagsTooltip": {},
-  "tagManagementSearchHint": "Search tags...",
+  "tagManagementSearchHint": "Cari tag...",
   "@tagManagementSearchHint": {},
-  "tagManagementEmptyTitle": "No tags created yet",
+  "tagManagementEmptyTitle": "Belum ada tag",
   "@tagManagementEmptyTitle": {},
-  "tagManagementNoMatch": "No tags match \"{query}\"",
+  "tagManagementNoMatch": "Tidak ada tag yang cocok dengan \"{query}\"",
   "@tagManagementNoMatch": {
     "placeholders": {
       "query": {
@@ -561,13 +561,13 @@
       }
     }
   },
-  "tagManagementSelectVisible": "Select visible",
+  "tagManagementSelectVisible": "Pilih yang terlihat",
   "@tagManagementSelectVisible": {},
-  "tagManagementSelectAllMatches": "Select all matches",
+  "tagManagementSelectAllMatches": "Pilih semua yang cocok",
   "@tagManagementSelectAllMatches": {},
-  "tagManagementClearSelection": "Clear selection",
+  "tagManagementClearSelection": "Hapus pilihan",
   "@tagManagementClearSelection": {},
-  "tagManagementScrollMore": "Scroll to load {remaining} more tags",
+  "tagManagementScrollMore": "Gulir untuk memuat {remaining} tag lagi",
   "@tagManagementScrollMore": {
     "placeholders": {
       "remaining": {
@@ -575,9 +575,9 @@
       }
     }
   },
-  "tagManagementUsedInOne": "Used in 1 item",
+  "tagManagementUsedInOne": "Digunakan di 1 item",
   "@tagManagementUsedInOne": {},
-  "tagManagementUsedInMany": "Used in {count} items",
+  "tagManagementUsedInMany": "Digunakan di {count} item",
   "@tagManagementUsedInMany": {
     "placeholders": {
       "count": {
@@ -585,13 +585,13 @@
       }
     }
   },
-  "tagManagementRenameAction": "Rename",
+  "tagManagementRenameAction": "Ubah nama",
   "@tagManagementRenameAction": {},
-  "tagManagementMergeAction": "Merge",
+  "tagManagementMergeAction": "Gabungkan",
   "@tagManagementMergeAction": {},
-  "tagManagementMergeIntoAction": "Merge Into...",
+  "tagManagementMergeIntoAction": "Gabungkan ke...",
   "@tagManagementMergeIntoAction": {},
-  "tagManagementLoadError": "Failed to load tags: {error}",
+  "tagManagementLoadError": "Gagal memuat tag: {error}",
   "@tagManagementLoadError": {
     "placeholders": {
       "error": {
@@ -599,11 +599,11 @@
       }
     }
   },
-  "tagManagementRenameTitle": "Rename Tag",
+  "tagManagementRenameTitle": "Ubah Nama Tag",
   "@tagManagementRenameTitle": {},
-  "tagManagementNewNameLabel": "New name",
+  "tagManagementNewNameLabel": "Nama baru",
   "@tagManagementNewNameLabel": {},
-  "tagManagementRenameSuccess": "\"{oldName}\" renamed to \"{newName}\"",
+  "tagManagementRenameSuccess": "\"{oldName}\" diubah menjadi \"{newName}\"",
   "@tagManagementRenameSuccess": {
     "placeholders": {
       "oldName": {
@@ -614,11 +614,11 @@
       }
     }
   },
-  "tagManagementMergeSelectedTitle": "Merge Selected Tags",
+  "tagManagementMergeSelectedTitle": "Gabungkan Tag Terpilih",
   "@tagManagementMergeSelectedTitle": {},
-  "tagManagementChooseDestination": "Choose destination tag:",
+  "tagManagementChooseDestination": "Pilih tag tujuan:",
   "@tagManagementChooseDestination": {},
-  "tagManagementMergeSelectedSuccess": "Merged {count} tags into \"{destination}\"",
+  "tagManagementMergeSelectedSuccess": "{count} tag digabungkan ke \"{destination}\"",
   "@tagManagementMergeSelectedSuccess": {
     "placeholders": {
       "count": {
@@ -629,9 +629,9 @@
       }
     }
   },
-  "tagManagementDeleteSelectedTitle": "Delete Selected Tags",
+  "tagManagementDeleteSelectedTitle": "Hapus Tag Terpilih",
   "@tagManagementDeleteSelectedTitle": {},
-  "tagManagementDeleteSelectedMessage": "Delete {count} selected tags from all items?\\n\\nThis cannot be undone.",
+  "tagManagementDeleteSelectedMessage": "Hapus {count} tag terpilih dari semua item?\\n\\nTindakan ini tidak dapat dibatalkan.",
   "@tagManagementDeleteSelectedMessage": {
     "placeholders": {
       "count": {
@@ -639,7 +639,7 @@
       }
     }
   },
-  "tagManagementDeleteSelectedSuccess": "Deleted {count} tags",
+  "tagManagementDeleteSelectedSuccess": "{count} tag dihapus",
   "@tagManagementDeleteSelectedSuccess": {
     "placeholders": {
       "count": {
@@ -647,9 +647,9 @@
       }
     }
   },
-  "tagManagementMergeIntoTitle": "Merge Into",
+  "tagManagementMergeIntoTitle": "Gabungkan ke",
   "@tagManagementMergeIntoTitle": {},
-  "tagManagementMergeSuccess": "\"{source}\" merged into \"{target}\"",
+  "tagManagementMergeSuccess": "\"{source}\" digabungkan ke \"{target}\"",
   "@tagManagementMergeSuccess": {
     "placeholders": {
       "source": {
@@ -660,9 +660,9 @@
       }
     }
   },
-  "tagManagementDeleteTitle": "Delete Tag",
+  "tagManagementDeleteTitle": "Hapus Tag",
   "@tagManagementDeleteTitle": {},
-  "tagManagementDeleteMessage": "Delete \"{tagName}\" from all items?\\n\\nThis cannot be undone.",
+  "tagManagementDeleteMessage": "Hapus \"{tagName}\" dari semua item?\\n\\nTindakan ini tidak dapat dibatalkan.",
   "@tagManagementDeleteMessage": {
     "placeholders": {
       "tagName": {
@@ -670,7 +670,7 @@
       }
     }
   },
-  "tagManagementDeleteSuccess": "\"{tagName}\" deleted",
+  "tagManagementDeleteSuccess": "\"{tagName}\" dihapus",
   "@tagManagementDeleteSuccess": {
     "placeholders": {
       "tagName": {
@@ -678,7 +678,7 @@
       }
     }
   },
-  "tagManagementMutationError": "Tag update failed: {error}",
+  "tagManagementMutationError": "Gagal memperbarui tag: {error}",
   "@tagManagementMutationError": {
     "placeholders": {
       "error": {
@@ -686,15 +686,15 @@
       }
     }
   },
-  "statisticsTitle": "Statistics",
+  "statisticsTitle": "Statistik",
   "@statisticsTitle": {},
-  "statisticsEmptyTitle": "No statistics yet",
+  "statisticsEmptyTitle": "Belum ada statistik",
   "@statisticsEmptyTitle": {},
-  "statisticsEmptyMessage": "Add collections and items to see insights.",
+  "statisticsEmptyMessage": "Tambahkan koleksi dan item untuk melihat insight.",
   "@statisticsEmptyMessage": {},
-  "statisticsLoadingMessage": "Loading statistics...",
+  "statisticsLoadingMessage": "Memuat statistik...",
   "@statisticsLoadingMessage": {},
-  "statisticsErrorLoading": "Error loading statistics: {error}",
+  "statisticsErrorLoading": "Gagal memuat statistik: {error}",
   "@statisticsErrorLoading": {
     "placeholders": {
       "error": {
@@ -702,9 +702,9 @@
       }
     }
   },
-  "statisticsPortfolioValueTitle": "Portfolio value",
+  "statisticsPortfolioValueTitle": "Nilai portofolio",
   "@statisticsPortfolioValueTitle": {},
-  "statisticsAveragePricedItem": "Avg priced item: {value}",
+  "statisticsAveragePricedItem": "Rata-rata item bernilai: {value}",
   "@statisticsAveragePricedItem": {
     "placeholders": {
       "value": {
@@ -712,7 +712,7 @@
       }
     }
   },
-  "statisticsPricedItemsBadge": "Priced items: {priced}/{total}",
+  "statisticsPricedItemsBadge": "Item bernilai: {priced}/{total}",
   "@statisticsPricedItemsBadge": {
     "placeholders": {
       "priced": {
@@ -723,11 +723,11 @@
       }
     }
   },
-  "statisticsQuantityTitle": "Total quantity",
+  "statisticsQuantityTitle": "Jumlah total",
   "@statisticsQuantityTitle": {},
-  "statisticsFavoritesTitle": "Favorites",
+  "statisticsFavoritesTitle": "Favorit",
   "@statisticsFavoritesTitle": {},
-  "statisticsPercentOfItems": "{percent}% of items",
+  "statisticsPercentOfItems": "{percent}% dari item",
   "@statisticsPercentOfItems": {
     "placeholders": {
       "percent": {
@@ -735,11 +735,11 @@
       }
     }
   },
-  "statisticsInventoryHealthTitle": "Inventory health",
+  "statisticsInventoryHealthTitle": "Kesehatan inventaris",
   "@statisticsInventoryHealthTitle": {},
-  "statisticsValuationCoverageLabel": "Valuation coverage",
+  "statisticsValuationCoverageLabel": "Cakupan valuasi",
   "@statisticsValuationCoverageLabel": {},
-  "statisticsPricedCaption": "{priced} of {total} items have prices",
+  "statisticsPricedCaption": "{priced} dari {total} item memiliki harga",
   "@statisticsPricedCaption": {
     "placeholders": {
       "priced": {
@@ -750,9 +750,9 @@
       }
     }
   },
-  "statisticsFavoritesCoverageLabel": "Favorites coverage",
+  "statisticsFavoritesCoverageLabel": "Cakupan favorit",
   "@statisticsFavoritesCoverageLabel": {},
-  "statisticsFavoritesCaption": "{favorites} of {total} items are favorites",
+  "statisticsFavoritesCaption": "{favorites} dari {total} item adalah favorit",
   "@statisticsFavoritesCaption": {
     "placeholders": {
       "favorites": {
@@ -763,9 +763,9 @@
       }
     }
   },
-  "statisticsWishlistCoverageLabel": "Wishlist coverage",
+  "statisticsWishlistCoverageLabel": "Cakupan wishlist",
   "@statisticsWishlistCoverageLabel": {},
-  "statisticsWishlistCaption": "{wishlist} of {total} items are on wishlist",
+  "statisticsWishlistCaption": "{wishlist} dari {total} item ada di wishlist",
   "@statisticsWishlistCaption": {
     "placeholders": {
       "wishlist": {
@@ -776,17 +776,17 @@
       }
     }
   },
-  "statisticsItemsByTypeTitle": "Items by type",
+  "statisticsItemsByTypeTitle": "Item berdasarkan jenis",
   "@statisticsItemsByTypeTitle": {},
-  "statisticsItemsByConditionTitle": "Items by condition",
+  "statisticsItemsByConditionTitle": "Item berdasarkan kondisi",
   "@statisticsItemsByConditionTitle": {},
-  "statisticsTopValuedTitle": "Top valued collections",
+  "statisticsTopValuedTitle": "Koleksi dengan nilai tertinggi",
   "@statisticsTopValuedTitle": {},
-  "statisticsLargestCollectionTitle": "Largest collection",
+  "statisticsLargestCollectionTitle": "Koleksi terbesar",
   "@statisticsLargestCollectionTitle": {},
-  "statisticsRecentlyCreatedTitle": "Recently created",
+  "statisticsRecentlyCreatedTitle": "Baru dibuat",
   "@statisticsRecentlyCreatedTitle": {},
-  "statisticsRecentCollectionSubtitle": "{itemCount} items • {createdAt}",
+  "statisticsRecentCollectionSubtitle": "{itemCount} item • {createdAt}",
   "@statisticsRecentCollectionSubtitle": {
     "placeholders": {
       "itemCount": {
@@ -797,15 +797,15 @@
       }
     }
   },
-  "statisticsNoChartData": "No chart data available",
+  "statisticsNoChartData": "Data grafik tidak tersedia",
   "@statisticsNoChartData": {},
   "statisticsTotalLabel": "Total",
   "@statisticsTotalLabel": {},
-  "relativeToday": "Today",
+  "relativeToday": "Hari ini",
   "@relativeToday": {},
-  "relativeYesterday": "Yesterday",
+  "relativeYesterday": "Kemarin",
   "@relativeYesterday": {},
-  "relativeDaysAgo": "{days} days ago",
+  "relativeDaysAgo": "{days} hari lalu",
   "@relativeDaysAgo": {
     "placeholders": {
       "days": {
@@ -813,7 +813,7 @@
       }
     }
   },
-  "relativeWeeksAgo": "{weeks} weeks ago",
+  "relativeWeeksAgo": "{weeks} minggu lalu",
   "@relativeWeeksAgo": {
     "placeholders": {
       "weeks": {
@@ -821,7 +821,7 @@
       }
     }
   },
-  "relativeMonthsAgo": "{months} months ago",
+  "relativeMonthsAgo": "{months} bulan lalu",
   "@relativeMonthsAgo": {
     "placeholders": {
       "months": {
@@ -829,7 +829,7 @@
       }
     }
   },
-  "relativeYearsAgo": "{years} years ago",
+  "relativeYearsAgo": "{years} tahun lalu",
   "@relativeYearsAgo": {
     "placeholders": {
       "years": {
@@ -837,26 +837,26 @@
       }
     }
   },
-  "collectionDetailsNotFoundTitle": "Collection not found",
+  "collectionDetailsNotFoundTitle": "Koleksi tidak ditemukan",
   "@collectionDetailsNotFoundTitle": {},
-  "collectionDetailsNotFoundMessage": "The selected collection is not available.",
+  "collectionDetailsNotFoundMessage": "Koleksi yang dipilih tidak tersedia.",
   "@collectionDetailsNotFoundMessage": {},
-  "collectionDetailsCreatedLabel": "Created",
+  "collectionDetailsCreatedLabel": "Dibuat",
   "@collectionDetailsCreatedLabel": {},
-  "collectionDetailsUpdatedLabel": "Last Updated",
+  "collectionDetailsUpdatedLabel": "Terakhir diperbarui",
   "@collectionDetailsUpdatedLabel": {},
-  "collectionDetailsLoading": "Loading collection...",
+  "collectionDetailsLoading": "Memuat koleksi...",
   "@collectionDetailsLoading": {},
-  "collectionTypeBooks": "Books",
+  "collectionTypeBooks": "Buku",
   "@collectionTypeBooks": {},
-  "collectionTypeGames": "Games",
+  "collectionTypeGames": "Game",
   "@collectionTypeGames": {},
-  "collectionTypeMovies": "Movies",
+  "collectionTypeMovies": "Film",
   "@collectionTypeMovies": {},
-  "collectionTypeComics": "Comics",
+  "collectionTypeComics": "Komik",
   "@collectionTypeComics": {},
-  "collectionTypeMusic": "Music",
+  "collectionTypeMusic": "Musik",
   "@collectionTypeMusic": {},
-  "collectionTypeCustom": "Custom",
+  "collectionTypeCustom": "Kustom",
   "@collectionTypeCustom": {}
 }

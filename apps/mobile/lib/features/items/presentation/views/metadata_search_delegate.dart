@@ -3,15 +3,20 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:metadata_api/metadata_api.dart';
 import 'package:domain/domain.dart';
 import 'package:collection_tracker/core/providers/metadata_providers.dart';
+import 'package:collection_tracker/l10n/l10n.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:ui/ui.dart';
 
 class MetadataSearchDelegate extends SearchDelegate<MetadataBase?> {
   final WidgetRef ref;
   final CollectionType collectionType;
+  final String searchFieldLabelText;
 
-  MetadataSearchDelegate({required this.ref, required this.collectionType})
-    : super(searchFieldLabel: 'Search ${collectionType.name} by title');
+  MetadataSearchDelegate({
+    required this.ref,
+    required this.collectionType,
+    required this.searchFieldLabelText,
+  }) : super(searchFieldLabel: searchFieldLabelText);
 
   @override
   List<Widget>? buildActions(BuildContext context) {
@@ -37,11 +42,12 @@ class MetadataSearchDelegate extends SearchDelegate<MetadataBase?> {
 
   @override
   Widget buildResults(BuildContext context) {
+    final l10n = context.l10n;
     if (query.isEmpty) {
-      return const EmptyState(
+      return EmptyState(
         icon: Icons.search,
-        title: 'Search metadata',
-        message: 'Enter a title to search.',
+        title: l10n.metadataSearchEmptyTitle,
+        message: l10n.metadataSearchEmptyMessage,
       );
     }
 
@@ -49,20 +55,22 @@ class MetadataSearchDelegate extends SearchDelegate<MetadataBase?> {
       future: _performSearch(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const LoadingView(message: 'Searching metadata...');
+          return LoadingView(message: l10n.metadataSearchLoading);
         }
 
         if (snapshot.hasError) {
-          return ErrorView(message: 'Error: ${snapshot.error}');
+          return ErrorView(
+            message: l10n.metadataSearchError('${snapshot.error}'),
+          );
         }
 
         final results = snapshot.data;
 
         if (results == null || results.isEmpty) {
-          return const EmptyState(
+          return EmptyState(
             icon: Icons.search_off,
-            title: 'No results',
-            message: 'No metadata found for this title.',
+            title: l10n.metadataSearchNoResultsTitle,
+            message: l10n.metadataSearchNoResultsMessage,
           );
         }
 
@@ -108,10 +116,10 @@ class MetadataSearchDelegate extends SearchDelegate<MetadataBase?> {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    return const EmptyState(
+    return EmptyState(
       icon: Icons.search,
-      title: 'Search by title',
-      message: 'Start typing to look up metadata.',
+      title: context.l10n.metadataSearchSuggestionTitle,
+      message: context.l10n.metadataSearchSuggestionMessage,
     );
   }
 

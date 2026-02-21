@@ -1,11 +1,13 @@
 import 'dart:io';
 import 'dart:math' as math;
 
+import 'package:collection_tracker/l10n/l10n.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import 'package:ui/ui.dart';
 
 import '../providers/price_tracking_provider.dart';
@@ -19,6 +21,7 @@ class ItemDetailScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = context.l10n;
     final itemAsync = ref.watch(itemDetailProvider(itemId));
 
     return itemAsync.when(
@@ -26,10 +29,10 @@ class ItemDetailScreen extends ConsumerWidget {
         if (item == null) {
           return Scaffold(
             appBar: AppBar(),
-            body: const EmptyState(
+            body: EmptyState(
               icon: Icons.inventory_2_outlined,
-              title: 'Item not found',
-              message: 'This item may have been deleted.',
+              title: l10n.itemDetailNotFoundTitle,
+              message: l10n.itemDetailNotFoundMessage,
             ),
           );
         }
@@ -48,7 +51,7 @@ class ItemDetailScreen extends ConsumerWidget {
             actions: [
               IconButton(
                 icon: const Icon(Icons.edit_rounded),
-                tooltip: 'Edit item',
+                tooltip: l10n.actionEdit,
                 onPressed: () => context.push('/items/${item.id}/edit'),
               ),
             ],
@@ -60,7 +63,7 @@ class ItemDetailScreen extends ConsumerWidget {
                 item: item,
                 heroTag: heroTag,
                 effectiveValue: effectiveValue,
-                formatCurrency: _formatCurrency,
+                formatCurrency: (value) => _formatCurrency(context, value),
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(
@@ -104,8 +107,8 @@ class ItemDetailScreen extends ConsumerWidget {
                                       ? Icons.favorite_rounded
                                       : Icons.favorite_border_rounded,
                                   label: item.isFavorite
-                                      ? 'Favorited'
-                                      : 'Favorite',
+                                      ? l10n.itemDetailFavorited
+                                      : l10n.itemDetailFavorite,
                                   active: item.isFavorite,
                                   onTap: () =>
                                       ref.read(toggleFavoriteProvider(item)),
@@ -115,15 +118,15 @@ class ItemDetailScreen extends ConsumerWidget {
                                       ? Icons.bookmark_rounded
                                       : Icons.bookmark_border_rounded,
                                   label: item.isWishlist
-                                      ? 'In wishlist'
-                                      : 'Wishlist',
+                                      ? l10n.itemDetailInWishlist
+                                      : l10n.navWishlist,
                                   active: item.isWishlist,
                                   onTap: () =>
                                       ref.read(toggleWishlistProvider(item)),
                                 ),
                                 _QuickActionChip(
                                   icon: Icons.edit_rounded,
-                                  label: 'Edit item',
+                                  label: l10n.actionEdit,
                                   onTap: () =>
                                       context.push('/items/${item.id}/edit'),
                                 ),
@@ -142,7 +145,7 @@ class ItemDetailScreen extends ConsumerWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'Tags',
+                                l10n.itemsTagsTitle,
                                 style: theme.textTheme.titleMedium?.copyWith(
                                   fontWeight: FontWeight.w700,
                                 ),
@@ -185,14 +188,14 @@ class ItemDetailScreen extends ConsumerWidget {
                             Row(
                               children: [
                                 Text(
-                                  'Price Tracking',
+                                  l10n.itemDetailPriceTrackingTitle,
                                   style: theme.textTheme.titleMedium?.copyWith(
                                     fontWeight: FontWeight.w700,
                                   ),
                                 ),
                                 const Spacer(),
                                 AppButton(
-                                  label: 'Update',
+                                  label: l10n.actionUpdate,
                                   icon: const Icon(Icons.show_chart, size: 18),
                                   variant: AppButtonVariant.ghost,
                                   onPressed: () =>
@@ -207,7 +210,7 @@ class ItemDetailScreen extends ConsumerWidget {
                             if (effectiveValue != null) ...[
                               const SizedBox(height: 2),
                               Text(
-                                _formatCurrency(effectiveValue),
+                                _formatCurrency(context, effectiveValue),
                                 style: theme.textTheme.headlineSmall?.copyWith(
                                   fontWeight: FontWeight.w800,
                                   color: theme.colorScheme.primary,
@@ -219,12 +222,14 @@ class ItemDetailScreen extends ConsumerWidget {
                                 _ValueDelta(
                                   purchasePrice: item.purchasePrice!,
                                   currentValue: item.currentValue!,
+                                  formatCurrency: (value) =>
+                                      _formatCurrency(context, value),
                                 ),
                               ],
                             ] else ...[
                               const SizedBox(height: 4),
                               Text(
-                                'No value set yet',
+                                l10n.itemDetailNoValueMessage,
                                 style: theme.textTheme.bodyMedium?.copyWith(
                                   color: theme.colorScheme.onSurfaceVariant,
                                 ),
@@ -236,7 +241,7 @@ class ItemDetailScreen extends ConsumerWidget {
                                 data: (history) {
                                   if (history.isEmpty) {
                                     return Text(
-                                      'No historical points yet. Update the current value to begin tracking.',
+                                      l10n.itemDetailNoHistoryMessage,
                                       key: const ValueKey('history-empty'),
                                       style: theme.textTheme.bodySmall
                                           ?.copyWith(
@@ -265,13 +270,16 @@ class ItemDetailScreen extends ConsumerWidget {
                                           child: Row(
                                             children: [
                                               Text(
-                                                _formatDate(entry.$1),
+                                                _formatDate(context, entry.$1),
                                                 style:
                                                     theme.textTheme.bodySmall,
                                               ),
                                               const Spacer(),
                                               Text(
-                                                _formatCurrency(entry.$2),
+                                                _formatCurrency(
+                                                  context,
+                                                  entry.$2,
+                                                ),
                                                 style: theme
                                                     .textTheme
                                                     .bodyMedium
@@ -292,7 +300,7 @@ class ItemDetailScreen extends ConsumerWidget {
                                   child: LoadingView(indicatorSize: 36),
                                 ),
                                 error: (_, _) => Text(
-                                  'Unable to load price history',
+                                  l10n.itemDetailPriceHistoryError,
                                   key: const ValueKey('history-error'),
                                   style: theme.textTheme.bodySmall?.copyWith(
                                     color: theme.colorScheme.error,
@@ -312,7 +320,7 @@ class ItemDetailScreen extends ConsumerWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Details',
+                              l10n.itemDetailDetailsTitle,
                               style: theme.textTheme.titleMedium?.copyWith(
                                 fontWeight: FontWeight.w700,
                               ),
@@ -321,43 +329,52 @@ class ItemDetailScreen extends ConsumerWidget {
                             if (item.barcode != null)
                               _DetailRow(
                                 icon: Icons.qr_code_rounded,
-                                label: 'Barcode',
+                                label: l10n.itemDetailBarcodeLabel,
                                 value: item.barcode!,
                               ),
                             if (item.condition != null)
                               _DetailRow(
                                 icon: Icons.verified_rounded,
-                                label: 'Condition',
-                                value: item.condition!.name.toUpperCase(),
+                                label: l10n.itemDetailConditionLabel,
+                                value: _conditionLabel(
+                                  context,
+                                  item.condition!,
+                                ),
                               ),
                             _DetailRow(
                               icon: Icons.layers_rounded,
-                              label: 'Quantity',
+                              label: l10n.itemDetailQuantityLabel,
                               value: '${item.quantity}',
                             ),
                             if (item.location != null)
                               _DetailRow(
                                 icon: Icons.location_on_rounded,
-                                label: 'Location',
+                                label: l10n.itemDetailLocationLabel,
                                 value: item.location!,
                               ),
                             if (item.purchasePrice != null)
                               _DetailRow(
                                 icon: Icons.attach_money_rounded,
-                                label: 'Purchase Price',
-                                value: _formatCurrency(item.purchasePrice!),
+                                label: l10n.itemDetailPurchasePriceLabel,
+                                value: _formatCurrency(
+                                  context,
+                                  item.purchasePrice!,
+                                ),
                               ),
                             if (item.currentValue != null)
                               _DetailRow(
                                 icon: Icons.show_chart_rounded,
-                                label: 'Current Value',
-                                value: _formatCurrency(item.currentValue!),
+                                label: l10n.itemDetailCurrentValueLabel,
+                                value: _formatCurrency(
+                                  context,
+                                  item.currentValue!,
+                                ),
                               ),
                             if (item.purchaseDate != null)
                               _DetailRow(
                                 icon: Icons.event_rounded,
-                                label: 'Purchase Date',
-                                value: _formatDate(item.purchaseDate!),
+                                label: l10n.itemDetailPurchaseDateLabel,
+                                value: _formatDate(context, item.purchaseDate!),
                               ),
                           ],
                         ),
@@ -373,7 +390,7 @@ class ItemDetailScreen extends ConsumerWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'Notes',
+                                l10n.itemDetailNotesTitle,
                                 style: theme.textTheme.titleMedium?.copyWith(
                                   fontWeight: FontWeight.w700,
                                 ),
@@ -398,25 +415,35 @@ class ItemDetailScreen extends ConsumerWidget {
         );
       },
       loading: () =>
-          const Scaffold(body: LoadingView(message: 'Loading item details...')),
+          Scaffold(body: LoadingView(message: l10n.itemDetailLoadingMessage)),
       error: (error, stack) => Scaffold(
         appBar: AppBar(),
         body: ErrorView(
-          message: 'Error loading item details: $error',
+          message: l10n.itemDetailErrorLoading('$error'),
           onRetry: () => ref.invalidate(itemDetailProvider(itemId)),
         ),
       ),
     );
   }
 
-  String _formatDate(DateTime date) {
-    final month = date.month.toString().padLeft(2, '0');
-    final day = date.day.toString().padLeft(2, '0');
-    return '${date.year}-$month-$day';
+  String _formatDate(BuildContext context, DateTime date) {
+    final locale = Localizations.localeOf(context).toLanguageTag();
+    return DateFormat.yMMMd(locale).format(date);
   }
 
-  String _formatCurrency(double value) {
-    return '\$${value.toStringAsFixed(2)}';
+  String _formatCurrency(BuildContext context, double value) {
+    final locale = Localizations.localeOf(context).toLanguageTag();
+    return NumberFormat.simpleCurrency(locale: locale).format(value);
+  }
+
+  String _conditionLabel(BuildContext context, ItemCondition condition) {
+    final l10n = context.l10n;
+    return switch (condition) {
+      ItemCondition.mint => l10n.itemConditionMint,
+      ItemCondition.good => l10n.itemConditionGood,
+      ItemCondition.fair => l10n.itemConditionFair,
+      ItemCondition.poor => l10n.itemConditionPoor,
+    };
   }
 
   Future<void> _showUpdateCurrentValueDialog(
@@ -424,17 +451,20 @@ class ItemDetailScreen extends ConsumerWidget {
     WidgetRef ref,
     Item item,
   ) async {
+    final l10n = context.l10n;
     var draftValue = item.currentValue?.toStringAsFixed(2) ?? '';
 
     final value = await showAppDialog<double>(
       context: context,
-      title: const Text('Update Current Value'),
+      title: Text(l10n.itemDetailUpdateValueTitle),
       content: AppInput(
         initialValue: draftValue,
         autofocus: true,
         keyboardType: const TextInputType.numberWithOptions(decimal: true),
-        labelText: 'Current value',
-        prefixText: '\$',
+        labelText: l10n.itemDetailCurrentValueLabel,
+        prefixText: NumberFormat.simpleCurrency(
+          locale: Localizations.localeOf(context).toLanguageTag(),
+        ).currencySymbol,
         hintText: '0.00',
         onChanged: (value) {
           draftValue = value;
@@ -442,12 +472,12 @@ class ItemDetailScreen extends ConsumerWidget {
       ),
       actions: [
         AppButton(
-          label: 'Cancel',
+          label: l10n.actionCancel,
           variant: AppButtonVariant.ghost,
           onPressed: () => Navigator.pop(context),
         ),
         AppButton(
-          label: 'Save',
+          label: l10n.actionSave,
           onPressed: () {
             final parsed = double.tryParse(draftValue.trim());
             if (parsed == null || parsed < 0) return;
@@ -464,15 +494,15 @@ class ItemDetailScreen extends ConsumerWidget {
         updateItemProvider(item.copyWith(currentValue: value)).future,
       );
       if (context.mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(const SnackBar(content: Text('Current value updated')));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(l10n.itemDetailCurrentValueUpdated)),
+        );
       }
     } catch (e) {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Failed to update value: $e'),
+            content: Text(l10n.itemDetailUpdateValueFailed('$e')),
             backgroundColor: Colors.red,
           ),
         );
@@ -527,12 +557,17 @@ class _ItemHeroBanner extends StatelessWidget {
                 if (item.condition != null)
                   _HeroBadge(
                     icon: Icons.verified_rounded,
-                    label: item.condition!.name.toUpperCase(),
+                    label: switch (item.condition!) {
+                      ItemCondition.mint => context.l10n.itemConditionMint,
+                      ItemCondition.good => context.l10n.itemConditionGood,
+                      ItemCondition.fair => context.l10n.itemConditionFair,
+                      ItemCondition.poor => context.l10n.itemConditionPoor,
+                    },
                   ),
                 if (item.quantity > 1)
                   _HeroBadge(
                     icon: Icons.layers_rounded,
-                    label: 'Qty ${item.quantity}',
+                    label: context.l10n.itemsQuantityShort(item.quantity),
                   ),
                 if (effectiveValue != null)
                   _HeroBadge(
@@ -679,8 +714,13 @@ class _QuickActionChip extends StatelessWidget {
 class _ValueDelta extends StatelessWidget {
   final double purchasePrice;
   final double currentValue;
+  final String Function(double value) formatCurrency;
 
-  const _ValueDelta({required this.purchasePrice, required this.currentValue});
+  const _ValueDelta({
+    required this.purchasePrice,
+    required this.currentValue,
+    required this.formatCurrency,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -701,7 +741,7 @@ class _ValueDelta extends StatelessWidget {
         ),
         const SizedBox(width: 4),
         Text(
-          '${isPositive ? '+' : ''}\$${delta.toStringAsFixed(2)} (${ratio.toStringAsFixed(1)}%)',
+          '${isPositive ? '+' : ''}${formatCurrency(delta.abs())} (${ratio.toStringAsFixed(1)}%)',
           style: Theme.of(context).textTheme.bodySmall?.copyWith(
             color: color,
             fontWeight: FontWeight.w700,
@@ -830,6 +870,7 @@ class _DetailRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final labelWidth = math.min(132.0, MediaQuery.sizeOf(context).width * 0.34);
 
     return Padding(
       padding: const EdgeInsets.only(bottom: AppSpacing.sm),
@@ -839,9 +880,11 @@ class _DetailRow extends StatelessWidget {
           Icon(icon, size: 16, color: theme.colorScheme.onSurfaceVariant),
           const SizedBox(width: 8),
           SizedBox(
-            width: 112,
+            width: labelWidth,
             child: Text(
               label,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
               style: theme.textTheme.bodyMedium?.copyWith(
                 color: theme.colorScheme.onSurfaceVariant,
               ),

@@ -1,9 +1,11 @@
 import 'dart:io';
 
+import 'package:collection_tracker/l10n/l10n.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import 'package:ui/ui.dart';
 
 class ItemGridCard extends StatelessWidget {
@@ -115,13 +117,15 @@ class ItemGridCard extends StatelessWidget {
                         if (item.condition != null)
                           _Pill(
                             icon: Icons.verified_outlined,
-                            label: item.condition!.name.toUpperCase(),
+                            label: _conditionLabel(context, item.condition!),
                             color: conditionColor,
                           ),
                         if (item.quantity > 1)
                           _Pill(
                             icon: Icons.layers_outlined,
-                            label: 'Qty ${item.quantity}',
+                            label: context.l10n.itemsQuantityShort(
+                              item.quantity,
+                            ),
                             color: theme.colorScheme.primary,
                           ),
                         if (item.tags.isNotEmpty)
@@ -139,7 +143,7 @@ class ItemGridCard extends StatelessWidget {
                     if (effectiveValue != null) ...[
                       const SizedBox(height: AppSpacing.sm),
                       Text(
-                        '\$${effectiveValue.toStringAsFixed(2)}',
+                        _formatCurrency(context, effectiveValue),
                         style: theme.textTheme.labelLarge?.copyWith(
                           color: theme.colorScheme.primary,
                           fontWeight: FontWeight.w700,
@@ -201,7 +205,7 @@ class ItemGridCard extends StatelessWidget {
           children: [
             ListTile(
               leading: const Icon(Icons.edit_rounded),
-              title: const Text('Edit'),
+              title: Text(context.l10n.actionEdit),
               onTap: () {
                 Navigator.pop(context);
                 context.push('/items/${item.id}/edit');
@@ -209,7 +213,10 @@ class ItemGridCard extends StatelessWidget {
             ),
             ListTile(
               leading: const Icon(Icons.delete_outline, color: Colors.red),
-              title: const Text('Delete', style: TextStyle(color: Colors.red)),
+              title: Text(
+                context.l10n.actionDelete,
+                style: const TextStyle(color: Colors.red),
+              ),
               onTap: () {
                 Navigator.pop(context);
                 onDelete();
@@ -229,6 +236,21 @@ class ItemGridCard extends StatelessWidget {
       ItemCondition.fair => const Color(0xFFD96B12),
       ItemCondition.poor => const Color(0xFFD64545),
     };
+  }
+
+  String _conditionLabel(BuildContext context, ItemCondition condition) {
+    final l10n = context.l10n;
+    return switch (condition) {
+      ItemCondition.mint => l10n.itemConditionMint,
+      ItemCondition.good => l10n.itemConditionGood,
+      ItemCondition.fair => l10n.itemConditionFair,
+      ItemCondition.poor => l10n.itemConditionPoor,
+    };
+  }
+
+  String _formatCurrency(BuildContext context, double value) {
+    final locale = Localizations.localeOf(context).toLanguageTag();
+    return NumberFormat.simpleCurrency(locale: locale).format(value);
   }
 }
 
@@ -266,11 +288,16 @@ class _Pill extends StatelessWidget {
             children: [
               Icon(icon, size: 12, color: color),
               const SizedBox(width: 4),
-              Text(
-                label,
-                style: theme.textTheme.labelSmall?.copyWith(
-                  color: color,
-                  fontWeight: FontWeight.w700,
+              ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 104),
+                child: Text(
+                  label,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: theme.textTheme.labelSmall?.copyWith(
+                    color: color,
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
               ),
             ],

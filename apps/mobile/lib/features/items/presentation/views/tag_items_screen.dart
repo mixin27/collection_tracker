@@ -1,4 +1,5 @@
 import 'package:collection_tracker/features/collections/presentation/view_models/collections_view_model.dart';
+import 'package:collection_tracker/l10n/l10n.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -26,30 +27,31 @@ class _TagItemsScreenState extends ConsumerState<TagItemsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     final tagName = widget.tagName;
     final itemsAsync = ref.watch(tagItemsProvider(tagName));
     final collectionsAsync = ref.watch(collectionsViewModelProvider);
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Tag: $tagName'),
+        title: Text(l10n.tagItemsTitle(tagName)),
         actions: [
           PopupMenuButton<_TagItemsSort>(
-            tooltip: 'Sort',
+            tooltip: l10n.tagItemsSortTooltip,
             initialValue: _sort,
             onSelected: (value) => setState(() => _sort = value),
-            itemBuilder: (context) => const [
+            itemBuilder: (context) => [
               PopupMenuItem(
                 value: _TagItemsSort.newest,
-                child: Text('Sort: Newest'),
+                child: Text(l10n.tagItemsSortNewest),
               ),
               PopupMenuItem(
                 value: _TagItemsSort.oldest,
-                child: Text('Sort: Oldest'),
+                child: Text(l10n.tagItemsSortOldest),
               ),
               PopupMenuItem(
                 value: _TagItemsSort.title,
-                child: Text('Sort: Title'),
+                child: Text(l10n.tagItemsSortTitle),
               ),
             ],
             icon: const Icon(Icons.sort),
@@ -60,11 +62,11 @@ class _TagItemsScreenState extends ConsumerState<TagItemsScreen> {
         data: (items) => collectionsAsync.when(
           data: (collections) =>
               _buildContent(context, ref, items, collections),
-          loading: () => const LoadingView(message: 'Loading collections...'),
-          error: (error, _) => ErrorView(message: 'Error: $error'),
+          loading: () => LoadingView(message: l10n.tagItemsLoadingCollections),
+          error: (error, _) => ErrorView(message: l10n.tagItemsError('$error')),
         ),
-        loading: () => const LoadingView(message: 'Loading tagged items...'),
-        error: (error, _) => ErrorView(message: 'Error: $error'),
+        loading: () => LoadingView(message: l10n.tagItemsLoadingItems),
+        error: (error, _) => ErrorView(message: l10n.tagItemsError('$error')),
       ),
     );
   }
@@ -75,11 +77,12 @@ class _TagItemsScreenState extends ConsumerState<TagItemsScreen> {
     List<Item> items,
     List<Collection> collections,
   ) {
+    final l10n = context.l10n;
     if (items.isEmpty) {
-      return const EmptyState(
+      return EmptyState(
         icon: Icons.search_off,
-        title: 'No items found',
-        message: 'No collection items currently use this tag.',
+        title: l10n.tagItemsEmptyTitle,
+        message: l10n.tagItemsEmptyMessage,
       );
     }
 
@@ -106,7 +109,8 @@ class _TagItemsScreenState extends ConsumerState<TagItemsScreen> {
       itemBuilder: (context, sectionIndex) {
         final collectionId = sortedCollectionIds[sectionIndex];
         final sectionItems = _sortedItems(grouped[collectionId]!);
-        final collectionName = collectionNames[collectionId] ?? 'Unknown';
+        final collectionName =
+            collectionNames[collectionId] ?? l10n.tagItemsUnknownCollection;
         final isCollapsed = _collapsedCollections.contains(collectionId);
 
         return Column(
@@ -133,7 +137,7 @@ class _TagItemsScreenState extends ConsumerState<TagItemsScreen> {
                     style: Theme.of(context).textTheme.bodySmall,
                   ),
                   IconButton(
-                    tooltip: 'Open collection',
+                    tooltip: l10n.tagItemsOpenCollectionTooltip,
                     icon: const Icon(Icons.open_in_new, size: 20),
                     onPressed: () => context.go('/collections/$collectionId'),
                   ),
@@ -206,16 +210,16 @@ class _TagItemsScreenState extends ConsumerState<TagItemsScreen> {
   ) async {
     final confirmed = await showAppDialog<bool>(
       context: context,
-      title: const Text('Delete Item'),
-      content: Text('Delete "${item.title}"?'),
+      title: Text(context.l10n.itemsDeleteTitle),
+      content: Text(context.l10n.itemsDeleteMessage(item.title)),
       actions: [
         AppButton(
-          label: 'Cancel',
+          label: context.l10n.actionCancel,
           variant: AppButtonVariant.ghost,
           onPressed: () => Navigator.pop(context, false),
         ),
         AppButton(
-          label: 'Delete',
+          label: context.l10n.actionDelete,
           variant: AppButtonVariant.danger,
           onPressed: () => Navigator.pop(context, true),
         ),
@@ -227,15 +231,15 @@ class _TagItemsScreenState extends ConsumerState<TagItemsScreen> {
     try {
       await ref.read(deleteItemProvider(item.id).future);
       if (context.mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(const SnackBar(content: Text('Item deleted')));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(context.l10n.itemsDeleted(item.title))),
+        );
       }
     } catch (e) {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Delete failed: $e'),
+            content: Text(context.l10n.tagItemsDeleteFailed('$e')),
             backgroundColor: Colors.red,
           ),
         );

@@ -1,17 +1,18 @@
+import 'package:collection_tracker/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:ui/ui.dart';
 
 class ItemTagsEditor extends StatefulWidget {
   final List<String> initialTags;
   final ValueChanged<List<String>> onChanged;
-  final String label;
-  final String hintText;
+  final String? label;
+  final String? hintText;
 
   const ItemTagsEditor({
     required this.initialTags,
     required this.onChanged,
-    this.label = 'Tags',
-    this.hintText = 'Add a tag',
+    this.label,
+    this.hintText,
     super.key,
   });
 
@@ -46,12 +47,15 @@ class _ItemTagsEditorState extends State<ItemTagsEditor> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = context.l10n;
+    final label = widget.label ?? l10n.itemsTagsTitle;
+    final hintText = widget.hintText ?? l10n.itemTagsEditorHint;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          widget.label,
+          label,
           style: theme.textTheme.titleSmall?.copyWith(
             fontWeight: FontWeight.w700,
           ),
@@ -62,7 +66,7 @@ class _ItemTagsEditorState extends State<ItemTagsEditor> {
             Expanded(
               child: AppInput(
                 controller: _controller,
-                hintText: widget.hintText,
+                hintText: hintText,
                 prefixIcon: const Icon(Icons.sell_outlined),
                 textInputAction: TextInputAction.done,
                 onFieldSubmitted: (_) => _addTag(),
@@ -72,7 +76,7 @@ class _ItemTagsEditorState extends State<ItemTagsEditor> {
             IconButton.filled(
               onPressed: _addTag,
               icon: const Icon(Icons.add),
-              tooltip: 'Add tag',
+              tooltip: l10n.itemTagsEditorAddTooltip,
             ),
           ],
         ),
@@ -92,7 +96,7 @@ class _ItemTagsEditorState extends State<ItemTagsEditor> {
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Text(
-                    'No tags yet. Add tags to organize items faster.',
+                    l10n.itemTagsEditorEmptyMessage,
                     style: theme.textTheme.bodySmall?.copyWith(
                       color: theme.colorScheme.onSurfaceVariant,
                     ),
@@ -129,7 +133,7 @@ class _ItemTagsEditorState extends State<ItemTagsEditor> {
     final normalized = raw.replaceAll(RegExp(r'\s+'), ' ');
     if (normalized.length > 50) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Tags must be 50 characters or less')),
+        SnackBar(content: Text(context.l10n.itemTagsEditorTooLong)),
       );
       return;
     }

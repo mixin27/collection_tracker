@@ -1,7 +1,9 @@
 import 'package:domain/domain.dart';
+import 'package:collection_tracker/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import 'package:ui/ui.dart';
 
 import '../view_models/items_view_model.dart';
@@ -56,17 +58,18 @@ class _EditItemScreenState extends ConsumerState<EditItemScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     final itemAsync = ref.watch(itemDetailProvider(widget.itemId));
 
     return itemAsync.when(
       data: (item) {
         if (item == null) {
           return Scaffold(
-            appBar: AppBar(title: const Text('Edit Item')),
-            body: const EmptyState(
+            appBar: AppBar(title: Text(l10n.editItemTitle)),
+            body: EmptyState(
               icon: Icons.inventory_2_outlined,
-              title: 'Item not found',
-              message: 'This item may have been removed.',
+              title: l10n.itemDetailNotFoundTitle,
+              message: l10n.itemDetailNotFoundMessage,
             ),
           );
         }
@@ -95,7 +98,7 @@ class _EditItemScreenState extends ConsumerState<EditItemScreen> {
         }
 
         return Scaffold(
-          appBar: AppBar(title: const Text('Edit Item')),
+          appBar: AppBar(title: Text(l10n.editItemTitle)),
           body: Form(
             key: _formKey,
             child: ListView(
@@ -106,12 +109,12 @@ class _EditItemScreenState extends ConsumerState<EditItemScreen> {
                     children: [
                       AppInput(
                         controller: _titleController,
-                        labelText: 'Title',
+                        labelText: l10n.itemFormTitleLabel,
                         prefixIcon: const Icon(Icons.title),
                         textCapitalization: TextCapitalization.words,
                         validator: (value) {
                           if (value == null || value.trim().isEmpty) {
-                            return 'Please enter a title';
+                            return l10n.itemFormTitleRequired;
                           }
                           return null;
                         },
@@ -119,7 +122,7 @@ class _EditItemScreenState extends ConsumerState<EditItemScreen> {
                       const SizedBox(height: AppSpacing.md),
                       AppInput(
                         controller: _barcodeController,
-                        labelText: 'Barcode (optional)',
+                        labelText: l10n.itemFormBarcodeLabelOptional,
                         prefixIcon: const Icon(Icons.qr_code),
                         suffixIcon: IconButton(
                           icon: const Icon(Icons.camera_alt),
@@ -140,7 +143,7 @@ class _EditItemScreenState extends ConsumerState<EditItemScreen> {
                       const SizedBox(height: AppSpacing.md),
                       AppInput(
                         controller: _descriptionController,
-                        labelText: 'Description (optional)',
+                        labelText: l10n.itemFormDescriptionLabelOptional,
                         prefixIcon: const Icon(Icons.description),
                         maxLines: 3,
                         textCapitalization: TextCapitalization.sentences,
@@ -151,8 +154,8 @@ class _EditItemScreenState extends ConsumerState<EditItemScreen> {
                         onChanged: (tags) {
                           _tags = tags;
                         },
-                        label: 'Tags (optional)',
-                        hintText: 'e.g., Signed, First Edition',
+                        label: l10n.itemFormTagsLabelOptional,
+                        hintText: l10n.editItemTagsHint,
                       ),
                       const SizedBox(height: AppSpacing.md),
                       Row(
@@ -160,8 +163,8 @@ class _EditItemScreenState extends ConsumerState<EditItemScreen> {
                           Expanded(
                             child: AppInput(
                               controller: _purchasePriceController,
-                              labelText: 'Purchase Price',
-                              prefixText: '\$',
+                              labelText: l10n.itemDetailPurchasePriceLabel,
+                              prefixText: _currencySymbol(context),
                               prefixIcon: const Icon(Icons.attach_money),
                               keyboardType:
                                   const TextInputType.numberWithOptions(
@@ -174,8 +177,8 @@ class _EditItemScreenState extends ConsumerState<EditItemScreen> {
                           Expanded(
                             child: AppInput(
                               controller: _currentValueController,
-                              labelText: 'Current Value',
-                              prefixText: '\$',
+                              labelText: l10n.itemDetailCurrentValueLabel,
+                              prefixText: _currencySymbol(context),
                               prefixIcon: const Icon(Icons.show_chart),
                               keyboardType:
                                   const TextInputType.numberWithOptions(
@@ -191,7 +194,7 @@ class _EditItemScreenState extends ConsumerState<EditItemScreen> {
                         controller: _purchaseDateController,
                         readOnly: true,
                         decoration: InputDecoration(
-                          labelText: 'Purchase Date (optional)',
+                          labelText: l10n.itemFormPurchaseDateLabelOptional,
                           prefixIcon: const Icon(Icons.calendar_today),
                           suffixIcon: _selectedPurchaseDate == null
                               ? null
@@ -210,14 +213,14 @@ class _EditItemScreenState extends ConsumerState<EditItemScreen> {
                       const SizedBox(height: AppSpacing.md),
                       DropdownButtonFormField<ItemCondition>(
                         initialValue: _selectedCondition,
-                        decoration: const InputDecoration(
-                          labelText: 'Condition (optional)',
-                          prefixIcon: Icon(Icons.star),
+                        decoration: InputDecoration(
+                          labelText: l10n.itemFormConditionLabelOptional,
+                          prefixIcon: const Icon(Icons.star),
                         ),
                         items: ItemCondition.values.map((condition) {
                           return DropdownMenuItem(
                             value: condition,
-                            child: Text(condition.name.toUpperCase()),
+                            child: Text(_conditionLabel(context, condition)),
                           );
                         }).toList(),
                         onChanged: (value) {
@@ -229,16 +232,16 @@ class _EditItemScreenState extends ConsumerState<EditItemScreen> {
                       const SizedBox(height: AppSpacing.md),
                       AppInput(
                         controller: _quantityController,
-                        labelText: 'Quantity',
+                        labelText: l10n.itemDetailQuantityLabel,
                         prefixIcon: const Icon(Icons.numbers),
                         keyboardType: TextInputType.number,
                         validator: (value) {
                           if (value == null || value.trim().isEmpty) {
-                            return 'Please enter quantity';
+                            return l10n.itemFormQuantityRequired;
                           }
                           final quantity = int.tryParse(value);
                           if (quantity == null || quantity < 1) {
-                            return 'Please enter a valid quantity';
+                            return l10n.itemFormQuantityInvalid;
                           }
                           return null;
                         },
@@ -246,15 +249,15 @@ class _EditItemScreenState extends ConsumerState<EditItemScreen> {
                       const SizedBox(height: AppSpacing.md),
                       AppInput(
                         controller: _locationController,
-                        labelText: 'Location (optional)',
-                        hintText: 'e.g., Shelf A, Box 3',
+                        labelText: l10n.itemFormLocationLabelOptional,
+                        hintText: l10n.itemFormLocationHint,
                         prefixIcon: const Icon(Icons.location_on),
                         textCapitalization: TextCapitalization.words,
                       ),
                       const SizedBox(height: AppSpacing.md),
                       AppInput(
                         controller: _notesController,
-                        labelText: 'Notes (optional)',
+                        labelText: l10n.itemFormNotesLabelOptional,
                         prefixIcon: const Icon(Icons.note),
                         maxLines: 3,
                         textCapitalization: TextCapitalization.sentences,
@@ -266,7 +269,7 @@ class _EditItemScreenState extends ConsumerState<EditItemScreen> {
 
                 // Save button
                 AppButton(
-                  label: 'Save Changes',
+                  label: l10n.editItemSaveChanges,
                   isLoading: _isSaving,
                   onPressed: _isSaving ? null : _handleSave,
                   expand: true,
@@ -277,12 +280,12 @@ class _EditItemScreenState extends ConsumerState<EditItemScreen> {
         );
       },
       loading: () => Scaffold(
-        appBar: AppBar(title: const Text('Edit Item')),
-        body: const LoadingView(message: 'Loading item...'),
+        appBar: AppBar(title: Text(l10n.editItemTitle)),
+        body: LoadingView(message: l10n.editItemLoading),
       ),
       error: (error, stack) => Scaffold(
-        appBar: AppBar(title: const Text('Edit Item')),
-        body: ErrorView(message: 'Error: $error'),
+        appBar: AppBar(title: Text(l10n.editItemTitle)),
+        body: ErrorView(message: l10n.editItemError('$error')),
       ),
     );
   }
@@ -323,15 +326,15 @@ class _EditItemScreenState extends ConsumerState<EditItemScreen> {
 
       if (mounted) {
         context.pop();
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Item updated successfully')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(context.l10n.editItemSuccess)));
       }
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Error updating item: $e'),
+            content: Text(context.l10n.editItemUpdateError('$e')),
             backgroundColor: Colors.red,
           ),
         );
@@ -351,10 +354,10 @@ class _EditItemScreenState extends ConsumerState<EditItemScreen> {
     }
     final parsed = _parsePriceInput(value);
     if (parsed == null) {
-      return 'Invalid price';
+      return context.l10n.itemFormInvalidPrice;
     }
     if (parsed < 0) {
-      return 'Must be positive';
+      return context.l10n.itemFormMustBePositive;
     }
     return null;
   }
@@ -381,8 +384,22 @@ class _EditItemScreenState extends ConsumerState<EditItemScreen> {
   }
 
   String _formatDate(DateTime date) {
-    final month = date.month.toString().padLeft(2, '0');
-    final day = date.day.toString().padLeft(2, '0');
-    return '${date.year}-$month-$day';
+    final locale = Localizations.localeOf(context).toLanguageTag();
+    return DateFormat.yMd(locale).format(date);
+  }
+
+  String _currencySymbol(BuildContext context) {
+    final locale = Localizations.localeOf(context).toLanguageTag();
+    return NumberFormat.simpleCurrency(locale: locale).currencySymbol;
+  }
+
+  String _conditionLabel(BuildContext context, ItemCondition condition) {
+    final l10n = context.l10n;
+    return switch (condition) {
+      ItemCondition.mint => l10n.itemConditionMint,
+      ItemCondition.good => l10n.itemConditionGood,
+      ItemCondition.fair => l10n.itemConditionFair,
+      ItemCondition.poor => l10n.itemConditionPoor,
+    };
   }
 }

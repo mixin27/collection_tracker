@@ -1,4 +1,5 @@
 import 'package:domain/domain.dart';
+import 'package:collection_tracker/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:ui/ui.dart';
@@ -77,11 +78,13 @@ class CollectionCard extends StatelessWidget {
                   children: [
                     _MetaChip(
                       icon: Icons.inventory_2_outlined,
-                      label: '${collection.itemCount} items',
+                      label: context.l10n.itemsCountWithValue(
+                        collection.itemCount,
+                      ),
                     ),
                     _MetaChip(
                       icon: Icons.category_outlined,
-                      label: collectionTypeLabel(collection.type),
+                      label: collectionTypeLabel(context, collection.type),
                     ),
                   ],
                 ),
@@ -101,7 +104,7 @@ class CollectionCard extends StatelessWidget {
             ),
           ),
           IconButton(
-            tooltip: 'Collection actions',
+            tooltip: context.l10n.collectionsActionsTooltip,
             onPressed: () => _showActions(context),
             icon: const Icon(Icons.more_horiz_rounded),
           ),
@@ -120,7 +123,7 @@ class CollectionCard extends StatelessWidget {
           children: [
             ListTile(
               leading: const Icon(Icons.open_in_new_rounded),
-              title: const Text('Open Collection'),
+              title: Text(context.l10n.collectionsOpenAction),
               onTap: () {
                 Navigator.pop(context);
                 onTap();
@@ -128,7 +131,7 @@ class CollectionCard extends StatelessWidget {
             ),
             ListTile(
               leading: const Icon(Icons.edit_outlined),
-              title: const Text('Edit Collection'),
+              title: Text(context.l10n.collectionsEditAction),
               onTap: () {
                 Navigator.pop(context);
                 onEdit();
@@ -139,7 +142,10 @@ class CollectionCard extends StatelessWidget {
                 Icons.delete_outline_rounded,
                 color: Colors.red,
               ),
-              title: const Text('Delete', style: TextStyle(color: Colors.red)),
+              title: Text(
+                context.l10n.actionDelete,
+                style: const TextStyle(color: Colors.red),
+              ),
               onTap: () {
                 HapticFeedback.lightImpact();
                 Navigator.pop(context);
@@ -175,11 +181,16 @@ class _MetaChip extends StatelessWidget {
         children: [
           Icon(icon, size: 14, color: theme.colorScheme.onSurfaceVariant),
           const SizedBox(width: 4),
-          Text(
-            label,
-            style: theme.textTheme.labelSmall?.copyWith(
-              color: theme.colorScheme.onSurfaceVariant,
-              fontWeight: FontWeight.w600,
+          ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 120),
+            child: Text(
+              label,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: theme.textTheme.labelSmall?.copyWith(
+                color: theme.colorScheme.onSurfaceVariant,
+                fontWeight: FontWeight.w600,
+              ),
             ),
           ),
         ],

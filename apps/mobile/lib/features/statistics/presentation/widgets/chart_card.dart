@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 
+import 'package:collection_tracker/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:ui/ui.dart';
 
@@ -23,7 +24,7 @@ class ChartCard extends StatelessWidget {
       return AppCard(
         child: Center(
           child: Text(
-            emptyLabel ?? 'No chart data available',
+            emptyLabel ?? context.l10n.statisticsNoChartData,
             style: Theme.of(context).textTheme.bodyMedium,
           ),
         ),
@@ -54,10 +55,15 @@ class ChartCard extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(width: 10),
-                      Text(
-                        '${item.value.toInt()} (${percentage.toStringAsFixed(1)}%)',
-                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          fontWeight: FontWeight.w700,
+                      ConstrainedBox(
+                        constraints: const BoxConstraints(maxWidth: 138),
+                        child: Text(
+                          '${item.value.toInt()} (${percentage.toStringAsFixed(1)}%)',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          textAlign: TextAlign.end,
+                          style: Theme.of(context).textTheme.bodySmall
+                              ?.copyWith(fontWeight: FontWeight.w700),
                         ),
                       ),
                     ],
@@ -103,7 +109,7 @@ class ChartCard extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      'Total',
+                      context.l10n.statisticsTotalLabel,
                       style: Theme.of(context).textTheme.labelSmall?.copyWith(
                         color: Theme.of(context).colorScheme.onSurfaceVariant,
                       ),

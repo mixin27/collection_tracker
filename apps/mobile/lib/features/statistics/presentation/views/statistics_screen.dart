@@ -2,9 +2,11 @@ import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import 'package:ui/ui.dart';
 
 import '../../../collections/presentation/widgets/collection_visuals.dart';
+import '../../../../l10n/l10n.dart';
 import '../view_models/statistics_view_model.dart';
 import '../widgets/chart_card.dart';
 import '../widgets/stat_card.dart';
@@ -14,21 +16,21 @@ class StatisticsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = context.l10n;
     final statisticsAsync = ref.watch(statisticsViewModelProvider);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Statistics')),
+      appBar: AppBar(title: Text(context.l10n.statisticsTitle)),
       body: AppAnimatedSwitcher(
         child: statisticsAsync.when(
           data: (stats) {
             if (stats.totalCollections == 0) {
               return EmptyState(
                 icon: Icons.insights_outlined,
-                title: 'No statistics yet',
-                message:
-                    'Create a collection and add items to unlock portfolio insights.',
+                title: l10n.statisticsEmptyTitle,
+                message: l10n.statisticsEmptyMessage,
                 action: AppButton(
-                  label: 'Refresh',
+                  label: l10n.actionRefresh,
                   icon: const Icon(Icons.refresh_rounded),
                   onPressed: () {
                     ref.read(statisticsViewModelProvider.notifier).refresh();
@@ -65,6 +67,8 @@ class StatisticsScreen extends ConsumerWidget {
                       averageValue: stats.averageItemValue,
                       pricedItems: stats.pricedItems,
                       totalItems: stats.totalItems,
+                      formatCurrency: (value) =>
+                          _formatCurrency(context, value),
                     ),
                   ),
                   const SizedBox(height: AppSpacing.lg),
@@ -79,33 +83,34 @@ class StatisticsScreen extends ConsumerWidget {
                         final isCompact = width < 900 || textScale > 1.05;
                         final crossAxisCount = isCompact ? 2 : 4;
                         final tileHeight = switch (crossAxisCount) {
-                          2 => width < 460 || textScale > 1.0 ? 164.0 : 148.0,
+                          2 => width < 460 || textScale > 1.0 ? 184.0 : 160.0,
                           _ => 136.0,
                         };
                         final cards = [
                           StatCard(
-                            title: 'Collections',
+                            title: l10n.collectionsCountLabel,
                             value: '${stats.totalCollections}',
                             icon: Icons.collections_bookmark_rounded,
                             color: Colors.blue,
                           ),
                           StatCard(
-                            title: 'Items',
+                            title: l10n.itemsCountLabel,
                             value: '${stats.totalItems}',
                             icon: Icons.inventory_2_rounded,
                             color: Colors.green,
                           ),
                           StatCard(
-                            title: 'Quantity',
+                            title: l10n.statisticsQuantityTitle,
                             value: '${stats.totalQuantity}',
                             icon: Icons.layers_rounded,
                             color: Colors.indigo,
                           ),
                           StatCard(
-                            title: 'Favorites',
+                            title: l10n.statisticsFavoritesTitle,
                             value: '${stats.favoriteItems}',
-                            subtitle:
-                                '${(favoritesRatio * 100).toStringAsFixed(0)}% of items',
+                            subtitle: l10n.statisticsPercentOfItems(
+                              (favoritesRatio * 100).toStringAsFixed(0),
+                            ),
                             icon: Icons.favorite_rounded,
                             color: Colors.red,
                           ),
@@ -135,30 +140,36 @@ class StatisticsScreen extends ConsumerWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Inventory Health',
+                            l10n.statisticsInventoryHealthTitle,
                             style: Theme.of(context).textTheme.titleMedium
                                 ?.copyWith(fontWeight: FontWeight.w700),
                           ),
                           const SizedBox(height: AppSpacing.md),
                           _ProgressLine(
-                            label: 'Valuation coverage',
+                            label: l10n.statisticsValuationCoverageLabel,
                             value: pricedRatio,
-                            caption:
-                                '${stats.pricedItems}/${stats.totalItems} priced',
+                            caption: l10n.statisticsPricedCaption(
+                              stats.pricedItems,
+                              stats.totalItems,
+                            ),
                           ),
                           const SizedBox(height: AppSpacing.sm),
                           _ProgressLine(
-                            label: 'Favorites coverage',
+                            label: l10n.statisticsFavoritesCoverageLabel,
                             value: favoritesRatio,
-                            caption:
-                                '${stats.favoriteItems}/${stats.totalItems} favorites',
+                            caption: l10n.statisticsFavoritesCaption(
+                              stats.favoriteItems,
+                              stats.totalItems,
+                            ),
                           ),
                           const SizedBox(height: AppSpacing.sm),
                           _ProgressLine(
-                            label: 'Wishlist coverage',
+                            label: l10n.statisticsWishlistCoverageLabel,
                             value: wishlistRatio,
-                            caption:
-                                '${stats.wishlistItems}/${stats.totalItems} wishlist',
+                            caption: l10n.statisticsWishlistCaption(
+                              stats.wishlistItems,
+                              stats.totalItems,
+                            ),
                           ),
                         ],
                       ),
@@ -169,7 +180,7 @@ class StatisticsScreen extends ConsumerWidget {
                     AppReveal(
                       delay: AppMotion.stagger * 3,
                       child: Text(
-                        'Items by Collection Type',
+                        l10n.statisticsItemsByTypeTitle,
                         style: Theme.of(context).textTheme.titleLarge?.copyWith(
                           fontWeight: FontWeight.w700,
                         ),
@@ -181,7 +192,7 @@ class StatisticsScreen extends ConsumerWidget {
                       child: ChartCard(
                         data: stats.itemsByType.entries.map((entry) {
                           return ChartData(
-                            label: collectionTypeLabel(entry.key),
+                            label: collectionTypeLabel(context, entry.key),
                             value: entry.value.toDouble(),
                             color: collectionTypeColor(context, entry.key),
                           );
@@ -194,7 +205,7 @@ class StatisticsScreen extends ConsumerWidget {
                     AppReveal(
                       delay: AppMotion.stagger * 5,
                       child: Text(
-                        'Items by Condition',
+                        l10n.statisticsItemsByConditionTitle,
                         style: Theme.of(context).textTheme.titleLarge?.copyWith(
                           fontWeight: FontWeight.w700,
                         ),
@@ -206,7 +217,7 @@ class StatisticsScreen extends ConsumerWidget {
                       child: ChartCard(
                         data: stats.itemsByCondition.entries.map((entry) {
                           return ChartData(
-                            label: entry.key.name.toUpperCase(),
+                            label: _conditionLabel(context, entry.key),
                             value: entry.value.toDouble(),
                             color: _getConditionColor(entry.key),
                           );
@@ -219,7 +230,7 @@ class StatisticsScreen extends ConsumerWidget {
                     AppReveal(
                       delay: AppMotion.stagger * 7,
                       child: Text(
-                        'Top Valued Collections',
+                        l10n.statisticsTopValuedTitle,
                         style: Theme.of(context).textTheme.titleLarge?.copyWith(
                           fontWeight: FontWeight.w700,
                         ),
@@ -252,6 +263,8 @@ class StatisticsScreen extends ConsumerWidget {
                                   children: [
                                     Text(
                                       collection.name,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
                                       style: Theme.of(context)
                                           .textTheme
                                           .titleMedium
@@ -260,7 +273,9 @@ class StatisticsScreen extends ConsumerWidget {
                                           ),
                                     ),
                                     Text(
-                                      '${collection.itemCount} items',
+                                      l10n.itemsCountWithValue(
+                                        collection.itemCount,
+                                      ),
                                       style: Theme.of(context)
                                           .textTheme
                                           .bodySmall
@@ -274,7 +289,7 @@ class StatisticsScreen extends ConsumerWidget {
                                 ),
                               ),
                               Text(
-                                _formatCurrency(value),
+                                _formatCurrency(context, value),
                                 style: Theme.of(context).textTheme.titleSmall
                                     ?.copyWith(
                                       color: Theme.of(
@@ -294,7 +309,7 @@ class StatisticsScreen extends ConsumerWidget {
                     AppReveal(
                       delay: AppMotion.stagger * 9,
                       child: Text(
-                        'Largest Collection',
+                        l10n.statisticsLargestCollectionTitle,
                         style: Theme.of(context).textTheme.titleLarge?.copyWith(
                           fontWeight: FontWeight.w700,
                         ),
@@ -322,7 +337,9 @@ class StatisticsScreen extends ConsumerWidget {
                             style: const TextStyle(fontWeight: FontWeight.w700),
                           ),
                           subtitle: Text(
-                            '${stats.largestCollection!.itemCount} items',
+                            l10n.itemsCountWithValue(
+                              stats.largestCollection!.itemCount,
+                            ),
                           ),
                         ),
                       ),
@@ -333,7 +350,7 @@ class StatisticsScreen extends ConsumerWidget {
                     AppReveal(
                       delay: AppMotion.stagger * 11,
                       child: Text(
-                        'Recently Created',
+                        l10n.statisticsRecentlyCreatedTitle,
                         style: Theme.of(context).textTheme.titleLarge?.copyWith(
                           fontWeight: FontWeight.w700,
                         ),
@@ -360,7 +377,10 @@ class StatisticsScreen extends ConsumerWidget {
                             ),
                             title: Text(collection.name),
                             subtitle: Text(
-                              '${collection.itemCount} items • Created ${_formatDate(collection.createdAt)}',
+                              l10n.statisticsRecentCollectionSubtitle(
+                                collection.itemCount,
+                                _formatDate(context, collection.createdAt),
+                              ),
                             ),
                           ),
                         ),
@@ -371,13 +391,13 @@ class StatisticsScreen extends ConsumerWidget {
               ),
             );
           },
-          loading: () => const LoadingView(
-            key: ValueKey('stats-loading'),
-            message: 'Calculating portfolio insights...',
+          loading: () => LoadingView(
+            key: const ValueKey('stats-loading'),
+            message: l10n.statisticsLoadingMessage,
           ),
           error: (error, stack) => ErrorView(
             key: const ValueKey('stats-error'),
-            message: 'Error loading statistics: $error',
+            message: l10n.statisticsErrorLoading('$error'),
             onRetry: () => ref.invalidate(statisticsViewModelProvider),
           ),
         ),
@@ -394,27 +414,39 @@ class StatisticsScreen extends ConsumerWidget {
     };
   }
 
-  String _formatDate(DateTime date) {
+  String _conditionLabel(BuildContext context, ItemCondition condition) {
+    final l10n = context.l10n;
+    return switch (condition) {
+      ItemCondition.mint => l10n.itemConditionMint,
+      ItemCondition.good => l10n.itemConditionGood,
+      ItemCondition.fair => l10n.itemConditionFair,
+      ItemCondition.poor => l10n.itemConditionPoor,
+    };
+  }
+
+  String _formatDate(BuildContext context, DateTime date) {
+    final l10n = context.l10n;
     final now = DateTime.now();
     final diff = now.difference(date);
 
     if (diff.inDays == 0) {
-      return 'today';
+      return l10n.relativeToday;
     } else if (diff.inDays == 1) {
-      return 'yesterday';
+      return l10n.relativeYesterday;
     } else if (diff.inDays < 7) {
-      return '${diff.inDays} days ago';
+      return l10n.relativeDaysAgo(diff.inDays);
     } else if (diff.inDays < 30) {
-      return '${(diff.inDays / 7).floor()} weeks ago';
+      return l10n.relativeWeeksAgo((diff.inDays / 7).floor());
     } else if (diff.inDays < 365) {
-      return '${(diff.inDays / 30).floor()} months ago';
+      return l10n.relativeMonthsAgo((diff.inDays / 30).floor());
     } else {
-      return '${(diff.inDays / 365).floor()} years ago';
+      return l10n.relativeYearsAgo((diff.inDays / 365).floor());
     }
   }
 
-  String _formatCurrency(double value) {
-    return '\$${value.toStringAsFixed(2)}';
+  String _formatCurrency(BuildContext context, double value) {
+    final locale = Localizations.localeOf(context).toLanguageTag();
+    return NumberFormat.simpleCurrency(locale: locale).format(value);
   }
 }
 
@@ -423,12 +455,14 @@ class _PortfolioValueCard extends StatelessWidget {
   final double averageValue;
   final int pricedItems;
   final int totalItems;
+  final String Function(double) formatCurrency;
 
   const _PortfolioValueCard({
     required this.totalValue,
     required this.averageValue,
     required this.pricedItems,
     required this.totalItems,
+    required this.formatCurrency,
   });
 
   @override
@@ -453,14 +487,14 @@ class _PortfolioValueCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Portfolio Value',
+              context.l10n.statisticsPortfolioValueTitle,
               style: theme.textTheme.titleMedium?.copyWith(
                 color: theme.colorScheme.onSurfaceVariant,
               ),
             ),
             const SizedBox(height: AppSpacing.sm),
             Text(
-              '\$${totalValue.toStringAsFixed(2)}',
+              formatCurrency(totalValue),
               style: theme.textTheme.headlineMedium?.copyWith(
                 fontWeight: FontWeight.w800,
               ),
@@ -471,9 +505,16 @@ class _PortfolioValueCard extends StatelessWidget {
               runSpacing: AppSpacing.sm,
               children: [
                 _Badge(
-                  text: 'Avg priced item: \$${averageValue.toStringAsFixed(2)}',
+                  text: context.l10n.statisticsAveragePricedItem(
+                    formatCurrency(averageValue),
+                  ),
                 ),
-                _Badge(text: '$pricedItems / $totalItems items priced'),
+                _Badge(
+                  text: context.l10n.statisticsPricedItemsBadge(
+                    pricedItems,
+                    totalItems,
+                  ),
+                ),
               ],
             ),
           ],

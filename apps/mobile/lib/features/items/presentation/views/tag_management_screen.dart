@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ui/ui.dart';
+import 'package:collection_tracker/l10n/l10n.dart';
 
 import '../view_models/tag_management_view_model.dart';
 
@@ -40,25 +41,28 @@ class _TagManagementScreenState extends ConsumerState<TagManagementScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     final tagsAsync = ref.watch(tagsWithUsageProvider);
     final theme = Theme.of(context);
 
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          _selectionMode ? '${_selectedTags.length} selected' : 'Manage Tags',
+          _selectionMode
+              ? l10n.tagManagementSelectedCount(_selectedTags.length)
+              : l10n.tagManagementTitle,
         ),
         actions: _selectionMode
             ? [
                 IconButton(
-                  tooltip: 'Cancel selection',
+                  tooltip: l10n.tagManagementCancelSelectionTooltip,
                   onPressed: _isBusy ? null : _clearSelectionMode,
                   icon: const Icon(Icons.close),
                 ),
               ]
             : [
                 IconButton(
-                  tooltip: 'Select tags',
+                  tooltip: l10n.tagManagementSelectTagsTooltip,
                   onPressed: _isBusy
                       ? null
                       : () => setState(() => _selectionMode = true),
@@ -84,7 +88,7 @@ class _TagManagementScreenState extends ConsumerState<TagManagementScreen> {
                     children: [
                       Expanded(
                         child: AppButton(
-                          label: 'Clear',
+                          label: l10n.actionReset,
                           icon: const Icon(Icons.deselect, size: 18),
                           variant: AppButtonVariant.secondary,
                           onPressed: _selectedTags.isEmpty || _isBusy
@@ -95,7 +99,7 @@ class _TagManagementScreenState extends ConsumerState<TagManagementScreen> {
                       const SizedBox(width: AppSpacing.sm),
                       Expanded(
                         child: AppButton(
-                          label: 'Merge',
+                          label: l10n.tagManagementMergeAction,
                           icon: const Icon(Icons.merge_type, size: 18),
                           onPressed: _selectedTags.length < 2 || _isBusy
                               ? null
@@ -105,7 +109,7 @@ class _TagManagementScreenState extends ConsumerState<TagManagementScreen> {
                       const SizedBox(width: AppSpacing.sm),
                       Expanded(
                         child: AppButton(
-                          label: 'Delete',
+                          label: l10n.actionDelete,
                           icon: const Icon(Icons.delete_outline, size: 18),
                           variant: AppButtonVariant.danger,
                           onPressed: _selectedTags.isEmpty || _isBusy
@@ -134,7 +138,7 @@ class _TagManagementScreenState extends ConsumerState<TagManagementScreen> {
                 _query = value.trim();
                 _visibleCount = _pageSize;
               }),
-              hintText: 'Search tags...',
+              hintText: l10n.tagManagementSearchHint,
               prefixIcon: const Icon(Icons.search),
             ),
           ),
@@ -157,8 +161,8 @@ class _TagManagementScreenState extends ConsumerState<TagManagementScreen> {
                       key: const ValueKey('empty-tags'),
                       child: Text(
                         _query.isEmpty
-                            ? 'No tags created yet'
-                            : 'No tags match "$_query"',
+                            ? l10n.tagManagementEmptyTitle
+                            : l10n.tagManagementNoMatch(_query),
                         style: theme.textTheme.bodyLarge,
                       ),
                     );
@@ -179,7 +183,7 @@ class _TagManagementScreenState extends ConsumerState<TagManagementScreen> {
                             runSpacing: AppSpacing.sm,
                             children: [
                               AppButton(
-                                label: 'Select visible',
+                                label: l10n.tagManagementSelectVisible,
                                 icon: const Icon(Icons.select_all, size: 18),
                                 variant: AppButtonVariant.secondary,
                                 onPressed: _isBusy
@@ -189,7 +193,7 @@ class _TagManagementScreenState extends ConsumerState<TagManagementScreen> {
                                       ),
                               ),
                               AppButton(
-                                label: 'Select all matches',
+                                label: l10n.tagManagementSelectAllMatches,
                                 icon: const Icon(Icons.done_all, size: 18),
                                 variant: AppButtonVariant.secondary,
                                 onPressed: _isBusy
@@ -199,7 +203,7 @@ class _TagManagementScreenState extends ConsumerState<TagManagementScreen> {
                                       ),
                               ),
                               AppButton(
-                                label: 'Clear selection',
+                                label: l10n.tagManagementClearSelection,
                                 icon: const Icon(Icons.deselect, size: 18),
                                 variant: AppButtonVariant.secondary,
                                 onPressed: _isBusy || _selectedTags.isEmpty
@@ -237,7 +241,7 @@ class _TagManagementScreenState extends ConsumerState<TagManagementScreen> {
                                 ),
                                 child: Center(
                                   child: Text(
-                                    'Scroll to load $remaining more tags',
+                                    l10n.tagManagementScrollMore(remaining),
                                     style: theme.textTheme.bodySmall?.copyWith(
                                       color: theme.colorScheme.onSurfaceVariant,
                                     ),
@@ -290,8 +294,8 @@ class _TagManagementScreenState extends ConsumerState<TagManagementScreen> {
                                   title: Text(tag),
                                   subtitle: Text(
                                     usage == 1
-                                        ? 'Used in 1 item'
-                                        : 'Used in $usage items',
+                                        ? l10n.tagManagementUsedInOne
+                                        : l10n.tagManagementUsedInMany(usage),
                                   ),
                                   trailing: _selectionMode
                                       ? null
@@ -300,7 +304,7 @@ class _TagManagementScreenState extends ConsumerState<TagManagementScreen> {
                                             action: action,
                                             tag: tag,
                                           ),
-                                          itemBuilder: (context) => const [
+                                          itemBuilder: (context) => [
                                             PopupMenuItem(
                                               value: _TagAction.rename,
                                               child: ListTile(
@@ -309,7 +313,9 @@ class _TagManagementScreenState extends ConsumerState<TagManagementScreen> {
                                                   Icons
                                                       .drive_file_rename_outline,
                                                 ),
-                                                title: Text('Rename'),
+                                                title: Text(
+                                                  l10n.tagManagementRenameAction,
+                                                ),
                                               ),
                                             ),
                                             PopupMenuItem(
@@ -317,7 +323,9 @@ class _TagManagementScreenState extends ConsumerState<TagManagementScreen> {
                                               child: ListTile(
                                                 contentPadding: EdgeInsets.zero,
                                                 leading: Icon(Icons.merge_type),
-                                                title: Text('Merge Into...'),
+                                                title: Text(
+                                                  l10n.tagManagementMergeIntoAction,
+                                                ),
                                               ),
                                             ),
                                             PopupMenuItem(
@@ -329,7 +337,7 @@ class _TagManagementScreenState extends ConsumerState<TagManagementScreen> {
                                                   color: Colors.red,
                                                 ),
                                                 title: Text(
-                                                  'Delete',
+                                                  l10n.actionDelete,
                                                   style: TextStyle(
                                                     color: Colors.red,
                                                   ),
@@ -351,7 +359,7 @@ class _TagManagementScreenState extends ConsumerState<TagManagementScreen> {
                 error: (error, _) => Center(
                   child: Padding(
                     padding: const EdgeInsets.all(24),
-                    child: Text('Failed to load tags: $error'),
+                    child: Text(l10n.tagManagementLoadError('$error')),
                   ),
                 ),
               ),
@@ -382,11 +390,11 @@ class _TagManagementScreenState extends ConsumerState<TagManagementScreen> {
     var draftName = oldName;
     final newName = await showAppDialog<String>(
       context: context,
-      title: const Text('Rename Tag'),
+      title: Text(context.l10n.tagManagementRenameTitle),
       content: AppInput(
         initialValue: oldName,
         autofocus: true,
-        labelText: 'New name',
+        labelText: context.l10n.tagManagementNewNameLabel,
         prefixIcon: const Icon(Icons.sell_outlined),
         onChanged: (value) {
           draftName = value.trim();
@@ -394,12 +402,12 @@ class _TagManagementScreenState extends ConsumerState<TagManagementScreen> {
       ),
       actions: [
         AppButton(
-          label: 'Cancel',
+          label: context.l10n.actionCancel,
           variant: AppButtonVariant.ghost,
           onPressed: () => Navigator.pop(context),
         ),
         AppButton(
-          label: 'Rename',
+          label: context.l10n.tagManagementRenameAction,
           onPressed: () => Navigator.pop(context, draftName),
         ),
       ],
@@ -413,7 +421,7 @@ class _TagManagementScreenState extends ConsumerState<TagManagementScreen> {
       action: () => ref.read(
         renameTagProvider((oldName: oldName, newName: newName)).future,
       ),
-      successMessage: '"$oldName" renamed to "$newName"',
+      successMessage: context.l10n.tagManagementRenameSuccess(oldName, newName),
     );
   }
 
@@ -471,13 +479,13 @@ class _TagManagementScreenState extends ConsumerState<TagManagementScreen> {
     String destination = selected.first;
     final confirmed = await showAppDialog<bool>(
       context: context,
-      title: const Text('Merge Selected Tags'),
+      title: Text(context.l10n.tagManagementMergeSelectedTitle),
       content: StatefulBuilder(
         builder: (context, setDialogState) => Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text('Choose destination tag:'),
+            Text(context.l10n.tagManagementChooseDestination),
             const SizedBox(height: 12),
             ...selected.map(
               (tag) => ListTile(
@@ -497,12 +505,12 @@ class _TagManagementScreenState extends ConsumerState<TagManagementScreen> {
       ),
       actions: [
         AppButton(
-          label: 'Cancel',
+          label: context.l10n.actionCancel,
           variant: AppButtonVariant.ghost,
           onPressed: () => Navigator.pop(context, false),
         ),
         AppButton(
-          label: 'Merge',
+          label: context.l10n.tagManagementMergeAction,
           onPressed: () => Navigator.pop(context, true),
         ),
       ],
@@ -522,7 +530,10 @@ class _TagManagementScreenState extends ConsumerState<TagManagementScreen> {
           );
         }
       },
-      successMessage: 'Merged ${sources.length} tags into "$destination"',
+      successMessage: context.l10n.tagManagementMergeSelectedSuccess(
+        sources.length,
+        destination,
+      ),
     );
     if (mounted) {
       _clearSelectionMode();
@@ -535,18 +546,18 @@ class _TagManagementScreenState extends ConsumerState<TagManagementScreen> {
 
     final confirmed = await showAppDialog<bool>(
       context: context,
-      title: const Text('Delete Selected Tags'),
+      title: Text(context.l10n.tagManagementDeleteSelectedTitle),
       content: Text(
-        'Delete ${selected.length} selected tags from all items?\n\nThis cannot be undone.',
+        context.l10n.tagManagementDeleteSelectedMessage(selected.length),
       ),
       actions: [
         AppButton(
-          label: 'Cancel',
+          label: context.l10n.actionCancel,
           variant: AppButtonVariant.ghost,
           onPressed: () => Navigator.pop(context, false),
         ),
         AppButton(
-          label: 'Delete',
+          label: context.l10n.actionDelete,
           variant: AppButtonVariant.danger,
           onPressed: () => Navigator.pop(context, true),
         ),
@@ -561,7 +572,9 @@ class _TagManagementScreenState extends ConsumerState<TagManagementScreen> {
           await ref.read(deleteTagProvider(tag).future);
         }
       },
-      successMessage: 'Deleted ${selected.length} tags',
+      successMessage: context.l10n.tagManagementDeleteSelectedSuccess(
+        selected.length,
+      ),
     );
     if (mounted) {
       _clearSelectionMode();
@@ -582,9 +595,9 @@ class _TagManagementScreenState extends ConsumerState<TagManagementScreen> {
         child: ListView(
           padding: const EdgeInsets.only(bottom: 16),
           children: [
-            const ListTile(
-              title: Text('Merge Into'),
-              subtitle: Text('Choose destination tag'),
+            ListTile(
+              title: Text(context.l10n.tagManagementMergeIntoTitle),
+              subtitle: Text(context.l10n.tagManagementChooseDestination),
             ),
             ...candidates.map(
               (name) => ListTile(
@@ -607,25 +620,26 @@ class _TagManagementScreenState extends ConsumerState<TagManagementScreen> {
           targetName: targetName,
         )).future,
       ),
-      successMessage: '"$sourceName" merged into "$targetName"',
+      successMessage: context.l10n.tagManagementMergeSuccess(
+        sourceName,
+        targetName,
+      ),
     );
   }
 
   Future<void> _deleteTag(String tagName) async {
     final confirmed = await showAppDialog<bool>(
       context: context,
-      title: const Text('Delete Tag'),
-      content: Text(
-        'Delete "$tagName" from all items?\n\nThis cannot be undone.',
-      ),
+      title: Text(context.l10n.tagManagementDeleteTitle),
+      content: Text(context.l10n.tagManagementDeleteMessage(tagName)),
       actions: [
         AppButton(
-          label: 'Cancel',
+          label: context.l10n.actionCancel,
           variant: AppButtonVariant.ghost,
           onPressed: () => Navigator.pop(context, false),
         ),
         AppButton(
-          label: 'Delete',
+          label: context.l10n.actionDelete,
           variant: AppButtonVariant.danger,
           onPressed: () => Navigator.pop(context, true),
         ),
@@ -636,7 +650,7 @@ class _TagManagementScreenState extends ConsumerState<TagManagementScreen> {
 
     await _runTagMutation(
       action: () => ref.read(deleteTagProvider(tagName).future),
-      successMessage: '"$tagName" deleted',
+      successMessage: context.l10n.tagManagementDeleteSuccess(tagName),
     );
   }
 
@@ -656,7 +670,7 @@ class _TagManagementScreenState extends ConsumerState<TagManagementScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Tag update failed: $e'),
+            content: Text(context.l10n.tagManagementMutationError('$e')),
             backgroundColor: Colors.red,
           ),
         );
