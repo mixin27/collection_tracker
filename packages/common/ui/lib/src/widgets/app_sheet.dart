@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 
 import '../theme/design_tokens.dart';
@@ -45,7 +47,16 @@ class AppSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final viewInsets = MediaQuery.viewInsetsOf(context);
+    final mediaQuery = MediaQuery.of(context);
+    final viewInsets = mediaQuery.viewInsets;
+    final resolvedMargin = margin.resolve(Directionality.of(context));
+    final maxHeight = math.max<double>(
+      220,
+      mediaQuery.size.height -
+          mediaQuery.padding.top -
+          viewInsets.bottom -
+          resolvedMargin.vertical,
+    );
 
     return AnimatedPadding(
       duration: AppMotion.fast,
@@ -55,26 +66,31 @@ class AppSheet extends StatelessWidget {
         top: false,
         child: Padding(
           padding: margin,
-          child: GlassSurface(
-            borderRadius: BorderRadius.circular(AppRadii.xl),
-            padding: padding,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                if (showHandle)
-                  Container(
-                    width: 38,
-                    height: 4,
-                    margin: const EdgeInsets.only(bottom: AppSpacing.md),
-                    decoration: BoxDecoration(
-                      color: Theme.of(
-                        context,
-                      ).colorScheme.onSurfaceVariant.withValues(alpha: 0.35),
-                      borderRadius: BorderRadius.circular(AppRadii.pill),
-                    ),
-                  ),
-                child,
-              ],
+          child: ConstrainedBox(
+            constraints: BoxConstraints(maxHeight: maxHeight),
+            child: GlassSurface(
+              borderRadius: BorderRadius.circular(AppRadii.xl),
+              padding: padding,
+              child: SingleChildScrollView(
+                physics: const BouncingScrollPhysics(),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    if (showHandle)
+                      Container(
+                        width: 38,
+                        height: 4,
+                        margin: const EdgeInsets.only(bottom: AppSpacing.md),
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).colorScheme.onSurfaceVariant
+                              .withValues(alpha: 0.35),
+                          borderRadius: BorderRadius.circular(AppRadii.pill),
+                        ),
+                      ),
+                    child,
+                  ],
+                ),
+              ),
             ),
           ),
         ),

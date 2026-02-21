@@ -70,41 +70,61 @@ class StatisticsScreen extends ConsumerWidget {
                   const SizedBox(height: AppSpacing.lg),
                   AppReveal(
                     delay: AppMotion.stagger,
-                    child: GridView.count(
-                      shrinkWrap: true,
-                      crossAxisCount: 2,
-                      mainAxisSpacing: AppSpacing.md,
-                      crossAxisSpacing: AppSpacing.md,
-                      physics: const NeverScrollableScrollPhysics(),
-                      childAspectRatio: 1.30,
-                      children: [
-                        StatCard(
-                          title: 'Collections',
-                          value: '${stats.totalCollections}',
-                          icon: Icons.collections_bookmark_rounded,
-                          color: Colors.blue,
-                        ),
-                        StatCard(
-                          title: 'Items',
-                          value: '${stats.totalItems}',
-                          icon: Icons.inventory_2_rounded,
-                          color: Colors.green,
-                        ),
-                        StatCard(
-                          title: 'Quantity',
-                          value: '${stats.totalQuantity}',
-                          icon: Icons.layers_rounded,
-                          color: Colors.indigo,
-                        ),
-                        StatCard(
-                          title: 'Favorites',
-                          value: '${stats.favoriteItems}',
-                          subtitle:
-                              '${(favoritesRatio * 100).toStringAsFixed(0)}% of items',
-                          icon: Icons.favorite_rounded,
-                          color: Colors.red,
-                        ),
-                      ],
+                    child: LayoutBuilder(
+                      builder: (context, constraints) {
+                        final textScale = MediaQuery.textScalerOf(
+                          context,
+                        ).scale(1.0);
+                        final width = constraints.maxWidth;
+                        final isCompact = width < 900 || textScale > 1.05;
+                        final crossAxisCount = isCompact ? 2 : 4;
+                        final tileHeight = switch (crossAxisCount) {
+                          2 => width < 460 || textScale > 1.0 ? 164.0 : 148.0,
+                          _ => 136.0,
+                        };
+                        final cards = [
+                          StatCard(
+                            title: 'Collections',
+                            value: '${stats.totalCollections}',
+                            icon: Icons.collections_bookmark_rounded,
+                            color: Colors.blue,
+                          ),
+                          StatCard(
+                            title: 'Items',
+                            value: '${stats.totalItems}',
+                            icon: Icons.inventory_2_rounded,
+                            color: Colors.green,
+                          ),
+                          StatCard(
+                            title: 'Quantity',
+                            value: '${stats.totalQuantity}',
+                            icon: Icons.layers_rounded,
+                            color: Colors.indigo,
+                          ),
+                          StatCard(
+                            title: 'Favorites',
+                            value: '${stats.favoriteItems}',
+                            subtitle:
+                                '${(favoritesRatio * 100).toStringAsFixed(0)}% of items',
+                            icon: Icons.favorite_rounded,
+                            color: Colors.red,
+                          ),
+                        ];
+
+                        return GridView.builder(
+                          shrinkWrap: true,
+                          itemCount: cards.length,
+                          physics: const NeverScrollableScrollPhysics(),
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: crossAxisCount,
+                                mainAxisSpacing: AppSpacing.md,
+                                crossAxisSpacing: AppSpacing.md,
+                                mainAxisExtent: tileHeight,
+                              ),
+                          itemBuilder: (context, index) => cards[index],
+                        );
+                      },
                     ),
                   ),
                   const SizedBox(height: AppSpacing.lg),

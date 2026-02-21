@@ -72,6 +72,15 @@ class _CollectionsScreenState extends ConsumerState<CollectionsScreen> {
                       : constraints.maxWidth > 860
                       ? 3
                       : 2;
+                  final textScale = MediaQuery.textScalerOf(context).scale(1.0);
+                  final gridTileHeight = switch (crossAxisCount) {
+                    4 => 264.0,
+                    3 => 250.0,
+                    _ =>
+                      constraints.maxWidth < 390 || textScale > 1.0
+                          ? 240.0
+                          : 254.0,
+                  };
                   final totalItems = collections
                       .map((collection) => collection.itemCount)
                       .fold<int>(0, (sum, value) => sum + value);
@@ -163,7 +172,7 @@ class _CollectionsScreenState extends ConsumerState<CollectionsScreen> {
                                   crossAxisCount: crossAxisCount,
                                   crossAxisSpacing: AppSpacing.md,
                                   mainAxisSpacing: AppSpacing.md,
-                                  childAspectRatio: 0.88,
+                                  mainAxisExtent: gridTileHeight,
                                 ),
                             itemBuilder: (context, index) {
                               final collection = collections[index];
