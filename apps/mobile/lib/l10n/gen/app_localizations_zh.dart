@@ -123,6 +123,69 @@ class AppLocalizationsZh extends AppLocalizations {
   String get settingsTermsTitle => '服务条款';
 
   @override
+  String get settingsAnalyticsTitle => '分析';
+
+  @override
+  String get settingsAnalyticsSummaryEnabled => '已启用';
+
+  @override
+  String get settingsAnalyticsSummaryDisabled => '已禁用';
+
+  @override
+  String get settingsAnalyticsSummaryPending => '需要同意';
+
+  @override
+  String get settingsAnalyticsSummaryDenied => '已拒绝同意';
+
+  @override
+  String get settingsAnalyticsSheetTitle => '分析偏好设置';
+
+  @override
+  String get settingsAnalyticsDescription => '管理匿名使用分析和数据共享偏好。';
+
+  @override
+  String get settingsAnalyticsToggleTitle => '启用分析';
+
+  @override
+  String get settingsAnalyticsToggleSubtitle => '允许收集匿名的应用使用事件。';
+
+  @override
+  String get settingsAnalyticsConsentStatusTitle => '同意状态';
+
+  @override
+  String get settingsAnalyticsConsentStatusGranted => '已同意';
+
+  @override
+  String get settingsAnalyticsConsentStatusDenied => '已拒绝';
+
+  @override
+  String get settingsAnalyticsConsentStatusPending => '待确认';
+
+  @override
+  String get settingsAnalyticsReviewConsentAction => '查看同意内容';
+
+  @override
+  String get settingsAnalyticsRevokeConsentAction => '撤销同意';
+
+  @override
+  String get settingsAnalyticsConsentAccepted => '已同意分析收集。';
+
+  @override
+  String get settingsAnalyticsConsentDeclined => '已拒绝分析收集。';
+
+  @override
+  String get analyticsConsentDialogTitle => '帮助改进 Collection Tracker';
+
+  @override
+  String get analyticsConsentDialogMessage => '我们可以收集匿名使用分析以改进应用质量和功能吗？你可以随时在设置中更改。';
+
+  @override
+  String get analyticsConsentAllowAction => '允许';
+
+  @override
+  String get analyticsConsentDeclineAction => '暂不';
+
+  @override
   String get settingsCrashlyticsTestTitle => '测试 Crashlytics';
 
   @override

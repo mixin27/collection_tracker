@@ -329,6 +329,132 @@ abstract class AppLocalizations {
   /// **'Terms of Service'**
   String get settingsTermsTitle;
 
+  /// No description provided for @settingsAnalyticsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Analytics'**
+  String get settingsAnalyticsTitle;
+
+  /// No description provided for @settingsAnalyticsSummaryEnabled.
+  ///
+  /// In en, this message translates to:
+  /// **'Enabled'**
+  String get settingsAnalyticsSummaryEnabled;
+
+  /// No description provided for @settingsAnalyticsSummaryDisabled.
+  ///
+  /// In en, this message translates to:
+  /// **'Disabled'**
+  String get settingsAnalyticsSummaryDisabled;
+
+  /// No description provided for @settingsAnalyticsSummaryPending.
+  ///
+  /// In en, this message translates to:
+  /// **'Consent required'**
+  String get settingsAnalyticsSummaryPending;
+
+  /// No description provided for @settingsAnalyticsSummaryDenied.
+  ///
+  /// In en, this message translates to:
+  /// **'Consent declined'**
+  String get settingsAnalyticsSummaryDenied;
+
+  /// No description provided for @settingsAnalyticsSheetTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Analytics Preferences'**
+  String get settingsAnalyticsSheetTitle;
+
+  /// No description provided for @settingsAnalyticsDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Control anonymous usage analytics and data sharing preferences.'**
+  String get settingsAnalyticsDescription;
+
+  /// No description provided for @settingsAnalyticsToggleTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Enable analytics'**
+  String get settingsAnalyticsToggleTitle;
+
+  /// No description provided for @settingsAnalyticsToggleSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow anonymous app usage events to be collected.'**
+  String get settingsAnalyticsToggleSubtitle;
+
+  /// No description provided for @settingsAnalyticsConsentStatusTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Consent status'**
+  String get settingsAnalyticsConsentStatusTitle;
+
+  /// No description provided for @settingsAnalyticsConsentStatusGranted.
+  ///
+  /// In en, this message translates to:
+  /// **'Granted'**
+  String get settingsAnalyticsConsentStatusGranted;
+
+  /// No description provided for @settingsAnalyticsConsentStatusDenied.
+  ///
+  /// In en, this message translates to:
+  /// **'Declined'**
+  String get settingsAnalyticsConsentStatusDenied;
+
+  /// No description provided for @settingsAnalyticsConsentStatusPending.
+  ///
+  /// In en, this message translates to:
+  /// **'Pending'**
+  String get settingsAnalyticsConsentStatusPending;
+
+  /// No description provided for @settingsAnalyticsReviewConsentAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Review Consent'**
+  String get settingsAnalyticsReviewConsentAction;
+
+  /// No description provided for @settingsAnalyticsRevokeConsentAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Revoke Consent'**
+  String get settingsAnalyticsRevokeConsentAction;
+
+  /// No description provided for @settingsAnalyticsConsentAccepted.
+  ///
+  /// In en, this message translates to:
+  /// **'Analytics consent accepted.'**
+  String get settingsAnalyticsConsentAccepted;
+
+  /// No description provided for @settingsAnalyticsConsentDeclined.
+  ///
+  /// In en, this message translates to:
+  /// **'Analytics consent declined.'**
+  String get settingsAnalyticsConsentDeclined;
+
+  /// No description provided for @analyticsConsentDialogTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Help Improve Collection Tracker'**
+  String get analyticsConsentDialogTitle;
+
+  /// No description provided for @analyticsConsentDialogMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Can we collect anonymous usage analytics to improve app quality and features? You can change this anytime in Settings.'**
+  String get analyticsConsentDialogMessage;
+
+  /// No description provided for @analyticsConsentAllowAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow'**
+  String get analyticsConsentAllowAction;
+
+  /// No description provided for @analyticsConsentDeclineAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Not now'**
+  String get analyticsConsentDeclineAction;
+
   /// No description provided for @settingsCrashlyticsTestTitle.
   ///
   /// In en, this message translates to:

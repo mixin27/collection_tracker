@@ -123,6 +123,69 @@ class AppLocalizationsId extends AppLocalizations {
   String get settingsTermsTitle => 'Ketentuan Layanan';
 
   @override
+  String get settingsAnalyticsTitle => 'Analitik';
+
+  @override
+  String get settingsAnalyticsSummaryEnabled => 'Aktif';
+
+  @override
+  String get settingsAnalyticsSummaryDisabled => 'Nonaktif';
+
+  @override
+  String get settingsAnalyticsSummaryPending => 'Perlu persetujuan';
+
+  @override
+  String get settingsAnalyticsSummaryDenied => 'Persetujuan ditolak';
+
+  @override
+  String get settingsAnalyticsSheetTitle => 'Preferensi Analitik';
+
+  @override
+  String get settingsAnalyticsDescription => 'Atur analitik penggunaan anonim dan preferensi berbagi data.';
+
+  @override
+  String get settingsAnalyticsToggleTitle => 'Aktifkan analitik';
+
+  @override
+  String get settingsAnalyticsToggleSubtitle => 'Izinkan pengumpulan event penggunaan aplikasi secara anonim.';
+
+  @override
+  String get settingsAnalyticsConsentStatusTitle => 'Status persetujuan';
+
+  @override
+  String get settingsAnalyticsConsentStatusGranted => 'Disetujui';
+
+  @override
+  String get settingsAnalyticsConsentStatusDenied => 'Ditolak';
+
+  @override
+  String get settingsAnalyticsConsentStatusPending => 'Menunggu';
+
+  @override
+  String get settingsAnalyticsReviewConsentAction => 'Tinjau Persetujuan';
+
+  @override
+  String get settingsAnalyticsRevokeConsentAction => 'Cabut Persetujuan';
+
+  @override
+  String get settingsAnalyticsConsentAccepted => 'Persetujuan analitik diterima.';
+
+  @override
+  String get settingsAnalyticsConsentDeclined => 'Persetujuan analitik ditolak.';
+
+  @override
+  String get analyticsConsentDialogTitle => 'Bantu Tingkatkan Collection Tracker';
+
+  @override
+  String get analyticsConsentDialogMessage => 'Bolehkah kami mengumpulkan analitik penggunaan anonim untuk meningkatkan kualitas dan fitur aplikasi? Anda dapat mengubahnya kapan saja di Pengaturan.';
+
+  @override
+  String get analyticsConsentAllowAction => 'Izinkan';
+
+  @override
+  String get analyticsConsentDeclineAction => 'Nanti saja';
+
+  @override
   String get settingsCrashlyticsTestTitle => 'Uji Crashlytics';
 
   @override

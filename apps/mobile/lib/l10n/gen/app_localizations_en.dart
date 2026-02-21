@@ -123,6 +123,69 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsTermsTitle => 'Terms of Service';
 
   @override
+  String get settingsAnalyticsTitle => 'Analytics';
+
+  @override
+  String get settingsAnalyticsSummaryEnabled => 'Enabled';
+
+  @override
+  String get settingsAnalyticsSummaryDisabled => 'Disabled';
+
+  @override
+  String get settingsAnalyticsSummaryPending => 'Consent required';
+
+  @override
+  String get settingsAnalyticsSummaryDenied => 'Consent declined';
+
+  @override
+  String get settingsAnalyticsSheetTitle => 'Analytics Preferences';
+
+  @override
+  String get settingsAnalyticsDescription => 'Control anonymous usage analytics and data sharing preferences.';
+
+  @override
+  String get settingsAnalyticsToggleTitle => 'Enable analytics';
+
+  @override
+  String get settingsAnalyticsToggleSubtitle => 'Allow anonymous app usage events to be collected.';
+
+  @override
+  String get settingsAnalyticsConsentStatusTitle => 'Consent status';
+
+  @override
+  String get settingsAnalyticsConsentStatusGranted => 'Granted';
+
+  @override
+  String get settingsAnalyticsConsentStatusDenied => 'Declined';
+
+  @override
+  String get settingsAnalyticsConsentStatusPending => 'Pending';
+
+  @override
+  String get settingsAnalyticsReviewConsentAction => 'Review Consent';
+
+  @override
+  String get settingsAnalyticsRevokeConsentAction => 'Revoke Consent';
+
+  @override
+  String get settingsAnalyticsConsentAccepted => 'Analytics consent accepted.';
+
+  @override
+  String get settingsAnalyticsConsentDeclined => 'Analytics consent declined.';
+
+  @override
+  String get analyticsConsentDialogTitle => 'Help Improve Collection Tracker';
+
+  @override
+  String get analyticsConsentDialogMessage => 'Can we collect anonymous usage analytics to improve app quality and features? You can change this anytime in Settings.';
+
+  @override
+  String get analyticsConsentAllowAction => 'Allow';
+
+  @override
+  String get analyticsConsentDeclineAction => 'Not now';
+
+  @override
   String get settingsCrashlyticsTestTitle => 'Test Crashlytics';
 
   @override

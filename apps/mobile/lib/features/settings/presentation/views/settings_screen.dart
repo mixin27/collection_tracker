@@ -1,4 +1,6 @@
 import 'package:app_logger/app_logger.dart';
+import 'package:collection_tracker/core/analytics/analytics_consent_dialog.dart';
+import 'package:collection_tracker/core/analytics/analytics_preferences.dart';
 import 'package:collection_tracker/core/providers/providers.dart';
 import 'package:collection_tracker/l10n/l10n.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -19,9 +21,11 @@ class SettingsScreen extends ConsumerWidget {
     final l10n = context.l10n;
     final themeSettings = ref.watch(themeSettingsProvider);
     final currentLanguage = ref.watch(localeSettingsProvider);
+    final analyticsPreferences = ref.watch(analyticsPreferencesProvider);
     final themeSummary =
         '${_themeModeLabel(context, themeSettings.mode)} - ${themeSettings.variant.label}';
     final languageSummary = _languageLabel(context, currentLanguage);
+    final analyticsSummary = _analyticsSummary(context, analyticsPreferences);
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.settingsTitle)),
@@ -48,6 +52,12 @@ class SettingsScreen extends ConsumerWidget {
                   title: l10n.settingsLanguageTitle,
                   subtitle: languageSummary,
                   onTap: () => _showLanguageSelector(context, ref),
+                ),
+                _SettingsTile(
+                  icon: Icons.insights_outlined,
+                  title: l10n.settingsAnalyticsTitle,
+                  subtitle: analyticsSummary,
+                  onTap: () => _showAnalyticsSettings(context, ref),
                 ),
               ],
             ),
@@ -359,6 +369,129 @@ class SettingsScreen extends ConsumerWidget {
     );
   }
 
+  Future<void> _showAnalyticsSettings(
+    BuildContext context,
+    WidgetRef ref,
+  ) async {
+    await showAppSheet(
+      context: context,
+      builder: (context) {
+        return Consumer(
+          builder: (context, ref, _) {
+            final l10n = context.l10n;
+            final preferences = ref.watch(analyticsPreferencesProvider);
+            final notifier = ref.read(analyticsPreferencesProvider.notifier);
+            final consentLabel = switch (preferences.consentStatus) {
+              AnalyticsConsentStatus.granted =>
+                l10n.settingsAnalyticsConsentStatusGranted,
+              AnalyticsConsentStatus.denied =>
+                l10n.settingsAnalyticsConsentStatusDenied,
+              AnalyticsConsentStatus.unknown =>
+                l10n.settingsAnalyticsConsentStatusPending,
+            };
+
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  l10n.settingsAnalyticsSheetTitle,
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                const SizedBox(height: AppSpacing.sm),
+                Text(
+                  l10n.settingsAnalyticsDescription,
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
+                ),
+                const SizedBox(height: AppSpacing.md),
+                SwitchListTile(
+                  contentPadding: EdgeInsets.zero,
+                  title: Text(l10n.settingsAnalyticsToggleTitle),
+                  subtitle: Text(l10n.settingsAnalyticsToggleSubtitle),
+                  value: preferences.enabled,
+                  onChanged: (value) {
+                    notifier.setEnabled(value);
+                  },
+                ),
+                ListTile(
+                  contentPadding: EdgeInsets.zero,
+                  leading: const Icon(Icons.privacy_tip_outlined),
+                  title: Text(l10n.settingsAnalyticsConsentStatusTitle),
+                  subtitle: Text(consentLabel),
+                ),
+                const SizedBox(height: AppSpacing.sm),
+                Wrap(
+                  spacing: AppSpacing.sm,
+                  runSpacing: AppSpacing.sm,
+                  children: [
+                    if (preferences.enabled &&
+                        preferences.consentStatus !=
+                            AnalyticsConsentStatus.granted)
+                      AppButton(
+                        label: l10n.settingsAnalyticsReviewConsentAction,
+                        onPressed: () async {
+                          final decision = await showAnalyticsConsentDialog(
+                            context,
+                            barrierDismissible: true,
+                          );
+                          if (!context.mounted) return;
+                          if (decision == AnalyticsConsentDecision.allow) {
+                            await notifier.grantConsent();
+                            if (context.mounted) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                    l10n.settingsAnalyticsConsentAccepted,
+                                  ),
+                                ),
+                              );
+                            }
+                          } else {
+                            await notifier.denyConsent();
+                            if (context.mounted) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                    l10n.settingsAnalyticsConsentDeclined,
+                                  ),
+                                ),
+                              );
+                            }
+                          }
+                        },
+                      ),
+                    if (preferences.consentStatus ==
+                        AnalyticsConsentStatus.granted)
+                      AppButton(
+                        label: l10n.settingsAnalyticsRevokeConsentAction,
+                        variant: AppButtonVariant.ghost,
+                        onPressed: () async {
+                          await notifier.denyConsent();
+                          if (context.mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  l10n.settingsAnalyticsConsentDeclined,
+                                ),
+                              ),
+                            );
+                          }
+                        },
+                      ),
+                  ],
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
+
   Future<void> _handleCrashlyticsTest(BuildContext context) async {
     final l10n = context.l10n;
     final shouldCrash = await showAppDialog<bool>(
@@ -480,6 +613,22 @@ class SettingsScreen extends ConsumerWidget {
       AppLanguage.korean => l10n.languageKorean,
       AppLanguage.chineseSimplified => l10n.languageChineseSimplified,
       AppLanguage.burmese => l10n.languageBurmese,
+    };
+  }
+
+  String _analyticsSummary(
+    BuildContext context,
+    AnalyticsPreferences preferences,
+  ) {
+    final l10n = context.l10n;
+    if (!preferences.enabled) {
+      return l10n.settingsAnalyticsSummaryDisabled;
+    }
+
+    return switch (preferences.consentStatus) {
+      AnalyticsConsentStatus.granted => l10n.settingsAnalyticsSummaryEnabled,
+      AnalyticsConsentStatus.denied => l10n.settingsAnalyticsSummaryDenied,
+      AnalyticsConsentStatus.unknown => l10n.settingsAnalyticsSummaryPending,
     };
   }
 }

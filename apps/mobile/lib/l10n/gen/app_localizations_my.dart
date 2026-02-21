@@ -123,6 +123,69 @@ class AppLocalizationsMy extends AppLocalizations {
   String get settingsTermsTitle => 'အသုံးပြုမှု စည်းမျဉ်းများ';
 
   @override
+  String get settingsAnalyticsTitle => 'Analytics';
+
+  @override
+  String get settingsAnalyticsSummaryEnabled => 'ဖွင့်ထားသည်';
+
+  @override
+  String get settingsAnalyticsSummaryDisabled => 'ပိတ်ထားသည်';
+
+  @override
+  String get settingsAnalyticsSummaryPending => 'သဘောတူညီချက်လိုအပ်သည်';
+
+  @override
+  String get settingsAnalyticsSummaryDenied => 'သဘောတူညီချက် မပေးထားပါ';
+
+  @override
+  String get settingsAnalyticsSheetTitle => 'Analytics စိတ်ကြိုက်';
+
+  @override
+  String get settingsAnalyticsDescription => 'အမည်မဖော်ဘဲ အသုံးပြုမှု analytics နှင့် ဒေတာမျှဝေမှုဆိုင်ရာ စိတ်ကြိုက်များကို စီမံပါ။';
+
+  @override
+  String get settingsAnalyticsToggleTitle => 'Analytics ဖွင့်ရန်';
+
+  @override
+  String get settingsAnalyticsToggleSubtitle => 'အက်ပ်အသုံးပြုမှု event များကို အမည်မဖော်ဘဲ စုဆောင်းခွင့်ပြုမည်။';
+
+  @override
+  String get settingsAnalyticsConsentStatusTitle => 'သဘောတူညီချက်အခြေအနေ';
+
+  @override
+  String get settingsAnalyticsConsentStatusGranted => 'သဘောတူသည်';
+
+  @override
+  String get settingsAnalyticsConsentStatusDenied => 'ငြင်းဆိုထားသည်';
+
+  @override
+  String get settingsAnalyticsConsentStatusPending => 'စောင့်ဆိုင်းနေသည်';
+
+  @override
+  String get settingsAnalyticsReviewConsentAction => 'သဘောတူညီချက် ပြန်ကြည့်မည်';
+
+  @override
+  String get settingsAnalyticsRevokeConsentAction => 'သဘောတူညီချက် ရုပ်သိမ်းမည်';
+
+  @override
+  String get settingsAnalyticsConsentAccepted => 'Analytics သဘောတူညီချက် လက်ခံပြီးပါပြီ။';
+
+  @override
+  String get settingsAnalyticsConsentDeclined => 'Analytics သဘောတူညီချက် ငြင်းဆိုထားသည်။';
+
+  @override
+  String get analyticsConsentDialogTitle => 'Collection Tracker ကို တိုးတက်စေရန် ကူညီပါ';
+
+  @override
+  String get analyticsConsentDialogMessage => 'အက်ပ်အရည်အသွေးနှင့် အင်္ဂါရပ်များ တိုးတက်စေရန် အမည်မဖော်ထားသော အသုံးပြုမှု analytics ကို စုဆောင်းခွင့်ပြုမလား? ဤဆက်တင်ကို Settings တွင် အချိန်မရွေး ပြောင်းလဲနိုင်သည်။';
+
+  @override
+  String get analyticsConsentAllowAction => 'ခွင့်ပြုမည်';
+
+  @override
+  String get analyticsConsentDeclineAction => 'ယခုမဟုတ်သေး';
+
+  @override
   String get settingsCrashlyticsTestTitle => 'Crashlytics စမ်းသပ်ရန်';
 
   @override

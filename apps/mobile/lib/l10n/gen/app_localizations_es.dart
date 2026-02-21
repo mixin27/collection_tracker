@@ -123,6 +123,69 @@ class AppLocalizationsEs extends AppLocalizations {
   String get settingsTermsTitle => 'Términos de servicio';
 
   @override
+  String get settingsAnalyticsTitle => 'Analíticas';
+
+  @override
+  String get settingsAnalyticsSummaryEnabled => 'Activadas';
+
+  @override
+  String get settingsAnalyticsSummaryDisabled => 'Desactivadas';
+
+  @override
+  String get settingsAnalyticsSummaryPending => 'Se requiere consentimiento';
+
+  @override
+  String get settingsAnalyticsSummaryDenied => 'Consentimiento rechazado';
+
+  @override
+  String get settingsAnalyticsSheetTitle => 'Preferencias de analíticas';
+
+  @override
+  String get settingsAnalyticsDescription => 'Controla las analíticas de uso anónimas y las preferencias de compartición de datos.';
+
+  @override
+  String get settingsAnalyticsToggleTitle => 'Activar analíticas';
+
+  @override
+  String get settingsAnalyticsToggleSubtitle => 'Permite recopilar eventos anónimos de uso de la aplicación.';
+
+  @override
+  String get settingsAnalyticsConsentStatusTitle => 'Estado del consentimiento';
+
+  @override
+  String get settingsAnalyticsConsentStatusGranted => 'Concedido';
+
+  @override
+  String get settingsAnalyticsConsentStatusDenied => 'Rechazado';
+
+  @override
+  String get settingsAnalyticsConsentStatusPending => 'Pendiente';
+
+  @override
+  String get settingsAnalyticsReviewConsentAction => 'Revisar consentimiento';
+
+  @override
+  String get settingsAnalyticsRevokeConsentAction => 'Revocar consentimiento';
+
+  @override
+  String get settingsAnalyticsConsentAccepted => 'Consentimiento de analíticas aceptado.';
+
+  @override
+  String get settingsAnalyticsConsentDeclined => 'Consentimiento de analíticas rechazado.';
+
+  @override
+  String get analyticsConsentDialogTitle => 'Ayúdanos a mejorar Collection Tracker';
+
+  @override
+  String get analyticsConsentDialogMessage => '¿Podemos recopilar analíticas de uso anónimas para mejorar la calidad y las funciones de la app? Puedes cambiarlo en Configuración en cualquier momento.';
+
+  @override
+  String get analyticsConsentAllowAction => 'Permitir';
+
+  @override
+  String get analyticsConsentDeclineAction => 'Ahora no';
+
+  @override
   String get settingsCrashlyticsTestTitle => 'Probar Crashlytics';
 
   @override

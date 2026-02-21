@@ -3,6 +3,7 @@ import 'analytics_event.dart';
 import 'analytics_middleware.dart';
 import 'analytics_provider.dart';
 import 'analytics_user.dart';
+import '../providers/base_analytics_provider.dart';
 
 /// Main analytics service - Singleton
 class AnalyticsService {
@@ -18,6 +19,7 @@ class AnalyticsService {
 
   bool _initialized = false;
   bool _consentGranted = false;
+  bool _trackingEnabled = true;
 
   AnalyticsService._();
 
@@ -30,7 +32,22 @@ class AnalyticsService {
   /// Initialize analytics service
   static Future<void> initialize(AnalyticsConfig config) async {
     final service = instance;
+    if (service._initialized) {
+      for (final provider in service._providers) {
+        try {
+          await provider.dispose();
+        } catch (_) {
+          // Ignore dispose failures while reconfiguring
+        }
+      }
+      service._providers.clear();
+      service._middleware.clear();
+      service._initialized = false;
+    }
+
     service._config = config;
+    service._consentGranted = false;
+    service._trackingEnabled = true;
 
     // Initialize providers
     for (final provider in config.providers) {
@@ -65,8 +82,26 @@ class AnalyticsService {
   /// Check if initialized
   bool get isInitialized => _initialized;
 
+  /// Check if analytics event tracking is enabled
+  bool get isTrackingEnabled => _trackingEnabled;
+
   /// Check if consent is granted
   bool get hasConsent => _consentGranted;
+
+  /// Enable/disable analytics tracking at runtime.
+  Future<void> setTrackingEnabled(bool enabled) async {
+    _trackingEnabled = enabled;
+
+    for (final provider in _providers) {
+      if (provider is BaseAnalyticsProvider) {
+        provider.enabled = enabled;
+      }
+    }
+
+    if (enabled) {
+      await flush();
+    }
+  }
 
   /// Set user consent
   Future<void> setConsentGranted(bool granted) async {
@@ -83,6 +118,13 @@ class AnalyticsService {
     if (!_initialized) {
       if (_config?.enableLogging ?? false) {
         print('Analytics not initialized');
+      }
+      return;
+    }
+
+    if (!_trackingEnabled) {
+      if (_config?.enableLogging ?? false) {
+        print('Event blocked: analytics disabled');
       }
       return;
     }
@@ -229,6 +271,7 @@ class AnalyticsService {
     _providers.clear();
     _middleware.clear();
     _initialized = false;
+    _trackingEnabled = true;
     _instance = null;
   }
 

@@ -1,5 +1,6 @@
 import 'package:app_analytics/app_analytics.dart';
 import 'package:app_logger/app_logger.dart';
+import 'package:collection_tracker/core/analytics/analytics_preferences.dart';
 import 'package:flutter/foundation.dart';
 import 'package:storage/storage.dart';
 
@@ -41,6 +42,16 @@ abstract final class AppBootstrap {
   }
 
   static Future<void> _initializeAnalytics() async {
+    final enabled =
+        PrefsStorageService.instance.readSync<bool>(
+          AnalyticsPreferences.enabledPrefKey,
+        ) ??
+        true;
+    final consentCode = PrefsStorageService.instance.readSync<String>(
+      AnalyticsPreferences.consentStatusPrefKey,
+    );
+    final consentStatus = AnalyticsConsentStatusX.fromCode(consentCode);
+
     final config = AnalyticsConfig(
       environment: AnalyticsEnvironment.development,
       enableLogging: true,
@@ -55,9 +66,13 @@ abstract final class AppBootstrap {
         EnrichmentMiddleware(),
       ],
       autoTrackScreenViews: true,
-      requireConsent: false,
+      requireConsent: true,
     );
 
     await AnalyticsService.initialize(config);
+    await AnalyticsService.instance.setTrackingEnabled(enabled);
+    await AnalyticsService.instance.setConsentGranted(
+      consentStatus == AnalyticsConsentStatus.granted,
+    );
   }
 }

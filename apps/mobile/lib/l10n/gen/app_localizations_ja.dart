@@ -123,6 +123,69 @@ class AppLocalizationsJa extends AppLocalizations {
   String get settingsTermsTitle => '利用規約';
 
   @override
+  String get settingsAnalyticsTitle => 'アナリティクス';
+
+  @override
+  String get settingsAnalyticsSummaryEnabled => '有効';
+
+  @override
+  String get settingsAnalyticsSummaryDisabled => '無効';
+
+  @override
+  String get settingsAnalyticsSummaryPending => '同意が必要';
+
+  @override
+  String get settingsAnalyticsSummaryDenied => '同意しない';
+
+  @override
+  String get settingsAnalyticsSheetTitle => 'アナリティクス設定';
+
+  @override
+  String get settingsAnalyticsDescription => '匿名の利用状況分析とデータ共有設定を管理します。';
+
+  @override
+  String get settingsAnalyticsToggleTitle => 'アナリティクスを有効化';
+
+  @override
+  String get settingsAnalyticsToggleSubtitle => '匿名のアプリ利用イベントの収集を許可します。';
+
+  @override
+  String get settingsAnalyticsConsentStatusTitle => '同意ステータス';
+
+  @override
+  String get settingsAnalyticsConsentStatusGranted => '同意済み';
+
+  @override
+  String get settingsAnalyticsConsentStatusDenied => '拒否';
+
+  @override
+  String get settingsAnalyticsConsentStatusPending => '保留';
+
+  @override
+  String get settingsAnalyticsReviewConsentAction => '同意内容を確認';
+
+  @override
+  String get settingsAnalyticsRevokeConsentAction => '同意を取り消す';
+
+  @override
+  String get settingsAnalyticsConsentAccepted => 'アナリティクスへの同意を受け付けました。';
+
+  @override
+  String get settingsAnalyticsConsentDeclined => 'アナリティクスへの同意を拒否しました。';
+
+  @override
+  String get analyticsConsentDialogTitle => 'Collection Tracker の改善にご協力ください';
+
+  @override
+  String get analyticsConsentDialogMessage => 'アプリ品質と機能改善のため、匿名の利用データ収集にご協力いただけますか？この設定はいつでも設定画面で変更できます。';
+
+  @override
+  String get analyticsConsentAllowAction => '許可';
+
+  @override
+  String get analyticsConsentDeclineAction => '今はしない';
+
+  @override
   String get settingsCrashlyticsTestTitle => 'Crashlytics をテスト';
 
   @override

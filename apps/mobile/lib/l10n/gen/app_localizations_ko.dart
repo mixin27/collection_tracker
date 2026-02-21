@@ -123,6 +123,69 @@ class AppLocalizationsKo extends AppLocalizations {
   String get settingsTermsTitle => '이용 약관';
 
   @override
+  String get settingsAnalyticsTitle => '분석';
+
+  @override
+  String get settingsAnalyticsSummaryEnabled => '활성화됨';
+
+  @override
+  String get settingsAnalyticsSummaryDisabled => '비활성화됨';
+
+  @override
+  String get settingsAnalyticsSummaryPending => '동의 필요';
+
+  @override
+  String get settingsAnalyticsSummaryDenied => '동의 거부';
+
+  @override
+  String get settingsAnalyticsSheetTitle => '분석 설정';
+
+  @override
+  String get settingsAnalyticsDescription => '익명 사용 분석 및 데이터 공유 설정을 관리합니다.';
+
+  @override
+  String get settingsAnalyticsToggleTitle => '분석 활성화';
+
+  @override
+  String get settingsAnalyticsToggleSubtitle => '익명 앱 사용 이벤트 수집을 허용합니다.';
+
+  @override
+  String get settingsAnalyticsConsentStatusTitle => '동의 상태';
+
+  @override
+  String get settingsAnalyticsConsentStatusGranted => '동의함';
+
+  @override
+  String get settingsAnalyticsConsentStatusDenied => '거부됨';
+
+  @override
+  String get settingsAnalyticsConsentStatusPending => '대기 중';
+
+  @override
+  String get settingsAnalyticsReviewConsentAction => '동의 다시 보기';
+
+  @override
+  String get settingsAnalyticsRevokeConsentAction => '동의 철회';
+
+  @override
+  String get settingsAnalyticsConsentAccepted => '분석 동의가 수락되었습니다.';
+
+  @override
+  String get settingsAnalyticsConsentDeclined => '분석 동의가 거부되었습니다.';
+
+  @override
+  String get analyticsConsentDialogTitle => 'Collection Tracker 개선에 도움을 주세요';
+
+  @override
+  String get analyticsConsentDialogMessage => '앱 품질과 기능 개선을 위해 익명 사용 분석을 수집해도 될까요? 이 설정은 언제든지 설정에서 변경할 수 있습니다.';
+
+  @override
+  String get analyticsConsentAllowAction => '허용';
+
+  @override
+  String get analyticsConsentDeclineAction => '나중에';
+
+  @override
   String get settingsCrashlyticsTestTitle => 'Crashlytics 테스트';
 
   @override
