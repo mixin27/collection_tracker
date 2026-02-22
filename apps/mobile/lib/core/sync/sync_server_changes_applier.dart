@@ -25,10 +25,14 @@ class SyncServerChangeApplyResult {
 }
 
 class SyncServerChangesApplier {
-  const SyncServerChangesApplier({required AppDatabase database})
-    : _database = database;
+  const SyncServerChangesApplier({
+    required AppDatabase database,
+    Duration timestampSkewTolerance = const Duration(seconds: 2),
+  }) : _database = database,
+       _timestampSkewTolerance = timestampSkewTolerance;
 
   final AppDatabase _database;
+  final Duration _timestampSkewTolerance;
 
   Future<SyncServerChangeApplyResult> apply(SyncChangesPayload changes) async {
     var appliedCollections = 0;
@@ -49,6 +53,26 @@ class SyncServerChangesApplier {
           continue;
         }
 
+        if (await _hasPendingLocalOperation(
+          entityType: 'tag',
+          entityId: tagId,
+        )) {
+          skippedTags++;
+          continue;
+        }
+
+        final existingTag = await (_database.select(
+          _database.tags,
+        )..where((tbl) => tbl.id.equals(tagId))).getSingleOrNull();
+        final serverUpdatedAt = _asDate(payload['updatedAt']);
+        if (_isServerPayloadOutdated(
+          localUpdatedAt: existingTag?.updatedAt,
+          serverUpdatedAt: serverUpdatedAt,
+        )) {
+          skippedTags++;
+          continue;
+        }
+
         if (_asBool(payload['isDeleted'])) {
           await (_database.delete(
             _database.tags,
@@ -62,9 +86,6 @@ class SyncServerChangesApplier {
           continue;
         }
 
-        final existingTag = await (_database.select(
-          _database.tags,
-        )..where((tbl) => tbl.id.equals(tagId))).getSingleOrNull();
         final now = DateTime.now().toUtc();
 
         await _database
@@ -93,6 +114,26 @@ class SyncServerChangesApplier {
           continue;
         }
 
+        if (await _hasPendingLocalOperation(
+          entityType: 'collection',
+          entityId: collectionId,
+        )) {
+          skippedCollections++;
+          continue;
+        }
+
+        final existingCollection = await (_database.select(
+          _database.collections,
+        )..where((tbl) => tbl.id.equals(collectionId))).getSingleOrNull();
+        final serverUpdatedAt = _asDate(payload['updatedAt']);
+        if (_isServerPayloadOutdated(
+          localUpdatedAt: existingCollection?.updatedAt,
+          serverUpdatedAt: serverUpdatedAt,
+        )) {
+          skippedCollections++;
+          continue;
+        }
+
         if (_asBool(payload['isDeleted'])) {
           await (_database.delete(
             _database.collections,
@@ -111,9 +152,6 @@ class SyncServerChangesApplier {
           continue;
         }
 
-        final existingCollection = await (_database.select(
-          _database.collections,
-        )..where((tbl) => tbl.id.equals(collectionId))).getSingleOrNull();
         final now = DateTime.now().toUtc();
 
         await _database
@@ -150,12 +188,29 @@ class SyncServerChangesApplier {
           continue;
         }
 
+        if (await _hasPendingLocalOperation(
+          entityType: 'item',
+          entityId: itemId,
+        )) {
+          skippedItems++;
+          continue;
+        }
+
+        final existingItem = await (_database.select(
+          _database.items,
+        )..where((tbl) => tbl.id.equals(itemId))).getSingleOrNull();
+        final serverUpdatedAt = _asDate(payload['updatedAt']);
+        if (_isServerPayloadOutdated(
+          localUpdatedAt: existingItem?.updatedAt,
+          serverUpdatedAt: serverUpdatedAt,
+        )) {
+          skippedItems++;
+          continue;
+        }
+
         if (_asBool(payload['isDeleted'])) {
-          final existing = await (_database.select(
-            _database.items,
-          )..where((tbl) => tbl.id.equals(itemId))).getSingleOrNull();
-          if (existing != null) {
-            affectedCollectionIds.add(existing.collectionId);
+          if (existingItem != null) {
+            affectedCollectionIds.add(existingItem.collectionId);
           }
 
           await (_database.delete(
@@ -183,9 +238,6 @@ class SyncServerChangesApplier {
           continue;
         }
 
-        final existingItem = await (_database.select(
-          _database.items,
-        )..where((tbl) => tbl.id.equals(itemId))).getSingleOrNull();
         final now = DateTime.now().toUtc();
 
         await _database
@@ -221,6 +273,9 @@ class SyncServerChangesApplier {
             );
         appliedItems++;
         affectedCollectionIds.add(collectionId);
+        if (existingItem != null && existingItem.collectionId != collectionId) {
+          affectedCollectionIds.add(existingItem.collectionId);
+        }
 
         await (_database.delete(
           _database.itemTags,
@@ -271,6 +326,31 @@ class SyncServerChangesApplier {
       skippedItems: skippedItems,
       skippedTags: skippedTags,
     );
+  }
+
+  Future<bool> _hasPendingLocalOperation({
+    required String entityType,
+    required String entityId,
+  }) async {
+    final pending =
+        await (_database.select(_database.syncOutbox)
+              ..where((tbl) => tbl.entityType.equals(entityType))
+              ..where((tbl) => tbl.entityId.equals(entityId)))
+            .getSingleOrNull();
+    return pending != null;
+  }
+
+  bool _isServerPayloadOutdated({
+    required DateTime? localUpdatedAt,
+    required DateTime? serverUpdatedAt,
+  }) {
+    if (localUpdatedAt == null || serverUpdatedAt == null) {
+      return false;
+    }
+
+    final local = localUpdatedAt.toUtc();
+    final server = serverUpdatedAt.toUtc();
+    return local.isAfter(server.add(_timestampSkewTolerance));
   }
 
   bool _asBool(Object? value, {bool fallback = false}) {

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:app_firebase/app_firebase.dart';
 import 'package:database/database.dart';
@@ -61,17 +62,26 @@ class SyncOrchestrator {
     required SyncServerChangesApplier serverChangesApplier,
     Uuid? uuid,
     int maxBatchSize = 1000,
+    int maxNetworkRetries = 2,
+    Duration initialRetryDelay = const Duration(milliseconds: 600),
+    Random? random,
   }) : _syncDao = syncDao,
        _backendClient = backendClient,
        _serverChangesApplier = serverChangesApplier,
        _uuid = uuid ?? const Uuid(),
-       _maxBatchSize = maxBatchSize;
+       _maxBatchSize = maxBatchSize,
+       _maxNetworkRetries = maxNetworkRetries,
+       _initialRetryDelay = initialRetryDelay,
+       _random = random ?? Random.secure();
 
   final SyncDao _syncDao;
   final SyncBackendClient _backendClient;
   final SyncServerChangesApplier _serverChangesApplier;
   final Uuid _uuid;
   final int _maxBatchSize;
+  final int _maxNetworkRetries;
+  final Duration _initialRetryDelay;
+  final Random _random;
 
   Stream<int> watchPendingOperationCount() {
     return _syncDao.watchPendingOperationCount();
@@ -133,22 +143,19 @@ class SyncOrchestrator {
 
     final changes = _buildChangesPayload(pending);
     final performanceService = FirebasePerformanceService.instance;
+    final requestPayload = SyncRequestPayload(
+      deviceId: deviceId,
+      clientRequestId: _uuid.v4(),
+      lastSyncAt: forceFullSync ? null : state?.lastSuccessfulSyncAt,
+      changes: changes.isEmpty ? null : changes,
+    );
 
     try {
-      final response = await performanceService.traceAsync(
-        'sync_push_pull_now',
-        () => _backendClient.sync(
-          SyncRequestPayload(
-            deviceId: deviceId,
-            clientRequestId: _uuid.v4(),
-            lastSyncAt: forceFullSync ? null : state?.lastSuccessfulSyncAt,
-            changes: changes.isEmpty ? null : changes,
-          ),
-        ),
-        attributes: {
-          'force_full_sync': forceFullSync ? '1' : '0',
-          'pending_operations': '${pending.length}',
-        },
+      final response = await _syncWithRetry(
+        request: requestPayload,
+        pendingOperationCount: pending.length,
+        forceFullSync: forceFullSync,
+        performanceService: performanceService,
       );
 
       final processedOperations = _processedOperationCount(response);
@@ -341,5 +348,75 @@ class SyncOrchestrator {
         response.syncedItems +
         response.syncedTags +
         response.conflicts.length;
+  }
+
+  Future<SyncResponsePayload> _syncWithRetry({
+    required SyncRequestPayload request,
+    required int pendingOperationCount,
+    required bool forceFullSync,
+    required FirebasePerformanceService performanceService,
+  }) async {
+    DioException? lastDioError;
+
+    for (var attempt = 0; attempt <= _maxNetworkRetries; attempt++) {
+      try {
+        return await performanceService.traceAsync(
+          'sync_push_pull_now',
+          () => _backendClient.sync(request),
+          attributes: {
+            'force_full_sync': forceFullSync ? '1' : '0',
+            'pending_operations': '$pendingOperationCount',
+            'attempt': '${attempt + 1}',
+          },
+        );
+      } on DioException catch (error) {
+        lastDioError = error;
+        if (!_isRetryableNetworkError(error) || attempt >= _maxNetworkRetries) {
+          rethrow;
+        }
+        await Future<void>.delayed(_retryDelayForAttempt(attempt));
+      }
+    }
+
+    throw lastDioError ??
+        DioException(
+          requestOptions: RequestOptions(path: '/sync'),
+          type: DioExceptionType.unknown,
+          message: 'Sync request failed after retry attempts.',
+        );
+  }
+
+  bool _isRetryableNetworkError(DioException error) {
+    switch (error.type) {
+      case DioExceptionType.connectionTimeout:
+      case DioExceptionType.sendTimeout:
+      case DioExceptionType.receiveTimeout:
+      case DioExceptionType.connectionError:
+        return true;
+      case DioExceptionType.badResponse:
+        final statusCode = error.response?.statusCode;
+        if (statusCode == null) {
+          return false;
+        }
+        return statusCode == 408 ||
+            statusCode == 429 ||
+            statusCode == 500 ||
+            statusCode == 502 ||
+            statusCode == 503 ||
+            statusCode == 504;
+      case DioExceptionType.badCertificate:
+      case DioExceptionType.cancel:
+        return false;
+      case DioExceptionType.unknown:
+        return true;
+    }
+  }
+
+  Duration _retryDelayForAttempt(int attempt) {
+    final exponentialMultiplier = 1 << attempt;
+    final baseMillis =
+        _initialRetryDelay.inMilliseconds * exponentialMultiplier;
+    final jitterMillis = _random.nextInt(250);
+    return Duration(milliseconds: baseMillis + jitterMillis);
   }
 }
