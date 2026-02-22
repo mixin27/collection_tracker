@@ -5,6 +5,7 @@ export 'src/core/analytics_provider.dart';
 export 'src/core/analytics_event.dart';
 export 'src/core/analytics_user.dart';
 export 'src/core/analytics_middleware.dart';
+export 'src/core/analytics_collection_control.dart';
 
 // Providers
 export 'src/providers/base_analytics_provider.dart';

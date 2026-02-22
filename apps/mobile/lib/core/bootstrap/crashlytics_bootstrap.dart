@@ -4,14 +4,16 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 
 abstract final class CrashlyticsBootstrap {
-  static Future<void> initialize() async {
+  static Future<void> initialize({required bool collectionEnabled}) async {
     const enableInDebug = bool.fromEnvironment(
       'ENABLE_CRASHLYTICS_IN_DEBUG',
       defaultValue: false,
     );
     final crashlyticsSupported = !kIsWeb && Firebase.apps.isNotEmpty;
     final crashlyticsEnabled =
-        crashlyticsSupported && (!kDebugMode || enableInDebug);
+        crashlyticsSupported &&
+        collectionEnabled &&
+        (!kDebugMode || enableInDebug);
 
     if (!crashlyticsSupported) {
       Logger.info(

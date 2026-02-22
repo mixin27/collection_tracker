@@ -1,10 +1,12 @@
 import 'package:app_analytics/src/core/analytics_event.dart';
+import 'package:app_analytics/src/core/analytics_collection_control.dart';
 import 'package:app_analytics/src/core/analytics_user.dart';
 import 'package:app_analytics/src/providers/base_analytics_provider.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 
 /// Firebase Analytics provider
-class FirebaseAnalyticsProvider extends BaseAnalyticsProvider {
+class FirebaseAnalyticsProvider extends BaseAnalyticsProvider
+    implements AnalyticsCollectionControl {
   late FirebaseAnalytics _analytics;
   late FirebaseAnalyticsObserver _observer;
 
@@ -65,6 +67,11 @@ class FirebaseAnalyticsProvider extends BaseAnalyticsProvider {
   @override
   Future<void> onReset() async {
     await _analytics.setUserId(id: null);
+  }
+
+  @override
+  Future<void> setCollectionEnabled(bool enabled) async {
+    await _analytics.setAnalyticsCollectionEnabled(enabled);
   }
 
   // Firebase has specific rules for event names and parameters

@@ -17,6 +17,9 @@ void main() async {
         onboardingCompleteProvider.overrideWith(
           (ref) => bootstrapData.onboardingComplete,
         ),
+        firebaseRuntimeConfigProvider.overrideWith(
+          (ref) => bootstrapData.firebaseRuntimeConfig,
+        ),
       ],
       observers: [RiverpodLogger()],
       child: const CollectionTrackerApp(),

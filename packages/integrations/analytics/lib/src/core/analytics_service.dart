@@ -6,6 +6,7 @@ import 'package:app_analytics/src/storage/analytics_storage.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/widgets.dart';
 
+import 'analytics_collection_control.dart';
 import 'analytics_config.dart';
 import 'analytics_event.dart';
 import 'analytics_middleware.dart';
@@ -114,6 +115,15 @@ class AnalyticsService {
     for (final provider in _providers) {
       if (provider is BaseAnalyticsProvider) {
         provider.enabled = enabled;
+      }
+      if (provider is AnalyticsCollectionControl) {
+        final collectionControlProvider =
+            provider as AnalyticsCollectionControl;
+        try {
+          await collectionControlProvider.setCollectionEnabled(enabled);
+        } catch (e) {
+          _log('Unable to set collection state on ${provider.runtimeType}: $e');
+        }
       }
     }
 

@@ -27,3 +27,4 @@ workspace:
   - packages/integrations/metadata_api
   - packages/integrations/payment
   - packages/integrations/storage
+  - packages/integrations/firebase_services

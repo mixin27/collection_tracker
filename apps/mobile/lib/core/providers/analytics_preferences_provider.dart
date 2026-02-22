@@ -1,5 +1,6 @@
 import 'package:app_analytics/app_analytics.dart';
 import 'package:collection_tracker/core/analytics/analytics_preferences.dart';
+import 'package:collection_tracker/core/providers/firebase_runtime_config_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:storage/storage.dart';
 
@@ -48,8 +49,11 @@ class AnalyticsPreferencesNotifier extends _$AnalyticsPreferencesNotifier {
   Future<void> _applyToAnalyticsService() async {
     final analytics = AnalyticsService.instance;
     if (!analytics.isInitialized) return;
+    final firebaseRuntimeConfig = ref.read(firebaseRuntimeConfigProvider);
 
-    await analytics.setTrackingEnabled(state.enabled);
+    await analytics.setTrackingEnabled(
+      state.enabled && firebaseRuntimeConfig.analyticsCollectionEnabled,
+    );
     await analytics.setConsentGranted(
       state.consentStatus == AnalyticsConsentStatus.granted,
     );

@@ -59,6 +59,8 @@ dependencies:
     path: ../../packages/integrations/logger
   app_analytics:
     path: ../../packages/integrations/analytics
+  app_firebase:
+    path: ../../packages/integrations/firebase_services
 
 dev_dependencies:
   flutter_test:
