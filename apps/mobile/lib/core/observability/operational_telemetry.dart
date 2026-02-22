@@ -152,6 +152,7 @@ class OperationalTelemetry {
     required bool crashlyticsEnabled,
     required bool performanceEnabled,
     required bool backendEnabled,
+    required bool authEnabled,
     required bool syncEnabled,
     bool? didActivateChanges,
   }) {
@@ -164,6 +165,7 @@ class OperationalTelemetry {
         'crashlytics_enabled': crashlyticsEnabled,
         'performance_enabled': performanceEnabled,
         'backend_enabled': backendEnabled,
+        'auth_enabled': authEnabled,
         'sync_enabled': syncEnabled,
         'changed': ?didActivateChanges,
       },
@@ -173,6 +175,7 @@ class OperationalTelemetry {
         'flag_crashlytics_enabled': crashlyticsEnabled,
         'flag_performance_enabled': performanceEnabled,
         'flag_backend_enabled': backendEnabled,
+        'flag_auth_enabled': authEnabled,
         'flag_sync_enabled': syncEnabled,
       },
     );

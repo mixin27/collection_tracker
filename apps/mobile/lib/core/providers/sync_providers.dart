@@ -13,17 +13,20 @@ import 'package:sync_api/sync_api.dart';
 class SyncTransportConfig {
   const SyncTransportConfig({
     required this.backendFeatureEnabled,
+    required this.authFeatureEnabled,
     required this.syncFeatureEnabled,
     required this.baseUrl,
     required this.apiPrefix,
   });
 
   final bool backendFeatureEnabled;
+  final bool authFeatureEnabled;
   final bool syncFeatureEnabled;
   final String baseUrl;
   final String apiPrefix;
 
-  bool get featureFlagEnabled => backendFeatureEnabled && syncFeatureEnabled;
+  bool get featureFlagEnabled =>
+      backendFeatureEnabled && authFeatureEnabled && syncFeatureEnabled;
 
   bool get isApiBaseUrlConfigured => baseUrl.trim().isNotEmpty;
 
@@ -56,20 +59,23 @@ final syncFeatureFlagEnabledProvider = Provider<bool>((ref) {
   final backendFeatureEnabled = ref.watch(
     backendIntegrationFeatureFlagProvider,
   );
+  final authFeatureEnabled = ref.watch(backendAuthFeatureFlagProvider);
   final syncFeatureEnabled = ref.watch(backendSyncFeatureFlagProvider);
-  return backendFeatureEnabled && syncFeatureEnabled;
+  return backendFeatureEnabled && authFeatureEnabled && syncFeatureEnabled;
 });
 
 final syncTransportConfigProvider = Provider<SyncTransportConfig>((ref) {
   final backendFeatureEnabled = ref.watch(
     backendIntegrationFeatureFlagProvider,
   );
+  final authFeatureEnabled = ref.watch(backendAuthFeatureFlagProvider);
   final syncFeatureEnabled = ref.watch(backendSyncFeatureFlagProvider);
   final baseUrl = ref.watch(backendApiBaseUrlProvider);
   final apiPrefix = ref.watch(backendApiPrefixProvider);
 
   return SyncTransportConfig(
     backendFeatureEnabled: backendFeatureEnabled,
+    authFeatureEnabled: authFeatureEnabled,
     syncFeatureEnabled: syncFeatureEnabled,
     baseUrl: baseUrl,
     apiPrefix: apiPrefix,
@@ -146,6 +152,13 @@ final syncBackendClientProvider = Provider<SyncBackendClient>((ref) {
     );
   }
 
+  if (!transportConfig.authFeatureEnabled) {
+    return const NoopSyncBackendClient(
+      reason: SyncBackendUnavailableReason.featureFlagDisabled,
+      message: 'Authentication is disabled by feature flags.',
+    );
+  }
+
   if (!transportConfig.isApiBaseUrlConfigured) {
     return const NoopSyncBackendClient(
       reason: SyncBackendUnavailableReason.notConfigured,
@@ -177,6 +190,13 @@ final syncReadinessProvider = Provider<SyncReadinessState>((ref) {
     return const SyncReadinessState(
       status: SyncReadinessStatus.disabledByFeatureFlag,
       message: 'Sync is disabled by feature flags.',
+    );
+  }
+
+  if (!transportConfig.authFeatureEnabled) {
+    return const SyncReadinessState(
+      status: SyncReadinessStatus.disabledByFeatureFlag,
+      message: 'Authentication is disabled by feature flags.',
     );
   }
 

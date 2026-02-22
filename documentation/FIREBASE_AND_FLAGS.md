@@ -27,6 +27,7 @@ Runtime flags are read in `FirebaseServicesBootstrap`.
 | `app_crashlytics_collection_enabled` | `true` | Enables/disables Crashlytics collection |
 | `app_performance_collection_enabled` | `true` | Enables/disables Firebase Performance collection |
 | `app_backend_integration_enabled` | `false` | Gates backend-auth integration paths |
+| `app_auth_feature_enabled` | `true` | Gates account authentication UI/service availability |
 | `app_sync_feature_enabled` | `false` | Gates sync transport and sync UI readiness |
 
 ## 3. Why Cloud Sync Can Still Look Disabled
@@ -34,9 +35,10 @@ Runtime flags are read in `FirebaseServicesBootstrap`.
 Cloud Sync readiness requires all of the following:
 
 1. `app_backend_integration_enabled = true`
-2. `app_sync_feature_enabled = true`
-3. API base URL available (`BACKEND_API_BASE_URL` or settings override)
-4. Signed-in auth session (sync is optional, but auth is required for sync)
+2. `app_auth_feature_enabled = true`
+3. `app_sync_feature_enabled = true`
+4. API base URL available (`BACKEND_API_BASE_URL` or settings override)
+5. Signed-in auth session (sync is optional, but auth is required for sync)
 
 If any condition fails, the settings sync tile shows non-ready state and relevant CTA.
 
@@ -66,6 +68,7 @@ There are optional debug-only `--dart-define` overrides:
 
 - `BACKEND_USE_ENV_FLAG_OVERRIDES=true`
 - `BACKEND_INTEGRATION_ENABLED=true|false`
+- `BACKEND_AUTH_ENABLED=true|false`
 - `BACKEND_SYNC_ENABLED=true|false`
 
 These overrides are ignored unless `BACKEND_USE_ENV_FLAG_OVERRIDES=true` and build is debug.
@@ -81,7 +84,7 @@ Crashlytics collection is also constrained by debug behavior:
 
 If sync tile does not enable after toggling Remote Config keys:
 
-1. Confirm both backend and sync keys are `true`.
+1. Confirm backend, auth, and sync keys are all `true`.
 2. Trigger manual refresh from debug settings.
 3. Verify fetch status and last fetch time in runtime config sheet.
 4. Check API base URL configuration.

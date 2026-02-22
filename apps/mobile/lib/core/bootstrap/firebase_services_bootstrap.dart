@@ -27,6 +27,7 @@ abstract final class FirebaseServicesBootstrap {
       'app_performance_collection_enabled';
   static const _backendIntegrationEnabledKey =
       'app_backend_integration_enabled';
+  static const _authFeatureEnabledKey = 'app_auth_feature_enabled';
   static const _syncFeatureEnabledKey = 'app_sync_feature_enabled';
 
   static Future<FirebaseRuntimeConfig> initialize() async {
@@ -38,6 +39,7 @@ abstract final class FirebaseServicesBootstrap {
         _crashlyticsCollectionEnabledKey: true,
         _performanceCollectionEnabledKey: true,
         _backendIntegrationEnabledKey: false,
+        _authFeatureEnabledKey: true,
         _syncFeatureEnabledKey: false,
       },
       minimumFetchInterval: kDebugMode
@@ -56,6 +58,7 @@ abstract final class FirebaseServicesBootstrap {
       'crashlytics: ${runtimeConfig.crashlyticsCollectionEnabled}, '
       'performance: ${runtimeConfig.performanceCollectionEnabled}, '
       'backend: ${runtimeConfig.backendIntegrationEnabled}, '
+      'auth: ${runtimeConfig.authFeatureEnabled}, '
       'sync: ${runtimeConfig.syncFeatureEnabled}).',
     );
 
@@ -93,6 +96,7 @@ abstract final class FirebaseServicesBootstrap {
       'crashlytics: ${runtimeConfig.crashlyticsCollectionEnabled}, '
       'performance: ${runtimeConfig.performanceCollectionEnabled}, '
       'backend: ${runtimeConfig.backendIntegrationEnabled}, '
+      'auth: ${runtimeConfig.authFeatureEnabled}, '
       'sync: ${runtimeConfig.syncFeatureEnabled}).',
     );
     await OperationalTelemetry.trackRuntimeConfigApplied(
@@ -101,6 +105,7 @@ abstract final class FirebaseServicesBootstrap {
       crashlyticsEnabled: runtimeConfig.crashlyticsCollectionEnabled,
       performanceEnabled: runtimeConfig.performanceCollectionEnabled,
       backendEnabled: runtimeConfig.backendIntegrationEnabled,
+      authEnabled: runtimeConfig.authFeatureEnabled,
       syncEnabled: runtimeConfig.syncFeatureEnabled,
       didActivateChanges: didActivateChanges,
     );
@@ -131,6 +136,10 @@ abstract final class FirebaseServicesBootstrap {
       backendIntegrationEnabled: remoteConfigService.getBool(
         _backendIntegrationEnabledKey,
         fallback: false,
+      ),
+      authFeatureEnabled: remoteConfigService.getBool(
+        _authFeatureEnabledKey,
+        fallback: true,
       ),
       syncFeatureEnabled: remoteConfigService.getBool(
         _syncFeatureEnabledKey,

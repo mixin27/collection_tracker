@@ -79,9 +79,10 @@ By default, backend/sync features are runtime-flag disabled.
 
 ### Option A: Use Firebase Remote Config only (recommended)
 
-Set both keys to `true` in Remote Config:
+Set these keys to `true` in Remote Config:
 
 - `app_backend_integration_enabled`
+- `app_auth_feature_enabled`
 - `app_sync_feature_enabled`
 
 ### Option B: Debug-only `--dart-define` overrides
@@ -92,6 +93,7 @@ Use only when explicitly needed for local testing:
 flutter run \
   --dart-define=BACKEND_USE_ENV_FLAG_OVERRIDES=true \
   --dart-define=BACKEND_INTEGRATION_ENABLED=true \
+  --dart-define=BACKEND_AUTH_ENABLED=true \
   --dart-define=BACKEND_SYNC_ENABLED=true \
   --dart-define=BACKEND_API_BASE_URL=http://localhost:4000
 ```

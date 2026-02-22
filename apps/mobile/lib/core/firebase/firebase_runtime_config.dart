@@ -4,6 +4,7 @@ class FirebaseRuntimeConfig {
     required this.crashlyticsCollectionEnabled,
     required this.performanceCollectionEnabled,
     required this.backendIntegrationEnabled,
+    required this.authFeatureEnabled,
     required this.syncFeatureEnabled,
   });
 
@@ -12,6 +13,7 @@ class FirebaseRuntimeConfig {
     crashlyticsCollectionEnabled: true,
     performanceCollectionEnabled: true,
     backendIntegrationEnabled: false,
+    authFeatureEnabled: true,
     syncFeatureEnabled: false,
   );
 
@@ -19,5 +21,6 @@ class FirebaseRuntimeConfig {
   final bool crashlyticsCollectionEnabled;
   final bool performanceCollectionEnabled;
   final bool backendIntegrationEnabled;
+  final bool authFeatureEnabled;
   final bool syncFeatureEnabled;
 }

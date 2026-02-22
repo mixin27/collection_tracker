@@ -82,6 +82,23 @@ final backendSyncFeatureFlagProvider = Provider<bool>((ref) {
   return debugEnvOverride;
 });
 
+final backendAuthFeatureFlagProvider = Provider<bool>((ref) {
+  final runtimeConfig = ref.watch(firebaseRuntimeConfigProvider);
+  if (runtimeConfig.authFeatureEnabled) {
+    return true;
+  }
+
+  if (!_shouldUseDebugEnvFlagOverrides) {
+    return false;
+  }
+
+  const debugEnvOverride = bool.fromEnvironment(
+    'BACKEND_AUTH_ENABLED',
+    defaultValue: false,
+  );
+  return debugEnvOverride;
+});
+
 final backendDebugEnvFlagOverridesActiveProvider = Provider<bool>((ref) {
   return _shouldUseDebugEnvFlagOverrides;
 });
@@ -154,6 +171,37 @@ final backendApiReadinessProvider = Provider<BackendApiReadiness>((ref) {
   );
 });
 
+final backendAuthReadinessProvider = Provider<BackendApiReadiness>((ref) {
+  final integrationEnabled = ref.watch(backendIntegrationFeatureFlagProvider);
+  if (!integrationEnabled) {
+    return const BackendApiReadiness(
+      enabled: false,
+      message: 'Backend integration is disabled by feature flags.',
+    );
+  }
+
+  final authEnabled = ref.watch(backendAuthFeatureFlagProvider);
+  if (!authEnabled) {
+    return const BackendApiReadiness(
+      enabled: false,
+      message: 'Authentication is disabled by feature flags.',
+    );
+  }
+
+  final baseUrl = ref.watch(backendApiBaseUrlProvider);
+  if (baseUrl.isEmpty) {
+    return const BackendApiReadiness(
+      enabled: false,
+      message: 'Backend API URL is missing.',
+    );
+  }
+
+  return const BackendApiReadiness(
+    enabled: true,
+    message: 'Authentication is enabled.',
+  );
+});
+
 final backendApiDioProvider = Provider<Dio>((ref) {
   final dio = Dio(
     BaseOptions(
@@ -178,7 +226,7 @@ final backendApiDioProvider = Provider<Dio>((ref) {
 });
 
 final backendAuthClientProvider = Provider<BackendAuthClient?>((ref) {
-  final readiness = ref.watch(backendApiReadinessProvider);
+  final readiness = ref.watch(backendAuthReadinessProvider);
   if (!readiness.enabled) {
     return null;
   }

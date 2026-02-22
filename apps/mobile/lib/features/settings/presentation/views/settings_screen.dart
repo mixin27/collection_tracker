@@ -28,13 +28,15 @@ class SettingsScreen extends ConsumerWidget {
     final analyticsPreferences = ref.watch(analyticsPreferencesProvider);
     final firebaseRuntimeConfig = ref.watch(firebaseRuntimeConfigProvider);
     final syncReadiness = ref.watch(syncReadinessProvider);
+    final accountReadiness = ref.watch(backendAuthReadinessProvider);
     final pendingSyncCount = ref.watch(syncOutboxCountProvider).value ?? 0;
     final authSession = ref.watch(authSessionProvider).value;
     final themeSummary =
         '${_themeModeLabel(context, themeSettings.mode)} - ${themeSettings.variant.label}';
     final languageSummary = _languageLabel(context, currentLanguage);
     final analyticsSummary = _analyticsSummary(context, analyticsPreferences);
-    final accountSummary = _authAccountSummary(authSession);
+    final accountSummary = _authAccountSummary(authSession, accountReadiness);
+    final accountFeatureEnabled = accountReadiness.enabled;
     final cloudSyncSummary = _cloudSyncSummary(
       syncReadiness,
       pendingSyncCount: pendingSyncCount,
@@ -82,7 +84,10 @@ class SettingsScreen extends ConsumerWidget {
                   icon: Icons.person_outline_rounded,
                   title: 'Account',
                   subtitle: accountSummary,
-                  onTap: () => context.push(Routes.auth),
+                  enabled: accountFeatureEnabled,
+                  onTap: accountFeatureEnabled
+                      ? () => context.push(Routes.auth)
+                      : null,
                 ),
               ],
             ),
@@ -333,7 +338,17 @@ class SettingsScreen extends ConsumerWidget {
     };
   }
 
-  String _authAccountSummary(AuthSession? session) {
+  String _authAccountSummary(
+    AuthSession? session,
+    BackendApiReadiness readiness,
+  ) {
+    if (!readiness.enabled) {
+      final message = readiness.message.toLowerCase();
+      if (message.contains('missing') || message.contains('configure')) {
+        return 'Configuration required';
+      }
+      return 'Unavailable';
+    }
     if (session == null || !session.isAuthenticated) {
       return 'Not signed in';
     }
@@ -695,6 +710,13 @@ class SettingsScreen extends ConsumerWidget {
                 _CloudSyncStateRow(
                   label: 'Sync flag',
                   value: transportConfig.syncFeatureEnabled
+                      ? 'Enabled'
+                      : 'Disabled',
+                ),
+                const SizedBox(height: AppSpacing.xs),
+                _CloudSyncStateRow(
+                  label: 'Auth flag',
+                  value: transportConfig.authFeatureEnabled
                       ? 'Enabled'
                       : 'Disabled',
                 ),
@@ -1197,6 +1219,18 @@ class SettingsScreen extends ConsumerWidget {
                     _enabledDisabledLabel(
                       context,
                       runtimeConfig.backendIntegrationEnabled,
+                    ),
+                  ),
+                ),
+                ListTile(
+                  contentPadding: EdgeInsets.zero,
+                  leading: const Icon(Icons.person_outline_rounded),
+                  title: const Text('Authentication'),
+                  subtitle: const Text('app_auth_feature_enabled'),
+                  trailing: Text(
+                    _enabledDisabledLabel(
+                      context,
+                      runtimeConfig.authFeatureEnabled,
                     ),
                   ),
                 ),

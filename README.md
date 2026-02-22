@@ -85,9 +85,10 @@ Detailed setup instructions: [documentation/SETUP_AND_RUN.md](documentation/SETU
 
 ## Cloud Sync Flags (Important)
 
-Cloud Sync is enabled only when both Remote Config flags are `true`:
+Cloud Sync is enabled only when all required Remote Config flags are `true`:
 
 - `app_backend_integration_enabled`
+- `app_auth_feature_enabled`
 - `app_sync_feature_enabled`
 
 If either is `false`, sync UI/actions are disabled. Full explanation: [documentation/FIREBASE_AND_FLAGS.md](documentation/FIREBASE_AND_FLAGS.md)

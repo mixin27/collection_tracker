@@ -54,7 +54,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
     final sessionAsync = ref.watch(authSessionProvider);
     final session = sessionAsync.value;
     final service = ref.watch(backendAuthServiceProvider);
-    final readiness = ref.watch(backendApiReadinessProvider);
+    final readiness = ref.watch(backendAuthReadinessProvider);
     final canAuthenticate = service != null;
     final isAuthenticated = session?.isAuthenticated ?? false;
 
