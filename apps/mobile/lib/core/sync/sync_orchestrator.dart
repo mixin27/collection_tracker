@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:app_firebase/app_firebase.dart';
 import 'package:database/database.dart';
 import 'package:sync_api/sync_api.dart';
 import 'package:uuid/uuid.dart';
@@ -14,12 +15,28 @@ class SyncAttemptResult {
     required this.success,
     required this.message,
     this.error,
+    this.stackTrace,
+    this.pendingOperations = 0,
+    this.processedOperations = 0,
+    this.syncedCollections = 0,
+    this.syncedItems = 0,
+    this.syncedTags = 0,
+    this.conflictCount = 0,
+    this.partial = false,
   });
 
   final bool executed;
   final bool success;
   final String message;
   final Object? error;
+  final StackTrace? stackTrace;
+  final int pendingOperations;
+  final int processedOperations;
+  final int syncedCollections;
+  final int syncedItems;
+  final int syncedTags;
+  final int conflictCount;
+  final bool partial;
 }
 
 class SyncOrchestrator {
@@ -79,17 +96,20 @@ class SyncOrchestrator {
     required String deviceId,
     bool forceFullSync = false,
   }) async {
+    final pending = await _syncDao.getPendingOperations(limit: _maxBatchSize);
+
     if (_backendClient is NoopSyncBackendClient) {
       final client = _backendClient;
       return SyncAttemptResult(
         executed: false,
         success: false,
         message: client.message,
+        pendingOperations: pending.length,
+        partial: false,
       );
     }
 
     final state = await _syncDao.getSyncState();
-    final pending = await _syncDao.getPendingOperations(limit: _maxBatchSize);
 
     await _syncDao.upsertSyncState(lastAttemptedSyncAt: DateTime.now());
 
@@ -99,19 +119,28 @@ class SyncOrchestrator {
         executed: false,
         success: true,
         message: 'No pending operations to sync.',
+        partial: false,
       );
     }
 
     final changes = _buildChangesPayload(pending);
+    final performanceService = FirebasePerformanceService.instance;
 
     try {
-      final response = await _backendClient.sync(
-        SyncRequestPayload(
-          deviceId: deviceId,
-          clientRequestId: _uuid.v4(),
-          lastSyncAt: forceFullSync ? null : state?.lastSuccessfulSyncAt,
-          changes: changes.isEmpty ? null : changes,
+      final response = await performanceService.traceAsync(
+        'sync_push_pull_now',
+        () => _backendClient.sync(
+          SyncRequestPayload(
+            deviceId: deviceId,
+            clientRequestId: _uuid.v4(),
+            lastSyncAt: forceFullSync ? null : state?.lastSuccessfulSyncAt,
+            changes: changes.isEmpty ? null : changes,
+          ),
         ),
+        attributes: {
+          'force_full_sync': forceFullSync ? '1' : '0',
+          'pending_operations': '${pending.length}',
+        },
       );
 
       final processedOperations = _processedOperationCount(response);
@@ -135,6 +164,14 @@ class SyncOrchestrator {
               'Sync partially processed. Local queue kept for retry. '
               'Processed $processedOperations of ${pending.length} change(s).',
           error: errorText,
+          stackTrace: null,
+          pendingOperations: pending.length,
+          processedOperations: processedOperations,
+          syncedCollections: response.syncedCollections,
+          syncedItems: response.syncedItems,
+          syncedTags: response.syncedTags,
+          conflictCount: response.conflicts.length,
+          partial: true,
         );
       }
 
@@ -153,6 +190,13 @@ class SyncOrchestrator {
         message:
             'Sync completed: ${response.syncedCollections} collections, '
             '${response.syncedItems} items, ${response.syncedTags} tags.',
+        pendingOperations: pending.length,
+        processedOperations: processedOperations,
+        syncedCollections: response.syncedCollections,
+        syncedItems: response.syncedItems,
+        syncedTags: response.syncedTags,
+        conflictCount: response.conflicts.length,
+        partial: false,
       );
     } on SyncAuthRequiredException catch (error) {
       return SyncAttemptResult(
@@ -160,8 +204,11 @@ class SyncOrchestrator {
         success: false,
         message: error.message,
         error: error,
+        stackTrace: null,
+        pendingOperations: pending.length,
+        partial: false,
       );
-    } catch (error) {
+    } catch (error, stackTrace) {
       final errorText = '$error';
       for (final op in pending) {
         await _syncDao.markOperationFailed(op.id, errorText);
@@ -176,6 +223,9 @@ class SyncOrchestrator {
         success: false,
         message: 'Sync failed.',
         error: error,
+        stackTrace: stackTrace,
+        pendingOperations: pending.length,
+        partial: false,
       );
     }
   }

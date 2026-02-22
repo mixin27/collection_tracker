@@ -3,6 +3,7 @@ import 'package:auth_session/auth_session.dart';
 import 'package:collection_tracker/core/analytics/analytics_consent_dialog.dart';
 import 'package:collection_tracker/core/analytics/analytics_preferences.dart';
 import 'package:collection_tracker/core/firebase/firebase_runtime_config.dart';
+import 'package:collection_tracker/core/observability/operational_telemetry.dart';
 import 'package:collection_tracker/core/providers/providers.dart';
 import 'package:collection_tracker/core/router/routes.dart';
 import 'package:collection_tracker/l10n/l10n.dart';
@@ -175,6 +176,12 @@ class SettingsScreen extends ConsumerWidget {
                     title: 'Cloud Sync Diagnostics',
                     subtitle: 'Debug sync transport and auth readiness',
                     onTap: () => _showCloudSyncDiagnosticsSheet(context, ref),
+                  ),
+                  _SettingsTile(
+                    icon: Icons.monitor_heart_outlined,
+                    title: 'Operational Telemetry',
+                    subtitle: 'Inspect recent sync/data/runtime events',
+                    onTap: () => _showOperationalTelemetrySheet(context, ref),
                   ),
                   _SettingsTile(
                     icon: Icons.bug_report_outlined,
@@ -428,6 +435,16 @@ class SettingsScreen extends ConsumerWidget {
   }
 
   Future<void> _triggerSyncNow(BuildContext context, WidgetRef ref) async {
+    final readiness = ref.read(syncReadinessProvider);
+    final pendingBefore = await ref
+        .read(syncOrchestratorProvider)
+        .getPendingOperationCount();
+    await OperationalTelemetry.trackSyncAttempt(
+      trigger: 'settings_manual_sync',
+      readinessStatus: readiness.status.name,
+      pendingBefore: pendingBefore,
+    );
+
     final session = ref.read(authSessionProvider).asData?.value;
     final deviceId = session?.deviceId;
     if (deviceId == null || deviceId.trim().isEmpty) {
@@ -443,10 +460,28 @@ class SettingsScreen extends ConsumerWidget {
     final bootstrapResult = await ref
         .read(syncOutboxBootstrapperProvider)
         .seedFromLocalDataIfNeeded();
+    await OperationalTelemetry.trackSyncSeed(
+      queuedOperations: bootstrapResult.totalOperations,
+      skipped: bootstrapResult.skipped,
+    );
 
     final result = await ref
         .read(syncOrchestratorProvider)
         .syncNow(deviceId: deviceId);
+    await OperationalTelemetry.trackSyncResult(
+      success: result.success,
+      executed: result.executed,
+      partial: result.partial,
+      pendingOperations: result.pendingOperations,
+      processedOperations: result.processedOperations,
+      syncedCollections: result.syncedCollections,
+      syncedItems: result.syncedItems,
+      syncedTags: result.syncedTags,
+      conflictCount: result.conflictCount,
+      message: result.message,
+      error: result.error,
+      stackTrace: result.stackTrace,
+    );
 
     if (!context.mounted) return;
     final bootstrapMessage = bootstrapResult.totalOperations > 0
@@ -467,22 +502,42 @@ class SettingsScreen extends ConsumerWidget {
     BuildContext context,
     WidgetRef ref,
   ) async {
-    final result = await ref
-        .read(syncOutboxBootstrapperProvider)
-        .rebuildFromLocalData();
+    try {
+      final result = await ref
+          .read(syncOutboxBootstrapperProvider)
+          .rebuildFromLocalData();
+      await OperationalTelemetry.trackSyncQueueRebuild(
+        success: true,
+        queuedOperations: result.totalOperations,
+      );
 
-    if (!context.mounted) return;
-    final message = result.totalOperations > 0
-        ? 'Rebuilt queue with ${result.totalOperations} local change(s). Run Sync now.'
-        : 'No local data found to queue for sync.';
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        backgroundColor: result.totalOperations > 0
-            ? Colors.green
-            : Colors.orange,
-      ),
-    );
+      if (!context.mounted) return;
+      final message = result.totalOperations > 0
+          ? 'Rebuilt queue with ${result.totalOperations} local change(s). Run Sync now.'
+          : 'No local data found to queue for sync.';
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(message),
+          backgroundColor: result.totalOperations > 0
+              ? Colors.green
+              : Colors.orange,
+        ),
+      );
+    } catch (error, stackTrace) {
+      await OperationalTelemetry.trackSyncQueueRebuild(
+        success: false,
+        queuedOperations: 0,
+        error: error,
+        stackTrace: stackTrace,
+      );
+      if (!context.mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Failed to rebuild local sync queue: $error'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
   }
 
   Future<void> _showSyncApiConfigurationHelp(
@@ -678,6 +733,110 @@ class SettingsScreen extends ConsumerWidget {
               ],
             );
           },
+        );
+      },
+    );
+  }
+
+  Future<void> _showOperationalTelemetrySheet(
+    BuildContext context,
+    WidgetRef ref,
+  ) async {
+    await showAppSheet(
+      context: context,
+      builder: (sheetContext) {
+        final maxHeight = MediaQuery.sizeOf(sheetContext).height * 0.72;
+        return SizedBox(
+          height: maxHeight,
+          child: Consumer(
+            builder: (sheetContext, ref, _) {
+              final historyAsync = ref.watch(
+                operationalTelemetryHistoryProvider,
+              );
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Operational Telemetry',
+                    style: Theme.of(sheetContext).textTheme.titleMedium
+                        ?.copyWith(fontWeight: FontWeight.w700),
+                  ),
+                  const SizedBox(height: AppSpacing.sm),
+                  Text(
+                    'Recent sync/data/runtime events captured locally for debug.',
+                    style: Theme.of(sheetContext).textTheme.bodyMedium
+                        ?.copyWith(
+                          color: Theme.of(
+                            sheetContext,
+                          ).colorScheme.onSurfaceVariant,
+                        ),
+                  ),
+                  const SizedBox(height: AppSpacing.md),
+                  Expanded(
+                    child: historyAsync.when(
+                      data: (entries) {
+                        if (entries.isEmpty) {
+                          return Center(
+                            child: Text(
+                              'No telemetry events yet.',
+                              style: Theme.of(sheetContext).textTheme.bodyMedium
+                                  ?.copyWith(
+                                    color: Theme.of(
+                                      sheetContext,
+                                    ).colorScheme.onSurfaceVariant,
+                                  ),
+                            ),
+                          );
+                        }
+
+                        return ListView.separated(
+                          itemCount: entries.length,
+                          separatorBuilder: (_, _) =>
+                              const SizedBox(height: AppSpacing.sm),
+                          itemBuilder: (context, index) {
+                            return _OperationalTelemetryEventTile(
+                              entry: entries[index],
+                            );
+                          },
+                        );
+                      },
+                      loading: () =>
+                          const Center(child: CircularProgressIndicator()),
+                      error: (error, _) => Center(
+                        child: Text(
+                          'Failed to load telemetry: $error',
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: AppSpacing.md),
+                  Wrap(
+                    spacing: AppSpacing.sm,
+                    runSpacing: AppSpacing.sm,
+                    children: [
+                      AppButton(
+                        label: 'Refresh',
+                        variant: AppButtonVariant.secondary,
+                        onPressed: () =>
+                            refreshOperationalTelemetryHistory(ref),
+                      ),
+                      AppButton(
+                        label: 'Clear',
+                        variant: AppButtonVariant.ghost,
+                        onPressed: () => clearOperationalTelemetryHistory(ref),
+                      ),
+                      AppButton(
+                        label: sheetContext.l10n.actionDismiss,
+                        variant: AppButtonVariant.ghost,
+                        onPressed: () => Navigator.of(sheetContext).pop(),
+                      ),
+                    ],
+                  ),
+                ],
+              );
+            },
+          ),
         );
       },
     );
@@ -1487,6 +1646,95 @@ class _CloudSyncStateRow extends StatelessWidget {
       ],
     );
   }
+}
+
+class _OperationalTelemetryEventTile extends StatelessWidget {
+  const _OperationalTelemetryEventTile({required this.entry});
+
+  final Map<String, dynamic> entry;
+
+  @override
+  Widget build(BuildContext context) {
+    final name = entry['name'] as String? ?? 'unknown_event';
+    final category = entry['category'] as String? ?? 'unknown';
+    final hasError = entry['has_error'] as bool? ?? false;
+    final timestamp = _formatTimestamp(entry['timestamp'] as String?);
+    final rawProperties = entry['properties'];
+    final properties = rawProperties is Map
+        ? rawProperties.cast<String, dynamic>()
+        : const <String, dynamic>{};
+    final preview = properties.entries
+        .take(4)
+        .map((entry) => '${entry.key}: ${entry.value}')
+        .join(' | ');
+
+    return Container(
+      padding: const EdgeInsets.all(AppSpacing.md),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(AppSpacing.md),
+        border: Border.all(color: Theme.of(context).colorScheme.outlineVariant),
+        color: Theme.of(
+          context,
+        ).colorScheme.surfaceContainerHighest.withValues(alpha: 0.25),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(
+                hasError ? Icons.error_outline : Icons.check_circle_outline,
+                size: 18,
+                color: hasError
+                    ? Theme.of(context).colorScheme.error
+                    : Theme.of(context).colorScheme.primary,
+              ),
+              const SizedBox(width: AppSpacing.xs),
+              Expanded(
+                child: Text(
+                  name,
+                  style: Theme.of(
+                    context,
+                  ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: AppSpacing.xs),
+          Text(
+            '$category • $timestamp',
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+            ),
+          ),
+          if (preview.isNotEmpty) ...[
+            const SizedBox(height: AppSpacing.xs),
+            Text(
+              preview,
+              style: Theme.of(context).textTheme.bodySmall,
+              maxLines: 3,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+
+  String _formatTimestamp(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'unknown time';
+    }
+    final parsed = DateTime.tryParse(value);
+    if (parsed == null) {
+      return value;
+    }
+    final local = parsed.toLocal();
+    return '${local.year}-${_two(local.month)}-${_two(local.day)} '
+        '${_two(local.hour)}:${_two(local.minute)}:${_two(local.second)}';
+  }
+
+  String _two(int value) => value < 10 ? '0$value' : '$value';
 }
 
 class _SettingsTile extends StatelessWidget {

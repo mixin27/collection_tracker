@@ -2,6 +2,7 @@ import 'package:app_analytics/app_analytics.dart';
 import 'package:app_logger/app_logger.dart';
 import 'package:collection_tracker/core/analytics/analytics_preferences.dart';
 import 'package:collection_tracker/core/firebase/firebase_runtime_config.dart';
+import 'package:collection_tracker/core/observability/operational_telemetry.dart';
 import 'package:flutter/foundation.dart';
 import 'package:storage/storage.dart';
 
@@ -31,6 +32,15 @@ abstract final class AppBootstrap {
     await _initializeAnalytics(
       analyticsCollectionEnabled:
           firebaseRuntimeConfig.analyticsCollectionEnabled,
+    );
+    await OperationalTelemetry.trackRuntimeConfigApplied(
+      source: 'bootstrap',
+      analyticsEnabled: firebaseRuntimeConfig.analyticsCollectionEnabled,
+      crashlyticsEnabled: firebaseRuntimeConfig.crashlyticsCollectionEnabled,
+      performanceEnabled: firebaseRuntimeConfig.performanceCollectionEnabled,
+      backendEnabled: firebaseRuntimeConfig.backendIntegrationEnabled,
+      syncEnabled: firebaseRuntimeConfig.syncFeatureEnabled,
+      didActivateChanges: null,
     );
 
     final onboardingComplete =

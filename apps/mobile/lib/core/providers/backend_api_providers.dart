@@ -45,20 +45,28 @@ class BackendApiBaseUrlOverrideController extends Notifier<String> {
 
 final backendIntegrationFeatureFlagProvider = Provider<bool>((ref) {
   final runtimeConfig = ref.watch(firebaseRuntimeConfigProvider);
-  const envOverride = bool.fromEnvironment(
+  if (runtimeConfig.backendIntegrationEnabled) {
+    return true;
+  }
+
+  const debugEnvOverride = bool.fromEnvironment(
     'BACKEND_INTEGRATION_ENABLED',
     defaultValue: false,
   );
-  return runtimeConfig.backendIntegrationEnabled || envOverride;
+  return kDebugMode && debugEnvOverride;
 });
 
 final backendSyncFeatureFlagProvider = Provider<bool>((ref) {
   final runtimeConfig = ref.watch(firebaseRuntimeConfigProvider);
-  const envOverride = bool.fromEnvironment(
+  if (runtimeConfig.syncFeatureEnabled) {
+    return true;
+  }
+
+  const debugEnvOverride = bool.fromEnvironment(
     'BACKEND_SYNC_ENABLED',
     defaultValue: false,
   );
-  return runtimeConfig.syncFeatureEnabled || envOverride;
+  return kDebugMode && debugEnvOverride;
 });
 
 final backendApiPrefixProvider = Provider<String>((ref) {

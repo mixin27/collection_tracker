@@ -1,4 +1,5 @@
 import 'package:app_firebase/app_firebase.dart';
+import 'package:collection_tracker/core/observability/operational_telemetry.dart';
 import 'package:collection_tracker/core/providers/providers.dart';
 import 'package:database/database.dart';
 import 'package:domain/domain.dart';
@@ -17,6 +18,9 @@ class ExportImportViewModel extends _$ExportImportViewModel {
   Future<String> exportAllDataToJson() async {
     state = const AsyncValue.loading();
     final performanceService = FirebasePerformanceService.instance;
+    final stopwatch = Stopwatch()..start();
+    var collectionCount = 0;
+    var itemCount = 0;
 
     final result = await AsyncValue.guard(
       () => performanceService.traceAsync(
@@ -31,6 +35,7 @@ class ExportImportViewModel extends _$ExportImportViewModel {
             (exception) => throw exception,
             (data) => data,
           );
+          collectionCount = collections.length;
 
           final allItems = <Item>[];
           for (final collection in collections) {
@@ -42,6 +47,7 @@ class ExportImportViewModel extends _$ExportImportViewModel {
               (items) => allItems.addAll(items),
             );
           }
+          itemCount = allItems.length;
 
           final exportData = {
             'version': '1.0.0',
@@ -87,10 +93,28 @@ class ExportImportViewModel extends _$ExportImportViewModel {
     );
 
     _setStateSafely(result);
+    stopwatch.stop();
 
     if (result.hasError) {
+      await OperationalTelemetry.trackDataTransfer(
+        operation: 'export_json',
+        success: false,
+        durationMs: stopwatch.elapsedMilliseconds,
+        collectionCount: collectionCount,
+        itemCount: itemCount,
+        error: result.error,
+        stackTrace: result.stackTrace,
+      );
       throw result.error!;
     }
+
+    await OperationalTelemetry.trackDataTransfer(
+      operation: 'export_json',
+      success: true,
+      durationMs: stopwatch.elapsedMilliseconds,
+      collectionCount: collectionCount,
+      itemCount: itemCount,
+    );
 
     return result.value!;
   }
@@ -98,6 +122,9 @@ class ExportImportViewModel extends _$ExportImportViewModel {
   Future<String> exportItemsToCsv() async {
     state = const AsyncValue.loading();
     final performanceService = FirebasePerformanceService.instance;
+    final stopwatch = Stopwatch()..start();
+    var collectionCount = 0;
+    var itemCount = 0;
 
     final result = await AsyncValue.guard(
       () =>
@@ -111,6 +138,7 @@ class ExportImportViewModel extends _$ExportImportViewModel {
               (exception) => throw exception,
               (data) => data,
             );
+            collectionCount = collections.length;
 
             final allItems = <Map<String, dynamic>>[];
             for (final collection in collections) {
@@ -135,16 +163,35 @@ class ExportImportViewModel extends _$ExportImportViewModel {
                 }
               });
             }
+            itemCount = allItems.length;
 
             return exportService.exportToCsv(allItems);
           }),
     );
 
     _setStateSafely(result);
+    stopwatch.stop();
 
     if (result.hasError) {
+      await OperationalTelemetry.trackDataTransfer(
+        operation: 'export_csv',
+        success: false,
+        durationMs: stopwatch.elapsedMilliseconds,
+        collectionCount: collectionCount,
+        itemCount: itemCount,
+        error: result.error,
+        stackTrace: result.stackTrace,
+      );
       throw result.error!;
     }
+
+    await OperationalTelemetry.trackDataTransfer(
+      operation: 'export_csv',
+      success: true,
+      durationMs: stopwatch.elapsedMilliseconds,
+      collectionCount: collectionCount,
+      itemCount: itemCount,
+    );
 
     return result.value!;
   }
@@ -152,6 +199,9 @@ class ExportImportViewModel extends _$ExportImportViewModel {
   Future<void> importFromJson() async {
     state = const AsyncValue.loading();
     final performanceService = FirebasePerformanceService.instance;
+    final stopwatch = Stopwatch()..start();
+    var collectionCount = 0;
+    var itemCount = 0;
 
     final result = await AsyncValue.guard(
       () => performanceService.traceAsync(
@@ -164,6 +214,7 @@ class ExportImportViewModel extends _$ExportImportViewModel {
           final data = await exportService.importFromJson();
 
           final collections = data['collections'] as List<dynamic>;
+          collectionCount = collections.length;
           for (final collectionData in collections) {
             final companion = CollectionsCompanion(
               id: Value(collectionData['id'] as String),
@@ -182,6 +233,7 @@ class ExportImportViewModel extends _$ExportImportViewModel {
           }
 
           final items = data['items'] as List<dynamic>;
+          itemCount = items.length;
           for (final itemData in items) {
             final companion = ItemsCompanion(
               id: Value(itemData['id'] as String),
@@ -214,6 +266,28 @@ class ExportImportViewModel extends _$ExportImportViewModel {
     );
 
     _setStateSafely(result);
+    stopwatch.stop();
+
+    if (result.hasError) {
+      await OperationalTelemetry.trackDataTransfer(
+        operation: 'import_json',
+        success: false,
+        durationMs: stopwatch.elapsedMilliseconds,
+        collectionCount: collectionCount,
+        itemCount: itemCount,
+        error: result.error,
+        stackTrace: result.stackTrace,
+      );
+      throw result.error!;
+    }
+
+    await OperationalTelemetry.trackDataTransfer(
+      operation: 'import_json',
+      success: true,
+      durationMs: stopwatch.elapsedMilliseconds,
+      collectionCount: collectionCount,
+      itemCount: itemCount,
+    );
   }
 
   void _setStateSafely(AsyncValue<void> value) {

@@ -6,6 +6,7 @@ export 'analytics_preferences_provider.dart';
 export 'auth_session_providers.dart';
 export 'backend_api_providers.dart';
 export 'firebase_runtime_config_provider.dart';
+export 'operational_telemetry_provider.dart';
 export 'theme_provider.dart';
 export 'items_view_mode_provider.dart';
 export 'collections_view_mode_provider.dart';

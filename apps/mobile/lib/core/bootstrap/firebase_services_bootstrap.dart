@@ -1,6 +1,7 @@
 import 'package:app_firebase/app_firebase.dart';
 import 'package:app_logger/app_logger.dart';
 import 'package:collection_tracker/core/firebase/firebase_runtime_config.dart';
+import 'package:collection_tracker/core/observability/operational_telemetry.dart';
 import 'package:flutter/foundation.dart';
 
 import 'crashlytics_bootstrap.dart';
@@ -93,6 +94,15 @@ abstract final class FirebaseServicesBootstrap {
       'performance: ${runtimeConfig.performanceCollectionEnabled}, '
       'backend: ${runtimeConfig.backendIntegrationEnabled}, '
       'sync: ${runtimeConfig.syncFeatureEnabled}).',
+    );
+    await OperationalTelemetry.trackRuntimeConfigApplied(
+      source: forceFetch ? 'manual_refresh' : 'auto_refresh',
+      analyticsEnabled: runtimeConfig.analyticsCollectionEnabled,
+      crashlyticsEnabled: runtimeConfig.crashlyticsCollectionEnabled,
+      performanceEnabled: runtimeConfig.performanceCollectionEnabled,
+      backendEnabled: runtimeConfig.backendIntegrationEnabled,
+      syncEnabled: runtimeConfig.syncFeatureEnabled,
+      didActivateChanges: didActivateChanges,
     );
 
     return FirebaseRuntimeConfigRefreshResult(
