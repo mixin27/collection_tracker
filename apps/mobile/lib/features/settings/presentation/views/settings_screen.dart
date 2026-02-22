@@ -350,6 +350,21 @@ class SettingsScreen extends ConsumerWidget {
     };
   }
 
+  String _formatSyncRetryAt(DateTime? value) {
+    if (value == null) {
+      return 'Not scheduled';
+    }
+
+    final local = value.toLocal();
+    String twoDigits(int part) => part.toString().padLeft(2, '0');
+    return '${local.year}-'
+        '${twoDigits(local.month)}-'
+        '${twoDigits(local.day)} '
+        '${twoDigits(local.hour)}:'
+        '${twoDigits(local.minute)}:'
+        '${twoDigits(local.second)}';
+  }
+
   Future<void> _showCloudSyncStatusSheet(
     BuildContext context,
     WidgetRef ref,
@@ -645,6 +660,7 @@ class SettingsScreen extends ConsumerWidget {
             final transportConfig = ref.watch(syncTransportConfigProvider);
             final pendingCount =
                 ref.watch(syncOutboxCountProvider).asData?.value ?? 0;
+            final syncState = ref.watch(syncStateProvider).asData?.value;
             final session = ref.watch(authSessionProvider).value;
             final hasSession = session?.isAuthenticated ?? false;
 
@@ -697,6 +713,16 @@ class SettingsScreen extends ConsumerWidget {
                 _CloudSyncStateRow(
                   label: 'Outbox',
                   value: '$pendingCount pending',
+                ),
+                const SizedBox(height: AppSpacing.xs),
+                _CloudSyncStateRow(
+                  label: 'Failures',
+                  value: '${syncState?.consecutiveFailures ?? 0}',
+                ),
+                const SizedBox(height: AppSpacing.xs),
+                _CloudSyncStateRow(
+                  label: 'Next retry',
+                  value: _formatSyncRetryAt(syncState?.nextRetryAt),
                 ),
                 const SizedBox(height: AppSpacing.xs),
                 _CloudSyncStateRow(

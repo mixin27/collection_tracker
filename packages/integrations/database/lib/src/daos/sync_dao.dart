@@ -25,6 +25,8 @@ class SyncDao extends DatabaseAccessor<AppDatabase> with _$SyncDaoMixin {
   Future<void> upsertSyncState({
     DateTime? lastSuccessfulSyncAt,
     DateTime? lastAttemptedSyncAt,
+    DateTime? nextRetryAt,
+    bool clearNextRetryAt = false,
     String? lastRemoteCursor,
     int? consecutiveFailures,
   }) async {
@@ -39,6 +41,9 @@ class SyncDao extends DatabaseAccessor<AppDatabase> with _$SyncDaoMixin {
         ),
         lastAttemptedSyncAt: Value(
           lastAttemptedSyncAt ?? current?.lastAttemptedSyncAt,
+        ),
+        nextRetryAt: Value(
+          clearNextRetryAt ? null : nextRetryAt ?? current?.nextRetryAt,
         ),
         lastRemoteCursor: Value(lastRemoteCursor ?? current?.lastRemoteCursor),
         consecutiveFailures: Value(

@@ -22,7 +22,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase([QueryExecutor? executor]) : super(executor ?? _openConnection());
 
   @override
-  int get schemaVersion => 6;
+  int get schemaVersion => 7;
 
   @override
   MigrationStrategy get migration {
@@ -79,6 +79,10 @@ class AppDatabase extends _$AppDatabase {
             'CREATE INDEX idx_sync_outbox_entity '
             'ON sync_outbox(entity_type, entity_id);',
           );
+        }
+
+        if (from < 7) {
+          await m.addColumn(syncState, syncState.nextRetryAt);
         }
       },
       beforeOpen: (details) async {

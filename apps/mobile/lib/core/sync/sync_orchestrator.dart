@@ -64,6 +64,8 @@ class SyncOrchestrator {
     int maxBatchSize = 1000,
     int maxNetworkRetries = 2,
     Duration initialRetryDelay = const Duration(milliseconds: 600),
+    Duration scheduledRetryBaseDelay = const Duration(seconds: 15),
+    Duration maxScheduledRetryDelay = const Duration(minutes: 10),
     Random? random,
   }) : _syncDao = syncDao,
        _backendClient = backendClient,
@@ -72,6 +74,8 @@ class SyncOrchestrator {
        _maxBatchSize = maxBatchSize,
        _maxNetworkRetries = maxNetworkRetries,
        _initialRetryDelay = initialRetryDelay,
+       _scheduledRetryBaseDelay = scheduledRetryBaseDelay,
+       _maxScheduledRetryDelay = maxScheduledRetryDelay,
        _random = random ?? Random.secure();
 
   final SyncDao _syncDao;
@@ -81,6 +85,8 @@ class SyncOrchestrator {
   final int _maxBatchSize;
   final int _maxNetworkRetries;
   final Duration _initialRetryDelay;
+  final Duration _scheduledRetryBaseDelay;
+  final Duration _maxScheduledRetryDelay;
   final Random _random;
 
   Stream<int> watchPendingOperationCount() {
@@ -170,6 +176,7 @@ class SyncOrchestrator {
 
         await _syncDao.upsertSyncState(
           consecutiveFailures: (state?.consecutiveFailures ?? 0) + 1,
+          nextRetryAt: _scheduledRetryAt((state?.consecutiveFailures ?? 0) + 1),
         );
 
         return SyncAttemptResult(
@@ -201,6 +208,7 @@ class SyncOrchestrator {
       await _syncDao.upsertSyncState(
         lastSuccessfulSyncAt: response.lastSyncAt.toUtc(),
         consecutiveFailures: 0,
+        clearNextRetryAt: true,
       );
 
       return SyncAttemptResult(
@@ -225,6 +233,7 @@ class SyncOrchestrator {
         skippedServerTags: applyResult.skippedTags,
       );
     } on SyncAuthRequiredException catch (error) {
+      await _syncDao.upsertSyncState(clearNextRetryAt: true);
       return SyncAttemptResult(
         executed: false,
         success: false,
@@ -240,8 +249,14 @@ class SyncOrchestrator {
         await _syncDao.markOperationFailed(op.id, errorText);
       }
 
+      final nextFailureCount = (state?.consecutiveFailures ?? 0) + 1;
+      final shouldScheduleRetry = _isRetryableNetworkError(error);
       await _syncDao.upsertSyncState(
-        consecutiveFailures: (state?.consecutiveFailures ?? 0) + 1,
+        consecutiveFailures: nextFailureCount,
+        nextRetryAt: shouldScheduleRetry
+            ? _scheduledRetryAt(nextFailureCount)
+            : null,
+        clearNextRetryAt: !shouldScheduleRetry,
       );
 
       return SyncAttemptResult(
@@ -261,6 +276,7 @@ class SyncOrchestrator {
 
       await _syncDao.upsertSyncState(
         consecutiveFailures: (state?.consecutiveFailures ?? 0) + 1,
+        clearNextRetryAt: true,
       );
 
       return SyncAttemptResult(
@@ -418,5 +434,19 @@ class SyncOrchestrator {
         _initialRetryDelay.inMilliseconds * exponentialMultiplier;
     final jitterMillis = _random.nextInt(250);
     return Duration(milliseconds: baseMillis + jitterMillis);
+  }
+
+  DateTime _scheduledRetryAt(int consecutiveFailures) {
+    final safeFailures = consecutiveFailures < 1 ? 1 : consecutiveFailures;
+    final multiplier = 1 << (safeFailures - 1);
+    final baseMillis = _scheduledRetryBaseDelay.inMilliseconds * multiplier;
+    final cappedMillis = min(
+      baseMillis,
+      _maxScheduledRetryDelay.inMilliseconds,
+    );
+    final jitterMillis = _random.nextInt(1500);
+    return DateTime.now().toUtc().add(
+      Duration(milliseconds: cappedMillis + jitterMillis),
+    );
   }
 }

@@ -245,6 +245,11 @@ final syncOutboxCountProvider = StreamProvider<int>((ref) {
   return dao.watchPendingOperationCount();
 });
 
+final syncStateProvider = StreamProvider<SyncStateData?>((ref) {
+  final dao = ref.watch(syncDaoProvider);
+  return dao.watchSyncState();
+});
+
 String _joinUrl(String baseUrl, String prefix) {
   final base = baseUrl.trim().replaceAll(RegExp(r'/+$'), '');
   final path = prefix.trim();
