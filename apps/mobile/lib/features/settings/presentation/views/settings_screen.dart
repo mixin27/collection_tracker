@@ -3,7 +3,6 @@ import 'package:collection_tracker/core/analytics/analytics_consent_dialog.dart'
 import 'package:collection_tracker/core/analytics/analytics_preferences.dart';
 import 'package:collection_tracker/core/firebase/firebase_runtime_config.dart';
 import 'package:collection_tracker/core/providers/providers.dart';
-import 'package:intl/intl.dart';
 import 'package:collection_tracker/l10n/l10n.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
@@ -527,12 +526,10 @@ class SettingsScreen extends ConsumerWidget {
             final isRefreshing = ref.watch(
               firebaseRuntimeConfigRefreshInProgressProvider,
             );
-            final localeTag = Localizations.localeOf(context).toLanguageTag();
-            final lastFetchTimeText = remoteConfigStatus.lastFetchTime == null
-                ? l10n.settingsFirebaseRuntimeConfigFetchStatusNoFetch
-                : DateFormat.yMd(localeTag).add_Hms().format(
-                    remoteConfigStatus.lastFetchTime!.toLocal(),
-                  );
+            final lastFetchTimeText = _lastFetchTimeLabel(
+              context,
+              remoteConfigStatus.lastFetchTime,
+            );
 
             return Column(
               mainAxisSize: MainAxisSize.min,
@@ -644,7 +641,7 @@ class SettingsScreen extends ConsumerWidget {
     try {
       final result = await ref
           .read(firebaseRuntimeConfigControllerProvider.notifier)
-          .refreshFromRemoteConfig();
+          .refreshFromRemoteConfig(forceFetch: true);
       await ref
           .read(analyticsPreferencesProvider.notifier)
           .syncToAnalyticsService();
@@ -840,17 +837,38 @@ class SettingsScreen extends ConsumerWidget {
 
   String _remoteConfigFetchStatusLabel(
     BuildContext context,
-    dynamic lastFetchStatus,
+    Object? lastFetchStatus,
   ) {
     final l10n = context.l10n;
-    final statusName = lastFetchStatus?.name;
+    final statusText = lastFetchStatus?.toString() ?? '';
 
-    return switch (statusName) {
-      'success' => l10n.settingsFirebaseRuntimeConfigFetchStatusSuccess,
-      'failure' => l10n.settingsFirebaseRuntimeConfigFetchStatusFailure,
-      'throttle' => l10n.settingsFirebaseRuntimeConfigFetchStatusThrottled,
-      _ => l10n.settingsFirebaseRuntimeConfigFetchStatusNoFetch,
-    };
+    if (statusText.contains('success')) {
+      return l10n.settingsFirebaseRuntimeConfigFetchStatusSuccess;
+    }
+    if (statusText.contains('failure')) {
+      return l10n.settingsFirebaseRuntimeConfigFetchStatusFailure;
+    }
+    if (statusText.contains('throttle')) {
+      return l10n.settingsFirebaseRuntimeConfigFetchStatusThrottled;
+    }
+
+    return l10n.settingsFirebaseRuntimeConfigFetchStatusNoFetch;
+  }
+
+  String _lastFetchTimeLabel(BuildContext context, DateTime? lastFetchTime) {
+    if (lastFetchTime == null) {
+      return context.l10n.settingsFirebaseRuntimeConfigFetchStatusNoFetch;
+    }
+
+    final materialLocalizations = MaterialLocalizations.of(context);
+    final localTime = lastFetchTime.toLocal();
+    final dateLabel = materialLocalizations.formatShortDate(localTime);
+    final timeLabel = materialLocalizations.formatTimeOfDay(
+      TimeOfDay.fromDateTime(localTime),
+      alwaysUse24HourFormat: MediaQuery.alwaysUse24HourFormatOf(context),
+    );
+
+    return '$dateLabel $timeLabel';
   }
 }
 

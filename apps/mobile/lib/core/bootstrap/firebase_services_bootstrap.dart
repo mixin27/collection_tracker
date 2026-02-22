@@ -54,8 +54,9 @@ abstract final class FirebaseServicesBootstrap {
     return runtimeConfig;
   }
 
-  static Future<FirebaseRuntimeConfigRefreshResult>
-  refreshRuntimeConfig() async {
+  static Future<FirebaseRuntimeConfigRefreshResult> refreshRuntimeConfig({
+    bool forceFetch = false,
+  }) async {
     final remoteConfigService = FirebaseRemoteConfigService.instance;
     if (!remoteConfigService.isInitialized) {
       final runtimeConfig = await initialize();
@@ -66,7 +67,9 @@ abstract final class FirebaseServicesBootstrap {
       );
     }
 
-    final didActivateChanges = await remoteConfigService.refresh();
+    final didActivateChanges = forceFetch
+        ? await remoteConfigService.refreshForced()
+        : await remoteConfigService.refresh();
     final runtimeConfig = _readRuntimeConfig(remoteConfigService);
 
     await FirebasePerformanceService.instance.setCollectionEnabled(

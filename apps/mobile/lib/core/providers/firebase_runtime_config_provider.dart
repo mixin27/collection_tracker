@@ -1,6 +1,7 @@
 import 'package:app_firebase/app_firebase.dart';
 import 'package:collection_tracker/core/bootstrap/firebase_services_bootstrap.dart';
 import 'package:collection_tracker/core/firebase/firebase_runtime_config.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class FirebaseRuntimeConfigState {
@@ -39,6 +40,12 @@ final firebaseRuntimeConfigControllerProvider =
 
 class FirebaseRuntimeConfigController
     extends Notifier<FirebaseRuntimeConfigState> {
+  static final Duration _defaultResumeRefreshThrottle = kDebugMode
+      ? const Duration(minutes: 1)
+      : const Duration(minutes: 15);
+
+  DateTime? _lastAutoRefreshAttempt;
+
   @override
   FirebaseRuntimeConfigState build() {
     final initialConfig = ref.watch(initialFirebaseRuntimeConfigProvider);
@@ -49,7 +56,9 @@ class FirebaseRuntimeConfigController
     );
   }
 
-  Future<FirebaseRuntimeConfigRefreshResult> refreshFromRemoteConfig() async {
+  Future<FirebaseRuntimeConfigRefreshResult> refreshFromRemoteConfig({
+    bool forceFetch = false,
+  }) async {
     if (state.isRefreshing) {
       return FirebaseRuntimeConfigRefreshResult(
         runtimeConfig: state.config,
@@ -61,7 +70,9 @@ class FirebaseRuntimeConfigController
     state = state.copyWith(isRefreshing: true);
 
     try {
-      final result = await FirebaseServicesBootstrap.refreshRuntimeConfig();
+      final result = await FirebaseServicesBootstrap.refreshRuntimeConfig(
+        forceFetch: forceFetch,
+      );
       state = state.copyWith(
         config: result.runtimeConfig,
         remoteConfigStatus: result.status,
@@ -75,6 +86,23 @@ class FirebaseRuntimeConfigController
       );
       rethrow;
     }
+  }
+
+  Future<FirebaseRuntimeConfigRefreshResult?> refreshFromRemoteConfigIfDue({
+    Duration? minimumInterval,
+    DateTime? now,
+  }) async {
+    final effectiveNow = now ?? DateTime.now();
+    final throttle = minimumInterval ?? _defaultResumeRefreshThrottle;
+    final previousAttempt = _lastAutoRefreshAttempt;
+
+    if (previousAttempt != null &&
+        effectiveNow.difference(previousAttempt) < throttle) {
+      return null;
+    }
+
+    _lastAutoRefreshAttempt = effectiveNow;
+    return refreshFromRemoteConfig();
   }
 }
 

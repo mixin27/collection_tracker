@@ -86,9 +86,7 @@ class ExportImportViewModel extends _$ExportImportViewModel {
       ),
     );
 
-    if (ref.mounted) {
-      state = result;
-    }
+    _setStateSafely(result);
 
     if (result.hasError) {
       throw result.error!;
@@ -142,9 +140,7 @@ class ExportImportViewModel extends _$ExportImportViewModel {
           }),
     );
 
-    if (ref.mounted) {
-      state = result;
-    }
+    _setStateSafely(result);
 
     if (result.hasError) {
       throw result.error!;
@@ -217,8 +213,14 @@ class ExportImportViewModel extends _$ExportImportViewModel {
       ),
     );
 
-    if (ref.mounted) {
-      state = result;
+    _setStateSafely(result);
+  }
+
+  void _setStateSafely(AsyncValue<void> value) {
+    try {
+      state = value;
+    } catch (_) {
+      // Ignore if provider was auto-disposed while async work was running.
     }
   }
 }

@@ -60,6 +60,12 @@ class FirebasePerformanceService {
     Map<String, String>? attributes,
   }) async {
     if (!_isReady) {
+      if (kDebugMode) {
+        debugPrint(
+          'Skipping Firebase trace $traceName: initialized=$_initialized, '
+          'collectionEnabled=$_collectionEnabled',
+        );
+      }
       return null;
     }
 
@@ -124,6 +130,12 @@ class FirebasePerformanceService {
 
   HttpMetric? newHttpMetric(String url, HttpMethod method) {
     if (!_isReady) {
+      if (kDebugMode) {
+        debugPrint(
+          'Skipping Firebase HttpMetric for $url: initialized=$_initialized, '
+          'collectionEnabled=$_collectionEnabled',
+        );
+      }
       return null;
     }
 
