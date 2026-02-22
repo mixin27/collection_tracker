@@ -4,10 +4,14 @@ import 'package:database/database.dart';
 import 'package:domain/domain.dart';
 import 'package:fpdart/fpdart.dart';
 
+import '../sync/outbox_sync_writer.dart';
+
 class ItemRepositoryImpl implements ItemRepository {
   final ItemDao _dao;
+  final SyncOutboxWriter? _syncOutboxWriter;
 
-  ItemRepositoryImpl(this._dao);
+  ItemRepositoryImpl(this._dao, {SyncDao? syncDao})
+    : _syncOutboxWriter = syncDao != null ? SyncOutboxWriter(syncDao) : null;
 
   @override
   Future<Either<AppException, List<Item>>> getItems({
@@ -70,6 +74,7 @@ class ItemRepositoryImpl implements ItemRepository {
     try {
       final companion = _mapToCompanion(item);
       await _dao.insertItem(companion, tags: item.tags);
+      await _queueItemUpsert(item);
       return Right(item);
     } catch (e, stack) {
       return Left(
@@ -94,6 +99,7 @@ class ItemRepositoryImpl implements ItemRepository {
           ),
         );
       }
+      await _queueItemUpsert(item);
       return Right(item);
     } catch (e, stack) {
       return Left(
@@ -108,7 +114,11 @@ class ItemRepositoryImpl implements ItemRepository {
   @override
   Future<Either<AppException, void>> deleteItem(String id) async {
     try {
+      final existing = await _dao.getItemWithTags(id);
       await _dao.deleteItem(id);
+      if (existing != null) {
+        await _queueItemDelete(_mapToEntity(existing.$1, existing.$2));
+      }
       return const Right(null);
     } catch (e, stack) {
       return Left(
@@ -236,7 +246,26 @@ class ItemRepositoryImpl implements ItemRepository {
     required String newName,
   }) async {
     try {
+      final sourceTagBefore = await _dao.getTagByName(oldName.trim());
+      final targetTagBefore = await _dao.getTagByName(newName.trim());
+
       await _dao.renameTag(oldName: oldName, newName: newName);
+
+      if (sourceTagBefore != null) {
+        if (targetTagBefore == null) {
+          final renamedTag = await _dao.getTagByName(newName.trim());
+          if (renamedTag != null) {
+            await _queueTagUpsert(renamedTag);
+          }
+        } else {
+          final mergedTarget = await _dao.getTagByName(newName.trim());
+          if (mergedTarget != null) {
+            await _queueTagUpsert(mergedTarget);
+          }
+          await _queueTagDelete(sourceTagBefore);
+        }
+      }
+
       return const Right(null);
     } catch (e, stack) {
       return Left(
@@ -254,7 +283,21 @@ class ItemRepositoryImpl implements ItemRepository {
     required String targetName,
   }) async {
     try {
+      final sourceTag = await _dao.getTagByName(sourceName.trim());
+      final targetTag = await _dao.getTagByName(targetName.trim());
+
       await _dao.mergeTags(sourceName: sourceName, targetName: targetName);
+
+      if (targetTag != null) {
+        final mergedTarget = await _dao.getTagByName(targetName.trim());
+        if (mergedTarget != null) {
+          await _queueTagUpsert(mergedTarget);
+        }
+      }
+      if (sourceTag != null) {
+        await _queueTagDelete(sourceTag);
+      }
+
       return const Right(null);
     } catch (e, stack) {
       return Left(
@@ -269,7 +312,11 @@ class ItemRepositoryImpl implements ItemRepository {
   @override
   Future<Either<AppException, void>> deleteTag(String tagName) async {
     try {
+      final existingTag = await _dao.getTagByName(tagName.trim());
       await _dao.deleteTagByName(tagName);
+      if (existingTag != null) {
+        await _queueTagDelete(existingTag);
+      }
       return const Right(null);
     } catch (e, stack) {
       return Left(
@@ -339,5 +386,151 @@ class ItemRepositoryImpl implements ItemRepository {
       createdAt: Value(entity.createdAt),
       updatedAt: Value(entity.updatedAt),
     );
+  }
+
+  Future<void> _queueItemUpsert(Item item) async {
+    final writer = _syncOutboxWriter;
+    if (writer == null) {
+      return;
+    }
+
+    try {
+      final tagRecords = await _dao.getTagsByNames(item.tags);
+      for (final tag in tagRecords) {
+        await _queueTagUpsert(tag);
+      }
+
+      final payload = _itemSyncPayload(
+        item: item,
+        tagIds: tagRecords.map((tag) => tag.id).toList(),
+      );
+      await writer.queueUpsert(
+        entityType: 'item',
+        entityId: item.id,
+        payload: payload,
+      );
+    } catch (_) {
+      // Keep local write successful even if sync queue persistence fails.
+    }
+  }
+
+  Future<void> _queueItemDelete(Item item) async {
+    final writer = _syncOutboxWriter;
+    if (writer == null) {
+      return;
+    }
+
+    try {
+      final deletedAt = DateTime.now();
+      final payload = _itemSyncPayload(
+        item: item,
+        tagIds: const <String>[],
+        isDeleted: true,
+        deletedAt: deletedAt,
+        updatedAt: deletedAt,
+      );
+      await writer.queueDelete(
+        entityType: 'item',
+        entityId: item.id,
+        payload: payload,
+      );
+    } catch (_) {
+      // Keep local write successful even if sync queue persistence fails.
+    }
+  }
+
+  Future<void> _queueTagUpsert(TagData tag) async {
+    final writer = _syncOutboxWriter;
+    if (writer == null) {
+      return;
+    }
+
+    try {
+      await writer.queueUpsert(
+        entityType: 'tag',
+        entityId: tag.id,
+        payload: _tagSyncPayload(tag: tag),
+      );
+    } catch (_) {
+      // Keep local write successful even if sync queue persistence fails.
+    }
+  }
+
+  Future<void> _queueTagDelete(TagData tag) async {
+    final writer = _syncOutboxWriter;
+    if (writer == null) {
+      return;
+    }
+
+    try {
+      final deletedAt = DateTime.now();
+      await writer.queueDelete(
+        entityType: 'tag',
+        entityId: tag.id,
+        payload: _tagSyncPayload(
+          tag: tag,
+          isDeleted: true,
+          deletedAt: deletedAt,
+          updatedAt: deletedAt,
+        ),
+      );
+    } catch (_) {
+      // Keep local write successful even if sync queue persistence fails.
+    }
+  }
+
+  Map<String, dynamic> _itemSyncPayload({
+    required Item item,
+    required List<String> tagIds,
+    bool isDeleted = false,
+    DateTime? deletedAt,
+    DateTime? updatedAt,
+  }) {
+    final effectiveUpdatedAt = updatedAt ?? item.updatedAt;
+    return {
+      'id': item.id,
+      'collectionId': item.collectionId,
+      'title': item.title,
+      'barcode': item.barcode,
+      'coverImageUrl': item.coverImageUrl,
+      'coverImagePath': item.coverImagePath,
+      'description': item.description,
+      'notes': item.notes,
+      'metadata': item.metadata != null ? jsonEncode(item.metadata) : null,
+      'condition': item.condition?.name,
+      'purchasePrice': item.purchasePrice,
+      'purchaseDate': item.purchaseDate?.toUtc().toIso8601String(),
+      'currentValue': item.currentValue,
+      'location': item.location,
+      'isFavorite': item.isFavorite,
+      'isWishlist': item.isWishlist,
+      'sortOrder': item.sortOrder,
+      'quantity': item.quantity,
+      'version': 1,
+      'isDeleted': isDeleted,
+      if (deletedAt != null) 'deletedAt': deletedAt.toUtc().toIso8601String(),
+      'createdAt': item.createdAt.toUtc().toIso8601String(),
+      'updatedAt': effectiveUpdatedAt.toUtc().toIso8601String(),
+      'tagIds': tagIds,
+    };
+  }
+
+  Map<String, dynamic> _tagSyncPayload({
+    required TagData tag,
+    bool isDeleted = false,
+    DateTime? deletedAt,
+    DateTime? updatedAt,
+  }) {
+    final effectiveUpdatedAt = updatedAt ?? tag.updatedAt;
+    return {
+      'id': tag.id,
+      'name': tag.name,
+      'color': tag.color,
+      'version': 1,
+      'isDeleted': isDeleted,
+      if (deletedAt != null) 'deletedAt': deletedAt.toUtc().toIso8601String(),
+      'createdAt': tag.createdAt.toUtc().toIso8601String(),
+      'updatedAt': effectiveUpdatedAt.toUtc().toIso8601String(),
+    };
   }
 }

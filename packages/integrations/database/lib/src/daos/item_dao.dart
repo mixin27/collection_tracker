@@ -1,12 +1,15 @@
 import 'package:database/src/app_database.dart';
 import 'package:database/src/tables/tables.dart';
 import 'package:drift/drift.dart';
+import 'package:uuid/uuid.dart';
 
 part 'item_dao.g.dart';
 
 @DriftAccessor(tables: [Items, Collections, ItemTags, Tags, ItemPriceHistory])
 class ItemDao extends DatabaseAccessor<AppDatabase> with _$ItemDaoMixin {
   ItemDao(super.db);
+
+  static const Uuid _uuid = Uuid();
 
   // Get all tags with usage count
   Future<List<(String, int)>> getTagsWithUsage() async {
@@ -209,6 +212,20 @@ class ItemDao extends DatabaseAccessor<AppDatabase> with _$ItemDaoMixin {
 
     final result = await query.map((row) => row.readTable(tags).name).get();
     return result;
+  }
+
+  Future<TagData?> getTagByName(String tagName) {
+    return (select(
+      tags,
+    )..where((tbl) => tbl.name.equals(tagName))).getSingleOrNull();
+  }
+
+  Future<List<TagData>> getTagsByNames(List<String> tagNames) async {
+    if (tagNames.isEmpty) {
+      return const <TagData>[];
+    }
+
+    return (select(tags)..where((tbl) => tbl.name.isIn(tagNames))).get();
   }
 
   // Watch tags for an item
@@ -516,8 +533,7 @@ class ItemDao extends DatabaseAccessor<AppDatabase> with _$ItemDaoMixin {
       if (existingTag != null) {
         tagIds.add(existingTag.id);
       } else {
-        final newTagId = DateTime.now().microsecondsSinceEpoch
-            .toString(); // Simple ID generation
+        final newTagId = _uuid.v4();
         await into(tags).insert(
           TagsCompanion.insert(
             id: newTagId,
