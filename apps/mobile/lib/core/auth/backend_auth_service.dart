@@ -64,22 +64,31 @@ class BackendAuthService {
       return null;
     }
 
-    final tokens = await _client.refresh(
-      BackendRefreshTokenRequest(
-        refreshToken: existing.refreshToken!,
-        deviceId: existing.deviceId!,
-      ),
-    );
+    try {
+      final tokens = await _client.refresh(
+        BackendRefreshTokenRequest(
+          refreshToken: existing.refreshToken!,
+          deviceId: existing.deviceId!,
+        ),
+      );
 
-    final updated = existing.copyWith(
-      status: AuthSessionStatus.signedIn,
-      accessToken: tokens.accessToken,
-      refreshToken: tokens.refreshToken,
-      updatedAt: DateTime.now().toUtc(),
-    );
+      final updated = existing.copyWith(
+        status: AuthSessionStatus.signedIn,
+        accessToken: tokens.accessToken,
+        refreshToken: tokens.refreshToken,
+        updatedAt: DateTime.now().toUtc(),
+      );
 
-    await _sessionStore.saveSession(updated);
-    return updated;
+      await _sessionStore.saveSession(updated);
+      return updated;
+    } on BackendApiException catch (error) {
+      final statusCode = error.statusCode;
+      if (statusCode == 401 || statusCode == 403) {
+        await _sessionStore.clearSession();
+        return null;
+      }
+      rethrow;
+    }
   }
 
   Future<void> signOut() async {

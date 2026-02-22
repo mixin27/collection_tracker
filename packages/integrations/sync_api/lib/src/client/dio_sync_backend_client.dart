@@ -54,7 +54,9 @@ class DioSyncBackendClient implements SyncBackendClient {
     var tokenApplied = await _applyAccessToken();
 
     if (!tokenApplied) {
-      final refreshedToken = await _authTokenProvider.refreshAccessToken();
+      final refreshedToken = await _refreshAccessToken(
+        requireAuth: requireAuth,
+      );
       if (refreshedToken != null && refreshedToken.isNotEmpty) {
         _dio.options.headers['Authorization'] = 'Bearer $refreshedToken';
         tokenApplied = true;
@@ -62,7 +64,9 @@ class DioSyncBackendClient implements SyncBackendClient {
     }
 
     if (requireAuth && !tokenApplied) {
-      throw const SyncAuthRequiredException();
+      throw const SyncAuthRequiredException(
+        message: 'Your sync session expired. Please sign in again.',
+      );
     }
 
     try {
@@ -72,16 +76,50 @@ class DioSyncBackendClient implements SyncBackendClient {
         rethrow;
       }
 
-      final refreshedToken = await _authTokenProvider.refreshAccessToken();
+      final refreshedToken = await _refreshAccessToken(
+        requireAuth: requireAuth,
+      );
       if (refreshedToken == null || refreshedToken.isEmpty) {
         if (requireAuth) {
-          throw const SyncAuthRequiredException();
+          throw const SyncAuthRequiredException(
+            message: 'Your sync session expired. Please sign in again.',
+          );
         }
         rethrow;
       }
 
       _dio.options.headers['Authorization'] = 'Bearer $refreshedToken';
-      return runRequest();
+      try {
+        return await runRequest();
+      } on DioException catch (retryError) {
+        if (!_isUnauthorized(retryError)) {
+          rethrow;
+        }
+        await _clearAuthState();
+        if (requireAuth) {
+          throw const SyncAuthRequiredException(
+            message: 'Your sync session expired. Please sign in again.',
+          );
+        }
+        rethrow;
+      }
+    }
+  }
+
+  Future<String?> _refreshAccessToken({required bool requireAuth}) async {
+    try {
+      return await _authTokenProvider.refreshAccessToken();
+    } on DioException catch (error) {
+      if (!_isUnauthorized(error)) {
+        rethrow;
+      }
+      await _clearAuthState();
+      if (requireAuth) {
+        throw const SyncAuthRequiredException(
+          message: 'Your sync session expired. Please sign in again.',
+        );
+      }
+      return null;
     }
   }
 
@@ -96,7 +134,13 @@ class DioSyncBackendClient implements SyncBackendClient {
   }
 
   bool _isUnauthorized(DioException error) {
-    return error.response?.statusCode == 401;
+    final status = error.response?.statusCode;
+    return status == 401 || status == 403;
+  }
+
+  Future<void> _clearAuthState() async {
+    _dio.options.headers.remove('Authorization');
+    await _authTokenProvider.clearTokens();
   }
 
   static Map<String, dynamic> _asJsonMap(Object? raw) {
