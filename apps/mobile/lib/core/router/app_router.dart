@@ -7,6 +7,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../../features/collections/presentation/views/collections_screen.dart';
 import '../../features/collections/presentation/views/create_collection_screen.dart';
 import '../../features/collections/presentation/views/edit_collection_screen.dart';
+import '../../features/auth/presentation/views/auth_screen.dart';
 import '../../features/items/presentation/views/add_item_screen.dart';
 import '../../features/items/presentation/views/edit_item_screen.dart';
 import '../../features/items/presentation/views/item_detail_screen.dart';
@@ -45,6 +46,20 @@ GoRouter appRouter(Ref ref) {
         name: 'onboarding',
         builder: (context, state) =>
             withAnalyticsConsent(const OnboardingScreen()),
+      ),
+      GoRoute(
+        path: Routes.auth,
+        name: 'auth',
+        parentNavigatorKey: _rootNavigatorKey,
+        builder: (context, state) {
+          final mode = state.uri.queryParameters['mode'];
+          final initialMode = mode == 'register'
+              ? AuthScreenMode.register
+              : AuthScreenMode.signIn;
+          return withAnalyticsConsent(
+            AuthScreen(initialMode: initialMode, popOnSuccess: true),
+          );
+        },
       ),
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) {

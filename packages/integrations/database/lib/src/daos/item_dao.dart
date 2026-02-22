@@ -29,6 +29,10 @@ class ItemDao extends DatabaseAccessor<AppDatabase> with _$ItemDaoMixin {
         .toList();
   }
 
+  Future<List<TagData>> getAllTags() {
+    return (select(tags)..orderBy([(tbl) => OrderingTerm.asc(tbl.name)])).get();
+  }
+
   // Watch all tags with usage count
   Stream<List<(String, int)>> watchTagsWithUsage() {
     return customSelect(

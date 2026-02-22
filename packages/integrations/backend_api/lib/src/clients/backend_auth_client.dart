@@ -107,15 +107,12 @@ class BackendAuthClient {
   BackendApiException _mapDioError(DioException error) {
     final statusCode = error.response?.statusCode;
     final responseData = error.response?.data;
+    final fallbackMessage = error.message ?? 'Backend API request failed';
 
     if (responseData is Map) {
       final map = responseData.cast<String, dynamic>();
-      final message =
-          (map['message'] as String?) ??
-          _extractMessageFromNestedData(map) ??
-          error.message ??
-          'Backend API request failed';
-      final code = map['code'] as String?;
+      final message = _extractMessage(map) ?? fallbackMessage;
+      final code = _extractCode(map);
       return BackendApiException(
         message: message,
         statusCode: statusCode,
@@ -125,18 +122,84 @@ class BackendAuthClient {
     }
 
     return BackendApiException(
-      message: error.message ?? 'Backend API request failed',
+      message: _normalizeMessage(responseData) ?? fallbackMessage,
       statusCode: statusCode,
       raw: responseData,
     );
   }
 
-  String? _extractMessageFromNestedData(Map<String, dynamic> map) {
+  String? _extractMessage(Map<String, dynamic> map) {
+    final direct =
+        _normalizeMessage(map['message']) ?? _normalizeMessage(map['error']);
+    if (direct != null) {
+      return direct;
+    }
+
     final data = map['data'];
     if (data is Map) {
-      return data['message'] as String?;
+      return _normalizeMessage(data['message']) ??
+          _normalizeMessage(data['error']);
     }
+
     return null;
+  }
+
+  String? _extractCode(Map<String, dynamic> map) {
+    final directCode = _normalizeCode(map['code']);
+    if (directCode != null) {
+      return directCode;
+    }
+
+    final data = map['data'];
+    if (data is Map) {
+      return _normalizeCode(data['code']);
+    }
+
+    return null;
+  }
+
+  String? _normalizeCode(Object? value) {
+    if (value == null) {
+      return null;
+    }
+
+    final text = value.toString().trim();
+    return text.isEmpty ? null : text;
+  }
+
+  String? _normalizeMessage(Object? value) {
+    if (value == null) {
+      return null;
+    }
+
+    if (value is String) {
+      final text = value.trim();
+      return text.isEmpty ? null : text;
+    }
+
+    if (value is List) {
+      final parts = value
+          .map(_normalizeMessage)
+          .whereType<String>()
+          .where((text) => text.isNotEmpty)
+          .toList();
+      if (parts.isEmpty) {
+        return null;
+      }
+      return parts.join(', ');
+    }
+
+    if (value is Map) {
+      final nested =
+          _normalizeMessage(value['message']) ??
+          _normalizeMessage(value['error']);
+      if (nested != null) {
+        return nested;
+      }
+    }
+
+    final text = value.toString().trim();
+    return text.isEmpty ? null : text;
   }
 
   Map<String, dynamic> _unwrapToMap(Object? raw) {

@@ -1,6 +1,7 @@
 abstract final class Routes {
   static const home = '/';
   static const login = '/login';
+  static const auth = '/auth';
   static const onboarding = '/onboarding';
   static const collections = '/collections';
   static const items = '/items';

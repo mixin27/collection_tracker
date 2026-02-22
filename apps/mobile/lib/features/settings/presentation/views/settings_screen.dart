@@ -1,9 +1,10 @@
 import 'package:app_logger/app_logger.dart';
-import 'package:backend_api/backend_api.dart';
+import 'package:auth_session/auth_session.dart';
 import 'package:collection_tracker/core/analytics/analytics_consent_dialog.dart';
 import 'package:collection_tracker/core/analytics/analytics_preferences.dart';
 import 'package:collection_tracker/core/firebase/firebase_runtime_config.dart';
 import 'package:collection_tracker/core/providers/providers.dart';
+import 'package:collection_tracker/core/router/routes.dart';
 import 'package:collection_tracker/l10n/l10n.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
@@ -27,14 +28,18 @@ class SettingsScreen extends ConsumerWidget {
     final firebaseRuntimeConfig = ref.watch(firebaseRuntimeConfigProvider);
     final syncReadiness = ref.watch(syncReadinessProvider);
     final pendingSyncCount = ref.watch(syncOutboxCountProvider).value ?? 0;
+    final authSession = ref.watch(authSessionProvider).value;
     final themeSummary =
         '${_themeModeLabel(context, themeSettings.mode)} - ${themeSettings.variant.label}';
     final languageSummary = _languageLabel(context, currentLanguage);
     final analyticsSummary = _analyticsSummary(context, analyticsPreferences);
+    final accountSummary = _authAccountSummary(authSession);
     final cloudSyncSummary = _cloudSyncSummary(
       syncReadiness,
       pendingSyncCount: pendingSyncCount,
     );
+    final cloudSyncFeatureEnabled =
+        syncReadiness.status != SyncReadinessStatus.disabledByFeatureFlag;
     final firebaseRuntimeSummary = _firebaseRuntimeSummary(
       context,
       firebaseRuntimeConfig,
@@ -72,6 +77,12 @@ class SettingsScreen extends ConsumerWidget {
                   subtitle: analyticsSummary,
                   onTap: () => _showAnalyticsSettings(context, ref),
                 ),
+                _SettingsTile(
+                  icon: Icons.person_outline_rounded,
+                  title: 'Account',
+                  subtitle: accountSummary,
+                  onTap: () => context.push(Routes.auth),
+                ),
               ],
             ),
           ),
@@ -108,7 +119,10 @@ class SettingsScreen extends ConsumerWidget {
                   icon: Icons.cloud_upload,
                   title: l10n.settingsCloudSyncTitle,
                   subtitle: cloudSyncSummary,
-                  onTap: () => _showCloudSyncStatusSheet(context, ref),
+                  enabled: cloudSyncFeatureEnabled,
+                  onTap: cloudSyncFeatureEnabled
+                      ? () => _showCloudSyncStatusSheet(context, ref)
+                      : null,
                 ),
                 _SettingsTile(
                   icon: Icons.sell_outlined,
@@ -155,6 +169,12 @@ class SettingsScreen extends ConsumerWidget {
                     title: l10n.settingsFirebaseRuntimeConfigTitle,
                     subtitle: firebaseRuntimeSummary,
                     onTap: () => _showFirebaseRuntimeConfigSheet(context, ref),
+                  ),
+                  _SettingsTile(
+                    icon: Icons.cloud_sync_outlined,
+                    title: 'Cloud Sync Diagnostics',
+                    subtitle: 'Debug sync transport and auth readiness',
+                    onTap: () => _showCloudSyncDiagnosticsSheet(context, ref),
                   ),
                   _SettingsTile(
                     icon: Icons.bug_report_outlined,
@@ -296,15 +316,21 @@ class SettingsScreen extends ConsumerWidget {
   }) {
     return switch (readiness.status) {
       SyncReadinessStatus.ready =>
-        'Ready • $pendingSyncCount pending change(s)',
-      SyncReadinessStatus.disabledByFeatureFlag => 'Feature disabled by flags',
-      SyncReadinessStatus.missingApiConfiguration =>
-        'Sync API is not configured',
-      SyncReadinessStatus.checkingAuthentication =>
-        'Checking authentication session...',
-      SyncReadinessStatus.authenticationRequired =>
-        'Sign in required for sync features',
+        pendingSyncCount > 0
+            ? 'Ready • $pendingSyncCount pending change(s)'
+            : 'Ready',
+      SyncReadinessStatus.disabledByFeatureFlag => 'Unavailable',
+      SyncReadinessStatus.missingApiConfiguration => 'Configuration required',
+      SyncReadinessStatus.checkingAuthentication => 'Checking session...',
+      SyncReadinessStatus.authenticationRequired => 'Sign in required',
     };
+  }
+
+  String _authAccountSummary(AuthSession? session) {
+    if (session == null || !session.isAuthenticated) {
+      return 'Not signed in';
+    }
+    return 'Signed in';
   }
 
   String _cloudSyncPrimaryCta(SyncReadinessStatus status) {
@@ -329,7 +355,6 @@ class SettingsScreen extends ConsumerWidget {
             final readiness = ref.watch(syncReadinessProvider);
             final pendingCount =
                 ref.watch(syncOutboxCountProvider).asData?.value ?? 0;
-            final transportConfig = ref.watch(syncTransportConfigProvider);
             final isBusy =
                 readiness.status == SyncReadinessStatus.checkingAuthentication;
 
@@ -349,25 +374,6 @@ class SettingsScreen extends ConsumerWidget {
                   style: Theme.of(sheetContext).textTheme.bodyMedium?.copyWith(
                     color: Theme.of(sheetContext).colorScheme.onSurfaceVariant,
                   ),
-                ),
-                const SizedBox(height: AppSpacing.md),
-                _CloudSyncStateRow(
-                  label: 'Feature flag',
-                  value: transportConfig.featureFlagEnabled
-                      ? 'Enabled'
-                      : 'Disabled',
-                ),
-                const SizedBox(height: AppSpacing.xs),
-                _CloudSyncStateRow(
-                  label: 'API base URL',
-                  value: transportConfig.baseUrl.trim().isEmpty
-                      ? 'Not set'
-                      : transportConfig.normalizedApiBaseUrl,
-                ),
-                const SizedBox(height: AppSpacing.xs),
-                _CloudSyncStateRow(
-                  label: 'Outbox pending',
-                  value: '$pendingCount',
                 ),
                 const SizedBox(height: AppSpacing.lg),
                 AppButton(
@@ -407,15 +413,14 @@ class SettingsScreen extends ConsumerWidget {
         return;
       case SyncReadinessStatus.authenticationRequired:
         Navigator.of(sheetContext).pop();
-        await _showSyncSignInSheet(context, ref);
+        if (!context.mounted) return;
+        await context.push<bool>('${Routes.auth}?mode=signin');
         return;
       case SyncReadinessStatus.missingApiConfiguration:
         Navigator.of(sheetContext).pop();
         await _showSyncApiConfigurationHelp(context, ref);
         return;
       case SyncReadinessStatus.disabledByFeatureFlag:
-        Navigator.of(sheetContext).pop();
-        await _showFeatureDisabledHelp(context);
         return;
       case SyncReadinessStatus.checkingAuthentication:
         return;
@@ -435,208 +440,49 @@ class SettingsScreen extends ConsumerWidget {
       return;
     }
 
+    final bootstrapResult = await ref
+        .read(syncOutboxBootstrapperProvider)
+        .seedFromLocalDataIfNeeded();
+
     final result = await ref
         .read(syncOrchestratorProvider)
         .syncNow(deviceId: deviceId);
 
     if (!context.mounted) return;
+    final bootstrapMessage = bootstrapResult.totalOperations > 0
+        ? 'Prepared ${bootstrapResult.totalOperations} local change(s). '
+        : '';
+    final recoveryHint = bootstrapResult.skipped && !result.executed
+        ? ' If existing local data is missing on cloud, open Cloud Sync Diagnostics and use "Rebuild local sync queue".'
+        : '';
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(result.message),
+        content: Text('$bootstrapMessage${result.message}$recoveryHint'),
         backgroundColor: result.success ? Colors.green : Colors.orange,
       ),
     );
   }
 
-  Future<void> _showSyncSignInSheet(BuildContext context, WidgetRef ref) async {
-    final existingSession = ref.read(authSessionProvider).asData?.value;
-    final emailController = TextEditingController();
-    final passwordController = TextEditingController();
-    final displayNameController = TextEditingController();
+  Future<void> _rebuildSyncOutboxFromLocal(
+    BuildContext context,
+    WidgetRef ref,
+  ) async {
+    final result = await ref
+        .read(syncOutboxBootstrapperProvider)
+        .rebuildFromLocalData();
 
-    try {
-      await showAppSheet(
-        context: context,
-        builder: (sheetContext) {
-          var isRegisterMode = false;
-          var isSubmitting = false;
-          return StatefulBuilder(
-            builder: (context, setState) {
-              return Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    isRegisterMode ? 'Create Sync Account' : 'Sign in for Sync',
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                  const SizedBox(height: AppSpacing.sm),
-                  Text(
-                    'Auth is optional for the app. Sign in only if you want cloud sync and backend features.',
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
-                    ),
-                  ),
-                  const SizedBox(height: AppSpacing.md),
-                  AppInput(
-                    controller: emailController,
-                    labelText: 'Email',
-                    keyboardType: TextInputType.emailAddress,
-                  ),
-                  const SizedBox(height: AppSpacing.sm),
-                  AppInput(
-                    controller: passwordController,
-                    labelText: 'Password',
-                  ),
-                  if (isRegisterMode) ...[
-                    const SizedBox(height: AppSpacing.sm),
-                    AppInput(
-                      controller: displayNameController,
-                      labelText: 'Display name (optional)',
-                    ),
-                  ],
-                  const SizedBox(height: AppSpacing.lg),
-                  AppButton(
-                    label: isSubmitting
-                        ? 'Please wait...'
-                        : (isRegisterMode ? 'Create account' : 'Sign in'),
-                    onPressed: isSubmitting
-                        ? null
-                        : () async {
-                            final service = ref.read(
-                              backendAuthServiceProvider,
-                            );
-                            if (service == null) {
-                              if (!context.mounted) return;
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text(
-                                    'Backend integration is disabled or not configured.',
-                                  ),
-                                ),
-                              );
-                              return;
-                            }
-
-                            final email = emailController.text.trim();
-                            final password = passwordController.text;
-                            final displayName = displayNameController.text
-                                .trim();
-
-                            if (email.isEmpty || password.isEmpty) {
-                              if (!context.mounted) return;
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text(
-                                    'Email and password are required.',
-                                  ),
-                                ),
-                              );
-                              return;
-                            }
-
-                            setState(() => isSubmitting = true);
-
-                            try {
-                              if (isRegisterMode) {
-                                await service.register(
-                                  email: email,
-                                  password: password,
-                                  displayName: displayName.isEmpty
-                                      ? null
-                                      : displayName,
-                                );
-                              } else {
-                                await service.signIn(
-                                  email: email,
-                                  password: password,
-                                );
-                              }
-
-                              if (!context.mounted) return;
-                              Navigator.of(context).pop();
-                              ScaffoldMessenger.of(sheetContext).showSnackBar(
-                                SnackBar(
-                                  content: Text(
-                                    isRegisterMode
-                                        ? 'Account created and signed in.'
-                                        : 'Signed in successfully.',
-                                  ),
-                                  backgroundColor: Colors.green,
-                                ),
-                              );
-                            } on BackendApiException catch (error) {
-                              if (!context.mounted) return;
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(content: Text(error.message)),
-                              );
-                            } catch (error) {
-                              if (!context.mounted) return;
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text('Sign-in failed: $error'),
-                                ),
-                              );
-                            } finally {
-                              if (context.mounted) {
-                                setState(() => isSubmitting = false);
-                              }
-                            }
-                          },
-                  ),
-                  const SizedBox(height: AppSpacing.sm),
-                  AppButton(
-                    label: isRegisterMode
-                        ? 'Already have an account? Sign in'
-                        : 'Create new account',
-                    variant: AppButtonVariant.ghost,
-                    onPressed: isSubmitting
-                        ? null
-                        : () {
-                            setState(() => isRegisterMode = !isRegisterMode);
-                          },
-                  ),
-                  if ((existingSession?.isAuthenticated ?? false)) ...[
-                    const SizedBox(height: AppSpacing.sm),
-                    AppButton(
-                      label: 'Sign out',
-                      variant: AppButtonVariant.secondary,
-                      onPressed: isSubmitting
-                          ? null
-                          : () async {
-                              final service = ref.read(
-                                backendAuthServiceProvider,
-                              );
-                              if (service != null) {
-                                await service.signOut();
-                              } else {
-                                await ref
-                                    .read(authSessionStoreProvider)
-                                    .clearSession();
-                              }
-                              if (!context.mounted) return;
-                              Navigator.of(context).pop();
-                              ScaffoldMessenger.of(sheetContext).showSnackBar(
-                                const SnackBar(
-                                  content: Text('Sync session cleared.'),
-                                ),
-                              );
-                            },
-                    ),
-                  ],
-                ],
-              );
-            },
-          );
-        },
-      );
-    } finally {
-      emailController.dispose();
-      passwordController.dispose();
-      displayNameController.dispose();
-    }
+    if (!context.mounted) return;
+    final message = result.totalOperations > 0
+        ? 'Rebuilt queue with ${result.totalOperations} local change(s). Run Sync now.'
+        : 'No local data found to queue for sync.';
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: result.totalOperations > 0
+            ? Colors.green
+            : Colors.orange,
+      ),
+    );
   }
 
   Future<void> _showSyncApiConfigurationHelp(
@@ -662,7 +508,7 @@ class SettingsScreen extends ConsumerWidget {
             ),
             const SizedBox(height: AppSpacing.sm),
             Text(
-              'Set your local API URL. Android emulator: 10.0.2.2. iOS simulator: localhost. Physical device: use your computer LAN IP.',
+              'Enter backend API base URL used for sync and authentication.',
               style: Theme.of(sheetContext).textTheme.bodyMedium?.copyWith(
                 color: Theme.of(sheetContext).colorScheme.onSurfaceVariant,
               ),
@@ -725,23 +571,115 @@ class SettingsScreen extends ConsumerWidget {
     controller.dispose();
   }
 
-  Future<void> _showFeatureDisabledHelp(BuildContext context) async {
-    await showAppDialog<void>(
+  Future<void> _showCloudSyncDiagnosticsSheet(
+    BuildContext context,
+    WidgetRef ref,
+  ) async {
+    await showAppSheet(
       context: context,
-      title: const Text('Feature disabled'),
-      content: const Text(
-        'Cloud sync/backend integration is disabled by feature flags. Enable '
-        'Remote Config keys app_backend_integration_enabled + '
-        'app_sync_feature_enabled, or use --dart-define BACKEND_INTEGRATION_ENABLED=true '
-        'and BACKEND_SYNC_ENABLED=true for local development.',
-      ),
-      actions: [
-        AppButton(
-          label: context.l10n.actionDismiss,
-          variant: AppButtonVariant.ghost,
-          onPressed: () => closeAppDialog(context),
-        ),
-      ],
+      builder: (sheetContext) {
+        return Consumer(
+          builder: (sheetContext, ref, _) {
+            final readiness = ref.watch(syncReadinessProvider);
+            final transportConfig = ref.watch(syncTransportConfigProvider);
+            final pendingCount =
+                ref.watch(syncOutboxCountProvider).asData?.value ?? 0;
+            final session = ref.watch(authSessionProvider).value;
+            final hasSession = session?.isAuthenticated ?? false;
+
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Cloud Sync Diagnostics',
+                  style: Theme.of(sheetContext).textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                const SizedBox(height: AppSpacing.sm),
+                _CloudSyncStateRow(
+                  label: 'Readiness',
+                  value: readiness.status.name,
+                ),
+                const SizedBox(height: AppSpacing.xs),
+                _CloudSyncStateRow(label: 'Message', value: readiness.message),
+                const SizedBox(height: AppSpacing.xs),
+                _CloudSyncStateRow(
+                  label: 'Backend flag',
+                  value: transportConfig.backendFeatureEnabled
+                      ? 'Enabled'
+                      : 'Disabled',
+                ),
+                const SizedBox(height: AppSpacing.xs),
+                _CloudSyncStateRow(
+                  label: 'Sync flag',
+                  value: transportConfig.syncFeatureEnabled
+                      ? 'Enabled'
+                      : 'Disabled',
+                ),
+                const SizedBox(height: AppSpacing.xs),
+                _CloudSyncStateRow(
+                  label: 'Base URL',
+                  value: transportConfig.baseUrl.isEmpty
+                      ? 'Not configured'
+                      : transportConfig.baseUrl,
+                ),
+                const SizedBox(height: AppSpacing.xs),
+                _CloudSyncStateRow(
+                  label: 'Resolved URL',
+                  value: transportConfig.isApiBaseUrlConfigured
+                      ? transportConfig.normalizedApiBaseUrl
+                      : 'Not available',
+                ),
+                const SizedBox(height: AppSpacing.xs),
+                _CloudSyncStateRow(
+                  label: 'Outbox',
+                  value: '$pendingCount pending',
+                ),
+                const SizedBox(height: AppSpacing.xs),
+                _CloudSyncStateRow(
+                  label: 'Auth',
+                  value: hasSession ? 'Signed in' : 'Signed out',
+                ),
+                const SizedBox(height: AppSpacing.xs),
+                _CloudSyncStateRow(
+                  label: 'Device',
+                  value: session?.deviceId ?? 'Unavailable',
+                ),
+                const SizedBox(height: AppSpacing.lg),
+                if (!transportConfig.isApiBaseUrlConfigured) ...[
+                  AppButton(
+                    label: 'Configure API',
+                    onPressed: () async {
+                      Navigator.of(sheetContext).pop();
+                      await _showSyncApiConfigurationHelp(context, ref);
+                    },
+                    expand: true,
+                  ),
+                  const SizedBox(height: AppSpacing.sm),
+                ],
+                AppButton(
+                  label: 'Rebuild local sync queue',
+                  variant: AppButtonVariant.secondary,
+                  onPressed: () async {
+                    Navigator.of(sheetContext).pop();
+                    await _rebuildSyncOutboxFromLocal(context, ref);
+                  },
+                  expand: true,
+                ),
+                const SizedBox(height: AppSpacing.sm),
+                AppButton(
+                  label: sheetContext.l10n.actionDismiss,
+                  variant: AppButtonVariant.ghost,
+                  onPressed: () => Navigator.of(sheetContext).pop(),
+                  expand: true,
+                ),
+              ],
+            );
+          },
+        );
+      },
     );
   }
 
@@ -1556,27 +1494,37 @@ class _SettingsTile extends StatelessWidget {
   final String title;
   final String? subtitle;
   final VoidCallback? onTap;
+  final bool enabled;
 
   const _SettingsTile({
     required this.icon,
     required this.title,
     this.subtitle,
     this.onTap,
+    this.enabled = true,
   });
 
   @override
   Widget build(BuildContext context) {
+    final canTap = enabled && onTap != null;
+
     return ListTile(
+      enabled: enabled,
       leading: Icon(icon),
       title: Text(title),
       subtitle: subtitle != null ? Text(subtitle!) : null,
-      trailing: onTap != null
+      trailing: canTap
           ? Icon(
               Icons.chevron_right_rounded,
               color: Theme.of(context).colorScheme.onSurfaceVariant,
             )
-          : null,
-      onTap: onTap,
+          : (!enabled
+                ? Icon(
+                    Icons.lock_outline_rounded,
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  )
+                : null),
+      onTap: canTap ? onTap : null,
     );
   }
 }

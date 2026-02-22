@@ -114,6 +114,30 @@ class SyncOrchestrator {
         ),
       );
 
+      final processedOperations = _processedOperationCount(response);
+      if (processedOperations < pending.length) {
+        final errorText =
+            'Sync response did not process all operations '
+            '(processed: $processedOperations, pending: ${pending.length}).';
+
+        for (final op in pending) {
+          await _syncDao.markOperationFailed(op.id, errorText);
+        }
+
+        await _syncDao.upsertSyncState(
+          consecutiveFailures: (state?.consecutiveFailures ?? 0) + 1,
+        );
+
+        return SyncAttemptResult(
+          executed: true,
+          success: false,
+          message:
+              'Sync partially processed. Local queue kept for retry. '
+              'Processed $processedOperations of ${pending.length} change(s).',
+          error: errorText,
+        );
+      }
+
       for (final op in pending) {
         await _syncDao.markOperationSynced(op.id);
       }
@@ -182,5 +206,12 @@ class SyncOrchestrator {
       items: items,
       tags: tags,
     );
+  }
+
+  int _processedOperationCount(SyncResponsePayload response) {
+    return response.syncedCollections +
+        response.syncedItems +
+        response.syncedTags +
+        response.conflicts.length;
   }
 }

@@ -1,6 +1,7 @@
 import 'package:collection_tracker/core/providers/database_providers.dart';
 import 'package:collection_tracker/core/providers/auth_session_providers.dart';
 import 'package:collection_tracker/core/providers/backend_api_providers.dart';
+import 'package:collection_tracker/core/sync/sync_outbox_bootstrapper.dart';
 import 'package:collection_tracker/core/sync/sync_orchestrator.dart';
 import 'package:database/database.dart';
 import 'package:dio/dio.dart';
@@ -213,6 +214,17 @@ final syncOrchestratorProvider = Provider<SyncOrchestrator>((ref) {
   final dao = ref.watch(syncDaoProvider);
   final backendClient = ref.watch(syncBackendClientProvider);
   return SyncOrchestrator(syncDao: dao, backendClient: backendClient);
+});
+
+final syncOutboxBootstrapperProvider = Provider<SyncOutboxBootstrapper>((ref) {
+  final syncDao = ref.watch(syncDaoProvider);
+  final collectionDao = ref.watch(collectionDaoProvider);
+  final itemDao = ref.watch(itemDaoProvider);
+  return SyncOutboxBootstrapper(
+    syncDao: syncDao,
+    collectionDao: collectionDao,
+    itemDao: itemDao,
+  );
 });
 
 final syncOutboxCountProvider = StreamProvider<int>((ref) {
