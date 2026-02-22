@@ -1,6 +1,9 @@
 #!/bin/bash
 set -e
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "$SCRIPT_DIR/workspace_packages.sh"
+
 echo "🧪 Running tests for all packages..."
 echo ""
 
@@ -53,23 +56,11 @@ WORKSPACE_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$WORKSPACE_ROOT"
 
 # Run tests for all packages
-run_tests "packages/core/domain" "core_domain"
-run_tests "packages/core/data" "core_data"
-run_tests "packages/common/env" "common_env"
-run_tests "packages/common/ui" "common_ui"
-run_tests "packages/common/utils" "common_utils"
-run_tests "packages/integrations/analytics" "integration_analytics"
-run_tests "packages/integrations/auth_session" "integration_auth_session"
-run_tests "packages/integrations/backend_api" "integration_backend_api"
-run_tests "packages/integrations/barcode_scanner" "integration_barcode_scanner"
-run_tests "packages/integrations/database" "integration_database"
-run_tests "packages/integrations/firebase_services" "integration_firebase_services"
-run_tests "packages/integrations/logger" "integration_logging"
-run_tests "packages/integrations/metadata_api" "integration_metadata_api"
-run_tests "packages/integrations/sync_api" "integration_sync_api"
-run_tests "packages/integrations/storage" "integration_storage"
-run_tests "packages/integrations/payment" "integration_payment"
-run_tests "apps/mobile" "mobile_app"
+for entry in "${WORKSPACE_PACKAGES_WITH_APP[@]}"; do
+    package_path="${entry%%:*}"
+    package_name="${entry#*:}"
+    run_tests "$package_path" "$package_name"
+done
 
 echo "════════════════════════════════════════"
 if [ $TEST_ERRORS -eq 0 ]; then

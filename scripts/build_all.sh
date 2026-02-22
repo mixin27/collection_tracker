@@ -1,6 +1,9 @@
 #!/bin/bash
 set -e
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "$SCRIPT_DIR/workspace_packages.sh"
+
 echo "🔨 Running code generation for all packages..."
 echo ""
 
@@ -42,23 +45,11 @@ WORKSPACE_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$WORKSPACE_ROOT"
 
 # Build packages in order (dependencies first)
-run_build "packages/core/domain" "core_domain"
-run_build "packages/core/data" "core_data"
-run_build "packages/common/env" "common_env"
-run_build "packages/common/ui" "common_ui"
-run_build "packages/common/utils" "common_utils"
-run_build "packages/integrations/analytics" "integration_analytics"
-run_build "packages/integrations/auth_session" "integration_auth_session"
-run_build "packages/integrations/backend_api" "integration_backend_api"
-run_build "packages/integrations/barcode_scanner" "integration_barcode_scanner"
-run_build "packages/integrations/database" "integration_database"
-run_build "packages/integrations/firebase_services" "integration_firebase_services"
-run_build "packages/integrations/logger" "integration_logging"
-run_build "packages/integrations/metadata_api" "integration_metadata_api"
-run_build "packages/integrations/sync_api" "integration_sync_api"
-run_build "packages/integrations/storage" "integration_storage"
-run_build "packages/integrations/payment" "integration_payment"
-run_build "apps/mobile" "mobile_app"
+for entry in "${WORKSPACE_PACKAGES_WITH_APP[@]}"; do
+    package_path="${entry%%:*}"
+    package_name="${entry#*:}"
+    run_build "$package_path" "$package_name"
+done
 
 if [ $BUILD_ERRORS -eq 0 ]; then
     echo "✅ All builds completed successfully!"

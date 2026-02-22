@@ -1,6 +1,9 @@
 #!/bin/bash
 set -e
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "$SCRIPT_DIR/workspace_packages.sh"
+
 echo "🧹 Cleaning all packages..."
 echo ""
 
@@ -36,23 +39,11 @@ WORKSPACE_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$WORKSPACE_ROOT"
 
 # Clean all packages
-clean_package "packages/core/domain" "core_domain"
-clean_package "packages/core/data" "core_data"
-clean_package "packages/common/env" "common_env"
-clean_package "packages/common/ui" "common_ui"
-clean_package "packages/common/utils" "common_utils"
-clean_package "packages/integrations/analytics" "integration_analytics"
-clean_package "packages/integrations/auth_session" "integration_auth_session"
-clean_package "packages/integrations/backend_api" "integration_backend_api"
-clean_package "packages/integrations/barcode_scanner" "integration_barcode_scanner"
-clean_package "packages/integrations/database" "integration_database"
-clean_package "packages/integrations/firebase_services" "integration_firebase_services"
-clean_package "packages/integrations/logger" "integration_logging"
-clean_package "packages/integrations/metadata_api" "integration_metadata_api"
-clean_package "packages/integrations/sync_api" "integration_sync_api"
-clean_package "packages/integrations/storage" "integration_storage"
-clean_package "packages/integrations/payment" "integration_payment"
-clean_package "apps/mobile" "mobile_app"
+for entry in "${WORKSPACE_PACKAGES_WITH_APP[@]}"; do
+    package_path="${entry%%:*}"
+    package_name="${entry#*:}"
+    clean_package "$package_path" "$package_name"
+done
 
 # Clean workspace root
 rm -rf .dart_tool
