@@ -17,6 +17,11 @@ class BackendApiReadiness {
   final String message;
 }
 
+const _backendUseDebugEnvFlagOverrides = bool.fromEnvironment(
+  'BACKEND_USE_ENV_FLAG_OVERRIDES',
+  defaultValue: false,
+);
+
 final backendApiBaseUrlOverrideProvider =
     NotifierProvider<BackendApiBaseUrlOverrideController, String>(
       BackendApiBaseUrlOverrideController.new,
@@ -49,11 +54,15 @@ final backendIntegrationFeatureFlagProvider = Provider<bool>((ref) {
     return true;
   }
 
+  if (!_shouldUseDebugEnvFlagOverrides) {
+    return false;
+  }
+
   const debugEnvOverride = bool.fromEnvironment(
     'BACKEND_INTEGRATION_ENABLED',
     defaultValue: false,
   );
-  return kDebugMode && debugEnvOverride;
+  return debugEnvOverride;
 });
 
 final backendSyncFeatureFlagProvider = Provider<bool>((ref) {
@@ -62,11 +71,19 @@ final backendSyncFeatureFlagProvider = Provider<bool>((ref) {
     return true;
   }
 
+  if (!_shouldUseDebugEnvFlagOverrides) {
+    return false;
+  }
+
   const debugEnvOverride = bool.fromEnvironment(
     'BACKEND_SYNC_ENABLED',
     defaultValue: false,
   );
-  return kDebugMode && debugEnvOverride;
+  return debugEnvOverride;
+});
+
+final backendDebugEnvFlagOverridesActiveProvider = Provider<bool>((ref) {
+  return _shouldUseDebugEnvFlagOverrides;
 });
 
 final backendApiPrefixProvider = Provider<String>((ref) {
@@ -231,3 +248,6 @@ String _normalizeBaseUrl(String value) {
       ? trimmed.substring(0, trimmed.length - 1)
       : trimmed;
 }
+
+bool get _shouldUseDebugEnvFlagOverrides =>
+    kDebugMode && _backendUseDebugEnvFlagOverrides;

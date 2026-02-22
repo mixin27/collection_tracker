@@ -1,15 +1,26 @@
 {
     "configurations": [
         {
-            "name": "Launch (With ENV)",
+            "name": "Launch (Remote Config Flags)",
             "type": "dart",
             "request": "launch",
             "program": "apps/mobile/lib/main.dart",
             "args": [
                 "--dart-define=ENABLE_CRASHLYTICS_IN_DEBUG=true",
+                "--dart-define=BACKEND_API_BASE_URL=http://localhost:4000"
+            ]
+        },
+        {
+            "name": "Launch (Force Backend ON via ENV)",
+            "type": "dart",
+            "request": "launch",
+            "program": "apps/mobile/lib/main.dart",
+            "args": [
+                "--dart-define=ENABLE_CRASHLYTICS_IN_DEBUG=true",
+                "--dart-define=BACKEND_USE_ENV_FLAG_OVERRIDES=true",
                 "--dart-define=BACKEND_INTEGRATION_ENABLED=true",
                 "--dart-define=BACKEND_SYNC_ENABLED=true",
-                "--dart-define=BACKEND_API_BASE_URL=http://localhost:4000",
+                "--dart-define=BACKEND_API_BASE_URL=http://localhost:4000"
             ]
         },
         {

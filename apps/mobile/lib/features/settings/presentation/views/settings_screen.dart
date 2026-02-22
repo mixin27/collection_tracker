@@ -661,6 +661,9 @@ class SettingsScreen extends ConsumerWidget {
             final pendingCount =
                 ref.watch(syncOutboxCountProvider).asData?.value ?? 0;
             final syncState = ref.watch(syncStateProvider).asData?.value;
+            final envFlagOverridesActive = ref.watch(
+              backendDebugEnvFlagOverridesActiveProvider,
+            );
             final session = ref.watch(authSessionProvider).value;
             final hasSession = session?.isAuthenticated ?? false;
 
@@ -694,6 +697,11 @@ class SettingsScreen extends ConsumerWidget {
                   value: transportConfig.syncFeatureEnabled
                       ? 'Enabled'
                       : 'Disabled',
+                ),
+                const SizedBox(height: AppSpacing.xs),
+                _CloudSyncStateRow(
+                  label: 'Env overrides',
+                  value: envFlagOverridesActive ? 'Active' : 'Inactive',
                 ),
                 const SizedBox(height: AppSpacing.xs),
                 _CloudSyncStateRow(
