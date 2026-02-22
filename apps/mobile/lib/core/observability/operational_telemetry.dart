@@ -51,6 +51,12 @@ class OperationalTelemetry {
     required int syncedItems,
     required int syncedTags,
     required int conflictCount,
+    required int appliedServerCollections,
+    required int appliedServerItems,
+    required int appliedServerTags,
+    required int skippedServerCollections,
+    required int skippedServerItems,
+    required int skippedServerTags,
     String? message,
     Object? error,
     StackTrace? stackTrace,
@@ -68,6 +74,12 @@ class OperationalTelemetry {
         'synced_items': syncedItems,
         'synced_tags': syncedTags,
         'conflicts': conflictCount,
+        'applied_server_collections': appliedServerCollections,
+        'applied_server_items': appliedServerItems,
+        'applied_server_tags': appliedServerTags,
+        'skipped_server_collections': skippedServerCollections,
+        'skipped_server_items': skippedServerItems,
+        'skipped_server_tags': skippedServerTags,
         if (message != null && message.trim().isNotEmpty) 'message': message,
       },
       crashlyticsLog: true,
@@ -81,6 +93,10 @@ class OperationalTelemetry {
         'sync_executed': executed,
         'sync_pending_ops': pendingOperations,
         'sync_processed_ops': processedOperations,
+        'sync_applied_server':
+            appliedServerCollections + appliedServerItems + appliedServerTags,
+        'sync_skipped_server':
+            skippedServerCollections + skippedServerItems + skippedServerTags,
       },
     );
   }

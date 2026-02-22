@@ -2,8 +2,11 @@ import 'dart:convert';
 
 import 'package:app_firebase/app_firebase.dart';
 import 'package:database/database.dart';
+import 'package:dio/dio.dart';
 import 'package:sync_api/sync_api.dart';
 import 'package:uuid/uuid.dart';
+
+import 'sync_server_changes_applier.dart';
 
 enum SyncEntityType { collection, item, tag }
 
@@ -23,6 +26,12 @@ class SyncAttemptResult {
     this.syncedTags = 0,
     this.conflictCount = 0,
     this.partial = false,
+    this.appliedServerCollections = 0,
+    this.appliedServerItems = 0,
+    this.appliedServerTags = 0,
+    this.skippedServerCollections = 0,
+    this.skippedServerItems = 0,
+    this.skippedServerTags = 0,
   });
 
   final bool executed;
@@ -37,21 +46,30 @@ class SyncAttemptResult {
   final int syncedTags;
   final int conflictCount;
   final bool partial;
+  final int appliedServerCollections;
+  final int appliedServerItems;
+  final int appliedServerTags;
+  final int skippedServerCollections;
+  final int skippedServerItems;
+  final int skippedServerTags;
 }
 
 class SyncOrchestrator {
   SyncOrchestrator({
     required SyncDao syncDao,
     required SyncBackendClient backendClient,
+    required SyncServerChangesApplier serverChangesApplier,
     Uuid? uuid,
     int maxBatchSize = 1000,
   }) : _syncDao = syncDao,
        _backendClient = backendClient,
+       _serverChangesApplier = serverChangesApplier,
        _uuid = uuid ?? const Uuid(),
        _maxBatchSize = maxBatchSize;
 
   final SyncDao _syncDao;
   final SyncBackendClient _backendClient;
+  final SyncServerChangesApplier _serverChangesApplier;
   final Uuid _uuid;
   final int _maxBatchSize;
 
@@ -113,16 +131,6 @@ class SyncOrchestrator {
 
     await _syncDao.upsertSyncState(lastAttemptedSyncAt: DateTime.now());
 
-    if (pending.isEmpty && !forceFullSync) {
-      await _syncDao.upsertSyncState(consecutiveFailures: 0);
-      return const SyncAttemptResult(
-        executed: false,
-        success: true,
-        message: 'No pending operations to sync.',
-        partial: false,
-      );
-    }
-
     final changes = _buildChangesPayload(pending);
     final performanceService = FirebasePerformanceService.instance;
 
@@ -175,6 +183,10 @@ class SyncOrchestrator {
         );
       }
 
+      final applyResult = await _serverChangesApplier.apply(
+        response.serverChanges,
+      );
+
       for (final op in pending) {
         await _syncDao.markOperationSynced(op.id);
       }
@@ -189,7 +201,8 @@ class SyncOrchestrator {
         success: true,
         message:
             'Sync completed: ${response.syncedCollections} collections, '
-            '${response.syncedItems} items, ${response.syncedTags} tags.',
+            '${response.syncedItems} items, ${response.syncedTags} tags. '
+            'Applied ${applyResult.appliedTotal} remote change(s).',
         pendingOperations: pending.length,
         processedOperations: processedOperations,
         syncedCollections: response.syncedCollections,
@@ -197,6 +210,12 @@ class SyncOrchestrator {
         syncedTags: response.syncedTags,
         conflictCount: response.conflicts.length,
         partial: false,
+        appliedServerCollections: applyResult.appliedCollections,
+        appliedServerItems: applyResult.appliedItems,
+        appliedServerTags: applyResult.appliedTags,
+        skippedServerCollections: applyResult.skippedCollections,
+        skippedServerItems: applyResult.skippedItems,
+        skippedServerTags: applyResult.skippedTags,
       );
     } on SyncAuthRequiredException catch (error) {
       return SyncAttemptResult(
@@ -205,6 +224,25 @@ class SyncOrchestrator {
         message: error.message,
         error: error,
         stackTrace: null,
+        pendingOperations: pending.length,
+        partial: false,
+      );
+    } on DioException catch (error, stackTrace) {
+      final errorText = _buildDioErrorMessage(error);
+      for (final op in pending) {
+        await _syncDao.markOperationFailed(op.id, errorText);
+      }
+
+      await _syncDao.upsertSyncState(
+        consecutiveFailures: (state?.consecutiveFailures ?? 0) + 1,
+      );
+
+      return SyncAttemptResult(
+        executed: true,
+        success: false,
+        message: errorText,
+        error: error,
+        stackTrace: stackTrace,
         pendingOperations: pending.length,
         partial: false,
       );
@@ -228,6 +266,46 @@ class SyncOrchestrator {
         partial: false,
       );
     }
+  }
+
+  String _buildDioErrorMessage(DioException error) {
+    final uri = error.requestOptions.uri;
+    final host = uri.host;
+    final statusCode = error.response?.statusCode;
+    final statusMessage = error.response?.statusMessage;
+
+    if (error.type == DioExceptionType.badResponse && statusCode != null) {
+      final details = statusMessage == null || statusMessage.isEmpty
+          ? ''
+          : ' ($statusMessage)';
+      return 'Sync failed with HTTP $statusCode$details.';
+    }
+
+    if (error.type == DioExceptionType.connectionTimeout ||
+        error.type == DioExceptionType.receiveTimeout ||
+        error.type == DioExceptionType.sendTimeout) {
+      return 'Sync request timed out while contacting $host. '
+          'Check backend availability and network.';
+    }
+
+    if (error.type == DioExceptionType.connectionError) {
+      final localhostHint = host == 'localhost' || host == '127.0.0.1'
+          ? ' If this is a physical device, use your computer LAN IP instead of localhost. '
+                'For Android emulator use 10.0.2.2.'
+          : '';
+      return 'Unable to reach sync backend at ${uri.toString()}.$localhostHint';
+    }
+
+    if (error.type == DioExceptionType.cancel) {
+      return 'Sync request was cancelled.';
+    }
+
+    final message = error.message;
+    if (message != null && message.trim().isNotEmpty) {
+      return 'Sync request failed: $message';
+    }
+
+    return 'Sync request failed due to an unexpected network error.';
   }
 
   SyncChangesPayload _buildChangesPayload(List<SyncOutboxData> pending) {

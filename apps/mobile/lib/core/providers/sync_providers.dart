@@ -3,6 +3,7 @@ import 'package:collection_tracker/core/providers/auth_session_providers.dart';
 import 'package:collection_tracker/core/providers/backend_api_providers.dart';
 import 'package:collection_tracker/core/sync/sync_outbox_bootstrapper.dart';
 import 'package:collection_tracker/core/sync/sync_orchestrator.dart';
+import 'package:collection_tracker/core/sync/sync_server_changes_applier.dart';
 import 'package:database/database.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
@@ -213,7 +214,19 @@ final syncReadinessProvider = Provider<SyncReadinessState>((ref) {
 final syncOrchestratorProvider = Provider<SyncOrchestrator>((ref) {
   final dao = ref.watch(syncDaoProvider);
   final backendClient = ref.watch(syncBackendClientProvider);
-  return SyncOrchestrator(syncDao: dao, backendClient: backendClient);
+  final serverChangesApplier = ref.watch(syncServerChangesApplierProvider);
+  return SyncOrchestrator(
+    syncDao: dao,
+    backendClient: backendClient,
+    serverChangesApplier: serverChangesApplier,
+  );
+});
+
+final syncServerChangesApplierProvider = Provider<SyncServerChangesApplier>((
+  ref,
+) {
+  final database = ref.watch(appDatabaseProvider);
+  return SyncServerChangesApplier(database: database);
 });
 
 final syncOutboxBootstrapperProvider = Provider<SyncOutboxBootstrapper>((ref) {
