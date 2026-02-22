@@ -28,3 +28,4 @@ workspace:
   - packages/integrations/payment
   - packages/integrations/storage
   - packages/integrations/firebase_services
+  - packages/integrations/sync_api

@@ -73,6 +73,21 @@ class NestSyncAuthTokenProvider implements SyncAuthTokenProvider {
     await _storage.delete(refreshTokenKey);
   }
 
+  @override
+  Future<bool> hasSession() async {
+    final accessToken = await _storage.get<String>(accessTokenKey);
+    if (accessToken != null && accessToken.isNotEmpty) {
+      return true;
+    }
+
+    final refreshToken = await _storage.get<String>(refreshTokenKey);
+    final deviceId = await _storage.get<String>(deviceIdKey);
+    return refreshToken != null &&
+        refreshToken.isNotEmpty &&
+        deviceId != null &&
+        deviceId.isNotEmpty;
+  }
+
   static String _normalizeBaseUrl(String value) {
     final trimmed = value.trim();
     if (trimmed.isEmpty) {

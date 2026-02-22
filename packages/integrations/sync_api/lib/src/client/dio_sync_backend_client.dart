@@ -1,8 +1,9 @@
 import 'package:dio/dio.dart';
 
-import 'sync_auth_token_provider.dart';
+import '../auth/sync_auth_token_provider.dart';
+import '../exceptions/sync_api_exceptions.dart';
+import '../models/sync_contract.dart';
 import 'sync_backend_client.dart';
-import 'sync_contract.dart';
 
 class DioSyncBackendClient implements SyncBackendClient {
   DioSyncBackendClient({
@@ -27,6 +28,7 @@ class DioSyncBackendClient implements SyncBackendClient {
   Future<SyncCapabilities> getCapabilities() async {
     final response = await _requestWithAuthRetry(
       () => _dio.get<Map<String, dynamic>>('$_baseUrl$_capabilitiesPath'),
+      requireAuth: false,
     );
     final data = _asJsonMap(response.data);
     return SyncCapabilities.fromJson(data);
@@ -39,15 +41,29 @@ class DioSyncBackendClient implements SyncBackendClient {
         '$_baseUrl$_syncPath',
         data: request.toJson(),
       ),
+      requireAuth: true,
     );
     final data = _asJsonMap(response.data);
     return SyncResponsePayload.fromJson(data);
   }
 
   Future<Response<T>> _requestWithAuthRetry<T>(
-    Future<Response<T>> Function() runRequest,
-  ) async {
-    await _applyAccessToken();
+    Future<Response<T>> Function() runRequest, {
+    required bool requireAuth,
+  }) async {
+    var tokenApplied = await _applyAccessToken();
+
+    if (!tokenApplied) {
+      final refreshedToken = await _authTokenProvider.refreshAccessToken();
+      if (refreshedToken != null && refreshedToken.isNotEmpty) {
+        _dio.options.headers['Authorization'] = 'Bearer $refreshedToken';
+        tokenApplied = true;
+      }
+    }
+
+    if (requireAuth && !tokenApplied) {
+      throw const SyncAuthRequiredException();
+    }
 
     try {
       return await runRequest();
@@ -58,6 +74,9 @@ class DioSyncBackendClient implements SyncBackendClient {
 
       final refreshedToken = await _authTokenProvider.refreshAccessToken();
       if (refreshedToken == null || refreshedToken.isEmpty) {
+        if (requireAuth) {
+          throw const SyncAuthRequiredException();
+        }
         rethrow;
       }
 
@@ -66,13 +85,14 @@ class DioSyncBackendClient implements SyncBackendClient {
     }
   }
 
-  Future<void> _applyAccessToken() async {
+  Future<bool> _applyAccessToken() async {
     final token = await _authTokenProvider.readAccessToken();
     if (token == null || token.isEmpty) {
       _dio.options.headers.remove('Authorization');
-      return;
+      return false;
     }
     _dio.options.headers['Authorization'] = 'Bearer $token';
+    return true;
   }
 
   bool _isUnauthorized(DioException error) {

@@ -24,6 +24,7 @@ abstract final class FirebaseServicesBootstrap {
       'app_crashlytics_collection_enabled';
   static const _performanceCollectionEnabledKey =
       'app_performance_collection_enabled';
+  static const _syncFeatureEnabledKey = 'app_sync_feature_enabled';
 
   static Future<FirebaseRuntimeConfig> initialize() async {
     final remoteConfigService = FirebaseRemoteConfigService.instance;
@@ -33,6 +34,7 @@ abstract final class FirebaseServicesBootstrap {
         _analyticsCollectionEnabledKey: true,
         _crashlyticsCollectionEnabledKey: true,
         _performanceCollectionEnabledKey: true,
+        _syncFeatureEnabledKey: false,
       },
       minimumFetchInterval: kDebugMode
           ? const Duration(minutes: 5)
@@ -48,7 +50,8 @@ abstract final class FirebaseServicesBootstrap {
     Logger.info(
       'Firebase services initialized (analytics: ${runtimeConfig.analyticsCollectionEnabled}, '
       'crashlytics: ${runtimeConfig.crashlyticsCollectionEnabled}, '
-      'performance: ${runtimeConfig.performanceCollectionEnabled}).',
+      'performance: ${runtimeConfig.performanceCollectionEnabled}, '
+      'sync: ${runtimeConfig.syncFeatureEnabled}).',
     );
 
     return runtimeConfig;
@@ -83,7 +86,8 @@ abstract final class FirebaseServicesBootstrap {
       'Firebase runtime config refreshed (changed: $didActivateChanges, '
       'analytics: ${runtimeConfig.analyticsCollectionEnabled}, '
       'crashlytics: ${runtimeConfig.crashlyticsCollectionEnabled}, '
-      'performance: ${runtimeConfig.performanceCollectionEnabled}).',
+      'performance: ${runtimeConfig.performanceCollectionEnabled}, '
+      'sync: ${runtimeConfig.syncFeatureEnabled}).',
     );
 
     return FirebaseRuntimeConfigRefreshResult(
@@ -108,6 +112,10 @@ abstract final class FirebaseServicesBootstrap {
       performanceCollectionEnabled: remoteConfigService.getBool(
         _performanceCollectionEnabledKey,
         fallback: true,
+      ),
+      syncFeatureEnabled: remoteConfigService.getBool(
+        _syncFeatureEnabledKey,
+        fallback: false,
       ),
     );
   }

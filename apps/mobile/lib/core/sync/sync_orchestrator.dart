@@ -1,10 +1,8 @@
 import 'dart:convert';
 
 import 'package:database/database.dart';
+import 'package:sync_api/sync_api.dart';
 import 'package:uuid/uuid.dart';
-
-import 'sync_backend_client.dart';
-import 'sync_contract.dart';
 
 enum SyncEntityType { collection, item, tag }
 
@@ -82,11 +80,11 @@ class SyncOrchestrator {
     bool forceFullSync = false,
   }) async {
     if (_backendClient is NoopSyncBackendClient) {
-      return const SyncAttemptResult(
+      final client = _backendClient;
+      return SyncAttemptResult(
         executed: false,
         success: false,
-        message:
-            'Sync backend is not configured yet. Attach a concrete SyncBackendClient first.',
+        message: client.message,
       );
     }
 
@@ -131,6 +129,13 @@ class SyncOrchestrator {
         message:
             'Sync completed: ${response.syncedCollections} collections, '
             '${response.syncedItems} items, ${response.syncedTags} tags.',
+      );
+    } on SyncAuthRequiredException catch (error) {
+      return SyncAttemptResult(
+        executed: false,
+        success: false,
+        message: error.message,
+        error: error,
       );
     } catch (error) {
       final errorText = '$error';

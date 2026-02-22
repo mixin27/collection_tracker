@@ -591,6 +591,18 @@ class SettingsScreen extends ConsumerWidget {
                 ),
                 ListTile(
                   contentPadding: EdgeInsets.zero,
+                  leading: const Icon(Icons.cloud_sync_outlined),
+                  title: Text(l10n.settingsCloudSyncTitle),
+                  subtitle: const Text('app_sync_feature_enabled'),
+                  trailing: Text(
+                    _enabledDisabledLabel(
+                      context,
+                      runtimeConfig.syncFeatureEnabled,
+                    ),
+                  ),
+                ),
+                ListTile(
+                  contentPadding: EdgeInsets.zero,
                   leading: const Icon(Icons.sync_alt_outlined),
                   title: Text(
                     l10n.settingsFirebaseRuntimeConfigFetchStatusTitle,
