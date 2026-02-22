@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:app_analytics/src/core/analytics_event.dart';
 import 'package:app_analytics/src/core/analytics_middleware.dart';
 import 'package:flutter/foundation.dart';
@@ -8,9 +6,10 @@ import 'package:package_info_plus/package_info_plus.dart';
 /// Middleware to enrich events with common properties
 class EnrichmentMiddleware implements AnalyticsMiddleware {
   final Map<String, dynamic> _commonProperties = {};
+  late final Future<void> _initialization;
 
   EnrichmentMiddleware() {
-    _initializeCommonProperties();
+    _initialization = _initializeCommonProperties();
   }
 
   @override
@@ -21,6 +20,8 @@ class EnrichmentMiddleware implements AnalyticsMiddleware {
     AnalyticsEvent event, {
     required bool Function(AnalyticsEvent) next,
   }) async {
+    await _initialization;
+
     // Add common properties to event
     final enrichedEvent = event.withProperties(_commonProperties);
 
@@ -33,24 +34,30 @@ class EnrichmentMiddleware implements AnalyticsMiddleware {
     // Platform
     if (kIsWeb) {
       _commonProperties['platform'] = 'web';
-    } else if (Platform.isAndroid) {
-      _commonProperties['platform'] = 'android';
-    } else if (Platform.isIOS) {
-      _commonProperties['platform'] = 'ios';
-    } else if (Platform.isMacOS) {
-      _commonProperties['platform'] = 'macos';
-    } else if (Platform.isWindows) {
-      _commonProperties['platform'] = 'windows';
-    } else if (Platform.isLinux) {
-      _commonProperties['platform'] = 'linux';
+    } else {
+      _commonProperties['platform'] = switch (defaultTargetPlatform) {
+        TargetPlatform.android => 'android',
+        TargetPlatform.iOS => 'ios',
+        TargetPlatform.macOS => 'macos',
+        TargetPlatform.windows => 'windows',
+        TargetPlatform.linux => 'linux',
+        TargetPlatform.fuchsia => 'fuchsia',
+      };
     }
 
-    // App version
-    PackageInfo packageInfo = await PackageInfo.fromPlatform();
-    _commonProperties['app_version'] = packageInfo.version;
+    // App version may be unavailable in tests or unsupported environments.
+    try {
+      final packageInfo = await PackageInfo.fromPlatform();
+      _commonProperties['app_version'] = packageInfo.version;
+      _commonProperties['app_build_number'] = packageInfo.buildNumber;
+    } catch (_) {
+      // Ignore package info failures to keep middleware non-blocking.
+    }
 
     // Build mode
-    _commonProperties['build_mode'] = kDebugMode ? 'debug' : 'release';
+    _commonProperties['build_mode'] = kDebugMode
+        ? 'debug'
+        : (kProfileMode ? 'profile' : 'release');
   }
 
   /// Add or update a common property
