@@ -1,4 +1,4 @@
-import 'package:storage/storage.dart';
+import 'package:auth_session/auth_session.dart';
 
 abstract class SyncAuthTokenProvider {
   Future<bool> hasSession();
@@ -23,43 +23,32 @@ class NoopSyncAuthTokenProvider implements SyncAuthTokenProvider {
   Future<String?> refreshAccessToken() async => null;
 }
 
-class SecureStorageSyncAuthTokenProvider implements SyncAuthTokenProvider {
-  SecureStorageSyncAuthTokenProvider({
-    required SecureStorageService storage,
-    this.accessTokenKey = 'sync_access_token',
-    this.refreshTokenKey = 'sync_refresh_token',
-  }) : _storage = storage;
+class AuthSessionSyncAuthTokenProvider implements SyncAuthTokenProvider {
+  AuthSessionSyncAuthTokenProvider({required AuthSessionStore sessionStore})
+    : _sessionStore = sessionStore;
 
-  final SecureStorageService _storage;
-  final String accessTokenKey;
-  final String refreshTokenKey;
+  final AuthSessionStore _sessionStore;
 
   @override
-  Future<String?> readAccessToken() {
-    return _storage.get<String>(accessTokenKey);
+  Future<String?> readAccessToken() async {
+    final session = await _sessionStore.readSession();
+    return session.hasAccessToken ? session.accessToken : null;
   }
 
   @override
-  Future<String?> refreshAccessToken() async {
-    // Placeholder for future auth exchange flow.
-    // For now we return currently stored access token (if any).
-    return _storage.get<String>(accessTokenKey);
+  Future<String?> refreshAccessToken() {
+    // Refresh is adapter-specific; this fallback only returns currently stored token.
+    return readAccessToken();
   }
 
   @override
   Future<void> clearTokens() async {
-    await _storage.delete(accessTokenKey);
-    await _storage.delete(refreshTokenKey);
+    await _sessionStore.clearSession();
   }
 
   @override
   Future<bool> hasSession() async {
-    final accessToken = await _storage.get<String>(accessTokenKey);
-    if (accessToken != null && accessToken.isNotEmpty) {
-      return true;
-    }
-
-    final refreshToken = await _storage.get<String>(refreshTokenKey);
-    return refreshToken != null && refreshToken.isNotEmpty;
+    final session = await _sessionStore.readSession();
+    return session.isAuthenticated;
   }
 }

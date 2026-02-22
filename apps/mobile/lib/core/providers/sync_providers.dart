@@ -1,11 +1,11 @@
 import 'package:collection_tracker/core/providers/database_providers.dart';
 import 'package:collection_tracker/core/providers/firebase_runtime_config_provider.dart';
+import 'package:collection_tracker/core/providers/auth_session_providers.dart';
 import 'package:collection_tracker/core/sync/sync_orchestrator.dart';
 import 'package:database/database.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:storage/storage.dart';
 import 'package:sync_api/sync_api.dart';
 
 class SyncTransportConfig {
@@ -28,6 +28,7 @@ enum SyncReadinessStatus {
   ready,
   disabledByFeatureFlag,
   missingApiConfiguration,
+  checkingAuthentication,
   authenticationRequired,
 }
 
@@ -117,12 +118,12 @@ final syncAuthTokenAdapterProvider = Provider<SyncAuthTokenProvider>((ref) {
   }
 
   final authDio = ref.watch(syncAuthDioProvider);
-  final storage = SecureStorageService.instance;
+  final sessionStore = ref.watch(authSessionStoreProvider);
 
   return NestSyncAuthTokenProvider(
     dio: authDio,
     apiBaseUrl: transportConfig.normalizedApiBaseUrl,
-    storage: storage,
+    sessionStore: sessionStore,
   );
 });
 
@@ -153,12 +154,7 @@ final syncBackendClientProvider = Provider<SyncBackendClient>((ref) {
   );
 });
 
-final syncAuthSessionProvider = FutureProvider<bool>((ref) async {
-  final tokenProvider = ref.watch(syncAuthTokenAdapterProvider);
-  return tokenProvider.hasSession();
-});
-
-final syncReadinessProvider = FutureProvider<SyncReadinessState>((ref) async {
+final syncReadinessProvider = Provider<SyncReadinessState>((ref) {
   final transportConfig = ref.watch(syncTransportConfigProvider);
 
   if (!transportConfig.featureFlagEnabled) {
@@ -176,8 +172,16 @@ final syncReadinessProvider = FutureProvider<SyncReadinessState>((ref) async {
     );
   }
 
-  final hasSession = await ref.watch(syncAuthSessionProvider.future);
-  if (!hasSession) {
+  final sessionAsync = ref.watch(authSessionProvider);
+  if (sessionAsync.isLoading) {
+    return const SyncReadinessState(
+      status: SyncReadinessStatus.checkingAuthentication,
+      message: 'Checking authentication session...',
+    );
+  }
+
+  final session = sessionAsync.value;
+  if (session == null || !session.isAuthenticated) {
     return const SyncReadinessState(
       status: SyncReadinessStatus.authenticationRequired,
       message:

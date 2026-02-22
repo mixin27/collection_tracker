@@ -1,5 +1,5 @@
-name: sync_api
-description: "Sync API integration for backend synchronization."
+name: auth_session
+description: "Persistent auth/session state primitives for Collection Tracker."
 version: 1.0.0
 publish_to: none
 resolution: workspace
@@ -9,11 +9,10 @@ environment:
   flutter: ">=1.17.0"
 
 dependencies:
-  auth_session:
-    path: ../auth_session
-  dio: ^5.9.0
   flutter:
     sdk: flutter
+  storage:
+    path: ../storage
 
 dev_dependencies:
   flutter_lints: ^6.0.0

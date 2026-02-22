@@ -1,4 +1,5 @@
 import 'package:app_logger/app_logger.dart';
+import 'package:auth_session/auth_session.dart';
 import 'package:collection_tracker/core/analytics/analytics_consent_dialog.dart';
 import 'package:collection_tracker/core/analytics/analytics_preferences.dart';
 import 'package:collection_tracker/core/firebase/firebase_runtime_config.dart';
@@ -24,10 +25,16 @@ class SettingsScreen extends ConsumerWidget {
     final currentLanguage = ref.watch(localeSettingsProvider);
     final analyticsPreferences = ref.watch(analyticsPreferencesProvider);
     final firebaseRuntimeConfig = ref.watch(firebaseRuntimeConfigProvider);
+    final syncReadiness = ref.watch(syncReadinessProvider);
+    final pendingSyncCount = ref.watch(syncOutboxCountProvider).value ?? 0;
     final themeSummary =
         '${_themeModeLabel(context, themeSettings.mode)} - ${themeSettings.variant.label}';
     final languageSummary = _languageLabel(context, currentLanguage);
     final analyticsSummary = _analyticsSummary(context, analyticsPreferences);
+    final cloudSyncSummary = _cloudSyncSummary(
+      syncReadiness,
+      pendingSyncCount: pendingSyncCount,
+    );
     final firebaseRuntimeSummary = _firebaseRuntimeSummary(
       context,
       firebaseRuntimeConfig,
@@ -100,8 +107,8 @@ class SettingsScreen extends ConsumerWidget {
                 _SettingsTile(
                   icon: Icons.cloud_upload,
                   title: l10n.settingsCloudSyncTitle,
-                  subtitle: l10n.settingsCloudSyncSubtitle,
-                  onTap: () {},
+                  subtitle: cloudSyncSummary,
+                  onTap: () => _showCloudSyncStatusSheet(context, ref),
                 ),
                 _SettingsTile(
                   icon: Icons.sell_outlined,
@@ -281,6 +288,352 @@ class SettingsScreen extends ConsumerWidget {
         );
       }
     }
+  }
+
+  String _cloudSyncSummary(
+    SyncReadinessState readiness, {
+    required int pendingSyncCount,
+  }) {
+    return switch (readiness.status) {
+      SyncReadinessStatus.ready =>
+        'Ready • $pendingSyncCount pending change(s)',
+      SyncReadinessStatus.disabledByFeatureFlag =>
+        'Feature disabled by runtime config',
+      SyncReadinessStatus.missingApiConfiguration =>
+        'Sync API is not configured',
+      SyncReadinessStatus.checkingAuthentication =>
+        'Checking authentication session...',
+      SyncReadinessStatus.authenticationRequired =>
+        'Sign in required for sync features',
+    };
+  }
+
+  String _cloudSyncPrimaryCta(SyncReadinessStatus status) {
+    return switch (status) {
+      SyncReadinessStatus.ready => 'Sync now',
+      SyncReadinessStatus.authenticationRequired => 'Sign in',
+      SyncReadinessStatus.missingApiConfiguration => 'Configure API',
+      SyncReadinessStatus.disabledByFeatureFlag => 'Feature disabled',
+      SyncReadinessStatus.checkingAuthentication => 'Checking session',
+    };
+  }
+
+  Future<void> _showCloudSyncStatusSheet(
+    BuildContext context,
+    WidgetRef ref,
+  ) async {
+    await showAppSheet(
+      context: context,
+      builder: (sheetContext) {
+        return Consumer(
+          builder: (sheetContext, ref, _) {
+            final readiness = ref.watch(syncReadinessProvider);
+            final pendingCount =
+                ref.watch(syncOutboxCountProvider).asData?.value ?? 0;
+            final transportConfig = ref.watch(syncTransportConfigProvider);
+            final isBusy =
+                readiness.status == SyncReadinessStatus.checkingAuthentication;
+
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  sheetContext.l10n.settingsCloudSyncTitle,
+                  style: Theme.of(sheetContext).textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                const SizedBox(height: AppSpacing.sm),
+                Text(
+                  _cloudSyncSummary(readiness, pendingSyncCount: pendingCount),
+                  style: Theme.of(sheetContext).textTheme.bodyMedium?.copyWith(
+                    color: Theme.of(sheetContext).colorScheme.onSurfaceVariant,
+                  ),
+                ),
+                const SizedBox(height: AppSpacing.md),
+                _CloudSyncStateRow(
+                  label: 'Feature flag',
+                  value: transportConfig.featureFlagEnabled
+                      ? 'Enabled'
+                      : 'Disabled',
+                ),
+                const SizedBox(height: AppSpacing.xs),
+                _CloudSyncStateRow(
+                  label: 'API base URL',
+                  value: transportConfig.baseUrl.trim().isEmpty
+                      ? 'Not set'
+                      : transportConfig.normalizedApiBaseUrl,
+                ),
+                const SizedBox(height: AppSpacing.xs),
+                _CloudSyncStateRow(
+                  label: 'Outbox pending',
+                  value: '$pendingCount',
+                ),
+                const SizedBox(height: AppSpacing.lg),
+                AppButton(
+                  label: _cloudSyncPrimaryCta(readiness.status),
+                  onPressed: isBusy
+                      ? null
+                      : () => _handleCloudSyncPrimaryAction(
+                          context: context,
+                          sheetContext: sheetContext,
+                          ref: ref,
+                          readiness: readiness,
+                        ),
+                ),
+                const SizedBox(height: AppSpacing.sm),
+                AppButton(
+                  label: sheetContext.l10n.actionDismiss,
+                  variant: AppButtonVariant.ghost,
+                  onPressed: () => Navigator.of(sheetContext).pop(),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
+
+  Future<void> _handleCloudSyncPrimaryAction({
+    required BuildContext context,
+    required BuildContext sheetContext,
+    required WidgetRef ref,
+    required SyncReadinessState readiness,
+  }) async {
+    switch (readiness.status) {
+      case SyncReadinessStatus.ready:
+        await _triggerSyncNow(context, ref);
+        return;
+      case SyncReadinessStatus.authenticationRequired:
+        Navigator.of(sheetContext).pop();
+        await _showSyncSignInSheet(context, ref);
+        return;
+      case SyncReadinessStatus.missingApiConfiguration:
+        Navigator.of(sheetContext).pop();
+        await _showSyncApiConfigurationHelp(context, ref);
+        return;
+      case SyncReadinessStatus.disabledByFeatureFlag:
+        Navigator.of(sheetContext).pop();
+        await _showFeatureDisabledHelp(context);
+        return;
+      case SyncReadinessStatus.checkingAuthentication:
+        return;
+    }
+  }
+
+  Future<void> _triggerSyncNow(BuildContext context, WidgetRef ref) async {
+    final session = ref.read(authSessionProvider).asData?.value;
+    final deviceId = session?.deviceId;
+    if (deviceId == null || deviceId.trim().isEmpty) {
+      if (!context.mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Missing device id. Sign in again to enable sync.'),
+        ),
+      );
+      return;
+    }
+
+    final result = await ref
+        .read(syncOrchestratorProvider)
+        .syncNow(deviceId: deviceId);
+
+    if (!context.mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(result.message),
+        backgroundColor: result.success ? Colors.green : Colors.orange,
+      ),
+    );
+  }
+
+  Future<void> _showSyncSignInSheet(BuildContext context, WidgetRef ref) async {
+    final existingSession = ref.read(authSessionProvider).asData?.value;
+    final accessTokenController = TextEditingController(
+      text: existingSession?.accessToken ?? '',
+    );
+    final refreshTokenController = TextEditingController(
+      text: existingSession?.refreshToken ?? '',
+    );
+    final deviceIdController = TextEditingController(
+      text: existingSession?.deviceId ?? '',
+    );
+
+    try {
+      await showAppSheet(
+        context: context,
+        builder: (sheetContext) {
+          var isSaving = false;
+          return StatefulBuilder(
+            builder: (context, setState) {
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Sign in for Sync',
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  const SizedBox(height: AppSpacing.sm),
+                  Text(
+                    'Auth is optional for the app. Add your sync session tokens only if you want cloud sync.',
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    ),
+                  ),
+                  const SizedBox(height: AppSpacing.md),
+                  AppInput(
+                    controller: accessTokenController,
+                    labelText: 'Access token (optional if refresh provided)',
+                  ),
+                  const SizedBox(height: AppSpacing.sm),
+                  AppInput(
+                    controller: refreshTokenController,
+                    labelText: 'Refresh token',
+                  ),
+                  const SizedBox(height: AppSpacing.sm),
+                  AppInput(
+                    controller: deviceIdController,
+                    labelText: 'Device id',
+                  ),
+                  const SizedBox(height: AppSpacing.lg),
+                  AppButton(
+                    label: isSaving ? 'Saving...' : 'Save session',
+                    onPressed: isSaving
+                        ? null
+                        : () async {
+                            final accessToken = accessTokenController.text
+                                .trim();
+                            final refreshToken = refreshTokenController.text
+                                .trim();
+                            final deviceId = deviceIdController.text.trim();
+
+                            final hasAccess = accessToken.isNotEmpty;
+                            final hasRefreshFlow =
+                                refreshToken.isNotEmpty && deviceId.isNotEmpty;
+
+                            if (!hasAccess && !hasRefreshFlow) {
+                              if (!context.mounted) return;
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text(
+                                    'Provide an access token, or provide both refresh token and device id.',
+                                  ),
+                                ),
+                              );
+                              return;
+                            }
+
+                            setState(() => isSaving = true);
+                            await ref
+                                .read(authSessionStoreProvider)
+                                .saveSession(
+                                  AuthSession(
+                                    status: AuthSessionStatus.signedIn,
+                                    accessToken: hasAccess ? accessToken : null,
+                                    refreshToken: refreshToken.isEmpty
+                                        ? null
+                                        : refreshToken,
+                                    deviceId: deviceId.isEmpty
+                                        ? null
+                                        : deviceId,
+                                    userId: existingSession?.userId,
+                                    expiresAt: existingSession?.expiresAt,
+                                    updatedAt: DateTime.now().toUtc(),
+                                  ),
+                                );
+                            if (!context.mounted) return;
+                            Navigator.of(context).pop();
+                            ScaffoldMessenger.of(sheetContext).showSnackBar(
+                              const SnackBar(
+                                content: Text('Sync session saved.'),
+                                backgroundColor: Colors.green,
+                              ),
+                            );
+                          },
+                  ),
+                  if ((existingSession?.isAuthenticated ?? false)) ...[
+                    const SizedBox(height: AppSpacing.sm),
+                    AppButton(
+                      label: 'Sign out',
+                      variant: AppButtonVariant.secondary,
+                      onPressed: isSaving
+                          ? null
+                          : () async {
+                              await ref
+                                  .read(authSessionStoreProvider)
+                                  .clearSession();
+                              if (!context.mounted) return;
+                              Navigator.of(context).pop();
+                              ScaffoldMessenger.of(sheetContext).showSnackBar(
+                                const SnackBar(
+                                  content: Text('Sync session cleared.'),
+                                ),
+                              );
+                            },
+                    ),
+                  ],
+                ],
+              );
+            },
+          );
+        },
+      );
+    } finally {
+      accessTokenController.dispose();
+      refreshTokenController.dispose();
+      deviceIdController.dispose();
+    }
+  }
+
+  Future<void> _showSyncApiConfigurationHelp(
+    BuildContext context,
+    WidgetRef ref,
+  ) async {
+    final config = ref.read(syncTransportConfigProvider);
+    final currentBaseUrl = config.baseUrl.trim().isEmpty
+        ? '(not set)'
+        : config.baseUrl.trim();
+
+    await showAppDialog<void>(
+      context: context,
+      title: const Text('Configure Sync API'),
+      content: Text(
+        'Sync backend URL is missing.\n\n'
+        'Current value: $currentBaseUrl\n\n'
+        'Run the app with:\n'
+        '--dart-define=SYNC_API_BASE_URL=https://your-backend.example.com\n'
+        '--dart-define=SYNC_API_PREFIX=/api/v1',
+      ),
+      actions: [
+        AppButton(
+          label: context.l10n.actionDismiss,
+          variant: AppButtonVariant.ghost,
+          onPressed: () => closeAppDialog(context),
+        ),
+      ],
+    );
+  }
+
+  Future<void> _showFeatureDisabledHelp(BuildContext context) async {
+    await showAppDialog<void>(
+      context: context,
+      title: const Text('Feature disabled'),
+      content: const Text(
+        'Cloud sync is currently disabled by Remote Config key: app_sync_feature_enabled.',
+      ),
+      actions: [
+        AppButton(
+          label: context.l10n.actionDismiss,
+          variant: AppButtonVariant.ghost,
+          onPressed: () => closeAppDialog(context),
+        ),
+      ],
+    );
   }
 
   Future<void> _showThemeSelector(BuildContext context, WidgetRef ref) async {
@@ -1037,6 +1390,39 @@ class _FirebaseFlagStatusRow extends StatelessWidget {
               color: badgeForeground,
               fontWeight: FontWeight.w700,
             ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _CloudSyncStateRow extends StatelessWidget {
+  const _CloudSyncStateRow({required this.label, required this.value});
+
+  final String label;
+  final String value;
+
+  @override
+  Widget build(BuildContext context) {
+    final valueStyle = Theme.of(context).textTheme.bodySmall?.copyWith(
+      color: Theme.of(context).colorScheme.onSurfaceVariant,
+      fontWeight: FontWeight.w600,
+    );
+
+    return Row(
+      children: [
+        SizedBox(
+          width: 112,
+          child: Text(label, style: Theme.of(context).textTheme.bodyMedium),
+        ),
+        const SizedBox(width: AppSpacing.sm),
+        Expanded(
+          child: Text(
+            value,
+            style: valueStyle,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
           ),
         ),
       ],

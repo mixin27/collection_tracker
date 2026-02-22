@@ -1,5 +1,5 @@
+import 'package:auth_session/auth_session.dart';
 import 'package:dio/dio.dart';
-import 'package:storage/storage.dart';
 
 import 'sync_auth_token_provider.dart';
 
@@ -7,33 +7,32 @@ class NestSyncAuthTokenProvider implements SyncAuthTokenProvider {
   NestSyncAuthTokenProvider({
     required Dio dio,
     required String apiBaseUrl,
-    required SecureStorageService storage,
+    required AuthSessionStore sessionStore,
     this.refreshPath = '/auth/refresh',
-    this.accessTokenKey = 'sync_access_token',
-    this.refreshTokenKey = 'sync_refresh_token',
-    this.deviceIdKey = 'sync_device_id',
   }) : _dio = dio,
        _apiBaseUrl = _normalizeBaseUrl(apiBaseUrl),
-       _storage = storage;
+       _sessionStore = sessionStore;
 
   final Dio _dio;
   final String _apiBaseUrl;
-  final SecureStorageService _storage;
+  final AuthSessionStore _sessionStore;
 
   final String refreshPath;
-  final String accessTokenKey;
-  final String refreshTokenKey;
-  final String deviceIdKey;
 
   @override
-  Future<String?> readAccessToken() {
-    return _storage.get<String>(accessTokenKey);
+  Future<String?> readAccessToken() async {
+    final session = await _sessionStore.readSession();
+    if (!session.hasAccessToken) {
+      return null;
+    }
+    return session.accessToken;
   }
 
   @override
   Future<String?> refreshAccessToken() async {
-    final refreshToken = await _storage.get<String>(refreshTokenKey);
-    final deviceId = await _storage.get<String>(deviceIdKey);
+    final session = await _sessionStore.readSession();
+    final refreshToken = session.refreshToken;
+    final deviceId = session.deviceId;
 
     if (refreshToken == null ||
         refreshToken.isEmpty ||
@@ -59,33 +58,30 @@ class NestSyncAuthTokenProvider implements SyncAuthTokenProvider {
       return null;
     }
 
-    await _storage.save<String>(accessTokenKey, newAccessToken);
-    if (newRefreshToken != null && newRefreshToken.isNotEmpty) {
-      await _storage.save<String>(refreshTokenKey, newRefreshToken);
-    }
+    await _sessionStore.saveSession(
+      session.copyWith(
+        status: AuthSessionStatus.signedIn,
+        accessToken: newAccessToken,
+        refreshToken: (newRefreshToken != null && newRefreshToken.isNotEmpty)
+            ? newRefreshToken
+            : refreshToken,
+        deviceId: deviceId,
+        updatedAt: DateTime.now().toUtc(),
+      ),
+    );
 
     return newAccessToken;
   }
 
   @override
-  Future<void> clearTokens() async {
-    await _storage.delete(accessTokenKey);
-    await _storage.delete(refreshTokenKey);
+  Future<void> clearTokens() {
+    return _sessionStore.clearSession();
   }
 
   @override
   Future<bool> hasSession() async {
-    final accessToken = await _storage.get<String>(accessTokenKey);
-    if (accessToken != null && accessToken.isNotEmpty) {
-      return true;
-    }
-
-    final refreshToken = await _storage.get<String>(refreshTokenKey);
-    final deviceId = await _storage.get<String>(deviceIdKey);
-    return refreshToken != null &&
-        refreshToken.isNotEmpty &&
-        deviceId != null &&
-        deviceId.isNotEmpty;
+    final session = await _sessionStore.readSession();
+    return session.isAuthenticated;
   }
 
   static String _normalizeBaseUrl(String value) {

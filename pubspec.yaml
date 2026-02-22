@@ -21,6 +21,7 @@ workspace:
   - packages/common/ui
   - packages/common/utils
   - packages/integrations/analytics
+  - packages/integrations/auth_session
   - packages/integrations/barcode_scanner
   - packages/integrations/database
   - packages/integrations/logger
