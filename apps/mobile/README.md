@@ -1,16 +1,17 @@
-# collection_tracker
+# Collection Tracker Mobile App
 
-A new Flutter project.
+This is the Flutter app module for the Collection Tracker workspace.
 
-## Getting Started
+## Main References
 
-This project is a starting point for a Flutter application.
+- Workspace root README: [README.md](../../README.md)
+- Setup guide: [documentation/SETUP_AND_RUN.md](../../documentation/SETUP_AND_RUN.md)
+- Architecture: [documentation/ARCHITECTURE.md](../../documentation/ARCHITECTURE.md)
+- Feature status: [documentation/APP_PROGRESS.md](../../documentation/APP_PROGRESS.md)
 
-A few resources to get you started if this is your first Flutter project:
+## Run
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+```bash
+cd apps/mobile
+flutter run
+```
