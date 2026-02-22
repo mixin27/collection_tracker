@@ -136,6 +136,60 @@
       }
     }
   },
+  "settingsFirebaseRuntimeConfigTitle": "Firebase Runtime Config",
+  "@settingsFirebaseRuntimeConfigTitle": {},
+  "settingsFirebaseRuntimeConfigSubtitle": "Inspect and refresh runtime feature flags",
+  "@settingsFirebaseRuntimeConfigSubtitle": {},
+  "settingsFirebaseRuntimeConfigSheetTitle": "Firebase Runtime Config",
+  "@settingsFirebaseRuntimeConfigSheetTitle": {},
+  "settingsFirebaseRuntimeConfigDescription": "Values are fetched from Firebase Remote Config and applied at runtime.",
+  "@settingsFirebaseRuntimeConfigDescription": {},
+  "settingsFirebaseRuntimeConfigSummary": "{enabledCount} of 3 signals enabled",
+  "@settingsFirebaseRuntimeConfigSummary": {
+    "placeholders": {
+      "enabledCount": {
+        "type": "int"
+      }
+    }
+  },
+  "settingsFirebaseRuntimeConfigAnalyticsLabel": "Analytics collection",
+  "@settingsFirebaseRuntimeConfigAnalyticsLabel": {},
+  "settingsFirebaseRuntimeConfigCrashlyticsLabel": "Crashlytics collection",
+  "@settingsFirebaseRuntimeConfigCrashlyticsLabel": {},
+  "settingsFirebaseRuntimeConfigPerformanceLabel": "Performance collection",
+  "@settingsFirebaseRuntimeConfigPerformanceLabel": {},
+  "settingsFirebaseRuntimeConfigFetchStatusTitle": "Last fetch status",
+  "@settingsFirebaseRuntimeConfigFetchStatusTitle": {},
+  "settingsFirebaseRuntimeConfigLastFetchTitle": "Last fetch time",
+  "@settingsFirebaseRuntimeConfigLastFetchTitle": {},
+  "settingsFirebaseRuntimeConfigValueEnabled": "Enabled",
+  "@settingsFirebaseRuntimeConfigValueEnabled": {},
+  "settingsFirebaseRuntimeConfigValueDisabled": "Disabled",
+  "@settingsFirebaseRuntimeConfigValueDisabled": {},
+  "settingsFirebaseRuntimeConfigFetchStatusSuccess": "Success",
+  "@settingsFirebaseRuntimeConfigFetchStatusSuccess": {},
+  "settingsFirebaseRuntimeConfigFetchStatusFailure": "Failure",
+  "@settingsFirebaseRuntimeConfigFetchStatusFailure": {},
+  "settingsFirebaseRuntimeConfigFetchStatusThrottled": "Throttled",
+  "@settingsFirebaseRuntimeConfigFetchStatusThrottled": {},
+  "settingsFirebaseRuntimeConfigFetchStatusNoFetch": "No fetch yet",
+  "@settingsFirebaseRuntimeConfigFetchStatusNoFetch": {},
+  "settingsFirebaseRuntimeConfigRefreshAction": "Refresh config",
+  "@settingsFirebaseRuntimeConfigRefreshAction": {},
+  "settingsFirebaseRuntimeConfigRefreshingAction": "Refreshing...",
+  "@settingsFirebaseRuntimeConfigRefreshingAction": {},
+  "settingsFirebaseRuntimeConfigRefreshSuccess": "Firebase runtime config refreshed.",
+  "@settingsFirebaseRuntimeConfigRefreshSuccess": {},
+  "settingsFirebaseRuntimeConfigRefreshNoChanges": "Firebase runtime config is already up to date.",
+  "@settingsFirebaseRuntimeConfigRefreshNoChanges": {},
+  "settingsFirebaseRuntimeConfigRefreshFailed": "Failed to refresh config: {error}",
+  "@settingsFirebaseRuntimeConfigRefreshFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
   "settingsExportingData": "Exporting data...",
   "@settingsExportingData": {},
   "settingsDataExportSuccess": "Data exported successfully!",

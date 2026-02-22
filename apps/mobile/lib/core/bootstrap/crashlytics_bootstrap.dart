@@ -4,32 +4,35 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 
 abstract final class CrashlyticsBootstrap {
-  static Future<void> initialize({required bool collectionEnabled}) async {
-    const enableInDebug = bool.fromEnvironment(
-      'ENABLE_CRASHLYTICS_IN_DEBUG',
-      defaultValue: false,
-    );
-    final crashlyticsSupported = !kIsWeb && Firebase.apps.isNotEmpty;
-    final crashlyticsEnabled =
-        crashlyticsSupported &&
-        collectionEnabled &&
-        (!kDebugMode || enableInDebug);
+  static bool _handlersRegistered = false;
+  static bool _collectionEnabled = false;
 
-    if (!crashlyticsSupported) {
+  static const _enableInDebug = bool.fromEnvironment(
+    'ENABLE_CRASHLYTICS_IN_DEBUG',
+    defaultValue: false,
+  );
+
+  static Future<void> initialize({required bool collectionEnabled}) async {
+    if (!_isSupported) {
       Logger.info(
         'Crashlytics skipped: unsupported platform or Firebase unavailable.',
       );
       return;
     }
 
-    await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(
-      crashlyticsEnabled,
-    );
+    await setCollectionEnabled(collectionEnabled: collectionEnabled);
+
+    if (_handlersRegistered) {
+      Logger.info(
+        'Crashlytics initialized (enabled: $_collectionEnabled, debug: $kDebugMode, debugOverride: $_enableInDebug).',
+      );
+      return;
+    }
 
     final previousFlutterErrorHandler = FlutterError.onError;
     FlutterError.onError = (details) {
       previousFlutterErrorHandler?.call(details);
-      if (crashlyticsEnabled) {
+      if (_collectionEnabled) {
         FirebaseCrashlytics.instance.recordFlutterFatalError(details);
       } else {
         Logger.error(
@@ -42,7 +45,7 @@ abstract final class CrashlyticsBootstrap {
 
     final previousPlatformErrorHandler = PlatformDispatcher.instance.onError;
     PlatformDispatcher.instance.onError = (error, stackTrace) {
-      if (crashlyticsEnabled) {
+      if (_collectionEnabled) {
         FirebaseCrashlytics.instance.recordError(
           error,
           stackTrace,
@@ -60,8 +63,34 @@ abstract final class CrashlyticsBootstrap {
       return true;
     };
 
+    _handlersRegistered = true;
     Logger.info(
-      'Crashlytics initialized (enabled: $crashlyticsEnabled, debug: $kDebugMode, debugOverride: $enableInDebug).',
+      'Crashlytics initialized (enabled: $_collectionEnabled, debug: $kDebugMode, debugOverride: $_enableInDebug).',
     );
+  }
+
+  static Future<void> setCollectionEnabled({
+    required bool collectionEnabled,
+  }) async {
+    if (!_isSupported) {
+      _collectionEnabled = false;
+      return;
+    }
+
+    _collectionEnabled = _resolveEnabled(collectionEnabled);
+    await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(
+      _collectionEnabled,
+    );
+
+    Logger.info(
+      'Crashlytics collection updated: $_collectionEnabled '
+      '(remote flag: $collectionEnabled, debug: $kDebugMode, debugOverride: $_enableInDebug).',
+    );
+  }
+
+  static bool get _isSupported => !kIsWeb && Firebase.apps.isNotEmpty;
+
+  static bool _resolveEnabled(bool remoteCollectionEnabled) {
+    return remoteCollectionEnabled && (!kDebugMode || _enableInDebug);
   }
 }

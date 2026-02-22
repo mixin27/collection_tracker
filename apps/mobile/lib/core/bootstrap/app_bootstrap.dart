@@ -75,7 +75,7 @@ abstract final class AppBootstrap {
           : AnalyticsEnvironment.development,
       enableLogging: !kReleaseMode,
       providers: [
-        ConsoleAnalyticsProvider(prettyPrint: true),
+        if (!kReleaseMode) ConsoleAnalyticsProvider(prettyPrint: true),
         FirebaseAnalyticsProvider(),
       ],
       middleware: [

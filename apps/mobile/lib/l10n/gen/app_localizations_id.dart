@@ -209,6 +209,73 @@ class AppLocalizationsId extends AppLocalizations {
   }
 
   @override
+  String get settingsFirebaseRuntimeConfigTitle => 'Konfigurasi Runtime Firebase';
+
+  @override
+  String get settingsFirebaseRuntimeConfigSubtitle => 'Periksa dan segarkan flag fitur runtime';
+
+  @override
+  String get settingsFirebaseRuntimeConfigSheetTitle => 'Konfigurasi Runtime Firebase';
+
+  @override
+  String get settingsFirebaseRuntimeConfigDescription => 'Nilai diambil dari Firebase Remote Config dan diterapkan saat runtime.';
+
+  @override
+  String settingsFirebaseRuntimeConfigSummary(int enabledCount) {
+    return '$enabledCount dari 3 sinyal aktif';
+  }
+
+  @override
+  String get settingsFirebaseRuntimeConfigAnalyticsLabel => 'Pengumpulan analitik';
+
+  @override
+  String get settingsFirebaseRuntimeConfigCrashlyticsLabel => 'Pengumpulan Crashlytics';
+
+  @override
+  String get settingsFirebaseRuntimeConfigPerformanceLabel => 'Pengumpulan performa';
+
+  @override
+  String get settingsFirebaseRuntimeConfigFetchStatusTitle => 'Status pengambilan terakhir';
+
+  @override
+  String get settingsFirebaseRuntimeConfigLastFetchTitle => 'Waktu pengambilan terakhir';
+
+  @override
+  String get settingsFirebaseRuntimeConfigValueEnabled => 'Aktif';
+
+  @override
+  String get settingsFirebaseRuntimeConfigValueDisabled => 'Nonaktif';
+
+  @override
+  String get settingsFirebaseRuntimeConfigFetchStatusSuccess => 'Berhasil';
+
+  @override
+  String get settingsFirebaseRuntimeConfigFetchStatusFailure => 'Gagal';
+
+  @override
+  String get settingsFirebaseRuntimeConfigFetchStatusThrottled => 'Dibatasi';
+
+  @override
+  String get settingsFirebaseRuntimeConfigFetchStatusNoFetch => 'Belum pernah diambil';
+
+  @override
+  String get settingsFirebaseRuntimeConfigRefreshAction => 'Segarkan konfigurasi';
+
+  @override
+  String get settingsFirebaseRuntimeConfigRefreshingAction => 'Menyegarkan...';
+
+  @override
+  String get settingsFirebaseRuntimeConfigRefreshSuccess => 'Konfigurasi runtime Firebase diperbarui.';
+
+  @override
+  String get settingsFirebaseRuntimeConfigRefreshNoChanges => 'Konfigurasi runtime Firebase sudah terbaru.';
+
+  @override
+  String settingsFirebaseRuntimeConfigRefreshFailed(String error) {
+    return 'Gagal menyegarkan konfigurasi: $error';
+  }
+
+  @override
   String get settingsExportingData => 'Mengekspor data...';
 
   @override

@@ -209,6 +209,73 @@ class AppLocalizationsKo extends AppLocalizations {
   }
 
   @override
+  String get settingsFirebaseRuntimeConfigTitle => 'Firebase 런타임 구성';
+
+  @override
+  String get settingsFirebaseRuntimeConfigSubtitle => '런타임 기능 플래그 확인 및 새로고침';
+
+  @override
+  String get settingsFirebaseRuntimeConfigSheetTitle => 'Firebase 런타임 구성';
+
+  @override
+  String get settingsFirebaseRuntimeConfigDescription => '값은 Firebase Remote Config에서 가져와 런타임에 적용됩니다.';
+
+  @override
+  String settingsFirebaseRuntimeConfigSummary(int enabledCount) {
+    return '3개 신호 중 $enabledCount개 활성화';
+  }
+
+  @override
+  String get settingsFirebaseRuntimeConfigAnalyticsLabel => '애널리틱스 수집';
+
+  @override
+  String get settingsFirebaseRuntimeConfigCrashlyticsLabel => 'Crashlytics 수집';
+
+  @override
+  String get settingsFirebaseRuntimeConfigPerformanceLabel => '성능 수집';
+
+  @override
+  String get settingsFirebaseRuntimeConfigFetchStatusTitle => '마지막 가져오기 상태';
+
+  @override
+  String get settingsFirebaseRuntimeConfigLastFetchTitle => '마지막 가져오기 시간';
+
+  @override
+  String get settingsFirebaseRuntimeConfigValueEnabled => '사용';
+
+  @override
+  String get settingsFirebaseRuntimeConfigValueDisabled => '사용 안 함';
+
+  @override
+  String get settingsFirebaseRuntimeConfigFetchStatusSuccess => '성공';
+
+  @override
+  String get settingsFirebaseRuntimeConfigFetchStatusFailure => '실패';
+
+  @override
+  String get settingsFirebaseRuntimeConfigFetchStatusThrottled => '제한됨';
+
+  @override
+  String get settingsFirebaseRuntimeConfigFetchStatusNoFetch => '가져온 기록 없음';
+
+  @override
+  String get settingsFirebaseRuntimeConfigRefreshAction => '구성 새로고침';
+
+  @override
+  String get settingsFirebaseRuntimeConfigRefreshingAction => '새로고침 중...';
+
+  @override
+  String get settingsFirebaseRuntimeConfigRefreshSuccess => 'Firebase 런타임 구성을 새로고침했습니다.';
+
+  @override
+  String get settingsFirebaseRuntimeConfigRefreshNoChanges => 'Firebase 런타임 구성이 이미 최신입니다.';
+
+  @override
+  String settingsFirebaseRuntimeConfigRefreshFailed(String error) {
+    return '구성 새로고침 실패: $error';
+  }
+
+  @override
   String get settingsExportingData => '데이터 내보내는 중...';
 
   @override

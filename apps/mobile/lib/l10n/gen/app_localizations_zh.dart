@@ -209,6 +209,73 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
+  String get settingsFirebaseRuntimeConfigTitle => 'Firebase 运行时配置';
+
+  @override
+  String get settingsFirebaseRuntimeConfigSubtitle => '查看并刷新运行时功能开关';
+
+  @override
+  String get settingsFirebaseRuntimeConfigSheetTitle => 'Firebase 运行时配置';
+
+  @override
+  String get settingsFirebaseRuntimeConfigDescription => '这些值来自 Firebase Remote Config，并在运行时生效。';
+
+  @override
+  String settingsFirebaseRuntimeConfigSummary(int enabledCount) {
+    return '3 项信号中已启用 $enabledCount 项';
+  }
+
+  @override
+  String get settingsFirebaseRuntimeConfigAnalyticsLabel => '分析收集';
+
+  @override
+  String get settingsFirebaseRuntimeConfigCrashlyticsLabel => 'Crashlytics 收集';
+
+  @override
+  String get settingsFirebaseRuntimeConfigPerformanceLabel => '性能收集';
+
+  @override
+  String get settingsFirebaseRuntimeConfigFetchStatusTitle => '最近拉取状态';
+
+  @override
+  String get settingsFirebaseRuntimeConfigLastFetchTitle => '最近拉取时间';
+
+  @override
+  String get settingsFirebaseRuntimeConfigValueEnabled => '已启用';
+
+  @override
+  String get settingsFirebaseRuntimeConfigValueDisabled => '已禁用';
+
+  @override
+  String get settingsFirebaseRuntimeConfigFetchStatusSuccess => '成功';
+
+  @override
+  String get settingsFirebaseRuntimeConfigFetchStatusFailure => '失败';
+
+  @override
+  String get settingsFirebaseRuntimeConfigFetchStatusThrottled => '受限';
+
+  @override
+  String get settingsFirebaseRuntimeConfigFetchStatusNoFetch => '尚未拉取';
+
+  @override
+  String get settingsFirebaseRuntimeConfigRefreshAction => '刷新配置';
+
+  @override
+  String get settingsFirebaseRuntimeConfigRefreshingAction => '正在刷新...';
+
+  @override
+  String get settingsFirebaseRuntimeConfigRefreshSuccess => 'Firebase 运行时配置已刷新。';
+
+  @override
+  String get settingsFirebaseRuntimeConfigRefreshNoChanges => 'Firebase 运行时配置已是最新。';
+
+  @override
+  String settingsFirebaseRuntimeConfigRefreshFailed(String error) {
+    return '刷新配置失败：$error';
+  }
+
+  @override
   String get settingsExportingData => '正在导出数据...';
 
   @override

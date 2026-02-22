@@ -209,6 +209,73 @@ class AppLocalizationsJa extends AppLocalizations {
   }
 
   @override
+  String get settingsFirebaseRuntimeConfigTitle => 'Firebase ランタイム設定';
+
+  @override
+  String get settingsFirebaseRuntimeConfigSubtitle => 'ランタイム機能フラグを確認して更新';
+
+  @override
+  String get settingsFirebaseRuntimeConfigSheetTitle => 'Firebase ランタイム設定';
+
+  @override
+  String get settingsFirebaseRuntimeConfigDescription => '値は Firebase Remote Config から取得され、実行時に適用されます。';
+
+  @override
+  String settingsFirebaseRuntimeConfigSummary(int enabledCount) {
+    return '3 件中 $enabledCount 件が有効';
+  }
+
+  @override
+  String get settingsFirebaseRuntimeConfigAnalyticsLabel => 'アナリティクス収集';
+
+  @override
+  String get settingsFirebaseRuntimeConfigCrashlyticsLabel => 'Crashlytics 収集';
+
+  @override
+  String get settingsFirebaseRuntimeConfigPerformanceLabel => 'パフォーマンス収集';
+
+  @override
+  String get settingsFirebaseRuntimeConfigFetchStatusTitle => '最終取得ステータス';
+
+  @override
+  String get settingsFirebaseRuntimeConfigLastFetchTitle => '最終取得時刻';
+
+  @override
+  String get settingsFirebaseRuntimeConfigValueEnabled => '有効';
+
+  @override
+  String get settingsFirebaseRuntimeConfigValueDisabled => '無効';
+
+  @override
+  String get settingsFirebaseRuntimeConfigFetchStatusSuccess => '成功';
+
+  @override
+  String get settingsFirebaseRuntimeConfigFetchStatusFailure => '失敗';
+
+  @override
+  String get settingsFirebaseRuntimeConfigFetchStatusThrottled => '制限中';
+
+  @override
+  String get settingsFirebaseRuntimeConfigFetchStatusNoFetch => '未取得';
+
+  @override
+  String get settingsFirebaseRuntimeConfigRefreshAction => '設定を更新';
+
+  @override
+  String get settingsFirebaseRuntimeConfigRefreshingAction => '更新中...';
+
+  @override
+  String get settingsFirebaseRuntimeConfigRefreshSuccess => 'Firebase ランタイム設定を更新しました。';
+
+  @override
+  String get settingsFirebaseRuntimeConfigRefreshNoChanges => 'Firebase ランタイム設定は最新です。';
+
+  @override
+  String settingsFirebaseRuntimeConfigRefreshFailed(String error) {
+    return '設定の更新に失敗しました: $error';
+  }
+
+  @override
   String get settingsExportingData => 'データをエクスポート中...';
 
   @override

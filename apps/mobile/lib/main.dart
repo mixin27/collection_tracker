@@ -17,7 +17,7 @@ void main() async {
         onboardingCompleteProvider.overrideWith(
           (ref) => bootstrapData.onboardingComplete,
         ),
-        firebaseRuntimeConfigProvider.overrideWith(
+        initialFirebaseRuntimeConfigProvider.overrideWith(
           (ref) => bootstrapData.firebaseRuntimeConfig,
         ),
       ],

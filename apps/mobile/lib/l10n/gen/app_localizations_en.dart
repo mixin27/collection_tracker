@@ -209,6 +209,73 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get settingsFirebaseRuntimeConfigTitle => 'Firebase Runtime Config';
+
+  @override
+  String get settingsFirebaseRuntimeConfigSubtitle => 'Inspect and refresh runtime feature flags';
+
+  @override
+  String get settingsFirebaseRuntimeConfigSheetTitle => 'Firebase Runtime Config';
+
+  @override
+  String get settingsFirebaseRuntimeConfigDescription => 'Values are fetched from Firebase Remote Config and applied at runtime.';
+
+  @override
+  String settingsFirebaseRuntimeConfigSummary(int enabledCount) {
+    return '$enabledCount of 3 signals enabled';
+  }
+
+  @override
+  String get settingsFirebaseRuntimeConfigAnalyticsLabel => 'Analytics collection';
+
+  @override
+  String get settingsFirebaseRuntimeConfigCrashlyticsLabel => 'Crashlytics collection';
+
+  @override
+  String get settingsFirebaseRuntimeConfigPerformanceLabel => 'Performance collection';
+
+  @override
+  String get settingsFirebaseRuntimeConfigFetchStatusTitle => 'Last fetch status';
+
+  @override
+  String get settingsFirebaseRuntimeConfigLastFetchTitle => 'Last fetch time';
+
+  @override
+  String get settingsFirebaseRuntimeConfigValueEnabled => 'Enabled';
+
+  @override
+  String get settingsFirebaseRuntimeConfigValueDisabled => 'Disabled';
+
+  @override
+  String get settingsFirebaseRuntimeConfigFetchStatusSuccess => 'Success';
+
+  @override
+  String get settingsFirebaseRuntimeConfigFetchStatusFailure => 'Failure';
+
+  @override
+  String get settingsFirebaseRuntimeConfigFetchStatusThrottled => 'Throttled';
+
+  @override
+  String get settingsFirebaseRuntimeConfigFetchStatusNoFetch => 'No fetch yet';
+
+  @override
+  String get settingsFirebaseRuntimeConfigRefreshAction => 'Refresh config';
+
+  @override
+  String get settingsFirebaseRuntimeConfigRefreshingAction => 'Refreshing...';
+
+  @override
+  String get settingsFirebaseRuntimeConfigRefreshSuccess => 'Firebase runtime config refreshed.';
+
+  @override
+  String get settingsFirebaseRuntimeConfigRefreshNoChanges => 'Firebase runtime config is already up to date.';
+
+  @override
+  String settingsFirebaseRuntimeConfigRefreshFailed(String error) {
+    return 'Failed to refresh config: $error';
+  }
+
+  @override
   String get settingsExportingData => 'Exporting data...';
 
   @override

@@ -136,6 +136,60 @@
       }
     }
   },
+  "settingsFirebaseRuntimeConfigTitle": "Konfigurasi Runtime Firebase",
+  "@settingsFirebaseRuntimeConfigTitle": {},
+  "settingsFirebaseRuntimeConfigSubtitle": "Periksa dan segarkan flag fitur runtime",
+  "@settingsFirebaseRuntimeConfigSubtitle": {},
+  "settingsFirebaseRuntimeConfigSheetTitle": "Konfigurasi Runtime Firebase",
+  "@settingsFirebaseRuntimeConfigSheetTitle": {},
+  "settingsFirebaseRuntimeConfigDescription": "Nilai diambil dari Firebase Remote Config dan diterapkan saat runtime.",
+  "@settingsFirebaseRuntimeConfigDescription": {},
+  "settingsFirebaseRuntimeConfigSummary": "{enabledCount} dari 3 sinyal aktif",
+  "@settingsFirebaseRuntimeConfigSummary": {
+    "placeholders": {
+      "enabledCount": {
+        "type": "int"
+      }
+    }
+  },
+  "settingsFirebaseRuntimeConfigAnalyticsLabel": "Pengumpulan analitik",
+  "@settingsFirebaseRuntimeConfigAnalyticsLabel": {},
+  "settingsFirebaseRuntimeConfigCrashlyticsLabel": "Pengumpulan Crashlytics",
+  "@settingsFirebaseRuntimeConfigCrashlyticsLabel": {},
+  "settingsFirebaseRuntimeConfigPerformanceLabel": "Pengumpulan performa",
+  "@settingsFirebaseRuntimeConfigPerformanceLabel": {},
+  "settingsFirebaseRuntimeConfigFetchStatusTitle": "Status pengambilan terakhir",
+  "@settingsFirebaseRuntimeConfigFetchStatusTitle": {},
+  "settingsFirebaseRuntimeConfigLastFetchTitle": "Waktu pengambilan terakhir",
+  "@settingsFirebaseRuntimeConfigLastFetchTitle": {},
+  "settingsFirebaseRuntimeConfigValueEnabled": "Aktif",
+  "@settingsFirebaseRuntimeConfigValueEnabled": {},
+  "settingsFirebaseRuntimeConfigValueDisabled": "Nonaktif",
+  "@settingsFirebaseRuntimeConfigValueDisabled": {},
+  "settingsFirebaseRuntimeConfigFetchStatusSuccess": "Berhasil",
+  "@settingsFirebaseRuntimeConfigFetchStatusSuccess": {},
+  "settingsFirebaseRuntimeConfigFetchStatusFailure": "Gagal",
+  "@settingsFirebaseRuntimeConfigFetchStatusFailure": {},
+  "settingsFirebaseRuntimeConfigFetchStatusThrottled": "Dibatasi",
+  "@settingsFirebaseRuntimeConfigFetchStatusThrottled": {},
+  "settingsFirebaseRuntimeConfigFetchStatusNoFetch": "Belum pernah diambil",
+  "@settingsFirebaseRuntimeConfigFetchStatusNoFetch": {},
+  "settingsFirebaseRuntimeConfigRefreshAction": "Segarkan konfigurasi",
+  "@settingsFirebaseRuntimeConfigRefreshAction": {},
+  "settingsFirebaseRuntimeConfigRefreshingAction": "Menyegarkan...",
+  "@settingsFirebaseRuntimeConfigRefreshingAction": {},
+  "settingsFirebaseRuntimeConfigRefreshSuccess": "Konfigurasi runtime Firebase diperbarui.",
+  "@settingsFirebaseRuntimeConfigRefreshSuccess": {},
+  "settingsFirebaseRuntimeConfigRefreshNoChanges": "Konfigurasi runtime Firebase sudah terbaru.",
+  "@settingsFirebaseRuntimeConfigRefreshNoChanges": {},
+  "settingsFirebaseRuntimeConfigRefreshFailed": "Gagal menyegarkan konfigurasi: {error}",
+  "@settingsFirebaseRuntimeConfigRefreshFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
   "settingsExportingData": "Mengekspor data...",
   "@settingsExportingData": {},
   "settingsDataExportSuccess": "Data berhasil diekspor!",

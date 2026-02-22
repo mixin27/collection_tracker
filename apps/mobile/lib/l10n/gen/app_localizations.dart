@@ -497,6 +497,132 @@ abstract class AppLocalizations {
   /// **'Failed to trigger crash test: {error}'**
   String settingsCrashlyticsTestFailed(String error);
 
+  /// No description provided for @settingsFirebaseRuntimeConfigTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Firebase Runtime Config'**
+  String get settingsFirebaseRuntimeConfigTitle;
+
+  /// No description provided for @settingsFirebaseRuntimeConfigSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Inspect and refresh runtime feature flags'**
+  String get settingsFirebaseRuntimeConfigSubtitle;
+
+  /// No description provided for @settingsFirebaseRuntimeConfigSheetTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Firebase Runtime Config'**
+  String get settingsFirebaseRuntimeConfigSheetTitle;
+
+  /// No description provided for @settingsFirebaseRuntimeConfigDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Values are fetched from Firebase Remote Config and applied at runtime.'**
+  String get settingsFirebaseRuntimeConfigDescription;
+
+  /// No description provided for @settingsFirebaseRuntimeConfigSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'{enabledCount} of 3 signals enabled'**
+  String settingsFirebaseRuntimeConfigSummary(int enabledCount);
+
+  /// No description provided for @settingsFirebaseRuntimeConfigAnalyticsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Analytics collection'**
+  String get settingsFirebaseRuntimeConfigAnalyticsLabel;
+
+  /// No description provided for @settingsFirebaseRuntimeConfigCrashlyticsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Crashlytics collection'**
+  String get settingsFirebaseRuntimeConfigCrashlyticsLabel;
+
+  /// No description provided for @settingsFirebaseRuntimeConfigPerformanceLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Performance collection'**
+  String get settingsFirebaseRuntimeConfigPerformanceLabel;
+
+  /// No description provided for @settingsFirebaseRuntimeConfigFetchStatusTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Last fetch status'**
+  String get settingsFirebaseRuntimeConfigFetchStatusTitle;
+
+  /// No description provided for @settingsFirebaseRuntimeConfigLastFetchTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Last fetch time'**
+  String get settingsFirebaseRuntimeConfigLastFetchTitle;
+
+  /// No description provided for @settingsFirebaseRuntimeConfigValueEnabled.
+  ///
+  /// In en, this message translates to:
+  /// **'Enabled'**
+  String get settingsFirebaseRuntimeConfigValueEnabled;
+
+  /// No description provided for @settingsFirebaseRuntimeConfigValueDisabled.
+  ///
+  /// In en, this message translates to:
+  /// **'Disabled'**
+  String get settingsFirebaseRuntimeConfigValueDisabled;
+
+  /// No description provided for @settingsFirebaseRuntimeConfigFetchStatusSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Success'**
+  String get settingsFirebaseRuntimeConfigFetchStatusSuccess;
+
+  /// No description provided for @settingsFirebaseRuntimeConfigFetchStatusFailure.
+  ///
+  /// In en, this message translates to:
+  /// **'Failure'**
+  String get settingsFirebaseRuntimeConfigFetchStatusFailure;
+
+  /// No description provided for @settingsFirebaseRuntimeConfigFetchStatusThrottled.
+  ///
+  /// In en, this message translates to:
+  /// **'Throttled'**
+  String get settingsFirebaseRuntimeConfigFetchStatusThrottled;
+
+  /// No description provided for @settingsFirebaseRuntimeConfigFetchStatusNoFetch.
+  ///
+  /// In en, this message translates to:
+  /// **'No fetch yet'**
+  String get settingsFirebaseRuntimeConfigFetchStatusNoFetch;
+
+  /// No description provided for @settingsFirebaseRuntimeConfigRefreshAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Refresh config'**
+  String get settingsFirebaseRuntimeConfigRefreshAction;
+
+  /// No description provided for @settingsFirebaseRuntimeConfigRefreshingAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Refreshing...'**
+  String get settingsFirebaseRuntimeConfigRefreshingAction;
+
+  /// No description provided for @settingsFirebaseRuntimeConfigRefreshSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Firebase runtime config refreshed.'**
+  String get settingsFirebaseRuntimeConfigRefreshSuccess;
+
+  /// No description provided for @settingsFirebaseRuntimeConfigRefreshNoChanges.
+  ///
+  /// In en, this message translates to:
+  /// **'Firebase runtime config is already up to date.'**
+  String get settingsFirebaseRuntimeConfigRefreshNoChanges;
+
+  /// No description provided for @settingsFirebaseRuntimeConfigRefreshFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to refresh config: {error}'**
+  String settingsFirebaseRuntimeConfigRefreshFailed(String error);
+
   /// No description provided for @settingsExportingData.
   ///
   /// In en, this message translates to:

@@ -136,6 +136,60 @@
       }
     }
   },
+  "settingsFirebaseRuntimeConfigTitle": "Firebase Runtime Config",
+  "@settingsFirebaseRuntimeConfigTitle": {},
+  "settingsFirebaseRuntimeConfigSubtitle": "runtime feature flags ကို စစ်ဆေးပြီး refresh လုပ်ပါ",
+  "@settingsFirebaseRuntimeConfigSubtitle": {},
+  "settingsFirebaseRuntimeConfigSheetTitle": "Firebase Runtime Config",
+  "@settingsFirebaseRuntimeConfigSheetTitle": {},
+  "settingsFirebaseRuntimeConfigDescription": "values တွေကို Firebase Remote Config မှ ရယူပြီး runtime တွင် apply လုပ်ပါသည်။",
+  "@settingsFirebaseRuntimeConfigDescription": {},
+  "settingsFirebaseRuntimeConfigSummary": "signal 3 ခုထဲမှ {enabledCount} ခု ဖွင့်ထားသည်",
+  "@settingsFirebaseRuntimeConfigSummary": {
+    "placeholders": {
+      "enabledCount": {
+        "type": "int"
+      }
+    }
+  },
+  "settingsFirebaseRuntimeConfigAnalyticsLabel": "Analytics collection",
+  "@settingsFirebaseRuntimeConfigAnalyticsLabel": {},
+  "settingsFirebaseRuntimeConfigCrashlyticsLabel": "Crashlytics collection",
+  "@settingsFirebaseRuntimeConfigCrashlyticsLabel": {},
+  "settingsFirebaseRuntimeConfigPerformanceLabel": "Performance collection",
+  "@settingsFirebaseRuntimeConfigPerformanceLabel": {},
+  "settingsFirebaseRuntimeConfigFetchStatusTitle": "နောက်ဆုံး fetch status",
+  "@settingsFirebaseRuntimeConfigFetchStatusTitle": {},
+  "settingsFirebaseRuntimeConfigLastFetchTitle": "နောက်ဆုံး fetch အချိန်",
+  "@settingsFirebaseRuntimeConfigLastFetchTitle": {},
+  "settingsFirebaseRuntimeConfigValueEnabled": "ဖွင့်ထားသည်",
+  "@settingsFirebaseRuntimeConfigValueEnabled": {},
+  "settingsFirebaseRuntimeConfigValueDisabled": "ပိတ်ထားသည်",
+  "@settingsFirebaseRuntimeConfigValueDisabled": {},
+  "settingsFirebaseRuntimeConfigFetchStatusSuccess": "အောင်မြင်သည်",
+  "@settingsFirebaseRuntimeConfigFetchStatusSuccess": {},
+  "settingsFirebaseRuntimeConfigFetchStatusFailure": "မအောင်မြင်ပါ",
+  "@settingsFirebaseRuntimeConfigFetchStatusFailure": {},
+  "settingsFirebaseRuntimeConfigFetchStatusThrottled": "ကန့်သတ်ထားသည်",
+  "@settingsFirebaseRuntimeConfigFetchStatusThrottled": {},
+  "settingsFirebaseRuntimeConfigFetchStatusNoFetch": "မရယူရသေးပါ",
+  "@settingsFirebaseRuntimeConfigFetchStatusNoFetch": {},
+  "settingsFirebaseRuntimeConfigRefreshAction": "config refresh",
+  "@settingsFirebaseRuntimeConfigRefreshAction": {},
+  "settingsFirebaseRuntimeConfigRefreshingAction": "refresh လုပ်နေသည်...",
+  "@settingsFirebaseRuntimeConfigRefreshingAction": {},
+  "settingsFirebaseRuntimeConfigRefreshSuccess": "Firebase runtime config ကို refresh လုပ်ပြီးပါပြီ။",
+  "@settingsFirebaseRuntimeConfigRefreshSuccess": {},
+  "settingsFirebaseRuntimeConfigRefreshNoChanges": "Firebase runtime config သည် နောက်ဆုံး update ဖြစ်နေပါသည်။",
+  "@settingsFirebaseRuntimeConfigRefreshNoChanges": {},
+  "settingsFirebaseRuntimeConfigRefreshFailed": "config refresh မအောင်မြင်ပါ: {error}",
+  "@settingsFirebaseRuntimeConfigRefreshFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
   "settingsExportingData": "ဒေတာ ထုတ်ယူနေသည်...",
   "@settingsExportingData": {},
   "settingsDataExportSuccess": "ဒေတာ ထုတ်ယူမှု အောင်မြင်သည်!",

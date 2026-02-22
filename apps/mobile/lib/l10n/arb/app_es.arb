@@ -136,6 +136,60 @@
       }
     }
   },
+  "settingsFirebaseRuntimeConfigTitle": "Configuración de ejecución de Firebase",
+  "@settingsFirebaseRuntimeConfigTitle": {},
+  "settingsFirebaseRuntimeConfigSubtitle": "Inspecciona y actualiza las banderas de ejecución",
+  "@settingsFirebaseRuntimeConfigSubtitle": {},
+  "settingsFirebaseRuntimeConfigSheetTitle": "Configuración de ejecución de Firebase",
+  "@settingsFirebaseRuntimeConfigSheetTitle": {},
+  "settingsFirebaseRuntimeConfigDescription": "Los valores se obtienen de Firebase Remote Config y se aplican en tiempo de ejecución.",
+  "@settingsFirebaseRuntimeConfigDescription": {},
+  "settingsFirebaseRuntimeConfigSummary": "{enabledCount} de 3 señales activas",
+  "@settingsFirebaseRuntimeConfigSummary": {
+    "placeholders": {
+      "enabledCount": {
+        "type": "int"
+      }
+    }
+  },
+  "settingsFirebaseRuntimeConfigAnalyticsLabel": "Recopilación de analíticas",
+  "@settingsFirebaseRuntimeConfigAnalyticsLabel": {},
+  "settingsFirebaseRuntimeConfigCrashlyticsLabel": "Recopilación de Crashlytics",
+  "@settingsFirebaseRuntimeConfigCrashlyticsLabel": {},
+  "settingsFirebaseRuntimeConfigPerformanceLabel": "Recopilación de rendimiento",
+  "@settingsFirebaseRuntimeConfigPerformanceLabel": {},
+  "settingsFirebaseRuntimeConfigFetchStatusTitle": "Estado de la última obtención",
+  "@settingsFirebaseRuntimeConfigFetchStatusTitle": {},
+  "settingsFirebaseRuntimeConfigLastFetchTitle": "Hora de la última obtención",
+  "@settingsFirebaseRuntimeConfigLastFetchTitle": {},
+  "settingsFirebaseRuntimeConfigValueEnabled": "Activado",
+  "@settingsFirebaseRuntimeConfigValueEnabled": {},
+  "settingsFirebaseRuntimeConfigValueDisabled": "Desactivado",
+  "@settingsFirebaseRuntimeConfigValueDisabled": {},
+  "settingsFirebaseRuntimeConfigFetchStatusSuccess": "Correcto",
+  "@settingsFirebaseRuntimeConfigFetchStatusSuccess": {},
+  "settingsFirebaseRuntimeConfigFetchStatusFailure": "Fallido",
+  "@settingsFirebaseRuntimeConfigFetchStatusFailure": {},
+  "settingsFirebaseRuntimeConfigFetchStatusThrottled": "Limitado",
+  "@settingsFirebaseRuntimeConfigFetchStatusThrottled": {},
+  "settingsFirebaseRuntimeConfigFetchStatusNoFetch": "Aún sin obtención",
+  "@settingsFirebaseRuntimeConfigFetchStatusNoFetch": {},
+  "settingsFirebaseRuntimeConfigRefreshAction": "Actualizar configuración",
+  "@settingsFirebaseRuntimeConfigRefreshAction": {},
+  "settingsFirebaseRuntimeConfigRefreshingAction": "Actualizando...",
+  "@settingsFirebaseRuntimeConfigRefreshingAction": {},
+  "settingsFirebaseRuntimeConfigRefreshSuccess": "La configuración de ejecución de Firebase se actualizó.",
+  "@settingsFirebaseRuntimeConfigRefreshSuccess": {},
+  "settingsFirebaseRuntimeConfigRefreshNoChanges": "La configuración de ejecución de Firebase ya está actualizada.",
+  "@settingsFirebaseRuntimeConfigRefreshNoChanges": {},
+  "settingsFirebaseRuntimeConfigRefreshFailed": "No se pudo actualizar la configuración: {error}",
+  "@settingsFirebaseRuntimeConfigRefreshFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
   "settingsExportingData": "Exportando datos...",
   "@settingsExportingData": {},
   "settingsDataExportSuccess": "¡Datos exportados correctamente!",

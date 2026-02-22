@@ -136,6 +136,60 @@
       }
     }
   },
+  "settingsFirebaseRuntimeConfigTitle": "Firebase 런타임 구성",
+  "@settingsFirebaseRuntimeConfigTitle": {},
+  "settingsFirebaseRuntimeConfigSubtitle": "런타임 기능 플래그 확인 및 새로고침",
+  "@settingsFirebaseRuntimeConfigSubtitle": {},
+  "settingsFirebaseRuntimeConfigSheetTitle": "Firebase 런타임 구성",
+  "@settingsFirebaseRuntimeConfigSheetTitle": {},
+  "settingsFirebaseRuntimeConfigDescription": "값은 Firebase Remote Config에서 가져와 런타임에 적용됩니다.",
+  "@settingsFirebaseRuntimeConfigDescription": {},
+  "settingsFirebaseRuntimeConfigSummary": "3개 신호 중 {enabledCount}개 활성화",
+  "@settingsFirebaseRuntimeConfigSummary": {
+    "placeholders": {
+      "enabledCount": {
+        "type": "int"
+      }
+    }
+  },
+  "settingsFirebaseRuntimeConfigAnalyticsLabel": "애널리틱스 수집",
+  "@settingsFirebaseRuntimeConfigAnalyticsLabel": {},
+  "settingsFirebaseRuntimeConfigCrashlyticsLabel": "Crashlytics 수집",
+  "@settingsFirebaseRuntimeConfigCrashlyticsLabel": {},
+  "settingsFirebaseRuntimeConfigPerformanceLabel": "성능 수집",
+  "@settingsFirebaseRuntimeConfigPerformanceLabel": {},
+  "settingsFirebaseRuntimeConfigFetchStatusTitle": "마지막 가져오기 상태",
+  "@settingsFirebaseRuntimeConfigFetchStatusTitle": {},
+  "settingsFirebaseRuntimeConfigLastFetchTitle": "마지막 가져오기 시간",
+  "@settingsFirebaseRuntimeConfigLastFetchTitle": {},
+  "settingsFirebaseRuntimeConfigValueEnabled": "사용",
+  "@settingsFirebaseRuntimeConfigValueEnabled": {},
+  "settingsFirebaseRuntimeConfigValueDisabled": "사용 안 함",
+  "@settingsFirebaseRuntimeConfigValueDisabled": {},
+  "settingsFirebaseRuntimeConfigFetchStatusSuccess": "성공",
+  "@settingsFirebaseRuntimeConfigFetchStatusSuccess": {},
+  "settingsFirebaseRuntimeConfigFetchStatusFailure": "실패",
+  "@settingsFirebaseRuntimeConfigFetchStatusFailure": {},
+  "settingsFirebaseRuntimeConfigFetchStatusThrottled": "제한됨",
+  "@settingsFirebaseRuntimeConfigFetchStatusThrottled": {},
+  "settingsFirebaseRuntimeConfigFetchStatusNoFetch": "가져온 기록 없음",
+  "@settingsFirebaseRuntimeConfigFetchStatusNoFetch": {},
+  "settingsFirebaseRuntimeConfigRefreshAction": "구성 새로고침",
+  "@settingsFirebaseRuntimeConfigRefreshAction": {},
+  "settingsFirebaseRuntimeConfigRefreshingAction": "새로고침 중...",
+  "@settingsFirebaseRuntimeConfigRefreshingAction": {},
+  "settingsFirebaseRuntimeConfigRefreshSuccess": "Firebase 런타임 구성을 새로고침했습니다.",
+  "@settingsFirebaseRuntimeConfigRefreshSuccess": {},
+  "settingsFirebaseRuntimeConfigRefreshNoChanges": "Firebase 런타임 구성이 이미 최신입니다.",
+  "@settingsFirebaseRuntimeConfigRefreshNoChanges": {},
+  "settingsFirebaseRuntimeConfigRefreshFailed": "구성 새로고침 실패: {error}",
+  "@settingsFirebaseRuntimeConfigRefreshFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
   "settingsExportingData": "데이터 내보내는 중...",
   "@settingsExportingData": {},
   "settingsDataExportSuccess": "데이터 내보내기 완료!",

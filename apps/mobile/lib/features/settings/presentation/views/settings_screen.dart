@@ -1,7 +1,9 @@
 import 'package:app_logger/app_logger.dart';
 import 'package:collection_tracker/core/analytics/analytics_consent_dialog.dart';
 import 'package:collection_tracker/core/analytics/analytics_preferences.dart';
+import 'package:collection_tracker/core/firebase/firebase_runtime_config.dart';
 import 'package:collection_tracker/core/providers/providers.dart';
+import 'package:intl/intl.dart';
 import 'package:collection_tracker/l10n/l10n.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
@@ -22,10 +24,15 @@ class SettingsScreen extends ConsumerWidget {
     final themeSettings = ref.watch(themeSettingsProvider);
     final currentLanguage = ref.watch(localeSettingsProvider);
     final analyticsPreferences = ref.watch(analyticsPreferencesProvider);
+    final firebaseRuntimeConfig = ref.watch(firebaseRuntimeConfigProvider);
     final themeSummary =
         '${_themeModeLabel(context, themeSettings.mode)} - ${themeSettings.variant.label}';
     final languageSummary = _languageLabel(context, currentLanguage);
     final analyticsSummary = _analyticsSummary(context, analyticsPreferences);
+    final firebaseRuntimeSummary = _firebaseRuntimeSummary(
+      context,
+      firebaseRuntimeConfig,
+    );
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.settingsTitle)),
@@ -62,9 +69,14 @@ class SettingsScreen extends ConsumerWidget {
               ],
             ),
           ),
-          const SizedBox(height: AppSpacing.lg),
+          const SizedBox(height: AppSpacing.md),
           AppReveal(
             delay: AppMotion.stagger,
+            child: _FirebaseRuntimeHealthCard(config: firebaseRuntimeConfig),
+          ),
+          const SizedBox(height: AppSpacing.lg),
+          AppReveal(
+            delay: AppMotion.stagger * 2,
             child: _SettingsSection(
               title: l10n.settingsSectionData,
               children: [
@@ -103,7 +115,7 @@ class SettingsScreen extends ConsumerWidget {
           ),
           const SizedBox(height: AppSpacing.lg),
           AppReveal(
-            delay: AppMotion.stagger * 2,
+            delay: AppMotion.stagger * 3,
             child: _SettingsSection(
               title: l10n.settingsSectionAbout,
               children: [
@@ -128,10 +140,16 @@ class SettingsScreen extends ConsumerWidget {
           if (kDebugMode) ...[
             const SizedBox(height: AppSpacing.lg),
             AppReveal(
-              delay: AppMotion.stagger * 3,
+              delay: AppMotion.stagger * 4,
               child: _SettingsSection(
                 title: l10n.settingsSectionDeveloper,
                 children: [
+                  _SettingsTile(
+                    icon: Icons.settings_remote_outlined,
+                    title: l10n.settingsFirebaseRuntimeConfigTitle,
+                    subtitle: firebaseRuntimeSummary,
+                    onTap: () => _showFirebaseRuntimeConfigSheet(context, ref),
+                  ),
                   _SettingsTile(
                     icon: Icons.bug_report_outlined,
                     title: l10n.settingsCrashlyticsTestTitle,
@@ -492,6 +510,175 @@ class SettingsScreen extends ConsumerWidget {
     );
   }
 
+  Future<void> _showFirebaseRuntimeConfigSheet(
+    BuildContext context,
+    WidgetRef ref,
+  ) async {
+    await showAppSheet(
+      context: context,
+      builder: (context) {
+        return Consumer(
+          builder: (context, ref, _) {
+            final l10n = context.l10n;
+            final runtimeConfig = ref.watch(firebaseRuntimeConfigProvider);
+            final remoteConfigStatus = ref.watch(
+              firebaseRemoteConfigStatusProvider,
+            );
+            final isRefreshing = ref.watch(
+              firebaseRuntimeConfigRefreshInProgressProvider,
+            );
+            final localeTag = Localizations.localeOf(context).toLanguageTag();
+            final lastFetchTimeText = remoteConfigStatus.lastFetchTime == null
+                ? l10n.settingsFirebaseRuntimeConfigFetchStatusNoFetch
+                : DateFormat.yMd(localeTag).add_Hms().format(
+                    remoteConfigStatus.lastFetchTime!.toLocal(),
+                  );
+
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  l10n.settingsFirebaseRuntimeConfigSheetTitle,
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                const SizedBox(height: AppSpacing.sm),
+                Text(
+                  l10n.settingsFirebaseRuntimeConfigDescription,
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
+                ),
+                const SizedBox(height: AppSpacing.md),
+                ListTile(
+                  contentPadding: EdgeInsets.zero,
+                  leading: const Icon(Icons.insights_outlined),
+                  title: Text(l10n.settingsFirebaseRuntimeConfigAnalyticsLabel),
+                  subtitle: const Text('app_analytics_collection_enabled'),
+                  trailing: Text(
+                    _enabledDisabledLabel(
+                      context,
+                      runtimeConfig.analyticsCollectionEnabled,
+                    ),
+                  ),
+                ),
+                ListTile(
+                  contentPadding: EdgeInsets.zero,
+                  leading: const Icon(Icons.bug_report_outlined),
+                  title: Text(
+                    l10n.settingsFirebaseRuntimeConfigCrashlyticsLabel,
+                  ),
+                  subtitle: const Text('app_crashlytics_collection_enabled'),
+                  trailing: Text(
+                    _enabledDisabledLabel(
+                      context,
+                      runtimeConfig.crashlyticsCollectionEnabled,
+                    ),
+                  ),
+                ),
+                ListTile(
+                  contentPadding: EdgeInsets.zero,
+                  leading: const Icon(Icons.speed_outlined),
+                  title: Text(
+                    l10n.settingsFirebaseRuntimeConfigPerformanceLabel,
+                  ),
+                  subtitle: const Text('app_performance_collection_enabled'),
+                  trailing: Text(
+                    _enabledDisabledLabel(
+                      context,
+                      runtimeConfig.performanceCollectionEnabled,
+                    ),
+                  ),
+                ),
+                ListTile(
+                  contentPadding: EdgeInsets.zero,
+                  leading: const Icon(Icons.sync_alt_outlined),
+                  title: Text(
+                    l10n.settingsFirebaseRuntimeConfigFetchStatusTitle,
+                  ),
+                  subtitle: Text(
+                    _remoteConfigFetchStatusLabel(
+                      context,
+                      remoteConfigStatus.lastFetchStatus,
+                    ),
+                  ),
+                ),
+                ListTile(
+                  contentPadding: EdgeInsets.zero,
+                  leading: const Icon(Icons.schedule_outlined),
+                  title: Text(l10n.settingsFirebaseRuntimeConfigLastFetchTitle),
+                  subtitle: Text(lastFetchTimeText),
+                ),
+                const SizedBox(height: AppSpacing.md),
+                AppButton(
+                  label: isRefreshing
+                      ? l10n.settingsFirebaseRuntimeConfigRefreshingAction
+                      : l10n.settingsFirebaseRuntimeConfigRefreshAction,
+                  onPressed: isRefreshing
+                      ? null
+                      : () => _refreshFirebaseRuntimeConfig(context, ref),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
+
+  Future<void> _refreshFirebaseRuntimeConfig(
+    BuildContext context,
+    WidgetRef ref,
+  ) async {
+    final isRefreshing = ref.read(
+      firebaseRuntimeConfigRefreshInProgressProvider,
+    );
+    if (isRefreshing) {
+      return;
+    }
+
+    final l10n = context.l10n;
+
+    try {
+      final result = await ref
+          .read(firebaseRuntimeConfigControllerProvider.notifier)
+          .refreshFromRemoteConfig();
+      await ref
+          .read(analyticsPreferencesProvider.notifier)
+          .syncToAnalyticsService();
+
+      if (!context.mounted) {
+        return;
+      }
+
+      final message = result.didActivateChanges
+          ? l10n.settingsFirebaseRuntimeConfigRefreshSuccess
+          : l10n.settingsFirebaseRuntimeConfigRefreshNoChanges;
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(message)));
+    } catch (error, stackTrace) {
+      Logger.error(
+        'Failed to refresh Firebase runtime config.',
+        error,
+        stackTrace,
+      );
+      if (!context.mounted) {
+        return;
+      }
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            l10n.settingsFirebaseRuntimeConfigRefreshFailed('$error'),
+          ),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
+
   Future<void> _handleCrashlyticsTest(BuildContext context) async {
     final l10n = context.l10n;
     final shouldCrash = await showAppDialog<bool>(
@@ -631,6 +818,40 @@ class SettingsScreen extends ConsumerWidget {
       AnalyticsConsentStatus.unknown => l10n.settingsAnalyticsSummaryPending,
     };
   }
+
+  String _firebaseRuntimeSummary(
+    BuildContext context,
+    FirebaseRuntimeConfig config,
+  ) {
+    final enabledCount = [
+      config.analyticsCollectionEnabled,
+      config.crashlyticsCollectionEnabled,
+      config.performanceCollectionEnabled,
+    ].where((value) => value).length;
+    return context.l10n.settingsFirebaseRuntimeConfigSummary(enabledCount);
+  }
+
+  String _enabledDisabledLabel(BuildContext context, bool enabled) {
+    final l10n = context.l10n;
+    return enabled
+        ? l10n.settingsFirebaseRuntimeConfigValueEnabled
+        : l10n.settingsFirebaseRuntimeConfigValueDisabled;
+  }
+
+  String _remoteConfigFetchStatusLabel(
+    BuildContext context,
+    dynamic lastFetchStatus,
+  ) {
+    final l10n = context.l10n;
+    final statusName = lastFetchStatus?.name;
+
+    return switch (statusName) {
+      'success' => l10n.settingsFirebaseRuntimeConfigFetchStatusSuccess,
+      'failure' => l10n.settingsFirebaseRuntimeConfigFetchStatusFailure,
+      'throttle' => l10n.settingsFirebaseRuntimeConfigFetchStatusThrottled,
+      _ => l10n.settingsFirebaseRuntimeConfigFetchStatusNoFetch,
+    };
+  }
 }
 
 class _SettingsSection extends StatelessWidget {
@@ -678,6 +899,118 @@ class _SettingsSection extends StatelessWidget {
       }
     }
     return out;
+  }
+}
+
+class _FirebaseRuntimeHealthCard extends StatelessWidget {
+  const _FirebaseRuntimeHealthCard({required this.config});
+
+  final FirebaseRuntimeConfig config;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    final enabledCount = [
+      config.analyticsCollectionEnabled,
+      config.crashlyticsCollectionEnabled,
+      config.performanceCollectionEnabled,
+    ].where((value) => value).length;
+
+    return AppCard(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            l10n.settingsFirebaseRuntimeConfigTitle,
+            style: Theme.of(
+              context,
+            ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700),
+          ),
+          const SizedBox(height: AppSpacing.xs),
+          Text(
+            l10n.settingsFirebaseRuntimeConfigSummary(enabledCount),
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+            ),
+          ),
+          const SizedBox(height: AppSpacing.sm),
+          _FirebaseFlagStatusRow(
+            icon: Icons.insights_outlined,
+            label: l10n.settingsFirebaseRuntimeConfigAnalyticsLabel,
+            enabled: config.analyticsCollectionEnabled,
+          ),
+          const SizedBox(height: AppSpacing.xs),
+          _FirebaseFlagStatusRow(
+            icon: Icons.bug_report_outlined,
+            label: l10n.settingsFirebaseRuntimeConfigCrashlyticsLabel,
+            enabled: config.crashlyticsCollectionEnabled,
+          ),
+          const SizedBox(height: AppSpacing.xs),
+          _FirebaseFlagStatusRow(
+            icon: Icons.speed_outlined,
+            label: l10n.settingsFirebaseRuntimeConfigPerformanceLabel,
+            enabled: config.performanceCollectionEnabled,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _FirebaseFlagStatusRow extends StatelessWidget {
+  const _FirebaseFlagStatusRow({
+    required this.icon,
+    required this.label,
+    required this.enabled,
+  });
+
+  final IconData icon;
+  final String label;
+  final bool enabled;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    final labelText = enabled
+        ? l10n.settingsFirebaseRuntimeConfigValueEnabled
+        : l10n.settingsFirebaseRuntimeConfigValueDisabled;
+    final badgeColor = enabled
+        ? Theme.of(context).colorScheme.primary
+        : Theme.of(context).colorScheme.outline;
+    final badgeForeground = enabled
+        ? Theme.of(context).colorScheme.onPrimary
+        : Theme.of(context).colorScheme.onSurfaceVariant;
+
+    return Row(
+      children: [
+        Icon(
+          icon,
+          size: 18,
+          color: Theme.of(context).colorScheme.onSurfaceVariant,
+        ),
+        const SizedBox(width: AppSpacing.sm),
+        Expanded(
+          child: Text(label, style: Theme.of(context).textTheme.bodyMedium),
+        ),
+        Container(
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppSpacing.sm,
+            vertical: AppSpacing.xs,
+          ),
+          decoration: BoxDecoration(
+            color: badgeColor,
+            borderRadius: BorderRadius.circular(AppRadii.pill),
+          ),
+          child: Text(
+            labelText,
+            style: Theme.of(context).textTheme.labelSmall?.copyWith(
+              color: badgeForeground,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        ),
+      ],
+    );
   }
 }
 

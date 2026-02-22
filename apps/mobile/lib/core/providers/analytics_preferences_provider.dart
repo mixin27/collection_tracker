@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:app_analytics/app_analytics.dart';
 import 'package:collection_tracker/core/analytics/analytics_preferences.dart';
+import 'package:collection_tracker/core/firebase/firebase_runtime_config.dart';
 import 'package:collection_tracker/core/providers/firebase_runtime_config_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:storage/storage.dart';
@@ -12,6 +15,13 @@ class AnalyticsPreferencesNotifier extends _$AnalyticsPreferencesNotifier {
 
   @override
   AnalyticsPreferences build() {
+    ref.listen<FirebaseRuntimeConfig>(firebaseRuntimeConfigProvider, (
+      previous,
+      next,
+    ) {
+      unawaited(_applyToAnalyticsService());
+    });
+
     _prefs = PrefsStorageService.instance;
     final enabled =
         _prefs.readSync<bool>(AnalyticsPreferences.enabledPrefKey) ?? true;
@@ -43,6 +53,10 @@ class AnalyticsPreferencesNotifier extends _$AnalyticsPreferencesNotifier {
       status.code,
     );
     state = state.copyWith(consentStatus: status);
+    await _applyToAnalyticsService();
+  }
+
+  Future<void> syncToAnalyticsService() async {
     await _applyToAnalyticsService();
   }
 

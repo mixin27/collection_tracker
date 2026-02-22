@@ -209,6 +209,73 @@ class AppLocalizationsMy extends AppLocalizations {
   }
 
   @override
+  String get settingsFirebaseRuntimeConfigTitle => 'Firebase Runtime Config';
+
+  @override
+  String get settingsFirebaseRuntimeConfigSubtitle => 'runtime feature flags ကို စစ်ဆေးပြီး refresh လုပ်ပါ';
+
+  @override
+  String get settingsFirebaseRuntimeConfigSheetTitle => 'Firebase Runtime Config';
+
+  @override
+  String get settingsFirebaseRuntimeConfigDescription => 'values တွေကို Firebase Remote Config မှ ရယူပြီး runtime တွင် apply လုပ်ပါသည်။';
+
+  @override
+  String settingsFirebaseRuntimeConfigSummary(int enabledCount) {
+    return 'signal 3 ခုထဲမှ $enabledCount ခု ဖွင့်ထားသည်';
+  }
+
+  @override
+  String get settingsFirebaseRuntimeConfigAnalyticsLabel => 'Analytics collection';
+
+  @override
+  String get settingsFirebaseRuntimeConfigCrashlyticsLabel => 'Crashlytics collection';
+
+  @override
+  String get settingsFirebaseRuntimeConfigPerformanceLabel => 'Performance collection';
+
+  @override
+  String get settingsFirebaseRuntimeConfigFetchStatusTitle => 'နောက်ဆုံး fetch status';
+
+  @override
+  String get settingsFirebaseRuntimeConfigLastFetchTitle => 'နောက်ဆုံး fetch အချိန်';
+
+  @override
+  String get settingsFirebaseRuntimeConfigValueEnabled => 'ဖွင့်ထားသည်';
+
+  @override
+  String get settingsFirebaseRuntimeConfigValueDisabled => 'ပိတ်ထားသည်';
+
+  @override
+  String get settingsFirebaseRuntimeConfigFetchStatusSuccess => 'အောင်မြင်သည်';
+
+  @override
+  String get settingsFirebaseRuntimeConfigFetchStatusFailure => 'မအောင်မြင်ပါ';
+
+  @override
+  String get settingsFirebaseRuntimeConfigFetchStatusThrottled => 'ကန့်သတ်ထားသည်';
+
+  @override
+  String get settingsFirebaseRuntimeConfigFetchStatusNoFetch => 'မရယူရသေးပါ';
+
+  @override
+  String get settingsFirebaseRuntimeConfigRefreshAction => 'config refresh';
+
+  @override
+  String get settingsFirebaseRuntimeConfigRefreshingAction => 'refresh လုပ်နေသည်...';
+
+  @override
+  String get settingsFirebaseRuntimeConfigRefreshSuccess => 'Firebase runtime config ကို refresh လုပ်ပြီးပါပြီ။';
+
+  @override
+  String get settingsFirebaseRuntimeConfigRefreshNoChanges => 'Firebase runtime config သည် နောက်ဆုံး update ဖြစ်နေပါသည်။';
+
+  @override
+  String settingsFirebaseRuntimeConfigRefreshFailed(String error) {
+    return 'config refresh မအောင်မြင်ပါ: $error';
+  }
+
+  @override
   String get settingsExportingData => 'ဒေတာ ထုတ်ယူနေသည်...';
 
   @override
