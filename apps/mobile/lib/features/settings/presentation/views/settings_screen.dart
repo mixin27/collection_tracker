@@ -1,5 +1,5 @@
 import 'package:app_logger/app_logger.dart';
-import 'package:auth_session/auth_session.dart';
+import 'package:backend_api/backend_api.dart';
 import 'package:collection_tracker/core/analytics/analytics_consent_dialog.dart';
 import 'package:collection_tracker/core/analytics/analytics_preferences.dart';
 import 'package:collection_tracker/core/firebase/firebase_runtime_config.dart';
@@ -297,8 +297,7 @@ class SettingsScreen extends ConsumerWidget {
     return switch (readiness.status) {
       SyncReadinessStatus.ready =>
         'Ready • $pendingSyncCount pending change(s)',
-      SyncReadinessStatus.disabledByFeatureFlag =>
-        'Feature disabled by runtime config',
+      SyncReadinessStatus.disabledByFeatureFlag => 'Feature disabled by flags',
       SyncReadinessStatus.missingApiConfiguration =>
         'Sync API is not configured',
       SyncReadinessStatus.checkingAuthentication =>
@@ -451,21 +450,16 @@ class SettingsScreen extends ConsumerWidget {
 
   Future<void> _showSyncSignInSheet(BuildContext context, WidgetRef ref) async {
     final existingSession = ref.read(authSessionProvider).asData?.value;
-    final accessTokenController = TextEditingController(
-      text: existingSession?.accessToken ?? '',
-    );
-    final refreshTokenController = TextEditingController(
-      text: existingSession?.refreshToken ?? '',
-    );
-    final deviceIdController = TextEditingController(
-      text: existingSession?.deviceId ?? '',
-    );
+    final emailController = TextEditingController();
+    final passwordController = TextEditingController();
+    final displayNameController = TextEditingController();
 
     try {
       await showAppSheet(
         context: context,
         builder: (sheetContext) {
-          var isSaving = false;
+          var isRegisterMode = false;
+          var isSubmitting = false;
           return StatefulBuilder(
             builder: (context, setState) {
               return Column(
@@ -473,87 +467,135 @@ class SettingsScreen extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Sign in for Sync',
+                    isRegisterMode ? 'Create Sync Account' : 'Sign in for Sync',
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
                       fontWeight: FontWeight.w700,
                     ),
                   ),
                   const SizedBox(height: AppSpacing.sm),
                   Text(
-                    'Auth is optional for the app. Add your sync session tokens only if you want cloud sync.',
+                    'Auth is optional for the app. Sign in only if you want cloud sync and backend features.',
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       color: Theme.of(context).colorScheme.onSurfaceVariant,
                     ),
                   ),
                   const SizedBox(height: AppSpacing.md),
                   AppInput(
-                    controller: accessTokenController,
-                    labelText: 'Access token (optional if refresh provided)',
+                    controller: emailController,
+                    labelText: 'Email',
+                    keyboardType: TextInputType.emailAddress,
                   ),
                   const SizedBox(height: AppSpacing.sm),
                   AppInput(
-                    controller: refreshTokenController,
-                    labelText: 'Refresh token',
+                    controller: passwordController,
+                    labelText: 'Password',
                   ),
-                  const SizedBox(height: AppSpacing.sm),
-                  AppInput(
-                    controller: deviceIdController,
-                    labelText: 'Device id',
-                  ),
+                  if (isRegisterMode) ...[
+                    const SizedBox(height: AppSpacing.sm),
+                    AppInput(
+                      controller: displayNameController,
+                      labelText: 'Display name (optional)',
+                    ),
+                  ],
                   const SizedBox(height: AppSpacing.lg),
                   AppButton(
-                    label: isSaving ? 'Saving...' : 'Save session',
-                    onPressed: isSaving
+                    label: isSubmitting
+                        ? 'Please wait...'
+                        : (isRegisterMode ? 'Create account' : 'Sign in'),
+                    onPressed: isSubmitting
                         ? null
                         : () async {
-                            final accessToken = accessTokenController.text
-                                .trim();
-                            final refreshToken = refreshTokenController.text
-                                .trim();
-                            final deviceId = deviceIdController.text.trim();
-
-                            final hasAccess = accessToken.isNotEmpty;
-                            final hasRefreshFlow =
-                                refreshToken.isNotEmpty && deviceId.isNotEmpty;
-
-                            if (!hasAccess && !hasRefreshFlow) {
+                            final service = ref.read(
+                              backendAuthServiceProvider,
+                            );
+                            if (service == null) {
                               if (!context.mounted) return;
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
                                   content: Text(
-                                    'Provide an access token, or provide both refresh token and device id.',
+                                    'Backend integration is disabled or not configured.',
                                   ),
                                 ),
                               );
                               return;
                             }
 
-                            setState(() => isSaving = true);
-                            await ref
-                                .read(authSessionStoreProvider)
-                                .saveSession(
-                                  AuthSession(
-                                    status: AuthSessionStatus.signedIn,
-                                    accessToken: hasAccess ? accessToken : null,
-                                    refreshToken: refreshToken.isEmpty
-                                        ? null
-                                        : refreshToken,
-                                    deviceId: deviceId.isEmpty
-                                        ? null
-                                        : deviceId,
-                                    userId: existingSession?.userId,
-                                    expiresAt: existingSession?.expiresAt,
-                                    updatedAt: DateTime.now().toUtc(),
+                            final email = emailController.text.trim();
+                            final password = passwordController.text;
+                            final displayName = displayNameController.text
+                                .trim();
+
+                            if (email.isEmpty || password.isEmpty) {
+                              if (!context.mounted) return;
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text(
+                                    'Email and password are required.',
                                   ),
+                                ),
+                              );
+                              return;
+                            }
+
+                            setState(() => isSubmitting = true);
+
+                            try {
+                              if (isRegisterMode) {
+                                await service.register(
+                                  email: email,
+                                  password: password,
+                                  displayName: displayName.isEmpty
+                                      ? null
+                                      : displayName,
                                 );
-                            if (!context.mounted) return;
-                            Navigator.of(context).pop();
-                            ScaffoldMessenger.of(sheetContext).showSnackBar(
-                              const SnackBar(
-                                content: Text('Sync session saved.'),
-                                backgroundColor: Colors.green,
-                              ),
-                            );
+                              } else {
+                                await service.signIn(
+                                  email: email,
+                                  password: password,
+                                );
+                              }
+
+                              if (!context.mounted) return;
+                              Navigator.of(context).pop();
+                              ScaffoldMessenger.of(sheetContext).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                    isRegisterMode
+                                        ? 'Account created and signed in.'
+                                        : 'Signed in successfully.',
+                                  ),
+                                  backgroundColor: Colors.green,
+                                ),
+                              );
+                            } on BackendApiException catch (error) {
+                              if (!context.mounted) return;
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text(error.message)),
+                              );
+                            } catch (error) {
+                              if (!context.mounted) return;
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text('Sign-in failed: $error'),
+                                ),
+                              );
+                            } finally {
+                              if (context.mounted) {
+                                setState(() => isSubmitting = false);
+                              }
+                            }
+                          },
+                  ),
+                  const SizedBox(height: AppSpacing.sm),
+                  AppButton(
+                    label: isRegisterMode
+                        ? 'Already have an account? Sign in'
+                        : 'Create new account',
+                    variant: AppButtonVariant.ghost,
+                    onPressed: isSubmitting
+                        ? null
+                        : () {
+                            setState(() => isRegisterMode = !isRegisterMode);
                           },
                   ),
                   if ((existingSession?.isAuthenticated ?? false)) ...[
@@ -561,12 +603,19 @@ class SettingsScreen extends ConsumerWidget {
                     AppButton(
                       label: 'Sign out',
                       variant: AppButtonVariant.secondary,
-                      onPressed: isSaving
+                      onPressed: isSubmitting
                           ? null
                           : () async {
-                              await ref
-                                  .read(authSessionStoreProvider)
-                                  .clearSession();
+                              final service = ref.read(
+                                backendAuthServiceProvider,
+                              );
+                              if (service != null) {
+                                await service.signOut();
+                              } else {
+                                await ref
+                                    .read(authSessionStoreProvider)
+                                    .clearSession();
+                              }
                               if (!context.mounted) return;
                               Navigator.of(context).pop();
                               ScaffoldMessenger.of(sheetContext).showSnackBar(
@@ -584,9 +633,9 @@ class SettingsScreen extends ConsumerWidget {
         },
       );
     } finally {
-      accessTokenController.dispose();
-      refreshTokenController.dispose();
-      deviceIdController.dispose();
+      emailController.dispose();
+      passwordController.dispose();
+      displayNameController.dispose();
     }
   }
 
@@ -594,29 +643,86 @@ class SettingsScreen extends ConsumerWidget {
     BuildContext context,
     WidgetRef ref,
   ) async {
-    final config = ref.read(syncTransportConfigProvider);
-    final currentBaseUrl = config.baseUrl.trim().isEmpty
-        ? '(not set)'
-        : config.baseUrl.trim();
+    final initialOverride = ref.read(backendApiBaseUrlOverrideProvider);
+    final effectiveUrl = ref.read(backendApiBaseUrlProvider);
+    final controller = TextEditingController(text: initialOverride);
 
-    await showAppDialog<void>(
+    await showAppSheet(
       context: context,
-      title: const Text('Configure Sync API'),
-      content: Text(
-        'Sync backend URL is missing.\n\n'
-        'Current value: $currentBaseUrl\n\n'
-        'Run the app with:\n'
-        '--dart-define=SYNC_API_BASE_URL=https://your-backend.example.com\n'
-        '--dart-define=SYNC_API_PREFIX=/api/v1',
-      ),
-      actions: [
-        AppButton(
-          label: context.l10n.actionDismiss,
-          variant: AppButtonVariant.ghost,
-          onPressed: () => closeAppDialog(context),
-        ),
-      ],
+      builder: (sheetContext) {
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Configure Backend API',
+              style: Theme.of(
+                sheetContext,
+              ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700),
+            ),
+            const SizedBox(height: AppSpacing.sm),
+            Text(
+              'Set your local API URL. Android emulator: 10.0.2.2. iOS simulator: localhost. Physical device: use your computer LAN IP.',
+              style: Theme.of(sheetContext).textTheme.bodyMedium?.copyWith(
+                color: Theme.of(sheetContext).colorScheme.onSurfaceVariant,
+              ),
+            ),
+            const SizedBox(height: AppSpacing.md),
+            AppInput(
+              controller: controller,
+              labelText: 'Base URL override',
+              hintText: 'http://localhost:4000',
+            ),
+            const SizedBox(height: AppSpacing.sm),
+            Text(
+              'Effective URL: $effectiveUrl',
+              style: Theme.of(sheetContext).textTheme.bodySmall?.copyWith(
+                color: Theme.of(sheetContext).colorScheme.onSurfaceVariant,
+              ),
+            ),
+            const SizedBox(height: AppSpacing.lg),
+            AppButton(
+              label: 'Save',
+              onPressed: () async {
+                await ref
+                    .read(backendApiBaseUrlOverrideProvider.notifier)
+                    .setBaseUrl(controller.text);
+                if (!sheetContext.mounted) return;
+                Navigator.of(sheetContext).pop();
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Backend API URL updated.')),
+                );
+              },
+            ),
+            const SizedBox(height: AppSpacing.sm),
+            AppButton(
+              label: 'Clear override',
+              variant: AppButtonVariant.secondary,
+              onPressed: () async {
+                await ref
+                    .read(backendApiBaseUrlOverrideProvider.notifier)
+                    .clear();
+                if (!sheetContext.mounted) return;
+                Navigator.of(sheetContext).pop();
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Backend API URL override cleared.'),
+                  ),
+                );
+              },
+            ),
+            const SizedBox(height: AppSpacing.sm),
+            AppButton(
+              label: sheetContext.l10n.actionDismiss,
+              variant: AppButtonVariant.ghost,
+              onPressed: () => Navigator.of(sheetContext).pop(),
+            ),
+          ],
+        );
+      },
     );
+
+    controller.dispose();
   }
 
   Future<void> _showFeatureDisabledHelp(BuildContext context) async {
@@ -624,7 +730,10 @@ class SettingsScreen extends ConsumerWidget {
       context: context,
       title: const Text('Feature disabled'),
       content: const Text(
-        'Cloud sync is currently disabled by Remote Config key: app_sync_feature_enabled.',
+        'Cloud sync/backend integration is disabled by feature flags. Enable '
+        'Remote Config keys app_backend_integration_enabled + '
+        'app_sync_feature_enabled, or use --dart-define BACKEND_INTEGRATION_ENABLED=true '
+        'and BACKEND_SYNC_ENABLED=true for local development.',
       ),
       actions: [
         AppButton(
@@ -939,6 +1048,18 @@ class SettingsScreen extends ConsumerWidget {
                     _enabledDisabledLabel(
                       context,
                       runtimeConfig.performanceCollectionEnabled,
+                    ),
+                  ),
+                ),
+                ListTile(
+                  contentPadding: EdgeInsets.zero,
+                  leading: const Icon(Icons.hub_outlined),
+                  title: const Text('Backend integration'),
+                  subtitle: const Text('app_backend_integration_enabled'),
+                  trailing: Text(
+                    _enabledDisabledLabel(
+                      context,
+                      runtimeConfig.backendIntegrationEnabled,
                     ),
                   ),
                 ),

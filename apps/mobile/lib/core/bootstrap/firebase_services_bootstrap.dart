@@ -24,6 +24,8 @@ abstract final class FirebaseServicesBootstrap {
       'app_crashlytics_collection_enabled';
   static const _performanceCollectionEnabledKey =
       'app_performance_collection_enabled';
+  static const _backendIntegrationEnabledKey =
+      'app_backend_integration_enabled';
   static const _syncFeatureEnabledKey = 'app_sync_feature_enabled';
 
   static Future<FirebaseRuntimeConfig> initialize() async {
@@ -34,6 +36,7 @@ abstract final class FirebaseServicesBootstrap {
         _analyticsCollectionEnabledKey: true,
         _crashlyticsCollectionEnabledKey: true,
         _performanceCollectionEnabledKey: true,
+        _backendIntegrationEnabledKey: false,
         _syncFeatureEnabledKey: false,
       },
       minimumFetchInterval: kDebugMode
@@ -51,6 +54,7 @@ abstract final class FirebaseServicesBootstrap {
       'Firebase services initialized (analytics: ${runtimeConfig.analyticsCollectionEnabled}, '
       'crashlytics: ${runtimeConfig.crashlyticsCollectionEnabled}, '
       'performance: ${runtimeConfig.performanceCollectionEnabled}, '
+      'backend: ${runtimeConfig.backendIntegrationEnabled}, '
       'sync: ${runtimeConfig.syncFeatureEnabled}).',
     );
 
@@ -87,6 +91,7 @@ abstract final class FirebaseServicesBootstrap {
       'analytics: ${runtimeConfig.analyticsCollectionEnabled}, '
       'crashlytics: ${runtimeConfig.crashlyticsCollectionEnabled}, '
       'performance: ${runtimeConfig.performanceCollectionEnabled}, '
+      'backend: ${runtimeConfig.backendIntegrationEnabled}, '
       'sync: ${runtimeConfig.syncFeatureEnabled}).',
     );
 
@@ -112,6 +117,10 @@ abstract final class FirebaseServicesBootstrap {
       performanceCollectionEnabled: remoteConfigService.getBool(
         _performanceCollectionEnabledKey,
         fallback: true,
+      ),
+      backendIntegrationEnabled: remoteConfigService.getBool(
+        _backendIntegrationEnabledKey,
+        fallback: false,
       ),
       syncFeatureEnabled: remoteConfigService.getBool(
         _syncFeatureEnabledKey,

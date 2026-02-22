@@ -1,6 +1,6 @@
 import 'package:collection_tracker/core/providers/database_providers.dart';
-import 'package:collection_tracker/core/providers/firebase_runtime_config_provider.dart';
 import 'package:collection_tracker/core/providers/auth_session_providers.dart';
+import 'package:collection_tracker/core/providers/backend_api_providers.dart';
 import 'package:collection_tracker/core/sync/sync_orchestrator.dart';
 import 'package:database/database.dart';
 import 'package:dio/dio.dart';
@@ -10,14 +10,18 @@ import 'package:sync_api/sync_api.dart';
 
 class SyncTransportConfig {
   const SyncTransportConfig({
-    required this.featureFlagEnabled,
+    required this.backendFeatureEnabled,
+    required this.syncFeatureEnabled,
     required this.baseUrl,
     required this.apiPrefix,
   });
 
-  final bool featureFlagEnabled;
+  final bool backendFeatureEnabled;
+  final bool syncFeatureEnabled;
   final String baseUrl;
   final String apiPrefix;
+
+  bool get featureFlagEnabled => backendFeatureEnabled && syncFeatureEnabled;
 
   bool get isApiBaseUrlConfigured => baseUrl.trim().isNotEmpty;
 
@@ -46,29 +50,25 @@ final syncDaoProvider = Provider<SyncDao>((ref) {
   return database.syncDao;
 });
 
-final syncApiBaseUrlProvider = Provider<String>((ref) {
-  return const String.fromEnvironment('SYNC_API_BASE_URL', defaultValue: '');
-});
-
-final syncApiPrefixProvider = Provider<String>((ref) {
-  return const String.fromEnvironment(
-    'SYNC_API_PREFIX',
-    defaultValue: '/api/v1',
-  );
-});
-
 final syncFeatureFlagEnabledProvider = Provider<bool>((ref) {
-  final runtimeConfig = ref.watch(firebaseRuntimeConfigProvider);
-  return runtimeConfig.syncFeatureEnabled;
+  final backendFeatureEnabled = ref.watch(
+    backendIntegrationFeatureFlagProvider,
+  );
+  final syncFeatureEnabled = ref.watch(backendSyncFeatureFlagProvider);
+  return backendFeatureEnabled && syncFeatureEnabled;
 });
 
 final syncTransportConfigProvider = Provider<SyncTransportConfig>((ref) {
-  final featureFlagEnabled = ref.watch(syncFeatureFlagEnabledProvider);
-  final baseUrl = ref.watch(syncApiBaseUrlProvider);
-  final apiPrefix = ref.watch(syncApiPrefixProvider);
+  final backendFeatureEnabled = ref.watch(
+    backendIntegrationFeatureFlagProvider,
+  );
+  final syncFeatureEnabled = ref.watch(backendSyncFeatureFlagProvider);
+  final baseUrl = ref.watch(backendApiBaseUrlProvider);
+  final apiPrefix = ref.watch(backendApiPrefixProvider);
 
   return SyncTransportConfig(
-    featureFlagEnabled: featureFlagEnabled,
+    backendFeatureEnabled: backendFeatureEnabled,
+    syncFeatureEnabled: syncFeatureEnabled,
     baseUrl: baseUrl,
     apiPrefix: apiPrefix,
   );
@@ -130,17 +130,24 @@ final syncAuthTokenAdapterProvider = Provider<SyncAuthTokenProvider>((ref) {
 final syncBackendClientProvider = Provider<SyncBackendClient>((ref) {
   final transportConfig = ref.watch(syncTransportConfigProvider);
 
-  if (!transportConfig.featureFlagEnabled) {
+  if (!transportConfig.backendFeatureEnabled) {
     return const NoopSyncBackendClient(
       reason: SyncBackendUnavailableReason.featureFlagDisabled,
+      message: 'Backend integration is disabled by feature flags.',
+    );
+  }
+
+  if (!transportConfig.syncFeatureEnabled) {
+    return const NoopSyncBackendClient(
+      reason: SyncBackendUnavailableReason.featureFlagDisabled,
+      message: 'Sync is disabled by feature flags.',
     );
   }
 
   if (!transportConfig.isApiBaseUrlConfigured) {
     return const NoopSyncBackendClient(
       reason: SyncBackendUnavailableReason.notConfigured,
-      message:
-          'Sync backend URL is not configured. Set --dart-define=SYNC_API_BASE_URL.',
+      message: 'Backend API base URL is not configured.',
     );
   }
 
@@ -157,10 +164,17 @@ final syncBackendClientProvider = Provider<SyncBackendClient>((ref) {
 final syncReadinessProvider = Provider<SyncReadinessState>((ref) {
   final transportConfig = ref.watch(syncTransportConfigProvider);
 
-  if (!transportConfig.featureFlagEnabled) {
+  if (!transportConfig.backendFeatureEnabled) {
     return const SyncReadinessState(
       status: SyncReadinessStatus.disabledByFeatureFlag,
-      message: 'Sync is disabled by remote config.',
+      message: 'Backend integration is disabled by feature flags.',
+    );
+  }
+
+  if (!transportConfig.syncFeatureEnabled) {
+    return const SyncReadinessState(
+      status: SyncReadinessStatus.disabledByFeatureFlag,
+      message: 'Sync is disabled by feature flags.',
     );
   }
 
@@ -168,7 +182,7 @@ final syncReadinessProvider = Provider<SyncReadinessState>((ref) {
     return const SyncReadinessState(
       status: SyncReadinessStatus.missingApiConfiguration,
       message:
-          'Sync API base URL is missing. Configure SYNC_API_BASE_URL to enable sync.',
+          'Sync API base URL is missing. Configure BACKEND_API_BASE_URL or set base URL override in settings.',
     );
   }
 

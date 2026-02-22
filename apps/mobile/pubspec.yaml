@@ -61,6 +61,8 @@ dependencies:
     path: ../../packages/integrations/analytics
   auth_session:
     path: ../../packages/integrations/auth_session
+  backend_api:
+    path: ../../packages/integrations/backend_api
   app_firebase:
     path: ../../packages/integrations/firebase_services
   sync_api:
