@@ -9,6 +9,13 @@ import 'package:uuid/uuid.dart';
 
 import 'sync_server_changes_applier.dart';
 
+typedef SyncTraceRunner =
+    Future<T> Function<T>(
+      String traceName,
+      Future<T> Function() operation, {
+      Map<String, String>? attributes,
+    });
+
 enum SyncEntityType { collection, item, tag }
 
 enum SyncOperationType { upsert, delete }
@@ -66,6 +73,7 @@ class SyncOrchestrator {
     Duration initialRetryDelay = const Duration(milliseconds: 600),
     Duration scheduledRetryBaseDelay = const Duration(seconds: 15),
     Duration maxScheduledRetryDelay = const Duration(minutes: 10),
+    SyncTraceRunner? traceRunner,
     Random? random,
   }) : _syncDao = syncDao,
        _backendClient = backendClient,
@@ -76,6 +84,7 @@ class SyncOrchestrator {
        _initialRetryDelay = initialRetryDelay,
        _scheduledRetryBaseDelay = scheduledRetryBaseDelay,
        _maxScheduledRetryDelay = maxScheduledRetryDelay,
+       _traceRunner = traceRunner ?? _defaultTraceRunner,
        _random = random ?? Random.secure();
 
   final SyncDao _syncDao;
@@ -87,6 +96,7 @@ class SyncOrchestrator {
   final Duration _initialRetryDelay;
   final Duration _scheduledRetryBaseDelay;
   final Duration _maxScheduledRetryDelay;
+  final SyncTraceRunner _traceRunner;
   final Random _random;
 
   Stream<int> watchPendingOperationCount() {
@@ -148,7 +158,6 @@ class SyncOrchestrator {
     await _syncDao.upsertSyncState(lastAttemptedSyncAt: DateTime.now());
 
     final changes = _buildChangesPayload(pending);
-    final performanceService = FirebasePerformanceService.instance;
     final requestPayload = SyncRequestPayload(
       deviceId: deviceId,
       clientRequestId: _uuid.v4(),
@@ -161,7 +170,6 @@ class SyncOrchestrator {
         request: requestPayload,
         pendingOperationCount: pending.length,
         forceFullSync: forceFullSync,
-        performanceService: performanceService,
       );
 
       final processedOperations = _processedOperationCount(response);
@@ -370,13 +378,12 @@ class SyncOrchestrator {
     required SyncRequestPayload request,
     required int pendingOperationCount,
     required bool forceFullSync,
-    required FirebasePerformanceService performanceService,
   }) async {
     DioException? lastDioError;
 
     for (var attempt = 0; attempt <= _maxNetworkRetries; attempt++) {
       try {
-        return await performanceService.traceAsync(
+        return await _traceRunner(
           'sync_push_pull_now',
           () => _backendClient.sync(request),
           attributes: {
@@ -447,6 +454,18 @@ class SyncOrchestrator {
     final jitterMillis = _random.nextInt(1500);
     return DateTime.now().toUtc().add(
       Duration(milliseconds: cappedMillis + jitterMillis),
+    );
+  }
+
+  static Future<T> _defaultTraceRunner<T>(
+    String traceName,
+    Future<T> Function() operation, {
+    Map<String, String>? attributes,
+  }) {
+    return FirebasePerformanceService.instance.traceAsync(
+      traceName,
+      operation,
+      attributes: attributes,
     );
   }
 }
