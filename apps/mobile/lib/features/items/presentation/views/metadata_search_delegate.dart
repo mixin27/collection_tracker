@@ -18,6 +18,10 @@ class MetadataSearchDelegate extends SearchDelegate<MetadataBase?> {
     required this.searchFieldLabelText,
   }) : super(searchFieldLabel: searchFieldLabelText);
 
+  String _lastSearchQuery = '';
+  int _lastSearchLimit = 0;
+  Future<List<MetadataBase>>? _lastSearchFuture;
+
   @override
   List<Widget>? buildActions(BuildContext context) {
     return [
@@ -52,7 +56,7 @@ class MetadataSearchDelegate extends SearchDelegate<MetadataBase?> {
     }
 
     return FutureBuilder(
-      future: _performSearch(),
+      future: _performSearch(query: query, limit: 12),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return LoadingView(message: l10n.metadataSearchLoading);
@@ -116,20 +120,94 @@ class MetadataSearchDelegate extends SearchDelegate<MetadataBase?> {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    return EmptyState(
-      icon: Icons.search,
-      title: context.l10n.metadataSearchSuggestionTitle,
-      message: context.l10n.metadataSearchSuggestionMessage,
+    if (query.trim().length < 2) {
+      return EmptyState(
+        icon: Icons.search,
+        title: context.l10n.metadataSearchSuggestionTitle,
+        message: context.l10n.metadataSearchSuggestionMessage,
+      );
+    }
+
+    return FutureBuilder<List<MetadataBase>>(
+      future: _performSearch(query: query, limit: 6),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return LoadingView(message: context.l10n.metadataSearchLoading);
+        }
+        if (snapshot.hasError) {
+          return ErrorView(
+            message: context.l10n.metadataSearchError('${snapshot.error}'),
+          );
+        }
+
+        final results = snapshot.data ?? const <MetadataBase>[];
+        if (results.isEmpty) {
+          return EmptyState(
+            icon: Icons.search_off,
+            title: context.l10n.metadataSearchNoResultsTitle,
+            message: context.l10n.metadataSearchNoResultsMessage,
+          );
+        }
+
+        return ListView.builder(
+          padding: const EdgeInsets.all(AppSpacing.md),
+          itemCount: results.length,
+          itemBuilder: (context, index) {
+            final item = results[index];
+            return ListTile(
+              leading: item.thumbnailUrl != null
+                  ? CachedNetworkImage(
+                      imageUrl: item.thumbnailUrl!,
+                      width: 42,
+                      fit: BoxFit.cover,
+                      placeholder: (context, url) => const Icon(Icons.image),
+                      errorWidget: (context, url, error) =>
+                          const Icon(Icons.image_not_supported),
+                    )
+                  : const Icon(Icons.image),
+              title: Text(
+                item.title,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+              onTap: () {
+                query = item.title;
+                showResults(context);
+              },
+            );
+          },
+        );
+      },
     );
   }
 
-  Future<List<MetadataBase>> _performSearch() async {
-    final service = await ref.read(unifiedMetadataServiceProvider.future);
-    final result = await service.search(
+  Future<List<MetadataBase>> _performSearch({
+    required String query,
+    int limit = 10,
+  }) {
+    final normalized = query.trim();
+    if (_lastSearchFuture != null &&
+        _lastSearchQuery == normalized &&
+        _lastSearchLimit == limit) {
+      return _lastSearchFuture!;
+    }
+
+    _lastSearchQuery = normalized;
+    _lastSearchLimit = limit;
+    _lastSearchFuture = _search(normalized, limit);
+    return _lastSearchFuture!;
+  }
+
+  Future<List<MetadataBase>> _search(String query, int limit) async {
+    if (query.isEmpty) {
+      return const [];
+    }
+
+    final service = ref.read(metadataLookupServiceProvider);
+    return service.search(
       query: query,
       collectionType: collectionType,
+      limit: limit,
     );
-
-    return result.fold((exception) => throw exception, (items) => items);
   }
 }

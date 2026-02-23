@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:collection_tracker/l10n/l10n.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -259,7 +257,6 @@ class _AddItemScreenState extends ConsumerState<AddItemScreen> {
   }
 
   Future<void> _showMetadataSearch(BuildContext context) async {
-    log('show metadata search');
     final collectionAsync = ref.read(
       collectionDetailProvider(widget.collectionId),
     );
@@ -302,38 +299,31 @@ class _AddItemScreenState extends ConsumerState<AddItemScreen> {
     });
 
     try {
-      final matcher = await ref.read(smartMetadataMatcherProvider.future);
-      final result = await matcher.findBestMatch(
+      final metadataService = ref.read(metadataLookupServiceProvider);
+      final result = await metadataService.findBestBarcodeMatch(
         barcode: barcode,
         primaryType: collection.type,
       );
 
-      result.fold(
-        (exception) => null, // Ignore errors for now
-        (match) {
-          if (match.metadata != null && mounted) {
-            final metadata = match.metadata!;
-            setState(() {
-              if (_titleController.text.isEmpty) {
-                _titleController.text = metadata.title;
-              }
-              if (_descriptionController.text.isEmpty) {
-                _descriptionController.text = metadata.description ?? '';
-              }
-              _coverImageUrl = metadata.thumbnailUrl;
-            });
-
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(
-                  context.l10n.addItemMatchedMetadata(match.source),
-                ),
-                duration: const Duration(seconds: 2),
-              ),
-            );
+      if (result.metadata != null && mounted) {
+        final metadata = result.metadata!;
+        setState(() {
+          if (_titleController.text.isEmpty) {
+            _titleController.text = metadata.title;
           }
-        },
-      );
+          if (_descriptionController.text.isEmpty) {
+            _descriptionController.text = metadata.description ?? '';
+          }
+          _coverImageUrl = metadata.thumbnailUrl;
+        });
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(context.l10n.addItemMatchedMetadata(result.source)),
+            duration: const Duration(seconds: 2),
+          ),
+        );
+      }
     } catch (e) {
       if (kDebugMode) {
         debugPrint('Metadata fetch error: $e');
