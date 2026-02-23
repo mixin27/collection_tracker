@@ -1,6 +1,6 @@
 {
   "@@locale": "es",
-  "appTitle": "Collection Tracker",
+  "appTitle": "Collectra",
   "@appTitle": {},
   "navHome": "Inicio",
   "@navHome": {},
@@ -112,7 +112,7 @@
   "@settingsAnalyticsConsentAccepted": {},
   "settingsAnalyticsConsentDeclined": "Consentimiento de analíticas rechazado.",
   "@settingsAnalyticsConsentDeclined": {},
-  "analyticsConsentDialogTitle": "Ayúdanos a mejorar Collection Tracker",
+  "analyticsConsentDialogTitle": "Ayúdanos a mejorar Collectra",
   "@analyticsConsentDialogTitle": {},
   "analyticsConsentDialogMessage": "¿Podemos recopilar analíticas de uso anónimas para mejorar la calidad y las funciones de la app? Puedes cambiarlo en Configuración en cualquier momento.",
   "@analyticsConsentDialogMessage": {},

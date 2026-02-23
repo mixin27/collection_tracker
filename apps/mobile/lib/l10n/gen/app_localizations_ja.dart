@@ -12,7 +12,7 @@ class AppLocalizationsJa extends AppLocalizations {
   AppLocalizationsJa([String locale = 'ja']) : super(locale);
 
   @override
-  String get appTitle => 'Collection Tracker';
+  String get appTitle => 'Collectra';
 
   @override
   String get navHome => 'ホーム';
@@ -180,7 +180,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get settingsAnalyticsConsentDeclined => 'アナリティクスへの同意を拒否しました。';
 
   @override
-  String get analyticsConsentDialogTitle => 'Collection Tracker の改善にご協力ください';
+  String get analyticsConsentDialogTitle => 'Collectra の改善にご協力ください';
 
   @override
   String get analyticsConsentDialogMessage => 'アプリ品質と機能改善のため、匿名の利用データ収集にご協力いただけますか？この設定はいつでも設定画面で変更できます。';

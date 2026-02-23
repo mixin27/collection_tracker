@@ -16,4 +16,13 @@ echo "Updating launcher icons for Android and iOS..."
   flutter pub run flutter_launcher_icons -f flutter_launcher_icons.yaml
 )
 
+echo "Syncing Android adaptive foreground densities from source asset..."
+FOREGROUND_SRC="$APP_DIR/assets/icons/logo_light.png"
+for entry in "mdpi:108" "hdpi:162" "xhdpi:216" "xxhdpi:324" "xxxhdpi:432"; do
+  density="${entry%%:*}"
+  size="${entry##*:}"
+  target="$APP_DIR/android/app/src/main/res/drawable-${density}/ic_launcher_foreground.png"
+  sips -s format png -z "$size" "$size" "$FOREGROUND_SRC" --out "$target" >/dev/null
+done
+
 echo "Brand assets updated."

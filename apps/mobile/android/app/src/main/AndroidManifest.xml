@@ -17,7 +17,7 @@
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
 
     <application
-        android:label="Collection Tracker"
+        android:label="Collectra"
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon">
         <activity

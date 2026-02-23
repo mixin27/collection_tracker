@@ -1,6 +1,6 @@
 {
   "@@locale": "zh",
-  "appTitle": "Collection Tracker",
+  "appTitle": "Collectra",
   "@appTitle": {},
   "navHome": "首页",
   "@navHome": {},
@@ -112,7 +112,7 @@
   "@settingsAnalyticsConsentAccepted": {},
   "settingsAnalyticsConsentDeclined": "已拒绝分析收集。",
   "@settingsAnalyticsConsentDeclined": {},
-  "analyticsConsentDialogTitle": "帮助改进 Collection Tracker",
+  "analyticsConsentDialogTitle": "帮助改进 Collectra",
   "@analyticsConsentDialogTitle": {},
   "analyticsConsentDialogMessage": "我们可以收集匿名使用分析以改进应用质量和功能吗？你可以随时在设置中更改。",
   "@analyticsConsentDialogMessage": {},

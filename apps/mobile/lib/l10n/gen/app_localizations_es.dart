@@ -12,7 +12,7 @@ class AppLocalizationsEs extends AppLocalizations {
   AppLocalizationsEs([String locale = 'es']) : super(locale);
 
   @override
-  String get appTitle => 'Collection Tracker';
+  String get appTitle => 'Collectra';
 
   @override
   String get navHome => 'Inicio';
@@ -180,7 +180,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get settingsAnalyticsConsentDeclined => 'Consentimiento de analíticas rechazado.';
 
   @override
-  String get analyticsConsentDialogTitle => 'Ayúdanos a mejorar Collection Tracker';
+  String get analyticsConsentDialogTitle => 'Ayúdanos a mejorar Collectra';
 
   @override
   String get analyticsConsentDialogMessage => '¿Podemos recopilar analíticas de uso anónimas para mejorar la calidad y las funciones de la app? Puedes cambiarlo en Configuración en cualquier momento.';

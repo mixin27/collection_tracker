@@ -1,6 +1,6 @@
 {
   "@@locale": "my",
-  "appTitle": "Collection Tracker",
+  "appTitle": "Collectra",
   "@appTitle": {},
   "navHome": "ပင်မ",
   "@navHome": {},
@@ -112,7 +112,7 @@
   "@settingsAnalyticsConsentAccepted": {},
   "settingsAnalyticsConsentDeclined": "Analytics သဘောတူညီချက် ငြင်းဆိုထားသည်။",
   "@settingsAnalyticsConsentDeclined": {},
-  "analyticsConsentDialogTitle": "Collection Tracker ကို တိုးတက်စေရန် ကူညီပါ",
+  "analyticsConsentDialogTitle": "Collectra ကို တိုးတက်စေရန် ကူညီပါ",
   "@analyticsConsentDialogTitle": {},
   "analyticsConsentDialogMessage": "အက်ပ်အရည်အသွေးနှင့် အင်္ဂါရပ်များ တိုးတက်စေရန် အမည်မဖော်ထားသော အသုံးပြုမှု analytics ကို စုဆောင်းခွင့်ပြုမလား? ဤဆက်တင်ကို Settings တွင် အချိန်မရွေး ပြောင်းလဲနိုင်သည်။",
   "@analyticsConsentDialogMessage": {},

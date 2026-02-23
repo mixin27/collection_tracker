@@ -12,7 +12,7 @@ class AppLocalizationsKo extends AppLocalizations {
   AppLocalizationsKo([String locale = 'ko']) : super(locale);
 
   @override
-  String get appTitle => '컬렉션 트래커';
+  String get appTitle => 'Collectra';
 
   @override
   String get navHome => '홈';
@@ -180,7 +180,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get settingsAnalyticsConsentDeclined => '분석 동의가 거부되었습니다.';
 
   @override
-  String get analyticsConsentDialogTitle => 'Collection Tracker 개선에 도움을 주세요';
+  String get analyticsConsentDialogTitle => 'Collectra 개선에 도움을 주세요';
 
   @override
   String get analyticsConsentDialogMessage => '앱 품질과 기능 개선을 위해 익명 사용 분석을 수집해도 될까요? 이 설정은 언제든지 설정에서 변경할 수 있습니다.';

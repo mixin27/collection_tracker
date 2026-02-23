@@ -12,7 +12,7 @@ class AppLocalizationsId extends AppLocalizations {
   AppLocalizationsId([String locale = 'id']) : super(locale);
 
   @override
-  String get appTitle => 'Collection Tracker';
+  String get appTitle => 'Collectra';
 
   @override
   String get navHome => 'Beranda';
@@ -180,7 +180,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get settingsAnalyticsConsentDeclined => 'Persetujuan analitik ditolak.';
 
   @override
-  String get analyticsConsentDialogTitle => 'Bantu Tingkatkan Collection Tracker';
+  String get analyticsConsentDialogTitle => 'Bantu Tingkatkan Collectra';
 
   @override
   String get analyticsConsentDialogMessage => 'Bolehkah kami mengumpulkan analitik penggunaan anonim untuk meningkatkan kualitas dan fitur aplikasi? Anda dapat mengubahnya kapan saja di Pengaturan.';

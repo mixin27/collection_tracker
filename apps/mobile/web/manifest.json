@@ -1,11 +1,11 @@
 {
-    "name": "collection_tracker",
-    "short_name": "collection_tracker",
+    "name": "Collectra",
+    "short_name": "Collectra",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "description": "Collectra collection tracking app.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

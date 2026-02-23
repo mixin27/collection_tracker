@@ -1,6 +1,6 @@
-# Collection Tracker Mobile App
+# Collectra Mobile App
 
-This is the Flutter app module for the Collection Tracker workspace.
+This is the Flutter app module for the Collectra workspace.
 
 ## Main References
 

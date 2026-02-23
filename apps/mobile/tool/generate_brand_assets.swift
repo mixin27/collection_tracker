@@ -110,7 +110,12 @@ func drawTextExactlyCentered(
     nsText.draw(at: drawPoint, withAttributes: attributes)
 }
 
-func drawOpenBook(in rect: NSRect, stroke: NSColor, lineWidth: CGFloat) {
+func drawOpenBook(
+    in rect: NSRect,
+    stroke: NSColor,
+    lineWidth: CGFloat,
+    includeFingerDetails: Bool = true
+) {
     let cx = rect.midX
     let topY = rect.minY + rect.height * 0.40
     let bottomY = rect.minY + rect.height * 0.74
@@ -171,24 +176,29 @@ func drawOpenBook(in rect: NSRect, stroke: NSColor, lineWidth: CGFloat) {
     spine.move(to: NSPoint(x: cx, y: rect.minY + rect.height * 0.39))
     spine.line(to: NSPoint(x: cx, y: rect.minY + rect.height * 0.75))
 
-    let leftFinger = NSBezierPath()
-    leftFinger.move(to: NSPoint(x: rect.minX + rect.width * 0.13, y: rect.minY + rect.height * 0.48))
-    leftFinger.line(to: NSPoint(x: rect.minX + rect.width * 0.22, y: rect.minY + rect.height * 0.50))
-    leftFinger.move(to: NSPoint(x: rect.minX + rect.width * 0.13, y: rect.minY + rect.height * 0.52))
-    leftFinger.line(to: NSPoint(x: rect.minX + rect.width * 0.22, y: rect.minY + rect.height * 0.54))
-    leftFinger.move(to: NSPoint(x: rect.minX + rect.width * 0.13, y: rect.minY + rect.height * 0.56))
-    leftFinger.line(to: NSPoint(x: rect.minX + rect.width * 0.22, y: rect.minY + rect.height * 0.58))
-
-    let rightFinger = NSBezierPath()
-    rightFinger.move(to: NSPoint(x: rect.maxX - rect.width * 0.13, y: rect.minY + rect.height * 0.48))
-    rightFinger.line(to: NSPoint(x: rect.maxX - rect.width * 0.22, y: rect.minY + rect.height * 0.50))
-    rightFinger.move(to: NSPoint(x: rect.maxX - rect.width * 0.13, y: rect.minY + rect.height * 0.52))
-    rightFinger.line(to: NSPoint(x: rect.maxX - rect.width * 0.22, y: rect.minY + rect.height * 0.54))
-    rightFinger.move(to: NSPoint(x: rect.maxX - rect.width * 0.13, y: rect.minY + rect.height * 0.56))
-    rightFinger.line(to: NSPoint(x: rect.maxX - rect.width * 0.22, y: rect.minY + rect.height * 0.58))
-
     stroke.setStroke()
-    for path in [leftPage, rightPage, topLeftLeaf, topRightLeaf, spine, leftFinger, rightFinger] {
+    var paths = [leftPage, rightPage, topLeftLeaf, topRightLeaf, spine]
+    if includeFingerDetails {
+        let leftFinger = NSBezierPath()
+        leftFinger.move(to: NSPoint(x: rect.minX + rect.width * 0.13, y: rect.minY + rect.height * 0.48))
+        leftFinger.line(to: NSPoint(x: rect.minX + rect.width * 0.22, y: rect.minY + rect.height * 0.50))
+        leftFinger.move(to: NSPoint(x: rect.minX + rect.width * 0.13, y: rect.minY + rect.height * 0.52))
+        leftFinger.line(to: NSPoint(x: rect.minX + rect.width * 0.22, y: rect.minY + rect.height * 0.54))
+        leftFinger.move(to: NSPoint(x: rect.minX + rect.width * 0.13, y: rect.minY + rect.height * 0.56))
+        leftFinger.line(to: NSPoint(x: rect.minX + rect.width * 0.22, y: rect.minY + rect.height * 0.58))
+
+        let rightFinger = NSBezierPath()
+        rightFinger.move(to: NSPoint(x: rect.maxX - rect.width * 0.13, y: rect.minY + rect.height * 0.48))
+        rightFinger.line(to: NSPoint(x: rect.maxX - rect.width * 0.22, y: rect.minY + rect.height * 0.50))
+        rightFinger.move(to: NSPoint(x: rect.maxX - rect.width * 0.13, y: rect.minY + rect.height * 0.52))
+        rightFinger.line(to: NSPoint(x: rect.maxX - rect.width * 0.22, y: rect.minY + rect.height * 0.54))
+        rightFinger.move(to: NSPoint(x: rect.maxX - rect.width * 0.13, y: rect.minY + rect.height * 0.56))
+        rightFinger.line(to: NSPoint(x: rect.maxX - rect.width * 0.22, y: rect.minY + rect.height * 0.58))
+        paths.append(leftFinger)
+        paths.append(rightFinger)
+    }
+
+    for path in paths {
         path.lineWidth = lineWidth
         path.lineCapStyle = .round
         path.lineJoinStyle = .round
@@ -213,6 +223,86 @@ func drawClock(in rect: NSRect, stroke: NSColor, lineWidth: CGFloat) {
     hands.move(to: NSPoint(x: cx, y: cy))
     hands.line(to: NSPoint(x: rect.maxX - rect.width * 0.28, y: cy))
     hands.stroke()
+}
+
+func drawAdaptiveForegroundMark(in rect: NSRect, stroke: NSColor) {
+    let body = NSRect(
+        x: rect.minX + rect.width * 0.18,
+        y: rect.minY + rect.height * 0.20,
+        width: rect.width * 0.64,
+        height: rect.height * 0.60
+    )
+
+    let line = max(2, rect.width * 0.11)
+    let corner = body.width * 0.16
+
+    stroke.setStroke()
+
+    let outline = roundedRect(body, radius: corner)
+    outline.lineWidth = line
+    outline.lineCapStyle = .round
+    outline.lineJoinStyle = .round
+    outline.stroke()
+
+    let spine = NSBezierPath()
+    spine.lineWidth = line * 0.58
+    spine.lineCapStyle = .round
+    spine.move(
+        to: NSPoint(
+            x: body.minX + body.width * 0.27,
+            y: body.minY + body.height * 0.16
+        )
+    )
+    spine.line(
+        to: NSPoint(
+            x: body.minX + body.width * 0.27,
+            y: body.maxY - body.height * 0.14
+        )
+    )
+    spine.stroke()
+
+    let line1 = NSBezierPath()
+    line1.lineWidth = line * 0.50
+    line1.lineCapStyle = .round
+    line1.move(
+        to: NSPoint(
+            x: body.minX + body.width * 0.42,
+            y: body.minY + body.height * 0.62
+        )
+    )
+    line1.line(
+        to: NSPoint(
+            x: body.maxX - body.width * 0.16,
+            y: body.minY + body.height * 0.62
+        )
+    )
+    line1.stroke()
+
+    let line2 = NSBezierPath()
+    line2.lineWidth = line * 0.50
+    line2.lineCapStyle = .round
+    line2.move(
+        to: NSPoint(
+            x: body.minX + body.width * 0.42,
+            y: body.minY + body.height * 0.42
+        )
+    )
+    line2.line(
+        to: NSPoint(
+            x: body.maxX - body.width * 0.30,
+            y: body.minY + body.height * 0.42
+        )
+    )
+    line2.stroke()
+
+    let tab = NSRect(
+        x: body.midX - body.width * 0.10,
+        y: body.maxY - body.height * 0.06,
+        width: body.width * 0.20,
+        height: body.height * 0.22
+    )
+    stroke.setFill()
+    roundedRect(tab, radius: tab.width * 0.30).fill()
 }
 
 func drawBadgeMark(in rect: NSRect, includeWords: Bool, ink: NSColor) {
@@ -297,8 +387,16 @@ let iconDark = drawImage(width: 1024, height: 1024) { rect, _ in
 }
 
 let iconForeground = drawImage(width: 432, height: 432) { rect, _ in
-    // Keep foreground minimal for adaptive icon legibility.
-    drawBadgeMark(in: rect, includeWords: false, ink: Palette.ink)
+    // Keep adaptive icon foreground bold and simple for small launcher sizes.
+    drawAdaptiveForegroundMark(
+        in: NSRect(
+            x: rect.minX + rect.width * 0.02,
+            y: rect.minY + rect.height * 0.02,
+            width: rect.width * 0.96,
+            height: rect.height * 0.96
+        ),
+        stroke: Palette.ink
+    )
 }
 
 let featureGraphic = drawImage(width: 1024, height: 500) { rect, ctx in
@@ -324,7 +422,7 @@ let featureGraphic = drawImage(width: 1024, height: 500) { rect, ctx in
     drawBadgeMark(in: emblemRect, includeWords: true, ink: Palette.inkSoft)
 
     drawCenteredText(
-        "Collection Time",
+        "Collectra",
         in: NSRect(x: 520, y: 282, width: 470, height: 78),
         size: 50,
         weight: .bold,

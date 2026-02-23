@@ -1,6 +1,6 @@
 {
   "@@locale": "ko",
-  "appTitle": "컬렉션 트래커",
+  "appTitle": "Collectra",
   "@appTitle": {},
   "navHome": "홈",
   "@navHome": {},
@@ -112,7 +112,7 @@
   "@settingsAnalyticsConsentAccepted": {},
   "settingsAnalyticsConsentDeclined": "분석 동의가 거부되었습니다.",
   "@settingsAnalyticsConsentDeclined": {},
-  "analyticsConsentDialogTitle": "Collection Tracker 개선에 도움을 주세요",
+  "analyticsConsentDialogTitle": "Collectra 개선에 도움을 주세요",
   "@analyticsConsentDialogTitle": {},
   "analyticsConsentDialogMessage": "앱 품질과 기능 개선을 위해 익명 사용 분석을 수집해도 될까요? 이 설정은 언제든지 설정에서 변경할 수 있습니다.",
   "@analyticsConsentDialogMessage": {},

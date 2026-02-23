@@ -1,6 +1,6 @@
 {
   "@@locale": "id",
-  "appTitle": "Collection Tracker",
+  "appTitle": "Collectra",
   "@appTitle": {},
   "navHome": "Beranda",
   "@navHome": {},
@@ -112,7 +112,7 @@
   "@settingsAnalyticsConsentAccepted": {},
   "settingsAnalyticsConsentDeclined": "Persetujuan analitik ditolak.",
   "@settingsAnalyticsConsentDeclined": {},
-  "analyticsConsentDialogTitle": "Bantu Tingkatkan Collection Tracker",
+  "analyticsConsentDialogTitle": "Bantu Tingkatkan Collectra",
   "@analyticsConsentDialogTitle": {},
   "analyticsConsentDialogMessage": "Bolehkah kami mengumpulkan analitik penggunaan anonim untuk meningkatkan kualitas dan fitur aplikasi? Anda dapat mengubahnya kapan saja di Pengaturan.",
   "@analyticsConsentDialogMessage": {},

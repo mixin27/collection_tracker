@@ -12,7 +12,7 @@ class AppLocalizationsMy extends AppLocalizations {
   AppLocalizationsMy([String locale = 'my']) : super(locale);
 
   @override
-  String get appTitle => 'Collection Tracker';
+  String get appTitle => 'Collectra';
 
   @override
   String get navHome => 'ပင်မ';
@@ -180,7 +180,7 @@ class AppLocalizationsMy extends AppLocalizations {
   String get settingsAnalyticsConsentDeclined => 'Analytics သဘောတူညီချက် ငြင်းဆိုထားသည်။';
 
   @override
-  String get analyticsConsentDialogTitle => 'Collection Tracker ကို တိုးတက်စေရန် ကူညီပါ';
+  String get analyticsConsentDialogTitle => 'Collectra ကို တိုးတက်စေရန် ကူညီပါ';
 
   @override
   String get analyticsConsentDialogMessage => 'အက်ပ်အရည်အသွေးနှင့် အင်္ဂါရပ်များ တိုးတက်စေရန် အမည်မဖော်ထားသော အသုံးပြုမှု analytics ကို စုဆောင်းခွင့်ပြုမလား? ဤဆက်တင်ကို Settings တွင် အချိန်မရွေး ပြောင်းလဲနိုင်သည်။';

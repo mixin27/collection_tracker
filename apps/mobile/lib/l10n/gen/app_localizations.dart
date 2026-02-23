@@ -110,7 +110,7 @@ abstract class AppLocalizations {
   /// No description provided for @appTitle.
   ///
   /// In en, this message translates to:
-  /// **'Collection Tracker'**
+  /// **'Collectra'**
   String get appTitle;
 
   /// No description provided for @navHome.
@@ -446,7 +446,7 @@ abstract class AppLocalizations {
   /// No description provided for @analyticsConsentDialogTitle.
   ///
   /// In en, this message translates to:
-  /// **'Help Improve Collection Tracker'**
+  /// **'Help Improve Collectra'**
   String get analyticsConsentDialogTitle;
 
   /// No description provided for @analyticsConsentDialogMessage.

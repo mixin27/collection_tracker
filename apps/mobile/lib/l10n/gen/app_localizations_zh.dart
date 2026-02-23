@@ -12,7 +12,7 @@ class AppLocalizationsZh extends AppLocalizations {
   AppLocalizationsZh([String locale = 'zh']) : super(locale);
 
   @override
-  String get appTitle => 'Collection Tracker';
+  String get appTitle => 'Collectra';
 
   @override
   String get navHome => '首页';
@@ -180,7 +180,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get settingsAnalyticsConsentDeclined => '已拒绝分析收集。';
 
   @override
-  String get analyticsConsentDialogTitle => '帮助改进 Collection Tracker';
+  String get analyticsConsentDialogTitle => '帮助改进 Collectra';
 
   @override
   String get analyticsConsentDialogMessage => '我们可以收集匿名使用分析以改进应用质量和功能吗？你可以随时在设置中更改。';
