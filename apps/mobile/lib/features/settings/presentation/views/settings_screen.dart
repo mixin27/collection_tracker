@@ -29,6 +29,7 @@ class SettingsScreen extends ConsumerWidget {
     final accountReadiness = ref.watch(backendAuthReadinessProvider);
     final pendingSyncCount = ref.watch(syncOutboxCountProvider).value ?? 0;
     final authSession = ref.watch(authSessionProvider).value;
+    final appVersionLabel = ref.watch(appDisplayVersionProvider);
 
     final themeSummary =
         '${_themeModeLabel(context, themeSettings.mode)} - ${themeSettings.variant.label}';
@@ -157,7 +158,7 @@ class SettingsScreen extends ConsumerWidget {
                 SettingsTile(
                   icon: Icons.info,
                   title: l10n.settingsVersionTitle,
-                  subtitle: '1.0.0',
+                  subtitle: appVersionLabel,
                 ),
               ],
             ),

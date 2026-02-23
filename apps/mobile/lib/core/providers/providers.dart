@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 export 'data_providers.dart';
 export 'database_providers.dart';
+export 'app_info_provider.dart';
 export 'analytics_preferences_provider.dart';
 export 'auth_session_providers.dart';
 export 'backend_api_providers.dart';

@@ -1,6 +1,6 @@
 name: collection_tracker_workspace
 description: A workspace for the Collection Tracker app
-version: 1.0.0
+version: 1.0.1
 publish_to: 'none'
 
 environment:

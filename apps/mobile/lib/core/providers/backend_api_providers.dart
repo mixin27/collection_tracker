@@ -8,6 +8,7 @@ import 'package:native_id/native_id.dart';
 import 'package:storage/storage.dart';
 import 'package:uuid/uuid.dart';
 
+import 'app_info_provider.dart';
 import 'auth_session_providers.dart';
 import 'firebase_runtime_config_provider.dart';
 
@@ -292,15 +293,17 @@ final backendAuthServiceProvider = Provider<BackendAuthService?>((ref) {
   }
 
   final sessionStore = ref.watch(authSessionStoreProvider);
+  final detectedAppVersion = ref.watch(appSemanticVersionProvider);
+  const envAppVersion = String.fromEnvironment('APP_VERSION', defaultValue: '');
+  final appVersion = envAppVersion.trim().isNotEmpty
+      ? envAppVersion.trim()
+      : detectedAppVersion;
 
   return BackendAuthService(
     client: client,
     sessionStore: sessionStore,
     resolveDeviceId: () => ref.read(backendDeviceIdProvider.future),
-    appVersion: const String.fromEnvironment(
-      'APP_VERSION',
-      defaultValue: '1.0.0',
-    ),
+    appVersion: appVersion,
   );
 });
 

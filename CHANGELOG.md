@@ -2,6 +2,32 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.1+2] - 2026-02-23
+
+### Added
+
+- **Release & Store Readiness**
+  - Added Play Store listing documentation with app metadata, SEO-oriented copy, ASO keyword strategy, release note templates, and launch checklist.
+  - Added MDX-ready privacy policy document for website and Play Console reuse.
+- **Product Features & Platform Integrations**
+  - Expanded optional backend integration flow for auth and sync readiness gating via runtime feature flags.
+  - Added/extended Firebase integrations for runtime config, analytics consent behavior, crash diagnostics, performance monitoring, and FCM-related flows.
+
+### Changed
+
+- **Versioning**
+  - Bumped mobile app version from `1.0.0+1` to `1.0.1+2`.
+  - Bumped workspace version from `1.0.0` to `1.0.1`.
+- **UX & Architecture**
+  - Continued UI/UX refinements across core screens and settings structure.
+  - Continued localization coverage and language improvements across key user flows.
+
+### Fixed
+
+- Navigation stability issues related to route stack/hero key conflicts in shell navigation flows.
+- Multiple layout overflow cases on compact/Android device sizes (bottom sheets, grids, and list end visibility with custom navigation shell).
+- State/controller lifecycle issues in edit/update dialogs and related action handlers.
+
 ## [1.0.0+1] - 2026-01-28
 
 ### Added

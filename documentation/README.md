@@ -21,3 +21,9 @@ This folder contains up-to-date technical documentation for the current state of
 
 - [documentation/LOCALIZATION.md](LOCALIZATION.md)
   Supported languages, localization workflow, and remaining gaps.
+
+- [documentation/PLAY_STORE_LISTING.md](PLAY_STORE_LISTING.md)
+  Play Store metadata pack, ASO copy, launch checklist, and release-note templates.
+
+- [documentation/PRIVACY_POLICY.md](PRIVACY_POLICY.md)
+  MDX-ready privacy policy template aligned with current app integrations and feature flags.
