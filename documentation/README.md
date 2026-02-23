@@ -25,5 +25,8 @@ This folder contains up-to-date technical documentation for the current state of
 - [documentation/PLAY_STORE_LISTING.md](PLAY_STORE_LISTING.md)
   Play Store metadata pack, ASO copy, launch checklist, and release-note templates.
 
+- [documentation/RELEASE_CHECKLIST.md](RELEASE_CHECKLIST.md)
+  Tailored Play Store release checklist based on current repository state and deployment flow.
+
 - [documentation/PRIVACY_POLICY.md](PRIVACY_POLICY.md)
   MDX-ready privacy policy template aligned with current app integrations and feature flags.
