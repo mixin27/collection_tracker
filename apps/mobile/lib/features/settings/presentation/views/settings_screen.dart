@@ -5,6 +5,7 @@ import 'package:collection_tracker/core/analytics/analytics_preferences.dart';
 import 'package:collection_tracker/core/observability/operational_telemetry.dart';
 import 'package:collection_tracker/core/providers/providers.dart';
 import 'package:collection_tracker/core/router/routes.dart';
+import 'package:collection_tracker/features/app_update/presentation/providers/app_update_providers.dart';
 import 'package:collection_tracker/l10n/l10n.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -27,6 +28,7 @@ class SettingsScreen extends ConsumerWidget {
     final metadataPreferences = ref.watch(metadataPreferencesProvider);
     final syncReadiness = ref.watch(syncReadinessProvider);
     final accountReadiness = ref.watch(backendAuthReadinessProvider);
+    final appUpdateSummary = ref.watch(appUpdateSummaryProvider);
     final pendingSyncCount = ref.watch(syncOutboxCountProvider).value ?? 0;
     final authSession = ref.watch(authSessionProvider).value;
     final appVersionLabel = ref.watch(appDisplayVersionProvider);
@@ -107,6 +109,12 @@ class SettingsScreen extends ConsumerWidget {
                   title: l10n.settingsMetadataTitle,
                   subtitle: metadataSummary,
                   onTap: () => context.push(Routes.settingsMetadata),
+                ),
+                SettingsTile(
+                  icon: Icons.system_update_alt_rounded,
+                  title: 'App Update',
+                  subtitle: appUpdateSummary,
+                  onTap: () => context.push(Routes.settingsAppUpdate),
                 ),
               ],
             ),

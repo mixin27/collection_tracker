@@ -244,6 +244,23 @@ final backendAuthClientProvider = Provider<BackendAuthClient?>((ref) {
   );
 });
 
+final backendAppUpdateClientProvider = Provider<BackendAppUpdateClient?>((ref) {
+  final readiness = ref.watch(backendApiReadinessProvider);
+  if (!readiness.enabled) {
+    return null;
+  }
+
+  final root = ref.watch(backendApiRootProvider);
+  if (root.isEmpty) {
+    return null;
+  }
+
+  return BackendAppUpdateClient(
+    dio: ref.watch(backendApiDioProvider),
+    apiBaseUrl: root,
+  );
+});
+
 final backendDeviceIdProvider = FutureProvider<String>((ref) async {
   final storage = SecureStorageService.instance;
 

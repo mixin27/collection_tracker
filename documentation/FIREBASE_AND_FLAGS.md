@@ -31,6 +31,19 @@ Runtime flags are read in `FirebaseServicesBootstrap`.
 | `app_backend_integration_enabled` | `false` | Gates backend-auth integration paths |
 | `app_auth_feature_enabled` | `true` | Gates account authentication UI/service availability |
 | `app_sync_feature_enabled` | `false` | Gates sync transport and sync UI readiness |
+| `app_update_feature_enabled` | `true` | Enables/disables app update checks in runtime |
+| `app_update_use_backend` | `true` | Prefer backend update policy endpoint before Remote Config fallback |
+| `app_update_check_interval_hours` | `12` | Auto-check interval used by startup/resume checks |
+| `app_update_snooze_hours` | `24` | Default snooze duration for optional update prompts |
+| `app_update_force_mode` | `false` | Treat latest-version updates as required updates |
+| `app_update_min_supported_android` | `""` | Minimum supported Android semantic version |
+| `app_update_min_supported_ios` | `""` | Minimum supported iOS semantic version |
+| `app_update_latest_android` | `""` | Latest recommended Android semantic version |
+| `app_update_latest_ios` | `""` | Latest recommended iOS semantic version |
+| `app_update_store_url_android` | `""` | Android store URL opened by update action |
+| `app_update_store_url_ios` | `""` | iOS store URL opened by update action |
+| `app_update_title` | `""` | Optional update prompt title |
+| `app_update_message` | `""` | Optional update prompt message |
 
 ## 3. Why Cloud Sync Can Still Look Disabled
 

@@ -13,6 +13,7 @@ abstract final class Routes {
   static const settingsLoans = '/settings/loans';
   static const settingsMetadata = '/settings/metadata';
   static const settingsNotifications = '/settings/notifications';
+  static const settingsAppUpdate = '/settings/app-update';
   static const settingsDevtools = '/settings/devtools';
   static const tagItems = '/tags/items';
 

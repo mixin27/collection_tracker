@@ -32,6 +32,21 @@ abstract final class FirebaseServicesBootstrap {
       'app_backend_integration_enabled';
   static const _authFeatureEnabledKey = 'app_auth_feature_enabled';
   static const _syncFeatureEnabledKey = 'app_sync_feature_enabled';
+  static const _appUpdateFeatureEnabledKey = 'app_update_feature_enabled';
+  static const _appUpdateUseBackendKey = 'app_update_use_backend';
+  static const _appUpdateCheckIntervalHoursKey =
+      'app_update_check_interval_hours';
+  static const _appUpdateSnoozeHoursKey = 'app_update_snooze_hours';
+  static const _appUpdateForceModeKey = 'app_update_force_mode';
+  static const _appUpdateMinSupportedAndroidKey =
+      'app_update_min_supported_android';
+  static const _appUpdateMinSupportedIosKey = 'app_update_min_supported_ios';
+  static const _appUpdateLatestAndroidKey = 'app_update_latest_android';
+  static const _appUpdateLatestIosKey = 'app_update_latest_ios';
+  static const _appUpdateStoreUrlAndroidKey = 'app_update_store_url_android';
+  static const _appUpdateStoreUrlIosKey = 'app_update_store_url_ios';
+  static const _appUpdateTitleKey = 'app_update_title';
+  static const _appUpdateMessageKey = 'app_update_message';
 
   static Future<FirebaseRuntimeConfig> initialize() async {
     final remoteConfigService = FirebaseRemoteConfigService.instance;
@@ -47,6 +62,19 @@ abstract final class FirebaseServicesBootstrap {
         _backendIntegrationEnabledKey: false,
         _authFeatureEnabledKey: true,
         _syncFeatureEnabledKey: false,
+        _appUpdateFeatureEnabledKey: true,
+        _appUpdateUseBackendKey: true,
+        _appUpdateCheckIntervalHoursKey: 12,
+        _appUpdateSnoozeHoursKey: 24,
+        _appUpdateForceModeKey: false,
+        _appUpdateMinSupportedAndroidKey: '',
+        _appUpdateMinSupportedIosKey: '',
+        _appUpdateLatestAndroidKey: '',
+        _appUpdateLatestIosKey: '',
+        _appUpdateStoreUrlAndroidKey: '',
+        _appUpdateStoreUrlIosKey: '',
+        _appUpdateTitleKey: '',
+        _appUpdateMessageKey: '',
       },
       minimumFetchInterval: kDebugMode
           ? const Duration(minutes: 5)
