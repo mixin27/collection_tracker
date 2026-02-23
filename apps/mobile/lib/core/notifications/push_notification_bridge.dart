@@ -9,6 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import 'local_notification_service.dart';
+
 class PushNotificationBridge extends ConsumerStatefulWidget {
   const PushNotificationBridge({required this.child, super.key});
 
@@ -23,6 +25,7 @@ class _PushNotificationBridgeState
     extends ConsumerState<PushNotificationBridge> {
   StreamSubscription<FirebaseMessagingMessage>? _foregroundSubscription;
   StreamSubscription<FirebaseMessagingMessage>? _openedSubscription;
+  StreamSubscription<String>? _localNotificationTapSubscription;
   bool _initialized = false;
 
   @override
@@ -35,6 +38,7 @@ class _PushNotificationBridgeState
   void dispose() {
     unawaited(_foregroundSubscription?.cancel());
     unawaited(_openedSubscription?.cancel());
+    unawaited(_localNotificationTapSubscription?.cancel());
     super.dispose();
   }
 
@@ -52,6 +56,20 @@ class _PushNotificationBridgeState
     _initialized = true;
 
     final messaging = FirebaseMessagingService.instance;
+    final localNotifications = LocalNotificationService.instance;
+    await localNotifications.initialize();
+
+    _localNotificationTapSubscription = localNotifications.onRouteTap.listen((
+      route,
+    ) {
+      _navigateToRoute(route);
+    });
+
+    final initialLocalRoute = localNotifications.takeInitialRoute();
+    if (initialLocalRoute != null && initialLocalRoute.isNotEmpty) {
+      _navigateToRoute(initialLocalRoute);
+    }
+
     _foregroundSubscription = messaging.onMessage.listen((message) {
       unawaited(_handleForegroundMessage(message));
     });
@@ -83,31 +101,10 @@ class _PushNotificationBridgeState
       hasRoute: route != null,
     );
 
-    if (!mounted) {
-      return;
-    }
-
-    final content = message.title?.trim().isNotEmpty == true
-        ? message.title!.trim()
-        : (message.body?.trim().isNotEmpty == true
-              ? message.body!.trim()
-              : 'Notification received');
-
-    final messenger = ScaffoldMessenger.maybeOf(context);
-    if (messenger == null) {
-      return;
-    }
-
-    messenger.showSnackBar(
-      SnackBar(
-        content: Text(content),
-        action: route == null
-            ? null
-            : SnackBarAction(
-                label: 'Open',
-                onPressed: () => _navigateToRoute(route),
-              ),
-      ),
+    await LocalNotificationService.instance.showForegroundMessage(
+      message: message,
+      notificationType: notificationType,
+      route: route,
     );
   }
 

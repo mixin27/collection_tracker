@@ -61,10 +61,11 @@ class FirebaseMessagingService {
     try {
       await _messaging.setAutoInitEnabled(enabled);
       if (_isApplePlatform) {
+        // Foreground alerts are shown via local notifications for consistent UX.
         await _messaging.setForegroundNotificationPresentationOptions(
-          alert: true,
-          badge: true,
-          sound: true,
+          alert: false,
+          badge: false,
+          sound: false,
         );
       }
       _initialized = true;
