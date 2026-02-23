@@ -19,6 +19,7 @@ import '../../features/scanner/presentation/views/scanner_screen.dart';
 import '../../features/search/presentation/views/search_screen.dart';
 import '../../features/settings/presentation/views/settings_screen.dart';
 import '../../features/settings/presentation/views/settings_devtools_screen.dart';
+import '../../features/settings/presentation/views/settings_metadata_screen.dart';
 import '../../features/settings/presentation/views/settings_notifications_screen.dart';
 import '../../features/statistics/presentation/views/statistics_screen.dart';
 import '../../features/items/presentation/views/tag_management_screen.dart';
@@ -178,6 +179,12 @@ GoRouter appRouter(Ref ref) {
                     name: 'settings-notifications',
                     parentNavigatorKey: _rootNavigatorKey,
                     builder: (_, _) => const SettingsNotificationsScreen(),
+                  ),
+                  GoRoute(
+                    path: 'metadata',
+                    name: 'settings-metadata',
+                    parentNavigatorKey: _rootNavigatorKey,
+                    builder: (_, _) => const SettingsMetadataScreen(),
                   ),
                   GoRoute(
                     path: 'loans',

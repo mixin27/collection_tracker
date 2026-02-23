@@ -521,6 +521,108 @@ abstract class AppLocalizations {
   /// **'Inspect and refresh runtime feature flags'**
   String get settingsFirebaseRuntimeConfigSubtitle;
 
+  /// No description provided for @settingsMetadataTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Metadata & Autofill'**
+  String get settingsMetadataTitle;
+
+  /// No description provided for @settingsMetadataSummaryEnabled.
+  ///
+  /// In en, this message translates to:
+  /// **'Enabled with automatic barcode lookup'**
+  String get settingsMetadataSummaryEnabled;
+
+  /// No description provided for @settingsMetadataSummaryManual.
+  ///
+  /// In en, this message translates to:
+  /// **'Enabled with manual lookup'**
+  String get settingsMetadataSummaryManual;
+
+  /// No description provided for @settingsMetadataSummaryDisabled.
+  ///
+  /// In en, this message translates to:
+  /// **'Disabled'**
+  String get settingsMetadataSummaryDisabled;
+
+  /// No description provided for @settingsMetadataSummaryFeatureDisabled.
+  ///
+  /// In en, this message translates to:
+  /// **'Disabled by runtime feature flag'**
+  String get settingsMetadataSummaryFeatureDisabled;
+
+  /// No description provided for @settingsMetadataEnableToggleTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Enable metadata assistance'**
+  String get settingsMetadataEnableToggleTitle;
+
+  /// No description provided for @settingsMetadataEnableToggleSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow metadata search and barcode-based autofill in item forms.'**
+  String get settingsMetadataEnableToggleSubtitle;
+
+  /// No description provided for @settingsMetadataAutoFetchToggleTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Auto-fetch from barcode scan'**
+  String get settingsMetadataAutoFetchToggleTitle;
+
+  /// No description provided for @settingsMetadataAutoFetchToggleSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'After scanning a barcode, fetch metadata automatically.'**
+  String get settingsMetadataAutoFetchToggleSubtitle;
+
+  /// No description provided for @settingsMetadataFillEmptyOnlyToggleTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Fill empty fields only'**
+  String get settingsMetadataFillEmptyOnlyToggleTitle;
+
+  /// No description provided for @settingsMetadataFillEmptyOnlyToggleSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Do not overwrite existing title or description when metadata is found.'**
+  String get settingsMetadataFillEmptyOnlyToggleSubtitle;
+
+  /// No description provided for @settingsMetadataSourcesSectionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Sources'**
+  String get settingsMetadataSourcesSectionTitle;
+
+  /// No description provided for @settingsMetadataSourceAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Available'**
+  String get settingsMetadataSourceAvailable;
+
+  /// No description provided for @settingsMetadataSourceNotConfigured.
+  ///
+  /// In en, this message translates to:
+  /// **'Not configured'**
+  String get settingsMetadataSourceNotConfigured;
+
+  /// No description provided for @settingsMetadataSourceManualOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'Manual only'**
+  String get settingsMetadataSourceManualOnly;
+
+  /// No description provided for @settingsMetadataManualCollectionsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Comics, Music, and Custom'**
+  String get settingsMetadataManualCollectionsLabel;
+
+  /// No description provided for @settingsMetadataFeatureDisabledMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Metadata assistance is disabled by runtime configuration.'**
+  String get settingsMetadataFeatureDisabledMessage;
+
   /// No description provided for @settingsFirebaseRuntimeConfigSheetTitle.
   ///
   /// In en, this message translates to:
@@ -1487,6 +1589,24 @@ abstract class AppLocalizations {
   /// **'Start typing to look up metadata.'**
   String get metadataSearchSuggestionMessage;
 
+  /// No description provided for @metadataSearchDisabledHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Metadata search is unavailable for this collection type or currently disabled.'**
+  String get metadataSearchDisabledHint;
+
+  /// No description provided for @metadataNoMatchForBarcode.
+  ///
+  /// In en, this message translates to:
+  /// **'No metadata match found for this barcode.'**
+  String get metadataNoMatchForBarcode;
+
+  /// No description provided for @metadataSearchUnavailableForType.
+  ///
+  /// In en, this message translates to:
+  /// **'Metadata search is unavailable for {collectionType}.'**
+  String metadataSearchUnavailableForType(String collectionType);
+
   /// No description provided for @tagItemsTitle.
   ///
   /// In en, this message translates to:
@@ -2326,6 +2446,354 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Due date'**
   String get loanTrackingDueDateLabel;
+
+  /// No description provided for @authTitleAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Account'**
+  String get authTitleAccount;
+
+  /// No description provided for @authCreateAccountHeading.
+  ///
+  /// In en, this message translates to:
+  /// **'Create Account'**
+  String get authCreateAccountHeading;
+
+  /// No description provided for @authSignInHeading.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign In'**
+  String get authSignInHeading;
+
+  /// No description provided for @authCreateAccountDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Create an account to sync your collections across devices.'**
+  String get authCreateAccountDescription;
+
+  /// No description provided for @authSignInDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in to enable cloud sync and account features.'**
+  String get authSignInDescription;
+
+  /// No description provided for @authSignInChoice.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in'**
+  String get authSignInChoice;
+
+  /// No description provided for @authRegisterChoice.
+  ///
+  /// In en, this message translates to:
+  /// **'Register'**
+  String get authRegisterChoice;
+
+  /// No description provided for @authEmailLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Email'**
+  String get authEmailLabel;
+
+  /// No description provided for @authEmailHint.
+  ///
+  /// In en, this message translates to:
+  /// **'you@example.com'**
+  String get authEmailHint;
+
+  /// No description provided for @authEmailRequiredError.
+  ///
+  /// In en, this message translates to:
+  /// **'Email is required.'**
+  String get authEmailRequiredError;
+
+  /// No description provided for @authEmailInvalidError.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a valid email.'**
+  String get authEmailInvalidError;
+
+  /// No description provided for @authPasswordLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Password'**
+  String get authPasswordLabel;
+
+  /// No description provided for @authPasswordHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Min 8 chars, A-Z, a-z, 0-9'**
+  String get authPasswordHint;
+
+  /// No description provided for @authPasswordRequiredError.
+  ///
+  /// In en, this message translates to:
+  /// **'Password is required.'**
+  String get authPasswordRequiredError;
+
+  /// No description provided for @authPasswordLengthError.
+  ///
+  /// In en, this message translates to:
+  /// **'Password must be at least 8 characters.'**
+  String get authPasswordLengthError;
+
+  /// No description provided for @authPasswordPolicyError.
+  ///
+  /// In en, this message translates to:
+  /// **'Password must include uppercase, lowercase, and number.'**
+  String get authPasswordPolicyError;
+
+  /// No description provided for @authDisplayNameLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Display Name (optional)'**
+  String get authDisplayNameLabel;
+
+  /// No description provided for @authDisplayNameHint.
+  ///
+  /// In en, this message translates to:
+  /// **'How should we call you?'**
+  String get authDisplayNameHint;
+
+  /// No description provided for @authCreateAccountAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Create account'**
+  String get authCreateAccountAction;
+
+  /// No description provided for @authNotNowAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Not now'**
+  String get authNotNowAction;
+
+  /// No description provided for @authUnavailableMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Authentication is currently unavailable.'**
+  String get authUnavailableMessage;
+
+  /// No description provided for @authRegisterSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Account created and signed in.'**
+  String get authRegisterSuccess;
+
+  /// No description provided for @authSignInSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Signed in successfully.'**
+  String get authSignInSuccess;
+
+  /// No description provided for @authSignInFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign-in failed: {error}'**
+  String authSignInFailed(String error);
+
+  /// No description provided for @authSignedOut.
+  ///
+  /// In en, this message translates to:
+  /// **'Signed out.'**
+  String get authSignedOut;
+
+  /// No description provided for @authFinalConfirmationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Final confirmation'**
+  String get authFinalConfirmationTitle;
+
+  /// No description provided for @authFinalConfirmationMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Submit account deletion request now? You will be signed out immediately from this device.'**
+  String get authFinalConfirmationMessage;
+
+  /// No description provided for @authBackAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Back'**
+  String get authBackAction;
+
+  /// No description provided for @authSubmitRequestAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Submit Request'**
+  String get authSubmitRequestAction;
+
+  /// No description provided for @authDeletionRequestSubmitted.
+  ///
+  /// In en, this message translates to:
+  /// **'Account deletion request submitted. You have been signed out.'**
+  String get authDeletionRequestSubmitted;
+
+  /// No description provided for @authDeletionEndpointMissing.
+  ///
+  /// In en, this message translates to:
+  /// **'Deletion request endpoint is not configured on backend yet.'**
+  String get authDeletionEndpointMissing;
+
+  /// No description provided for @authDeletionImpactDialogTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Before requesting account deletion'**
+  String get authDeletionImpactDialogTitle;
+
+  /// No description provided for @authDeletionImpactReviewPrompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Please review the impact carefully.'**
+  String get authDeletionImpactReviewPrompt;
+
+  /// No description provided for @authIrreversibleRequestTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Irreversible request'**
+  String get authIrreversibleRequestTitle;
+
+  /// No description provided for @authImpactLineSessionRevoked.
+  ///
+  /// In en, this message translates to:
+  /// **'Your account session is revoked immediately on request.'**
+  String get authImpactLineSessionRevoked;
+
+  /// No description provided for @authImpactLineCloudDataDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Synced cloud data linked to this account may be permanently deleted during processing.'**
+  String get authImpactLineCloudDataDeleted;
+
+  /// No description provided for @authImpactLineCannotRestore.
+  ///
+  /// In en, this message translates to:
+  /// **'Deleted account data cannot be restored once processed.'**
+  String get authImpactLineCannotRestore;
+
+  /// No description provided for @authUnderstandAction.
+  ///
+  /// In en, this message translates to:
+  /// **'I understand'**
+  String get authUnderstandAction;
+
+  /// No description provided for @authPasswordPolicySuffix.
+  ///
+  /// In en, this message translates to:
+  /// **'Use English keyboard letters and digits (A-Z, a-z, 0-9).'**
+  String get authPasswordPolicySuffix;
+
+  /// No description provided for @authAccountConnected.
+  ///
+  /// In en, this message translates to:
+  /// **'Account connected'**
+  String get authAccountConnected;
+
+  /// No description provided for @authSignedInReadySubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Signed in and ready for cloud sync'**
+  String get authSignedInReadySubtitle;
+
+  /// No description provided for @authActiveStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'Active'**
+  String get authActiveStatus;
+
+  /// No description provided for @authSessionDetailsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Session details'**
+  String get authSessionDetailsTitle;
+
+  /// No description provided for @authUserIdLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'User ID'**
+  String get authUserIdLabel;
+
+  /// No description provided for @authDeviceIdLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Device ID'**
+  String get authDeviceIdLabel;
+
+  /// No description provided for @authUnknownValue.
+  ///
+  /// In en, this message translates to:
+  /// **'Unknown'**
+  String get authUnknownValue;
+
+  /// No description provided for @authDeletionNoticeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Account deletion notice'**
+  String get authDeletionNoticeTitle;
+
+  /// No description provided for @authDeletionNoticeSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Deletion requests are irreversible once processed.'**
+  String get authDeletionNoticeSubtitle;
+
+  /// No description provided for @authDeletionNoticeLineProfileSessions.
+  ///
+  /// In en, this message translates to:
+  /// **'Account profile and active sessions will be removed from cloud access.'**
+  String get authDeletionNoticeLineProfileSessions;
+
+  /// No description provided for @authDeletionNoticeLineSyncedData.
+  ///
+  /// In en, this message translates to:
+  /// **'Synced collections, items, tags, and loans may be permanently deleted.'**
+  String get authDeletionNoticeLineSyncedData;
+
+  /// No description provided for @authRequestDeletionAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Request account deletion'**
+  String get authRequestDeletionAction;
+
+  /// No description provided for @authSignOutAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign out'**
+  String get authSignOutAction;
+
+  /// No description provided for @authDoneAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Done'**
+  String get authDoneAction;
+
+  /// No description provided for @authHeaderCreateTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Create your account'**
+  String get authHeaderCreateTitle;
+
+  /// No description provided for @authHeaderWelcomeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome back'**
+  String get authHeaderWelcomeTitle;
+
+  /// No description provided for @authHeaderCreateSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Accounts are optional, but required for cloud sync and multi-device access.'**
+  String get authHeaderCreateSubtitle;
+
+  /// No description provided for @authHeaderSignInSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in to access cloud sync and account-based features.'**
+  String get authHeaderSignInSubtitle;
+
+  /// No description provided for @authUnavailableTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Authentication unavailable'**
+  String get authUnavailableTitle;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

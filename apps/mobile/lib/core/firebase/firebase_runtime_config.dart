@@ -5,6 +5,7 @@ class FirebaseRuntimeConfig {
     required this.performanceCollectionEnabled,
     required this.appCheckEnabled,
     required this.fcmEnabled,
+    required this.metadataFeatureEnabled,
     required this.backendIntegrationEnabled,
     required this.authFeatureEnabled,
     required this.syncFeatureEnabled,
@@ -16,6 +17,7 @@ class FirebaseRuntimeConfig {
     performanceCollectionEnabled: true,
     appCheckEnabled: false,
     fcmEnabled: false,
+    metadataFeatureEnabled: true,
     backendIntegrationEnabled: false,
     authFeatureEnabled: true,
     syncFeatureEnabled: false,
@@ -26,6 +28,7 @@ class FirebaseRuntimeConfig {
   final bool performanceCollectionEnabled;
   final bool appCheckEnabled;
   final bool fcmEnabled;
+  final bool metadataFeatureEnabled;
   final bool backendIntegrationEnabled;
   final bool authFeatureEnabled;
   final bool syncFeatureEnabled;

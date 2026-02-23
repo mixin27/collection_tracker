@@ -720,6 +720,18 @@ class SettingsDevToolsScreen extends ConsumerWidget {
                 ),
                 ListTile(
                   contentPadding: EdgeInsets.zero,
+                  leading: const Icon(Icons.auto_awesome_outlined),
+                  title: const Text('Metadata fetching'),
+                  subtitle: const Text('app_metadata_feature_enabled'),
+                  trailing: Text(
+                    _enabledDisabledLabel(
+                      sheetContext,
+                      runtimeConfig.metadataFeatureEnabled,
+                    ),
+                  ),
+                ),
+                ListTile(
+                  contentPadding: EdgeInsets.zero,
                   leading: const Icon(Icons.hub_outlined),
                   title: const Text('Backend integration'),
                   subtitle: const Text('app_backend_integration_enabled'),

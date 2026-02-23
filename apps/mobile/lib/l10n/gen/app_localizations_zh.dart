@@ -221,6 +221,57 @@ class AppLocalizationsZh extends AppLocalizations {
   String get settingsFirebaseRuntimeConfigSubtitle => '查看并刷新运行时功能开关';
 
   @override
+  String get settingsMetadataTitle => '元数据与自动填充';
+
+  @override
+  String get settingsMetadataSummaryEnabled => '已启用（自动条码查询）';
+
+  @override
+  String get settingsMetadataSummaryManual => '已启用（手动查询）';
+
+  @override
+  String get settingsMetadataSummaryDisabled => '已禁用';
+
+  @override
+  String get settingsMetadataSummaryFeatureDisabled => '已被运行时功能开关禁用';
+
+  @override
+  String get settingsMetadataEnableToggleTitle => '启用元数据辅助';
+
+  @override
+  String get settingsMetadataEnableToggleSubtitle => '在条目表单中允许元数据搜索和基于条码的自动填充。';
+
+  @override
+  String get settingsMetadataAutoFetchToggleTitle => '扫描条码后自动获取';
+
+  @override
+  String get settingsMetadataAutoFetchToggleSubtitle => '扫描条码后自动获取元数据。';
+
+  @override
+  String get settingsMetadataFillEmptyOnlyToggleTitle => '仅填充空字段';
+
+  @override
+  String get settingsMetadataFillEmptyOnlyToggleSubtitle => '找到元数据时不覆盖现有标题或描述。';
+
+  @override
+  String get settingsMetadataSourcesSectionTitle => '数据源';
+
+  @override
+  String get settingsMetadataSourceAvailable => '可用';
+
+  @override
+  String get settingsMetadataSourceNotConfigured => '未配置';
+
+  @override
+  String get settingsMetadataSourceManualOnly => '仅手动';
+
+  @override
+  String get settingsMetadataManualCollectionsLabel => '漫画、音乐和自定义';
+
+  @override
+  String get settingsMetadataFeatureDisabledMessage => '元数据辅助已被运行时配置禁用。';
+
+  @override
   String get settingsFirebaseRuntimeConfigSheetTitle => 'Firebase 运行时配置';
 
   @override
@@ -752,6 +803,17 @@ class AppLocalizationsZh extends AppLocalizations {
   String get metadataSearchSuggestionMessage => '开始输入以查找元数据。';
 
   @override
+  String get metadataSearchDisabledHint => '此集合类型不支持元数据搜索，或当前已禁用。';
+
+  @override
+  String get metadataNoMatchForBarcode => '未找到与此条码匹配的元数据。';
+
+  @override
+  String metadataSearchUnavailableForType(String collectionType) {
+    return '$collectionType 不支持元数据搜索。';
+  }
+
+  @override
   String tagItemsTitle(String tag) {
     return '标签：$tag';
   }
@@ -1240,4 +1302,180 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get loanTrackingDueDateLabel => '到期日期';
+
+  @override
+  String get authTitleAccount => '账户';
+
+  @override
+  String get authCreateAccountHeading => '创建账户';
+
+  @override
+  String get authSignInHeading => '登录';
+
+  @override
+  String get authCreateAccountDescription => '创建账户以在多台设备间同步你的收藏。';
+
+  @override
+  String get authSignInDescription => '登录以启用云同步和账户功能。';
+
+  @override
+  String get authSignInChoice => '登录';
+
+  @override
+  String get authRegisterChoice => '注册';
+
+  @override
+  String get authEmailLabel => '邮箱';
+
+  @override
+  String get authEmailHint => 'you@example.com';
+
+  @override
+  String get authEmailRequiredError => '邮箱为必填项。';
+
+  @override
+  String get authEmailInvalidError => '请输入有效的邮箱地址。';
+
+  @override
+  String get authPasswordLabel => '密码';
+
+  @override
+  String get authPasswordHint => '至少8位，A-Z、a-z、0-9';
+
+  @override
+  String get authPasswordRequiredError => '密码为必填项。';
+
+  @override
+  String get authPasswordLengthError => '密码至少需要8位字符。';
+
+  @override
+  String get authPasswordPolicyError => '密码必须包含大写字母、小写字母和数字。';
+
+  @override
+  String get authDisplayNameLabel => '显示名称（可选）';
+
+  @override
+  String get authDisplayNameHint => '我们应该如何称呼你？';
+
+  @override
+  String get authCreateAccountAction => '创建账户';
+
+  @override
+  String get authNotNowAction => '暂不';
+
+  @override
+  String get authUnavailableMessage => '当前无法使用身份验证。';
+
+  @override
+  String get authRegisterSuccess => '账户已创建并已登录。';
+
+  @override
+  String get authSignInSuccess => '登录成功。';
+
+  @override
+  String authSignInFailed(String error) {
+    return '登录失败：$error';
+  }
+
+  @override
+  String get authSignedOut => '已退出登录。';
+
+  @override
+  String get authFinalConfirmationTitle => '最终确认';
+
+  @override
+  String get authFinalConfirmationMessage => '现在提交账户删除请求吗？你将立即在此设备上退出登录。';
+
+  @override
+  String get authBackAction => '返回';
+
+  @override
+  String get authSubmitRequestAction => '提交请求';
+
+  @override
+  String get authDeletionRequestSubmitted => '账户删除请求已提交。你已退出登录。';
+
+  @override
+  String get authDeletionEndpointMissing => '后端尚未配置删除请求接口。';
+
+  @override
+  String get authDeletionImpactDialogTitle => '请求删除账户前';
+
+  @override
+  String get authDeletionImpactReviewPrompt => '请仔细确认影响。';
+
+  @override
+  String get authIrreversibleRequestTitle => '不可逆请求';
+
+  @override
+  String get authImpactLineSessionRevoked => '提交请求后，你的账户会话将立即失效。';
+
+  @override
+  String get authImpactLineCloudDataDeleted => '与该账户关联的云端同步数据在处理过程中可能被永久删除。';
+
+  @override
+  String get authImpactLineCannotRestore => '账户数据一旦删除并处理完成将无法恢复。';
+
+  @override
+  String get authUnderstandAction => '我已了解';
+
+  @override
+  String get authPasswordPolicySuffix => '请使用英文键盘字母和数字（A-Z、a-z、0-9）。';
+
+  @override
+  String get authAccountConnected => '账户已连接';
+
+  @override
+  String get authSignedInReadySubtitle => '已登录并可进行云同步';
+
+  @override
+  String get authActiveStatus => '已激活';
+
+  @override
+  String get authSessionDetailsTitle => '会话详情';
+
+  @override
+  String get authUserIdLabel => '用户 ID';
+
+  @override
+  String get authDeviceIdLabel => '设备 ID';
+
+  @override
+  String get authUnknownValue => '未知';
+
+  @override
+  String get authDeletionNoticeTitle => '账户删除提示';
+
+  @override
+  String get authDeletionNoticeSubtitle => '删除请求一旦处理即不可撤销。';
+
+  @override
+  String get authDeletionNoticeLineProfileSessions => '账户资料和活跃会话将从云端访问中移除。';
+
+  @override
+  String get authDeletionNoticeLineSyncedData => '已同步的收藏、条目、标签和借出记录可能被永久删除。';
+
+  @override
+  String get authRequestDeletionAction => '请求删除账户';
+
+  @override
+  String get authSignOutAction => '退出登录';
+
+  @override
+  String get authDoneAction => '完成';
+
+  @override
+  String get authHeaderCreateTitle => '创建你的账户';
+
+  @override
+  String get authHeaderWelcomeTitle => '欢迎回来';
+
+  @override
+  String get authHeaderCreateSubtitle => '账户不是必需的，但云同步和多设备访问需要登录账户。';
+
+  @override
+  String get authHeaderSignInSubtitle => '登录以使用云同步和账户相关功能。';
+
+  @override
+  String get authUnavailableTitle => '身份验证不可用';
 }

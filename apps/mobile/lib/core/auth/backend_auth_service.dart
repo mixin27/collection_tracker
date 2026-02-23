@@ -115,6 +115,26 @@ class BackendAuthService {
     return response.user;
   }
 
+  Future<void> requestAccountDeletion({String? reason}) async {
+    final existing = await _sessionStore.readSession();
+    if (!existing.hasAccessToken || existing.accessToken == null) {
+      throw const BackendApiException(
+        message: 'Sign in is required to request account deletion.',
+        code: 'AUTH_REQUIRED',
+      );
+    }
+
+    await _client.requestAccountDeletion(
+      accessToken: existing.accessToken!,
+      request: BackendAccountDeletionRequest(
+        reason: reason,
+        source: 'mobile_app',
+      ),
+    );
+
+    await _sessionStore.clearSession();
+  }
+
   Future<AuthSession> _persistAuthResponse(BackendAuthResponse response) async {
     final session = AuthSession(
       status: AuthSessionStatus.signedIn,

@@ -1,12 +1,17 @@
 import 'package:domain/domain.dart';
+import 'package:collection_tracker/core/providers/metadata_preferences_provider.dart';
+import 'package:collection_tracker/core/providers/metadata_providers.dart';
+import 'package:collection_tracker/features/collections/presentation/view_models/collections_view_model.dart';
 import 'package:collection_tracker/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:metadata_api/metadata_api.dart';
 import 'package:ui/ui.dart';
 
 import '../view_models/items_view_model.dart';
+import 'metadata_search_delegate.dart';
 import '../widgets/item_tags_editor.dart';
 
 class EditItemScreen extends ConsumerStatefulWidget {
@@ -31,6 +36,7 @@ class _EditItemScreenState extends ConsumerState<EditItemScreen> {
   final _quantityController = TextEditingController();
 
   bool _isSaving = false;
+  bool _isFetchingMetadata = false;
   bool _isInitialized = false;
   Item? _item;
   ItemCondition? _selectedCondition;
@@ -97,6 +103,17 @@ class _EditItemScreenState extends ConsumerState<EditItemScreen> {
           _isInitialized = true;
         }
 
+        final collectionAsync = ref.watch(
+          collectionDetailProvider(item.collectionId),
+        );
+        final collection = collectionAsync.asData?.value;
+        final metadataPreferences = ref.watch(metadataPreferencesProvider);
+        final metadataService = ref.read(metadataLookupServiceProvider);
+        final metadataSearchSupported =
+            collection != null &&
+            metadataPreferences.isEnabled &&
+            metadataService.supportsSearch(collection.type);
+
         return Scaffold(
           appBar: AppBar(title: Text(l10n.editItemTitle)),
           body: Form(
@@ -111,6 +128,16 @@ class _EditItemScreenState extends ConsumerState<EditItemScreen> {
                         controller: _titleController,
                         labelText: l10n.itemFormTitleLabel,
                         prefixIcon: const Icon(Icons.title),
+                        suffixIcon: Tooltip(
+                          message: metadataSearchSupported
+                              ? l10n.metadataSearchSuggestionTitle
+                              : l10n.metadataSearchDisabledHint,
+                          child: IconButton(
+                            icon: const Icon(Icons.search),
+                            onPressed: () =>
+                                _showMetadataSearch(context, collection?.type),
+                          ),
+                        ),
                         textCapitalization: TextCapitalization.words,
                         validator: (value) {
                           if (value == null || value.trim().isEmpty) {
@@ -128,18 +155,57 @@ class _EditItemScreenState extends ConsumerState<EditItemScreen> {
                           icon: const Icon(Icons.camera_alt),
                           onPressed: () async {
                             final barcode = await context.push<String>(
-                              '/scanner',
+                              '/scanner?collectionId=${item.collectionId}',
                             );
 
                             if (barcode != null && mounted) {
                               setState(() {
                                 _barcodeController.text = barcode;
                               });
+                              if (metadataPreferences.canAutoFetchFromBarcode) {
+                                _fetchMetadata(
+                                  barcode,
+                                  collectionType: collection?.type,
+                                  showNoMatchFeedback: false,
+                                );
+                              }
                             }
                           },
                         ),
-                        keyboardType: TextInputType.number,
+                        keyboardType: TextInputType.text,
+                        onFieldSubmitted: (value) {
+                          if (value.trim().isEmpty) {
+                            return;
+                          }
+                          _fetchMetadata(
+                            value.trim(),
+                            collectionType: collection?.type,
+                          );
+                        },
                       ),
+                      if (_isFetchingMetadata)
+                        Padding(
+                          padding: EdgeInsets.only(top: AppSpacing.sm),
+                          child: Center(
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                SizedBox(
+                                  width: 16,
+                                  height: 16,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                  ),
+                                ),
+                                SizedBox(width: 8),
+                                Text(
+                                  l10n.addItemFetchingMetadata,
+                                  style: TextStyle(fontSize: 12),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
                       const SizedBox(height: AppSpacing.md),
                       AppInput(
                         controller: _descriptionController,
@@ -348,6 +414,131 @@ class _EditItemScreenState extends ConsumerState<EditItemScreen> {
     }
   }
 
+  Future<void> _showMetadataSearch(
+    BuildContext context,
+    CollectionType? collectionType,
+  ) async {
+    if (collectionType == null) {
+      return;
+    }
+
+    final metadataPreferences = ref.read(metadataPreferencesProvider);
+    if (!metadataPreferences.isEnabled) {
+      _showMetadataMessage(context.l10n.settingsMetadataFeatureDisabledMessage);
+      return;
+    }
+
+    final metadataService = ref.read(metadataLookupServiceProvider);
+    if (!metadataService.supportsSearch(collectionType)) {
+      _showMetadataMessage(
+        context.l10n.metadataSearchUnavailableForType(
+          _collectionTypeLabel(collectionType),
+        ),
+      );
+      return;
+    }
+
+    final result = await showSearch<MetadataBase?>(
+      context: context,
+      delegate: MetadataSearchDelegate(
+        ref: ref,
+        collectionType: collectionType,
+        searchFieldLabelText: context.l10n.metadataSearchFieldLabel(
+          _collectionTypeLabel(collectionType),
+        ),
+      ),
+      query: _titleController.text,
+    );
+
+    if (result == null || !mounted) {
+      return;
+    }
+
+    setState(() {
+      _applyMetadata(
+        result,
+        fillOnlyEmptyFields: metadataPreferences.fillOnlyEmptyFields,
+      );
+    });
+  }
+
+  Future<void> _fetchMetadata(
+    String barcode, {
+    required CollectionType? collectionType,
+    bool showNoMatchFeedback = true,
+  }) async {
+    if (_isFetchingMetadata || collectionType == null) {
+      return;
+    }
+
+    final metadataPreferences = ref.read(metadataPreferencesProvider);
+    if (!metadataPreferences.isEnabled) {
+      if (showNoMatchFeedback) {
+        _showMetadataMessage(
+          context.l10n.settingsMetadataFeatureDisabledMessage,
+        );
+      }
+      return;
+    }
+
+    final metadataService = ref.read(metadataLookupServiceProvider);
+    if (!metadataService.supportsBarcodeLookup(primaryType: collectionType)) {
+      if (showNoMatchFeedback) {
+        _showMetadataMessage(
+          context.l10n.metadataSearchUnavailableForType(
+            _collectionTypeLabel(collectionType),
+          ),
+        );
+      }
+      return;
+    }
+
+    setState(() {
+      _isFetchingMetadata = true;
+    });
+
+    try {
+      final result = await metadataService.findBestBarcodeMatch(
+        barcode: barcode,
+        primaryType: collectionType,
+      );
+
+      if (!mounted) {
+        return;
+      }
+
+      if (result.metadata != null) {
+        setState(() {
+          _applyMetadata(
+            result.metadata!,
+            fillOnlyEmptyFields: metadataPreferences.fillOnlyEmptyFields,
+          );
+        });
+
+        _showMetadataMessage(
+          context.l10n.addItemMatchedMetadata(
+            _metadataSourceLabel(result.source),
+          ),
+        );
+      } else if (showNoMatchFeedback) {
+        _showMetadataMessage(context.l10n.metadataNoMatchForBarcode);
+      }
+    } catch (_) {
+      if (!mounted) {
+        return;
+      }
+      if (showNoMatchFeedback) {
+        _showMetadataMessage(context.l10n.metadataNoMatchForBarcode);
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isFetchingMetadata = false;
+        });
+      }
+    }
+  }
+
   String? _validatePriceInput(String? value) {
     if (value == null || value.trim().isEmpty) {
       return null;
@@ -401,5 +592,62 @@ class _EditItemScreenState extends ConsumerState<EditItemScreen> {
       ItemCondition.fair => l10n.itemConditionFair,
       ItemCondition.poor => l10n.itemConditionPoor,
     };
+  }
+
+  void _applyMetadata(
+    MetadataBase metadata, {
+    required bool fillOnlyEmptyFields,
+  }) {
+    final title = metadata.title.trim();
+    final description = metadata.description?.trim();
+
+    if (fillOnlyEmptyFields) {
+      if (_titleController.text.trim().isEmpty && title.isNotEmpty) {
+        _titleController.text = title;
+      }
+      if (_descriptionController.text.trim().isEmpty &&
+          description != null &&
+          description.isNotEmpty) {
+        _descriptionController.text = description;
+      }
+      return;
+    }
+
+    if (title.isNotEmpty) {
+      _titleController.text = title;
+    }
+    if (description != null && description.isNotEmpty) {
+      _descriptionController.text = description;
+    }
+  }
+
+  String _collectionTypeLabel(CollectionType type) {
+    final l10n = context.l10n;
+    return switch (type) {
+      CollectionType.book => l10n.collectionTypeBooks,
+      CollectionType.game => l10n.collectionTypeGames,
+      CollectionType.movie => l10n.collectionTypeMovies,
+      CollectionType.comic => l10n.collectionTypeComics,
+      CollectionType.music => l10n.collectionTypeMusic,
+      CollectionType.custom => l10n.collectionTypeCustom,
+    };
+  }
+
+  String _metadataSourceLabel(String source) {
+    return switch (source.toLowerCase()) {
+      'book' => context.l10n.collectionTypeBooks,
+      'game' => context.l10n.collectionTypeGames,
+      'movie' => context.l10n.collectionTypeMovies,
+      _ => source,
+    };
+  }
+
+  void _showMetadataMessage(String message) {
+    if (!mounted) {
+      return;
+    }
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(message)));
   }
 }

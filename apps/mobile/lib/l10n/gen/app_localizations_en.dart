@@ -221,6 +221,57 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsFirebaseRuntimeConfigSubtitle => 'Inspect and refresh runtime feature flags';
 
   @override
+  String get settingsMetadataTitle => 'Metadata & Autofill';
+
+  @override
+  String get settingsMetadataSummaryEnabled => 'Enabled with automatic barcode lookup';
+
+  @override
+  String get settingsMetadataSummaryManual => 'Enabled with manual lookup';
+
+  @override
+  String get settingsMetadataSummaryDisabled => 'Disabled';
+
+  @override
+  String get settingsMetadataSummaryFeatureDisabled => 'Disabled by runtime feature flag';
+
+  @override
+  String get settingsMetadataEnableToggleTitle => 'Enable metadata assistance';
+
+  @override
+  String get settingsMetadataEnableToggleSubtitle => 'Allow metadata search and barcode-based autofill in item forms.';
+
+  @override
+  String get settingsMetadataAutoFetchToggleTitle => 'Auto-fetch from barcode scan';
+
+  @override
+  String get settingsMetadataAutoFetchToggleSubtitle => 'After scanning a barcode, fetch metadata automatically.';
+
+  @override
+  String get settingsMetadataFillEmptyOnlyToggleTitle => 'Fill empty fields only';
+
+  @override
+  String get settingsMetadataFillEmptyOnlyToggleSubtitle => 'Do not overwrite existing title or description when metadata is found.';
+
+  @override
+  String get settingsMetadataSourcesSectionTitle => 'Sources';
+
+  @override
+  String get settingsMetadataSourceAvailable => 'Available';
+
+  @override
+  String get settingsMetadataSourceNotConfigured => 'Not configured';
+
+  @override
+  String get settingsMetadataSourceManualOnly => 'Manual only';
+
+  @override
+  String get settingsMetadataManualCollectionsLabel => 'Comics, Music, and Custom';
+
+  @override
+  String get settingsMetadataFeatureDisabledMessage => 'Metadata assistance is disabled by runtime configuration.';
+
+  @override
   String get settingsFirebaseRuntimeConfigSheetTitle => 'Firebase Runtime Config';
 
   @override
@@ -752,6 +803,17 @@ class AppLocalizationsEn extends AppLocalizations {
   String get metadataSearchSuggestionMessage => 'Start typing to look up metadata.';
 
   @override
+  String get metadataSearchDisabledHint => 'Metadata search is unavailable for this collection type or currently disabled.';
+
+  @override
+  String get metadataNoMatchForBarcode => 'No metadata match found for this barcode.';
+
+  @override
+  String metadataSearchUnavailableForType(String collectionType) {
+    return 'Metadata search is unavailable for $collectionType.';
+  }
+
+  @override
   String tagItemsTitle(String tag) {
     return 'Tag: $tag';
   }
@@ -1240,4 +1302,180 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get loanTrackingDueDateLabel => 'Due date';
+
+  @override
+  String get authTitleAccount => 'Account';
+
+  @override
+  String get authCreateAccountHeading => 'Create Account';
+
+  @override
+  String get authSignInHeading => 'Sign In';
+
+  @override
+  String get authCreateAccountDescription => 'Create an account to sync your collections across devices.';
+
+  @override
+  String get authSignInDescription => 'Sign in to enable cloud sync and account features.';
+
+  @override
+  String get authSignInChoice => 'Sign in';
+
+  @override
+  String get authRegisterChoice => 'Register';
+
+  @override
+  String get authEmailLabel => 'Email';
+
+  @override
+  String get authEmailHint => 'you@example.com';
+
+  @override
+  String get authEmailRequiredError => 'Email is required.';
+
+  @override
+  String get authEmailInvalidError => 'Enter a valid email.';
+
+  @override
+  String get authPasswordLabel => 'Password';
+
+  @override
+  String get authPasswordHint => 'Min 8 chars, A-Z, a-z, 0-9';
+
+  @override
+  String get authPasswordRequiredError => 'Password is required.';
+
+  @override
+  String get authPasswordLengthError => 'Password must be at least 8 characters.';
+
+  @override
+  String get authPasswordPolicyError => 'Password must include uppercase, lowercase, and number.';
+
+  @override
+  String get authDisplayNameLabel => 'Display Name (optional)';
+
+  @override
+  String get authDisplayNameHint => 'How should we call you?';
+
+  @override
+  String get authCreateAccountAction => 'Create account';
+
+  @override
+  String get authNotNowAction => 'Not now';
+
+  @override
+  String get authUnavailableMessage => 'Authentication is currently unavailable.';
+
+  @override
+  String get authRegisterSuccess => 'Account created and signed in.';
+
+  @override
+  String get authSignInSuccess => 'Signed in successfully.';
+
+  @override
+  String authSignInFailed(String error) {
+    return 'Sign-in failed: $error';
+  }
+
+  @override
+  String get authSignedOut => 'Signed out.';
+
+  @override
+  String get authFinalConfirmationTitle => 'Final confirmation';
+
+  @override
+  String get authFinalConfirmationMessage => 'Submit account deletion request now? You will be signed out immediately from this device.';
+
+  @override
+  String get authBackAction => 'Back';
+
+  @override
+  String get authSubmitRequestAction => 'Submit Request';
+
+  @override
+  String get authDeletionRequestSubmitted => 'Account deletion request submitted. You have been signed out.';
+
+  @override
+  String get authDeletionEndpointMissing => 'Deletion request endpoint is not configured on backend yet.';
+
+  @override
+  String get authDeletionImpactDialogTitle => 'Before requesting account deletion';
+
+  @override
+  String get authDeletionImpactReviewPrompt => 'Please review the impact carefully.';
+
+  @override
+  String get authIrreversibleRequestTitle => 'Irreversible request';
+
+  @override
+  String get authImpactLineSessionRevoked => 'Your account session is revoked immediately on request.';
+
+  @override
+  String get authImpactLineCloudDataDeleted => 'Synced cloud data linked to this account may be permanently deleted during processing.';
+
+  @override
+  String get authImpactLineCannotRestore => 'Deleted account data cannot be restored once processed.';
+
+  @override
+  String get authUnderstandAction => 'I understand';
+
+  @override
+  String get authPasswordPolicySuffix => 'Use English keyboard letters and digits (A-Z, a-z, 0-9).';
+
+  @override
+  String get authAccountConnected => 'Account connected';
+
+  @override
+  String get authSignedInReadySubtitle => 'Signed in and ready for cloud sync';
+
+  @override
+  String get authActiveStatus => 'Active';
+
+  @override
+  String get authSessionDetailsTitle => 'Session details';
+
+  @override
+  String get authUserIdLabel => 'User ID';
+
+  @override
+  String get authDeviceIdLabel => 'Device ID';
+
+  @override
+  String get authUnknownValue => 'Unknown';
+
+  @override
+  String get authDeletionNoticeTitle => 'Account deletion notice';
+
+  @override
+  String get authDeletionNoticeSubtitle => 'Deletion requests are irreversible once processed.';
+
+  @override
+  String get authDeletionNoticeLineProfileSessions => 'Account profile and active sessions will be removed from cloud access.';
+
+  @override
+  String get authDeletionNoticeLineSyncedData => 'Synced collections, items, tags, and loans may be permanently deleted.';
+
+  @override
+  String get authRequestDeletionAction => 'Request account deletion';
+
+  @override
+  String get authSignOutAction => 'Sign out';
+
+  @override
+  String get authDoneAction => 'Done';
+
+  @override
+  String get authHeaderCreateTitle => 'Create your account';
+
+  @override
+  String get authHeaderWelcomeTitle => 'Welcome back';
+
+  @override
+  String get authHeaderCreateSubtitle => 'Accounts are optional, but required for cloud sync and multi-device access.';
+
+  @override
+  String get authHeaderSignInSubtitle => 'Sign in to access cloud sync and account-based features.';
+
+  @override
+  String get authUnavailableTitle => 'Authentication unavailable';
 }

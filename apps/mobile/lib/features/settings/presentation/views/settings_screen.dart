@@ -26,6 +26,7 @@ class SettingsScreen extends ConsumerWidget {
     final currentLanguage = ref.watch(localeSettingsProvider);
     final analyticsPreferences = ref.watch(analyticsPreferencesProvider);
     final pushPreferences = ref.watch(pushNotificationPreferencesProvider);
+    final metadataPreferences = ref.watch(metadataPreferencesProvider);
     final syncReadiness = ref.watch(syncReadinessProvider);
     final accountReadiness = ref.watch(backendAuthReadinessProvider);
     final pendingSyncCount = ref.watch(syncOutboxCountProvider).value ?? 0;
@@ -42,6 +43,7 @@ class SettingsScreen extends ConsumerWidget {
       pendingSyncCount: pendingSyncCount,
     );
     final pushSummary = _pushNotificationSummary(pushPreferences);
+    final metadataSummary = _metadataSummary(context, metadataPreferences);
     final cloudSyncFeatureEnabled =
         syncReadiness.status != SyncReadinessStatus.disabledByFeatureFlag;
 
@@ -100,6 +102,12 @@ class SettingsScreen extends ConsumerWidget {
                   title: 'Push Notifications',
                   subtitle: pushSummary,
                   onTap: () => context.push(Routes.settingsNotifications),
+                ),
+                SettingsTile(
+                  icon: Icons.auto_awesome_outlined,
+                  title: l10n.settingsMetadataTitle,
+                  subtitle: metadataSummary,
+                  onTap: () => context.push(Routes.settingsMetadata),
                 ),
               ],
             ),
@@ -888,5 +896,22 @@ class SettingsScreen extends ConsumerWidget {
     ].where((enabled) => enabled).length;
 
     return 'Enabled ($enabledTopics topics)';
+  }
+
+  String _metadataSummary(
+    BuildContext context,
+    MetadataPreferencesState preferences,
+  ) {
+    final l10n = context.l10n;
+    if (!preferences.runtimeFeatureEnabled) {
+      return l10n.settingsMetadataSummaryFeatureDisabled;
+    }
+    if (!preferences.preferenceEnabled) {
+      return l10n.settingsMetadataSummaryDisabled;
+    }
+    if (!preferences.autoFetchBarcodeEnabled) {
+      return l10n.settingsMetadataSummaryManual;
+    }
+    return l10n.settingsMetadataSummaryEnabled;
   }
 }

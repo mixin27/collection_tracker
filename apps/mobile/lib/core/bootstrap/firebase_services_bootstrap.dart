@@ -27,6 +27,7 @@ abstract final class FirebaseServicesBootstrap {
       'app_performance_collection_enabled';
   static const _appCheckEnabledKey = 'app_app_check_enabled';
   static const _fcmEnabledKey = 'app_fcm_enabled';
+  static const _metadataFeatureEnabledKey = 'app_metadata_feature_enabled';
   static const _backendIntegrationEnabledKey =
       'app_backend_integration_enabled';
   static const _authFeatureEnabledKey = 'app_auth_feature_enabled';
@@ -42,6 +43,7 @@ abstract final class FirebaseServicesBootstrap {
         _performanceCollectionEnabledKey: true,
         _appCheckEnabledKey: false,
         _fcmEnabledKey: false,
+        _metadataFeatureEnabledKey: true,
         _backendIntegrationEnabledKey: false,
         _authFeatureEnabledKey: true,
         _syncFeatureEnabledKey: false,
@@ -69,6 +71,7 @@ abstract final class FirebaseServicesBootstrap {
       'performance: ${runtimeConfig.performanceCollectionEnabled}, '
       'appCheck: ${runtimeConfig.appCheckEnabled}, '
       'fcm: ${runtimeConfig.fcmEnabled}, '
+      'metadata: ${runtimeConfig.metadataFeatureEnabled}, '
       'backend: ${runtimeConfig.backendIntegrationEnabled}, '
       'auth: ${runtimeConfig.authFeatureEnabled}, '
       'sync: ${runtimeConfig.syncFeatureEnabled}).',
@@ -115,6 +118,7 @@ abstract final class FirebaseServicesBootstrap {
       'performance: ${runtimeConfig.performanceCollectionEnabled}, '
       'appCheck: ${runtimeConfig.appCheckEnabled}, '
       'fcm: ${runtimeConfig.fcmEnabled}, '
+      'metadata: ${runtimeConfig.metadataFeatureEnabled}, '
       'backend: ${runtimeConfig.backendIntegrationEnabled}, '
       'auth: ${runtimeConfig.authFeatureEnabled}, '
       'sync: ${runtimeConfig.syncFeatureEnabled}).',
@@ -126,6 +130,7 @@ abstract final class FirebaseServicesBootstrap {
       performanceEnabled: runtimeConfig.performanceCollectionEnabled,
       appCheckEnabled: runtimeConfig.appCheckEnabled,
       fcmEnabled: runtimeConfig.fcmEnabled,
+      metadataEnabled: runtimeConfig.metadataFeatureEnabled,
       backendEnabled: runtimeConfig.backendIntegrationEnabled,
       authEnabled: runtimeConfig.authFeatureEnabled,
       syncEnabled: runtimeConfig.syncFeatureEnabled,
@@ -160,6 +165,10 @@ abstract final class FirebaseServicesBootstrap {
         fallback: false,
       ),
       fcmEnabled: remoteConfigService.getBool(_fcmEnabledKey, fallback: false),
+      metadataFeatureEnabled: remoteConfigService.getBool(
+        _metadataFeatureEnabledKey,
+        fallback: true,
+      ),
       backendIntegrationEnabled: remoteConfigService.getBool(
         _backendIntegrationEnabledKey,
         fallback: false,

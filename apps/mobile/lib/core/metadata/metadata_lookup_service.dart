@@ -80,6 +80,32 @@ class MetadataLookupService {
   final Map<String, Future<List<MetadataBase>>> _searchInFlight = {};
   final Map<String, Future<MetadataLookupMatch>> _barcodeInFlight = {};
 
+  bool supportsSearch(CollectionType collectionType) {
+    return switch (collectionType) {
+      CollectionType.book => true,
+      CollectionType.game => _config.hasIgdbConfig,
+      CollectionType.movie => _config.hasTmdbConfig,
+      CollectionType.comic ||
+      CollectionType.music ||
+      CollectionType.custom => false,
+    };
+  }
+
+  bool supportsBarcodeLookup({
+    required CollectionType primaryType,
+    List<CollectionType>? fallbackTypes,
+  }) {
+    if (supportsSearch(primaryType)) {
+      return true;
+    }
+
+    final fallbackOrder = _resolveFallbackTypes(
+      primaryType: primaryType,
+      providedFallbackTypes: fallbackTypes,
+    );
+    return fallbackOrder.any(supportsSearch);
+  }
+
   Future<List<MetadataBase>> search({
     required String query,
     required CollectionType collectionType,
@@ -170,19 +196,20 @@ class MetadataLookupService {
     required String query,
     required CollectionType collectionType,
     required int limit,
-  }) {
-    switch (collectionType) {
-      case CollectionType.book:
-        return _searchBooks(query, limit);
-      case CollectionType.game:
-        return _searchGames(query, limit);
-      case CollectionType.movie:
-        return _searchMovies(query, limit);
-      case CollectionType.comic:
-      case CollectionType.music:
-      case CollectionType.custom:
-        return Future.value(const []);
-    }
+  }) async {
+    final results = switch (collectionType) {
+      CollectionType.book => await _searchBooks(query, limit),
+      CollectionType.game => await _searchGames(query, limit),
+      CollectionType.movie => await _searchMovies(query, limit),
+      CollectionType.comic ||
+      CollectionType.music ||
+      CollectionType.custom => const <MetadataBase>[],
+    };
+
+    return _filterSearchResults(
+      collectionType: collectionType,
+      results: results,
+    );
   }
 
   Future<MetadataLookupMatch> _findBestBarcodeMatchInternal({
@@ -239,10 +266,16 @@ class MetadataLookupService {
       case CollectionType.book:
         return _fetchBookByBarcode(barcode);
       case CollectionType.game:
-        final games = await _searchGames(barcode, 1);
+        final games = _filterSearchResults(
+          collectionType: CollectionType.game,
+          results: await _searchGames(barcode, 1),
+        );
         return games.isEmpty ? null : games.first;
       case CollectionType.movie:
-        final movies = await _searchMovies(barcode, 1);
+        final movies = _filterSearchResults(
+          collectionType: CollectionType.movie,
+          results: await _searchMovies(barcode, 1),
+        );
         return movies.isEmpty ? null : movies.first;
       case CollectionType.comic:
       case CollectionType.music:
@@ -457,14 +490,28 @@ class MetadataLookupService {
     return cleaned.length == 10 || cleaned.length == 13;
   }
 
+  List<MetadataBase> _filterSearchResults({
+    required CollectionType collectionType,
+    required List<MetadataBase> results,
+  }) {
+    return switch (collectionType) {
+      CollectionType.book => results.whereType<BookMetadata>().toList(),
+      CollectionType.game => results.whereType<GameMetadata>().toList(),
+      CollectionType.movie => results.whereType<MovieMetadata>().toList(),
+      CollectionType.comic ||
+      CollectionType.music ||
+      CollectionType.custom => const <MetadataBase>[],
+    };
+  }
+
   List<CollectionType> _resolveFallbackTypes({
     required CollectionType primaryType,
     required List<CollectionType>? providedFallbackTypes,
   }) {
     final defaults = switch (primaryType) {
-      CollectionType.book => const [CollectionType.movie, CollectionType.game],
-      CollectionType.game => const [CollectionType.movie, CollectionType.book],
-      CollectionType.movie => const [CollectionType.book, CollectionType.game],
+      CollectionType.book => const <CollectionType>[],
+      CollectionType.game => const <CollectionType>[],
+      CollectionType.movie => const <CollectionType>[],
       CollectionType.comic || CollectionType.music || CollectionType.custom =>
         const [CollectionType.book, CollectionType.movie, CollectionType.game],
     };

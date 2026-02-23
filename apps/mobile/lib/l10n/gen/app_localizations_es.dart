@@ -221,6 +221,57 @@ class AppLocalizationsEs extends AppLocalizations {
   String get settingsFirebaseRuntimeConfigSubtitle => 'Inspecciona y actualiza las banderas de ejecución';
 
   @override
+  String get settingsMetadataTitle => 'Metadatos y Autorrelleno';
+
+  @override
+  String get settingsMetadataSummaryEnabled => 'Activado con búsqueda automática por código de barras';
+
+  @override
+  String get settingsMetadataSummaryManual => 'Activado con búsqueda manual';
+
+  @override
+  String get settingsMetadataSummaryDisabled => 'Desactivado';
+
+  @override
+  String get settingsMetadataSummaryFeatureDisabled => 'Desactivado por bandera de ejecución';
+
+  @override
+  String get settingsMetadataEnableToggleTitle => 'Activar asistencia de metadatos';
+
+  @override
+  String get settingsMetadataEnableToggleSubtitle => 'Permite la búsqueda de metadatos y el autorrelleno por código de barras en formularios de artículos.';
+
+  @override
+  String get settingsMetadataAutoFetchToggleTitle => 'Buscar automáticamente al escanear código';
+
+  @override
+  String get settingsMetadataAutoFetchToggleSubtitle => 'Después de escanear un código de barras, obtiene metadatos automáticamente.';
+
+  @override
+  String get settingsMetadataFillEmptyOnlyToggleTitle => 'Rellenar solo campos vacíos';
+
+  @override
+  String get settingsMetadataFillEmptyOnlyToggleSubtitle => 'No sobrescribe el título ni la descripción existentes cuando se encuentran metadatos.';
+
+  @override
+  String get settingsMetadataSourcesSectionTitle => 'Fuentes';
+
+  @override
+  String get settingsMetadataSourceAvailable => 'Disponible';
+
+  @override
+  String get settingsMetadataSourceNotConfigured => 'Sin configurar';
+
+  @override
+  String get settingsMetadataSourceManualOnly => 'Solo manual';
+
+  @override
+  String get settingsMetadataManualCollectionsLabel => 'Cómics, Música y Personalizado';
+
+  @override
+  String get settingsMetadataFeatureDisabledMessage => 'La asistencia de metadatos está desactivada por configuración de ejecución.';
+
+  @override
   String get settingsFirebaseRuntimeConfigSheetTitle => 'Configuración de ejecución de Firebase';
 
   @override
@@ -752,6 +803,17 @@ class AppLocalizationsEs extends AppLocalizations {
   String get metadataSearchSuggestionMessage => 'Empieza a escribir para buscar metadatos.';
 
   @override
+  String get metadataSearchDisabledHint => 'La búsqueda de metadatos no está disponible para este tipo de colección o está desactivada.';
+
+  @override
+  String get metadataNoMatchForBarcode => 'No se encontraron metadatos para este código de barras.';
+
+  @override
+  String metadataSearchUnavailableForType(String collectionType) {
+    return 'La búsqueda de metadatos no está disponible para $collectionType.';
+  }
+
+  @override
   String tagItemsTitle(String tag) {
     return 'Etiqueta: $tag';
   }
@@ -1240,4 +1302,180 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get loanTrackingDueDateLabel => 'Fecha de vencimiento';
+
+  @override
+  String get authTitleAccount => 'Cuenta';
+
+  @override
+  String get authCreateAccountHeading => 'Crear cuenta';
+
+  @override
+  String get authSignInHeading => 'Iniciar sesión';
+
+  @override
+  String get authCreateAccountDescription => 'Crea una cuenta para sincronizar tus colecciones entre dispositivos.';
+
+  @override
+  String get authSignInDescription => 'Inicia sesión para habilitar la sincronización en la nube y funciones de cuenta.';
+
+  @override
+  String get authSignInChoice => 'Iniciar sesión';
+
+  @override
+  String get authRegisterChoice => 'Registrarse';
+
+  @override
+  String get authEmailLabel => 'Correo electrónico';
+
+  @override
+  String get authEmailHint => 'tu@ejemplo.com';
+
+  @override
+  String get authEmailRequiredError => 'El correo electrónico es obligatorio.';
+
+  @override
+  String get authEmailInvalidError => 'Introduce un correo electrónico válido.';
+
+  @override
+  String get authPasswordLabel => 'Contraseña';
+
+  @override
+  String get authPasswordHint => 'Mín. 8 caracteres, A-Z, a-z, 0-9';
+
+  @override
+  String get authPasswordRequiredError => 'La contraseña es obligatoria.';
+
+  @override
+  String get authPasswordLengthError => 'La contraseña debe tener al menos 8 caracteres.';
+
+  @override
+  String get authPasswordPolicyError => 'La contraseña debe incluir mayúsculas, minúsculas y números.';
+
+  @override
+  String get authDisplayNameLabel => 'Nombre para mostrar (opcional)';
+
+  @override
+  String get authDisplayNameHint => '¿Cómo debemos llamarte?';
+
+  @override
+  String get authCreateAccountAction => 'Crear cuenta';
+
+  @override
+  String get authNotNowAction => 'Ahora no';
+
+  @override
+  String get authUnavailableMessage => 'La autenticación no está disponible en este momento.';
+
+  @override
+  String get authRegisterSuccess => 'Cuenta creada e inicio de sesión completado.';
+
+  @override
+  String get authSignInSuccess => 'Inicio de sesión exitoso.';
+
+  @override
+  String authSignInFailed(String error) {
+    return 'Error al iniciar sesión: $error';
+  }
+
+  @override
+  String get authSignedOut => 'Sesión cerrada.';
+
+  @override
+  String get authFinalConfirmationTitle => 'Confirmación final';
+
+  @override
+  String get authFinalConfirmationMessage => '¿Enviar solicitud de eliminación de cuenta ahora? Se cerrará la sesión de inmediato en este dispositivo.';
+
+  @override
+  String get authBackAction => 'Atrás';
+
+  @override
+  String get authSubmitRequestAction => 'Enviar solicitud';
+
+  @override
+  String get authDeletionRequestSubmitted => 'Solicitud de eliminación enviada. Se cerró tu sesión.';
+
+  @override
+  String get authDeletionEndpointMissing => 'El endpoint de solicitud de eliminación aún no está configurado en el backend.';
+
+  @override
+  String get authDeletionImpactDialogTitle => 'Antes de solicitar la eliminación de la cuenta';
+
+  @override
+  String get authDeletionImpactReviewPrompt => 'Revisa cuidadosamente el impacto.';
+
+  @override
+  String get authIrreversibleRequestTitle => 'Solicitud irreversible';
+
+  @override
+  String get authImpactLineSessionRevoked => 'La sesión de tu cuenta se revoca inmediatamente al solicitarla.';
+
+  @override
+  String get authImpactLineCloudDataDeleted => 'Los datos sincronizados en la nube vinculados a esta cuenta pueden eliminarse permanentemente durante el proceso.';
+
+  @override
+  String get authImpactLineCannotRestore => 'Los datos eliminados de la cuenta no se pueden restaurar una vez procesados.';
+
+  @override
+  String get authUnderstandAction => 'Entiendo';
+
+  @override
+  String get authPasswordPolicySuffix => 'Usa letras y dígitos del teclado en inglés (A-Z, a-z, 0-9).';
+
+  @override
+  String get authAccountConnected => 'Cuenta conectada';
+
+  @override
+  String get authSignedInReadySubtitle => 'Sesión iniciada y lista para sincronización en la nube';
+
+  @override
+  String get authActiveStatus => 'Activa';
+
+  @override
+  String get authSessionDetailsTitle => 'Detalles de la sesión';
+
+  @override
+  String get authUserIdLabel => 'ID de usuario';
+
+  @override
+  String get authDeviceIdLabel => 'ID del dispositivo';
+
+  @override
+  String get authUnknownValue => 'Desconocido';
+
+  @override
+  String get authDeletionNoticeTitle => 'Aviso de eliminación de cuenta';
+
+  @override
+  String get authDeletionNoticeSubtitle => 'Las solicitudes de eliminación son irreversibles una vez procesadas.';
+
+  @override
+  String get authDeletionNoticeLineProfileSessions => 'El perfil de la cuenta y las sesiones activas se eliminarán del acceso en la nube.';
+
+  @override
+  String get authDeletionNoticeLineSyncedData => 'Las colecciones, artículos, etiquetas y préstamos sincronizados pueden eliminarse permanentemente.';
+
+  @override
+  String get authRequestDeletionAction => 'Solicitar eliminación de cuenta';
+
+  @override
+  String get authSignOutAction => 'Cerrar sesión';
+
+  @override
+  String get authDoneAction => 'Listo';
+
+  @override
+  String get authHeaderCreateTitle => 'Crea tu cuenta';
+
+  @override
+  String get authHeaderWelcomeTitle => 'Bienvenido de nuevo';
+
+  @override
+  String get authHeaderCreateSubtitle => 'Las cuentas son opcionales, pero necesarias para sincronización en la nube y acceso multidispositivo.';
+
+  @override
+  String get authHeaderSignInSubtitle => 'Inicia sesión para acceder a sincronización en la nube y funciones de cuenta.';
+
+  @override
+  String get authUnavailableTitle => 'Autenticación no disponible';
 }

@@ -221,6 +221,57 @@ class AppLocalizationsMy extends AppLocalizations {
   String get settingsFirebaseRuntimeConfigSubtitle => 'runtime feature flags ကို စစ်ဆေးပြီး refresh လုပ်ပါ';
 
   @override
+  String get settingsMetadataTitle => 'Metadata နှင့် Auto-fill';
+
+  @override
+  String get settingsMetadataSummaryEnabled => 'Barcode အလိုအလျောက်ရှာဖွေမှုဖြင့် ဖွင့်ထားသည်';
+
+  @override
+  String get settingsMetadataSummaryManual => 'လက်ဖြင့်ရှာဖွေမှုဖြင့် ဖွင့်ထားသည်';
+
+  @override
+  String get settingsMetadataSummaryDisabled => 'ပိတ်ထားသည်';
+
+  @override
+  String get settingsMetadataSummaryFeatureDisabled => 'Runtime feature flag ကြောင့် ပိတ်ထားသည်';
+
+  @override
+  String get settingsMetadataEnableToggleTitle => 'Metadata အကူအညီ ဖွင့်မည်';
+
+  @override
+  String get settingsMetadataEnableToggleSubtitle => 'Item form များတွင် metadata ရှာဖွေမှုနှင့် barcode auto-fill ကို ခွင့်ပြုပါသည်။';
+
+  @override
+  String get settingsMetadataAutoFetchToggleTitle => 'Barcode scan ပြီးနောက် အလိုအလျောက် ရယူမည်';
+
+  @override
+  String get settingsMetadataAutoFetchToggleSubtitle => 'Barcode scan ပြီးနောက် metadata ကို အလိုအလျောက် ရယူပါသည်။';
+
+  @override
+  String get settingsMetadataFillEmptyOnlyToggleTitle => 'လွတ်နေသော fields များကိုသာ ဖြည့်မည်';
+
+  @override
+  String get settingsMetadataFillEmptyOnlyToggleSubtitle => 'Metadata တွေ့ရှိသောအခါ ရှိပြီးသား title သို့မဟုတ် description ကို မရေးကျော်ပါ။';
+
+  @override
+  String get settingsMetadataSourcesSectionTitle => 'Sources';
+
+  @override
+  String get settingsMetadataSourceAvailable => 'အသုံးပြုနိုင်သည်';
+
+  @override
+  String get settingsMetadataSourceNotConfigured => 'မသတ်မှတ်ရသေးပါ';
+
+  @override
+  String get settingsMetadataSourceManualOnly => 'လက်ဖြင့်သာ';
+
+  @override
+  String get settingsMetadataManualCollectionsLabel => 'Comics, Music နှင့် Custom';
+
+  @override
+  String get settingsMetadataFeatureDisabledMessage => 'Metadata အကူအညီကို runtime configuration ဖြင့် ပိတ်ထားသည်။';
+
+  @override
   String get settingsFirebaseRuntimeConfigSheetTitle => 'Firebase Runtime Config';
 
   @override
@@ -752,6 +803,17 @@ class AppLocalizationsMy extends AppLocalizations {
   String get metadataSearchSuggestionMessage => 'Start typing to look up metadata.';
 
   @override
+  String get metadataSearchDisabledHint => 'ဤ collection type အတွက် metadata ရှာဖွေမှု မရနိုင်ပါ သို့မဟုတ် လက်ရှိပိတ်ထားသည်။';
+
+  @override
+  String get metadataNoMatchForBarcode => 'ဤ barcode အတွက် ကိုက်ညီသော metadata မတွေ့ပါ။';
+
+  @override
+  String metadataSearchUnavailableForType(String collectionType) {
+    return '$collectionType အတွက် metadata ရှာဖွေမှု မရနိုင်ပါ။';
+  }
+
+  @override
   String tagItemsTitle(String tag) {
     return 'Tag: $tag';
   }
@@ -1240,4 +1302,180 @@ class AppLocalizationsMy extends AppLocalizations {
 
   @override
   String get loanTrackingDueDateLabel => 'ပြန်အပ်ရမည့်နေ့';
+
+  @override
+  String get authTitleAccount => 'အကောင့်';
+
+  @override
+  String get authCreateAccountHeading => 'အကောင့် ဖန်တီးရန်';
+
+  @override
+  String get authSignInHeading => 'ဝင်မည်';
+
+  @override
+  String get authCreateAccountDescription => 'စက်များအကြား စုစည်းမှုများကို sync လုပ်ရန် အကောင့်တစ်ခု ဖန်တီးပါ။';
+
+  @override
+  String get authSignInDescription => 'Cloud sync နှင့် အကောင့်ဆိုင်ရာ လုပ်ဆောင်ချက်များအသုံးပြုရန် ဝင်ပါ။';
+
+  @override
+  String get authSignInChoice => 'ဝင်မည်';
+
+  @override
+  String get authRegisterChoice => 'မှတ်ပုံတင်မည်';
+
+  @override
+  String get authEmailLabel => 'အီးမေးလ်';
+
+  @override
+  String get authEmailHint => 'you@example.com';
+
+  @override
+  String get authEmailRequiredError => 'အီးမေးလ် မဖြစ်မနေလိုအပ်သည်။';
+
+  @override
+  String get authEmailInvalidError => 'မှန်ကန်သော အီးမေးလ် ထည့်ပါ။';
+
+  @override
+  String get authPasswordLabel => 'လျှို့ဝှက်နံပါတ်';
+
+  @override
+  String get authPasswordHint => 'အနည်းဆုံး ၈ လုံး၊ A-Z, a-z, 0-9';
+
+  @override
+  String get authPasswordRequiredError => 'လျှို့ဝှက်နံပါတ် မဖြစ်မနေလိုအပ်သည်။';
+
+  @override
+  String get authPasswordLengthError => 'လျှို့ဝှက်နံပါတ်မှာ အနည်းဆုံး ၈ လုံး ရှိရမည်။';
+
+  @override
+  String get authPasswordPolicyError => 'လျှို့ဝှက်နံပါတ်တွင် စာလုံးကြီး၊ စာလုံးသေးနှင့် ဂဏန်း ပါဝင်ရမည်။';
+
+  @override
+  String get authDisplayNameLabel => 'ပြသမည့်အမည် (မဖြည့်လည်းရ)';
+
+  @override
+  String get authDisplayNameHint => 'သင့်ကို ဘယ်လိုခေါ်မလဲ?';
+
+  @override
+  String get authCreateAccountAction => 'အကောင့်ဖန်တီးမည်';
+
+  @override
+  String get authNotNowAction => 'အခုမလုပ်တော့';
+
+  @override
+  String get authUnavailableMessage => 'ယခု အတည်ပြုဝင်ရောက်မှု မရနိုင်သေးပါ။';
+
+  @override
+  String get authRegisterSuccess => 'အကောင့် ဖန်တီးပြီး ဝင်ရောက်ပြီးပါပြီ။';
+
+  @override
+  String get authSignInSuccess => 'ဝင်ရောက်မှု အောင်မြင်သည်။';
+
+  @override
+  String authSignInFailed(String error) {
+    return 'ဝင်ရောက်မှု မအောင်မြင်ပါ: $error';
+  }
+
+  @override
+  String get authSignedOut => 'ထွက်ပြီးပါပြီ။';
+
+  @override
+  String get authFinalConfirmationTitle => 'နောက်ဆုံးအတည်ပြုချက်';
+
+  @override
+  String get authFinalConfirmationMessage => 'အကောင့်ဖျက်ရန် တောင်းဆိုချက်ကို ယခု ပို့မလား? ဒီစက်တွင် ချက်ချင်း ထွက်သွားပါမည်။';
+
+  @override
+  String get authBackAction => 'နောက်သို့';
+
+  @override
+  String get authSubmitRequestAction => 'တောင်းဆိုချက် ပို့မည်';
+
+  @override
+  String get authDeletionRequestSubmitted => 'အကောင့်ဖျက်ရန် တောင်းဆိုချက် ပို့ပြီးပါပြီ။ သင့်ကို ထွက်ပေးလိုက်ပါပြီ။';
+
+  @override
+  String get authDeletionEndpointMissing => 'ဖျက်ရန် တောင်းဆို endpoint ကို backend တွင် မသတ်မှတ်ရသေးပါ။';
+
+  @override
+  String get authDeletionImpactDialogTitle => 'အကောင့်ဖျက်ရန် တောင်းဆိုမီ';
+
+  @override
+  String get authDeletionImpactReviewPrompt => 'သက်ရောက်မှုကို သေချာစွာ စစ်ဆေးပါ။';
+
+  @override
+  String get authIrreversibleRequestTitle => 'ပြန်မယူနိုင်သော တောင်းဆိုချက်';
+
+  @override
+  String get authImpactLineSessionRevoked => 'တောင်းဆိုပြီးချင်း သင့်အကောင့် session ကို ပိတ်ပါမည်။';
+
+  @override
+  String get authImpactLineCloudDataDeleted => 'ဒီအကောင့်နှင့်ချိတ်ဆက်ထားသော sync cloud ဒေတာများကို လုပ်ဆောင်နေစဉ် အပြီးအပိုင် ဖျက်နိုင်ပါသည်။';
+
+  @override
+  String get authImpactLineCannotRestore => 'ဖျက်ပြီးသော အကောင့်ဒေတာကို လုပ်ဆောင်ပြီးနောက် ပြန်မရနိုင်ပါ။';
+
+  @override
+  String get authUnderstandAction => 'နားလည်ပါသည်';
+
+  @override
+  String get authPasswordPolicySuffix => 'အင်္ဂလိပ်ကီးဘုတ် စာလုံးများနှင့် ဂဏန်းများ (A-Z, a-z, 0-9) ကို အသုံးပြုပါ။';
+
+  @override
+  String get authAccountConnected => 'အကောင့် ချိတ်ဆက်ပြီး';
+
+  @override
+  String get authSignedInReadySubtitle => 'ဝင်ထားပြီး Cloud sync အတွက် အဆင်သင့်';
+
+  @override
+  String get authActiveStatus => 'အသုံးပြုနေ';
+
+  @override
+  String get authSessionDetailsTitle => 'Session အသေးစိတ်';
+
+  @override
+  String get authUserIdLabel => 'User ID';
+
+  @override
+  String get authDeviceIdLabel => 'Device ID';
+
+  @override
+  String get authUnknownValue => 'မသိ';
+
+  @override
+  String get authDeletionNoticeTitle => 'အကောင့်ဖျက်ရန် အသိပေးချက်';
+
+  @override
+  String get authDeletionNoticeSubtitle => 'ဖျက်ရန် တောင်းဆိုချက်သည် လုပ်ဆောင်ပြီးပါက ပြန်မရနိုင်ပါ။';
+
+  @override
+  String get authDeletionNoticeLineProfileSessions => 'အကောင့်ပရိုဖိုင်နှင့် active session များကို cloud access မှ ဖယ်ရှားပါမည်။';
+
+  @override
+  String get authDeletionNoticeLineSyncedData => 'Sync လုပ်ထားသော collections, items, tags နှင့် loans များကို အပြီးအပိုင် ဖျက်နိုင်ပါသည်။';
+
+  @override
+  String get authRequestDeletionAction => 'အကောင့်ဖျက်ရန် တောင်းဆို';
+
+  @override
+  String get authSignOutAction => 'ထွက်မည်';
+
+  @override
+  String get authDoneAction => 'ပြီးပါပြီ';
+
+  @override
+  String get authHeaderCreateTitle => 'သင့်အကောင့် ဖန်တီးပါ';
+
+  @override
+  String get authHeaderWelcomeTitle => 'ပြန်လည်ကြိုဆိုပါသည်';
+
+  @override
+  String get authHeaderCreateSubtitle => 'အကောင့်မဖွင့်လည်း ရပါသည်၊ သို့သော် cloud sync နှင့် စက်အများအပြား အသုံးပြုရန် လိုအပ်ပါသည်။';
+
+  @override
+  String get authHeaderSignInSubtitle => 'Cloud sync နှင့် အကောင့်အခြေပြု လုပ်ဆောင်ချက်များ အသုံးပြုရန် ဝင်ပါ။';
+
+  @override
+  String get authUnavailableTitle => 'အတည်ပြုဝင်ရောက်မှု မရနိုင်ပါ';
 }

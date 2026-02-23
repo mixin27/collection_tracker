@@ -64,6 +64,45 @@ class BackendAuthClient {
     return BackendProfileResponse.fromJson(map);
   }
 
+  Future<void> requestAccountDeletion({
+    required String accessToken,
+    BackendAccountDeletionRequest request =
+        const BackendAccountDeletionRequest(),
+  }) async {
+    final candidatePaths = <String>[
+      '$_authPathPrefix/account-deletion-request',
+      '$_authPathPrefix/request-account-deletion',
+      '$_authPathPrefix/delete-account-request',
+      '$_authPathPrefix/request-deletion',
+    ];
+
+    BackendApiException? lastException;
+    for (final path in candidatePaths) {
+      try {
+        await _post(
+          path: path,
+          data: request.toJson(),
+          accessToken: accessToken,
+        );
+        return;
+      } on BackendApiException catch (error) {
+        if (error.statusCode == 404) {
+          lastException = error;
+          continue;
+        }
+        rethrow;
+      }
+    }
+
+    throw BackendApiException(
+      message:
+          'Account deletion request endpoint is not available on the backend.',
+      statusCode: lastException?.statusCode ?? 404,
+      code: 'ACCOUNT_DELETION_ENDPOINT_NOT_FOUND',
+      raw: lastException?.raw,
+    );
+  }
+
   Future<Map<String, dynamic>> _post({
     required String path,
     required Map<String, dynamic> data,

@@ -282,6 +282,26 @@ final backendAuthServiceProvider = Provider<BackendAuthService?>((ref) {
   );
 });
 
+final backendAuthProfileProvider = FutureProvider<BackendAuthUser?>((
+  ref,
+) async {
+  final service = ref.watch(backendAuthServiceProvider);
+  if (service == null) {
+    return null;
+  }
+
+  final session = ref.watch(authSessionProvider).value;
+  if (session == null || !session.isAuthenticated) {
+    return null;
+  }
+
+  try {
+    return await service.fetchProfile();
+  } on BackendApiException {
+    return null;
+  }
+});
+
 final backendSessionStoreProvider = Provider<AuthSessionStore>((ref) {
   return ref.watch(authSessionStoreProvider);
 });
