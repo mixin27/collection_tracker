@@ -1212,6 +1212,18 @@ class SettingsScreen extends ConsumerWidget {
                 ),
                 ListTile(
                   contentPadding: EdgeInsets.zero,
+                  leading: const Icon(Icons.verified_user_outlined),
+                  title: const Text('App Check'),
+                  subtitle: const Text('app_app_check_enabled'),
+                  trailing: Text(
+                    _enabledDisabledLabel(
+                      context,
+                      runtimeConfig.appCheckEnabled,
+                    ),
+                  ),
+                ),
+                ListTile(
+                  contentPadding: EdgeInsets.zero,
                   leading: const Icon(Icons.hub_outlined),
                   title: const Text('Backend integration'),
                   subtitle: const Text('app_backend_integration_enabled'),

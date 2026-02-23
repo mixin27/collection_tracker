@@ -25,6 +25,7 @@ abstract final class FirebaseServicesBootstrap {
       'app_crashlytics_collection_enabled';
   static const _performanceCollectionEnabledKey =
       'app_performance_collection_enabled';
+  static const _appCheckEnabledKey = 'app_app_check_enabled';
   static const _backendIntegrationEnabledKey =
       'app_backend_integration_enabled';
   static const _authFeatureEnabledKey = 'app_auth_feature_enabled';
@@ -38,6 +39,7 @@ abstract final class FirebaseServicesBootstrap {
         _analyticsCollectionEnabledKey: true,
         _crashlyticsCollectionEnabledKey: true,
         _performanceCollectionEnabledKey: true,
+        _appCheckEnabledKey: false,
         _backendIntegrationEnabledKey: false,
         _authFeatureEnabledKey: true,
         _syncFeatureEnabledKey: false,
@@ -49,6 +51,9 @@ abstract final class FirebaseServicesBootstrap {
 
     final runtimeConfig = _readRuntimeConfig(remoteConfigService);
 
+    await FirebaseAppCheckService.instance.initialize(
+      enabled: runtimeConfig.appCheckEnabled,
+    );
     await FirebasePerformanceService.instance.initialize(
       enabled: runtimeConfig.performanceCollectionEnabled,
     );
@@ -57,6 +62,7 @@ abstract final class FirebaseServicesBootstrap {
       'Firebase services initialized (analytics: ${runtimeConfig.analyticsCollectionEnabled}, '
       'crashlytics: ${runtimeConfig.crashlyticsCollectionEnabled}, '
       'performance: ${runtimeConfig.performanceCollectionEnabled}, '
+      'appCheck: ${runtimeConfig.appCheckEnabled}, '
       'backend: ${runtimeConfig.backendIntegrationEnabled}, '
       'auth: ${runtimeConfig.authFeatureEnabled}, '
       'sync: ${runtimeConfig.syncFeatureEnabled}).',
@@ -83,6 +89,9 @@ abstract final class FirebaseServicesBootstrap {
         : await remoteConfigService.refresh();
     final runtimeConfig = _readRuntimeConfig(remoteConfigService);
 
+    await FirebaseAppCheckService.instance.setEnabled(
+      runtimeConfig.appCheckEnabled,
+    );
     await FirebasePerformanceService.instance.setCollectionEnabled(
       runtimeConfig.performanceCollectionEnabled,
     );
@@ -95,6 +104,7 @@ abstract final class FirebaseServicesBootstrap {
       'analytics: ${runtimeConfig.analyticsCollectionEnabled}, '
       'crashlytics: ${runtimeConfig.crashlyticsCollectionEnabled}, '
       'performance: ${runtimeConfig.performanceCollectionEnabled}, '
+      'appCheck: ${runtimeConfig.appCheckEnabled}, '
       'backend: ${runtimeConfig.backendIntegrationEnabled}, '
       'auth: ${runtimeConfig.authFeatureEnabled}, '
       'sync: ${runtimeConfig.syncFeatureEnabled}).',
@@ -104,6 +114,7 @@ abstract final class FirebaseServicesBootstrap {
       analyticsEnabled: runtimeConfig.analyticsCollectionEnabled,
       crashlyticsEnabled: runtimeConfig.crashlyticsCollectionEnabled,
       performanceEnabled: runtimeConfig.performanceCollectionEnabled,
+      appCheckEnabled: runtimeConfig.appCheckEnabled,
       backendEnabled: runtimeConfig.backendIntegrationEnabled,
       authEnabled: runtimeConfig.authFeatureEnabled,
       syncEnabled: runtimeConfig.syncFeatureEnabled,
@@ -132,6 +143,10 @@ abstract final class FirebaseServicesBootstrap {
       performanceCollectionEnabled: remoteConfigService.getBool(
         _performanceCollectionEnabledKey,
         fallback: true,
+      ),
+      appCheckEnabled: remoteConfigService.getBool(
+        _appCheckEnabledKey,
+        fallback: false,
       ),
       backendIntegrationEnabled: remoteConfigService.getBool(
         _backendIntegrationEnabledKey,

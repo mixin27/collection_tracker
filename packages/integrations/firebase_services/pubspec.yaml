@@ -1,5 +1,5 @@
 name: app_firebase
-description: "Firebase integration services for Remote Config and Performance."
+description: "Firebase integration services for Runtime Config, Performance, and App Check."
 version: 1.0.0
 publish_to: none
 resolution: workspace
@@ -9,6 +9,7 @@ environment:
   flutter: ">=1.17.0"
 
 dependencies:
+  firebase_app_check: ^0.4.1+2
   firebase_core: ^4.4.0
   firebase_performance: ^0.11.0+9
   firebase_remote_config: ^6.1.1

@@ -38,6 +38,7 @@ abstract final class AppBootstrap {
       analyticsEnabled: firebaseRuntimeConfig.analyticsCollectionEnabled,
       crashlyticsEnabled: firebaseRuntimeConfig.crashlyticsCollectionEnabled,
       performanceEnabled: firebaseRuntimeConfig.performanceCollectionEnabled,
+      appCheckEnabled: firebaseRuntimeConfig.appCheckEnabled,
       backendEnabled: firebaseRuntimeConfig.backendIntegrationEnabled,
       authEnabled: firebaseRuntimeConfig.authFeatureEnabled,
       syncEnabled: firebaseRuntimeConfig.syncFeatureEnabled,

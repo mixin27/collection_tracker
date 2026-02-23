@@ -26,6 +26,7 @@ Runtime flags are read in `FirebaseServicesBootstrap`.
 | `app_analytics_collection_enabled` | `true` | Enables/disables analytics collection runtime behavior |
 | `app_crashlytics_collection_enabled` | `true` | Enables/disables Crashlytics collection |
 | `app_performance_collection_enabled` | `true` | Enables/disables Firebase Performance collection |
+| `app_app_check_enabled` | `false` | Enables/disables Firebase App Check activation |
 | `app_backend_integration_enabled` | `false` | Gates backend-auth integration paths |
 | `app_auth_feature_enabled` | `true` | Gates account authentication UI/service availability |
 | `app_sync_feature_enabled` | `false` | Gates sync transport and sync UI readiness |
@@ -80,7 +81,17 @@ Crashlytics collection is also constrained by debug behavior:
 - Disabled by default in debug unless `ENABLE_CRASHLYTICS_IN_DEBUG=true`
 - Always controlled by runtime flag + build mode logic
 
-## 7. Troubleshooting Checklist
+## 7. App Check Notes
+
+- App Check is activated from runtime config via `app_app_check_enabled`.
+- Provider strategy:
+  - Android debug: `AndroidDebugProvider`
+  - Android release: `AndroidPlayIntegrityProvider`
+  - Apple debug: `AppleDebugProvider`
+  - Apple release: `AppleAppAttestWithDeviceCheckFallbackProvider`
+- On web/unsupported desktop platforms, App Check activation is skipped.
+
+## 8. Troubleshooting Checklist
 
 If sync tile does not enable after toggling Remote Config keys:
 

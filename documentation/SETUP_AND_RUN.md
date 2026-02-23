@@ -81,6 +81,7 @@ By default, backend/sync features are runtime-flag disabled.
 
 Set these keys to `true` in Remote Config:
 
+- `app_app_check_enabled` (optional, for App Check)
 - `app_backend_integration_enabled`
 - `app_auth_feature_enabled`
 - `app_sync_feature_enabled`
