@@ -86,6 +86,46 @@ decode_base64_to_file() {
   printf '%s' "$encoded" | base64 -D > "$out_file"
 }
 
+validate_target_config() {
+  local target="$1"
+  local out_file="$2"
+  local source_label="$3"
+
+  if [[ ! -s "$out_file" ]]; then
+    echo "[error] '$target' config is empty from $source_label." >&2
+    return 1
+  fi
+
+  case "$target" in
+    dart)
+      if ! grep -q "class DefaultFirebaseOptions" "$out_file"; then
+        echo "[error] '$out_file' does not look like FlutterFire Dart config." >&2
+        echo "        Check FIREBASE_OPTIONS_DART / FIREBASE_OPTIONS_DART_BASE64." >&2
+        echo "        Source used: $source_label" >&2
+        return 1
+      fi
+      ;;
+    android)
+      if ! grep -q '"project_info"' "$out_file"; then
+        echo "[error] '$out_file' does not look like Android google-services.json." >&2
+        echo "        Check FIREBASE_ANDROID_GOOGLE_SERVICES_JSON / _BASE64." >&2
+        echo "        Source used: $source_label" >&2
+        return 1
+      fi
+      ;;
+    ios|macos)
+      if ! grep -q "<plist" "$out_file"; then
+        echo "[error] '$out_file' does not look like Apple GoogleService-Info.plist." >&2
+        echo "        Check FIREBASE_${target^^}_GOOGLE_SERVICE_INFO_PLIST / _BASE64." >&2
+        echo "        Source used: $source_label" >&2
+        return 1
+      fi
+      ;;
+  esac
+
+  return 0
+}
+
 write_secret_file() {
   local target="$1"
   local out_file="$2"
@@ -94,19 +134,39 @@ write_secret_file() {
 
   local raw_value="${!raw_var_name:-}"
   local b64_value="${!b64_var_name:-}"
+  local source_label=""
 
   mkdir -p "$(dirname "$out_file")"
 
   if [[ -n "$b64_value" ]]; then
     decode_base64_to_file "$b64_value" "$out_file"
-    echo "[ok] Wrote $target config: $out_file"
-    return 0
+    source_label="$b64_var_name"
+    if validate_target_config "$target" "$out_file" "$source_label"; then
+      echo "[ok] Wrote $target config: $out_file (source: $source_label)"
+      return 0
+    fi
+
+    if [[ -n "$raw_value" ]]; then
+      echo "[warn] Falling back to $raw_var_name for '$target'..." >&2
+      printf '%s' "$raw_value" > "$out_file"
+      source_label="$raw_var_name"
+      if validate_target_config "$target" "$out_file" "$source_label"; then
+        echo "[ok] Wrote $target config: $out_file (source: $source_label)"
+        return 0
+      fi
+    fi
+
+    return 1
   fi
 
   if [[ -n "$raw_value" ]]; then
     printf '%s' "$raw_value" > "$out_file"
-    echo "[ok] Wrote $target config: $out_file"
-    return 0
+    source_label="$raw_var_name"
+    if validate_target_config "$target" "$out_file" "$source_label"; then
+      echo "[ok] Wrote $target config: $out_file (source: $source_label)"
+      return 0
+    fi
+    return 1
   fi
 
   if is_required "$target"; then
