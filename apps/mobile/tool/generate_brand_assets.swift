@@ -316,6 +316,7 @@ let appDir = root.appendingPathComponent("apps/mobile")
 
 let iconLightURL = appDir.appendingPathComponent("assets/icons/logo_light.png")
 let iconDarkURL = appDir.appendingPathComponent("assets/icons/logo_dark.png")
+let iconBackgroundURL = appDir.appendingPathComponent("assets/icons/logo_background.png")
 let iconForegroundURL = appDir.appendingPathComponent("assets/icons/logo_foreground.png")
 let featureURL = appDir.appendingPathComponent("assets/branding/play_store_feature_graphic.png")
 
@@ -344,6 +345,10 @@ let iconForeground = drawImage(width: 432, height: 432) { rect, _ in
         includeRing: false,
         lineWidthScale: 1.08
     )
+}
+
+let iconBackground = drawImage(width: 432, height: 432) { rect, _ in
+    drawBackground(in: rect, dark: false, cornerRadiusRatio: 0.0)
 }
 
 let featureGraphic = drawImage(width: 1024, height: 500) { rect, _ in
@@ -406,11 +411,13 @@ let featureGraphic = drawImage(width: 1024, height: 500) { rect, _ in
 do {
     try savePng(iconLight, to: iconLightURL)
     try savePng(iconDark, to: iconDarkURL)
+    try savePng(iconBackground, to: iconBackgroundURL)
     try savePng(iconForeground, to: iconForegroundURL)
     try savePng(featureGraphic, to: featureURL)
     print("Generated brand assets:")
     print("- \(iconLightURL.path)")
     print("- \(iconDarkURL.path)")
+    print("- \(iconBackgroundURL.path)")
     print("- \(iconForegroundURL.path)")
     print("- \(featureURL.path)")
 } catch {
