@@ -17,6 +17,8 @@ import '../../features/onboarding/presentation/views/onboarding_screen.dart';
 import '../../features/scanner/presentation/views/scanner_screen.dart';
 import '../../features/search/presentation/views/search_screen.dart';
 import '../../features/settings/presentation/views/settings_screen.dart';
+import '../../features/settings/presentation/views/settings_devtools_screen.dart';
+import '../../features/settings/presentation/views/settings_notifications_screen.dart';
 import '../../features/statistics/presentation/views/statistics_screen.dart';
 import '../../features/items/presentation/views/tag_management_screen.dart';
 import 'app_shell.dart';
@@ -154,6 +156,18 @@ GoRouter appRouter(Ref ref) {
                     name: 'manage-tags',
                     parentNavigatorKey: _rootNavigatorKey,
                     builder: (_, _) => const TagManagementScreen(),
+                  ),
+                  GoRoute(
+                    path: 'notifications',
+                    name: 'settings-notifications',
+                    parentNavigatorKey: _rootNavigatorKey,
+                    builder: (_, _) => const SettingsNotificationsScreen(),
+                  ),
+                  GoRoute(
+                    path: 'devtools',
+                    name: 'settings-devtools',
+                    parentNavigatorKey: _rootNavigatorKey,
+                    builder: (_, _) => const SettingsDevToolsScreen(),
                   ),
                 ],
               ),
