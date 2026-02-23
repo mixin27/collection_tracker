@@ -311,6 +311,18 @@ abstract class AppLocalizations {
   /// **'Rename, merge, and delete tags'**
   String get settingsManageTagsSubtitle;
 
+  /// No description provided for @settingsLoanTrackingTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Loan Tracking'**
+  String get settingsLoanTrackingTitle;
+
+  /// No description provided for @settingsLoanTrackingSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Track borrowed items and return dates'**
+  String get settingsLoanTrackingSubtitle;
+
   /// No description provided for @settingsVersionTitle.
   ///
   /// In en, this message translates to:

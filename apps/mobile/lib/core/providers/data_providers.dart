@@ -24,3 +24,9 @@ ItemRepository itemRepository(Ref ref) {
       : null;
   return ItemRepositoryImpl(dao, syncDao: syncDao);
 }
+
+@riverpod
+LoanRepository loanRepository(Ref ref) {
+  final dao = ref.watch(loanDaoProvider);
+  return LoanRepositoryImpl(dao);
+}

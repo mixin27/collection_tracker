@@ -114,6 +114,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String get settingsManageTagsSubtitle => '重命名、合并和删除标签';
 
   @override
+  String get settingsLoanTrackingTitle => '借出追踪';
+
+  @override
+  String get settingsLoanTrackingSubtitle => '跟踪借出物品和归还日期';
+
+  @override
   String get settingsVersionTitle => '版本';
 
   @override

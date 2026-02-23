@@ -114,6 +114,12 @@ class AppLocalizationsKo extends AppLocalizations {
   String get settingsManageTagsSubtitle => '태그 이름 변경, 병합, 삭제';
 
   @override
+  String get settingsLoanTrackingTitle => '대여 추적';
+
+  @override
+  String get settingsLoanTrackingSubtitle => '대여한 항목과 반납 예정일을 추적합니다';
+
+  @override
   String get settingsVersionTitle => '버전';
 
   @override

@@ -114,6 +114,12 @@ class AppLocalizationsMy extends AppLocalizations {
   String get settingsManageTagsSubtitle => 'Tag အမည်ပြောင်း၊ ပေါင်းစည်း၊ ဖျက်နိုင်သည်';
 
   @override
+  String get settingsLoanTrackingTitle => 'ငှားရမ်းမှု ခြေရာခံ';
+
+  @override
+  String get settingsLoanTrackingSubtitle => 'ငှားထားသော ပစ္စည်းများနှင့် ပြန်အပ်ရမည့်ရက်ကို ခြေရာခံပါ';
+
+  @override
   String get settingsVersionTitle => 'ဗားရှင်း';
 
   @override

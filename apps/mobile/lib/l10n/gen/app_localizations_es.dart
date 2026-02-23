@@ -114,6 +114,12 @@ class AppLocalizationsEs extends AppLocalizations {
   String get settingsManageTagsSubtitle => 'Renombrar, combinar y eliminar etiquetas';
 
   @override
+  String get settingsLoanTrackingTitle => 'Seguimiento de préstamos';
+
+  @override
+  String get settingsLoanTrackingSubtitle => 'Controla artículos prestados y fechas de devolución';
+
+  @override
   String get settingsVersionTitle => 'Versión';
 
   @override

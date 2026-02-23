@@ -21,6 +21,7 @@ import '../../features/settings/presentation/views/settings_devtools_screen.dart
 import '../../features/settings/presentation/views/settings_notifications_screen.dart';
 import '../../features/statistics/presentation/views/statistics_screen.dart';
 import '../../features/items/presentation/views/tag_management_screen.dart';
+import '../../features/loans/presentation/views/loan_tracking_screen.dart';
 import 'app_shell.dart';
 import 'package:collection_tracker/core/observers/analytics_observer.dart';
 import 'routes.dart';
@@ -162,6 +163,12 @@ GoRouter appRouter(Ref ref) {
                     name: 'settings-notifications',
                     parentNavigatorKey: _rootNavigatorKey,
                     builder: (_, _) => const SettingsNotificationsScreen(),
+                  ),
+                  GoRoute(
+                    path: 'loans',
+                    name: 'settings-loans',
+                    parentNavigatorKey: _rootNavigatorKey,
+                    builder: (_, _) => const LoanTrackingScreen(),
                   ),
                   GoRoute(
                     path: 'devtools',

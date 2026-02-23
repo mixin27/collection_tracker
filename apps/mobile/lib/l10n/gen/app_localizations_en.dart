@@ -114,6 +114,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsManageTagsSubtitle => 'Rename, merge, and delete tags';
 
   @override
+  String get settingsLoanTrackingTitle => 'Loan Tracking';
+
+  @override
+  String get settingsLoanTrackingSubtitle => 'Track borrowed items and return dates';
+
+  @override
   String get settingsVersionTitle => 'Version';
 
   @override

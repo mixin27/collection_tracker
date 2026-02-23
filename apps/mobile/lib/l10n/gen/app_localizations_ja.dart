@@ -114,6 +114,12 @@ class AppLocalizationsJa extends AppLocalizations {
   String get settingsManageTagsSubtitle => 'タグの名前変更・統合・削除';
 
   @override
+  String get settingsLoanTrackingTitle => '貸出管理';
+
+  @override
+  String get settingsLoanTrackingSubtitle => '貸し出したアイテムと返却予定日を追跡';
+
+  @override
   String get settingsVersionTitle => 'バージョン';
 
   @override

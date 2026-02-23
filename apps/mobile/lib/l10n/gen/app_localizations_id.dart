@@ -114,6 +114,12 @@ class AppLocalizationsId extends AppLocalizations {
   String get settingsManageTagsSubtitle => 'Ubah nama, gabungkan, dan hapus tag';
 
   @override
+  String get settingsLoanTrackingTitle => 'Pelacakan Pinjaman';
+
+  @override
+  String get settingsLoanTrackingSubtitle => 'Lacak item yang dipinjam dan tanggal pengembalian';
+
+  @override
   String get settingsVersionTitle => 'Versi';
 
   @override

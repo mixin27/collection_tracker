@@ -145,6 +145,12 @@ class SettingsScreen extends ConsumerWidget {
                   subtitle: l10n.settingsManageTagsSubtitle,
                   onTap: () => context.push(Routes.settingsTags),
                 ),
+                SettingsTile(
+                  icon: Icons.handshake_outlined,
+                  title: l10n.settingsLoanTrackingTitle,
+                  subtitle: l10n.settingsLoanTrackingSubtitle,
+                  onTap: () => context.push(Routes.settingsLoans),
+                ),
               ],
             ),
           ),
