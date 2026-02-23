@@ -1,89 +1,83 @@
 import 'dart:convert';
-import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:file_picker/file_picker.dart' as fp;
-import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:storage/src/exceptions/storage_exception.dart';
 
 class ExportImportService {
-  // Export data to JSON
   Future<String> exportToJson(Map<String, dynamic> data) async {
-    try {
-      final jsonString = const JsonEncoder.withIndent('  ').convert(data);
-
-      final timestamp = DateTime.now().millisecondsSinceEpoch;
-      final file = await _getExportFile(
-        'collection_tracker_export_$timestamp.json',
-      );
-      await file.writeAsString(jsonString);
-
-      return file.path;
-    } catch (e) {
-      throw Exception('Failed to export to JSON: $e');
-    }
+    final jsonString = const JsonEncoder.withIndent('  ').convert(data);
+    final bytes = Uint8List.fromList(utf8.encode(jsonString));
+    final timestamp = DateTime.now().millisecondsSinceEpoch;
+    final fileName = 'collection_tracker_export_$timestamp.json';
+    return _saveToUserSelectedLocation(
+      bytes: bytes,
+      fileName: fileName,
+      allowedExtensions: const ['json'],
+      dialogTitle: 'Save JSON export',
+    );
   }
 
-  // Export data to CSV
   Future<String> exportToCsv(List<Map<String, dynamic>> items) async {
-    try {
-      if (items.isEmpty) {
-        throw Exception('No data to export');
-      }
-
-      final headers = items.first.keys.toList();
-      final csvLines = <String>[];
-
-      // Add header row
-      csvLines.add(headers.map((h) => _escapeCsvValue(h)).join(','));
-
-      // Add data rows
-      for (final item in items) {
-        final row = headers
-            .map((header) {
-              final value = item[header]?.toString() ?? '';
-              return _escapeCsvValue(value);
-            })
-            .join(',');
-        csvLines.add(row);
-      }
-
-      final csvString = csvLines.join('\n');
-
-      final timestamp = DateTime.now().millisecondsSinceEpoch;
-      final file = await _getExportFile(
-        'collection_tracker_export_$timestamp.csv',
-      );
-      await file.writeAsString(csvString);
-
-      return file.path;
-    } catch (e) {
-      throw Exception('Failed to export to CSV: $e');
+    if (items.isEmpty) {
+      throw StorageException('No data to export as CSV.');
     }
+
+    final headers = items.first.keys.toList();
+    final csvLines = <String>[];
+
+    csvLines.add(headers.map((h) => _escapeCsvValue(h)).join(','));
+    for (final item in items) {
+      final row = headers
+          .map((header) => _escapeCsvValue(item[header]?.toString() ?? ''))
+          .join(',');
+      csvLines.add(row);
+    }
+
+    final csvString = csvLines.join('\n');
+    final bytes = Uint8List.fromList(utf8.encode(csvString));
+    final timestamp = DateTime.now().millisecondsSinceEpoch;
+    final fileName = 'collection_tracker_export_$timestamp.csv';
+
+    return _saveToUserSelectedLocation(
+      bytes: bytes,
+      fileName: fileName,
+      allowedExtensions: const ['csv'],
+      dialogTitle: 'Save CSV export',
+    );
   }
 
-  Future<File> _getExportFile(String fileName) async {
-    Directory? directory;
-    if (Platform.isMacOS || Platform.isWindows || Platform.isLinux) {
-      directory = await getDownloadsDirectory();
-    } else if (Platform.isAndroid) {
-      // Try to get the public downloads directory on Android
-      final externalDirs = await getExternalStorageDirectories(
-        type: StorageDirectory.downloads,
+  Future<String> _saveToUserSelectedLocation({
+    required Uint8List bytes,
+    required String fileName,
+    required List<String> allowedExtensions,
+    required String dialogTitle,
+  }) async {
+    try {
+      final savedPath = await fp.FilePicker.platform.saveFile(
+        dialogTitle: dialogTitle,
+        fileName: fileName,
+        type: fp.FileType.custom,
+        allowedExtensions: allowedExtensions,
+        bytes: bytes,
       );
-      if (externalDirs != null && externalDirs.isNotEmpty) {
-        directory = externalDirs.first;
-      } else {
-        directory = await getExternalStorageDirectory();
+
+      if (savedPath == null || savedPath.trim().isEmpty) {
+        throw UserCancelledStorageOperationException(
+          'File save was cancelled by user.',
+        );
       }
-    } else if (Platform.isIOS) {
-      // getApplicationDocumentsDirectory is public if UIFileSharingEnabled is set in Info.plist
-      directory = await getApplicationDocumentsDirectory();
+
+      return savedPath;
+    } on UserCancelledStorageOperationException {
+      rethrow;
+    } catch (error) {
+      throw StorageException(
+        'Failed to save export file.',
+        originalError: error,
+      );
     }
-
-    directory ??= await getApplicationDocumentsDirectory();
-
-    final filePath = '${directory.path}/$fileName';
-    return File(filePath);
   }
 
   String _escapeCsvValue(String value) {
@@ -93,7 +87,6 @@ class ExportImportService {
     return value;
   }
 
-  // Share exported file
   Future<void> shareFile(String filePath, String fileName) async {
     try {
       final file = XFile(filePath);
@@ -104,83 +97,120 @@ class ExportImportService {
           text: 'My collection data from Collection Tracker',
         ),
       );
-    } catch (e) {
-      throw Exception('Failed to share file: $e');
+    } catch (error) {
+      throw StorageException('Failed to share file.', originalError: error);
     }
   }
 
-  // Import from JSON
   Future<Map<String, dynamic>> importFromJson() async {
     try {
       final result = await fp.FilePicker.platform.pickFiles(
         type: fp.FileType.custom,
-        allowedExtensions: ['json'],
+        allowedExtensions: const ['json'],
+        withData: true,
       );
 
       if (result == null || result.files.isEmpty) {
-        throw Exception('No file selected');
+        throw UserCancelledStorageOperationException(
+          'Import cancelled by user.',
+        );
       }
 
-      final file = File(result.files.first.path!);
-      final jsonString = await file.readAsString();
-      final data = jsonDecode(jsonString) as Map<String, dynamic>;
+      final selected = result.files.first;
+      final bytes = selected.bytes;
+      final path = selected.path;
 
-      return data;
-    } catch (e) {
-      throw Exception('Failed to import from JSON: $e');
+      String jsonString;
+      if (bytes != null) {
+        jsonString = utf8.decode(bytes);
+      } else if (path != null && path.trim().isNotEmpty) {
+        jsonString = await XFile(path).readAsString();
+      } else {
+        throw StorageException('Unable to read selected file.');
+      }
+
+      final decoded = jsonDecode(jsonString);
+      if (decoded is! Map<String, dynamic>) {
+        throw StorageException('Invalid JSON format: expected an object root.');
+      }
+      return decoded;
+    } on UserCancelledStorageOperationException {
+      rethrow;
+    } catch (error) {
+      throw StorageException(
+        'Failed to import JSON file.',
+        originalError: error,
+      );
     }
   }
 
-  // Import from CSV
   Future<List<Map<String, dynamic>>> importFromCsv() async {
     try {
       final result = await fp.FilePicker.platform.pickFiles(
         type: fp.FileType.custom,
-        allowedExtensions: ['csv'],
+        allowedExtensions: const ['csv'],
+        withData: true,
       );
 
       if (result == null || result.files.isEmpty) {
-        throw Exception('No file selected');
+        throw UserCancelledStorageOperationException(
+          'Import cancelled by user.',
+        );
       }
 
-      final file = File(result.files.first.path!);
-      final csvString = await file.readAsString();
+      final selected = result.files.first;
+      final bytes = selected.bytes;
+      final path = selected.path;
+
+      String csvString;
+      if (bytes != null) {
+        csvString = utf8.decode(bytes);
+      } else if (path != null && path.trim().isNotEmpty) {
+        csvString = await XFile(path).readAsString();
+      } else {
+        throw StorageException('Unable to read selected file.');
+      }
 
       final lines = csvString.split('\n');
       if (lines.isEmpty) {
-        throw Exception('Empty CSV file');
+        throw StorageException('CSV file is empty.');
       }
 
-      final headers = _parseCsvLine(lines[0]);
+      final headers = _parseCsvLine(lines.first);
       final data = <Map<String, dynamic>>[];
 
-      for (int i = 1; i < lines.length; i++) {
-        if (lines[i].trim().isEmpty) continue;
-
-        final values = _parseCsvLine(lines[i]);
-        final row = <String, dynamic>{};
-
-        for (int j = 0; j < headers.length && j < values.length; j++) {
-          row[headers[j]] = values[j];
+      for (var index = 1; index < lines.length; index++) {
+        final line = lines[index].trimRight();
+        if (line.isEmpty) {
+          continue;
         }
 
+        final values = _parseCsvLine(line);
+        final row = <String, dynamic>{};
+        for (var i = 0; i < headers.length && i < values.length; i++) {
+          row[headers[i]] = values[i];
+        }
         data.add(row);
       }
 
       return data;
-    } catch (e) {
-      throw Exception('Failed to import from CSV: $e');
+    } on UserCancelledStorageOperationException {
+      rethrow;
+    } catch (error) {
+      throw StorageException(
+        'Failed to import CSV file.',
+        originalError: error,
+      );
     }
   }
 
   List<String> _parseCsvLine(String line) {
     final values = <String>[];
     final buffer = StringBuffer();
-    bool inQuotes = false;
+    var inQuotes = false;
 
-    for (int i = 0; i < line.length; i++) {
+    for (var i = 0; i < line.length; i++) {
       final char = line[i];
-
       if (char == '"') {
         if (inQuotes && i + 1 < line.length && line[i + 1] == '"') {
           buffer.write('"');

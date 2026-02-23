@@ -8,6 +8,7 @@ abstract final class Routes {
   static const scanner = '/scanner';
   static const statistics = '/statistics';
   static const settings = '/settings';
+  static const settingsDataTransfer = '/settings/data-transfer';
   static const settingsTags = '/settings/tags';
   static const settingsLoans = '/settings/loans';
   static const settingsMetadata = '/settings/metadata';

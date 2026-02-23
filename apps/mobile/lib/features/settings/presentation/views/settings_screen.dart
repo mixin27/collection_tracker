@@ -10,10 +10,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:storage/storage.dart';
 import 'package:ui/ui.dart';
 
-import '../view_models/export_import_view_model.dart';
 import '../widgets/settings_primitives.dart';
 
 class SettingsScreen extends ConsumerWidget {
@@ -119,22 +117,12 @@ class SettingsScreen extends ConsumerWidget {
               title: l10n.settingsSectionData,
               children: [
                 SettingsTile(
-                  icon: Icons.file_download,
-                  title: l10n.settingsExportJsonTitle,
-                  subtitle: l10n.settingsExportJsonSubtitle,
-                  onTap: () => _handleExportJson(context, ref),
-                ),
-                SettingsTile(
-                  icon: Icons.table_chart,
-                  title: l10n.settingsExportCsvTitle,
-                  subtitle: l10n.settingsExportCsvSubtitle,
-                  onTap: () => _handleExportCsv(context, ref),
-                ),
-                SettingsTile(
-                  icon: Icons.file_upload,
-                  title: l10n.settingsImportJsonTitle,
-                  subtitle: l10n.settingsImportJsonSubtitle,
-                  onTap: () => _handleImportJson(context, ref),
+                  icon: Icons.folder_shared_outlined,
+                  title:
+                      '${l10n.settingsExportJsonTitle} / ${l10n.settingsImportJsonTitle}',
+                  subtitle:
+                      '${l10n.settingsExportJsonSubtitle}. ${l10n.settingsImportJsonSubtitle}.',
+                  onTap: () => context.push(Routes.settingsDataTransfer),
                 ),
                 SettingsTile(
                   icon: Icons.cloud_upload,
@@ -194,133 +182,6 @@ class SettingsScreen extends ConsumerWidget {
         ],
       ),
     );
-  }
-
-  Future<void> _handleExportJson(BuildContext context, WidgetRef ref) async {
-    final l10n = context.l10n;
-    try {
-      final messenger = ScaffoldMessenger.of(context);
-      messenger.showSnackBar(
-        SnackBar(content: Text(l10n.settingsExportingData)),
-      );
-
-      final filePath = await ref
-          .read(exportImportViewModelProvider.notifier)
-          .exportAllDataToJson();
-
-      final exportService = ExportImportService();
-      await exportService.shareFile(filePath, 'collection_tracker_export.json');
-
-      if (!context.mounted) {
-        return;
-      }
-      messenger.showSnackBar(
-        SnackBar(
-          content: Text(l10n.settingsDataExportSuccess),
-          backgroundColor: Colors.green,
-        ),
-      );
-    } catch (error) {
-      if (!context.mounted) {
-        return;
-      }
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(l10n.settingsExportFailed('$error')),
-          backgroundColor: Colors.red,
-        ),
-      );
-    }
-  }
-
-  Future<void> _handleExportCsv(BuildContext context, WidgetRef ref) async {
-    final l10n = context.l10n;
-    try {
-      final messenger = ScaffoldMessenger.of(context);
-      messenger.showSnackBar(
-        SnackBar(content: Text(l10n.settingsExportingData)),
-      );
-
-      final filePath = await ref
-          .read(exportImportViewModelProvider.notifier)
-          .exportItemsToCsv();
-
-      final exportService = ExportImportService();
-      await exportService.shareFile(filePath, 'collection_tracker_export.csv');
-
-      if (!context.mounted) {
-        return;
-      }
-      messenger.showSnackBar(
-        SnackBar(
-          content: Text(l10n.settingsDataExportSuccess),
-          backgroundColor: Colors.green,
-        ),
-      );
-    } catch (error) {
-      if (!context.mounted) {
-        return;
-      }
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(l10n.settingsExportFailed('$error')),
-          backgroundColor: Colors.red,
-        ),
-      );
-    }
-  }
-
-  Future<void> _handleImportJson(BuildContext context, WidgetRef ref) async {
-    final l10n = context.l10n;
-    final confirmed = await showAppDialog<bool>(
-      context: context,
-      title: Text(l10n.settingsImportDataTitle),
-      content: Text(l10n.settingsImportDataMessage),
-      actions: [
-        AppButton(
-          label: l10n.actionCancel,
-          variant: AppButtonVariant.ghost,
-          onPressed: () => closeAppDialog(context, false),
-        ),
-        AppButton(
-          label: l10n.actionImport,
-          onPressed: () => closeAppDialog(context, true),
-        ),
-      ],
-    );
-
-    if (confirmed != true || !context.mounted) {
-      return;
-    }
-
-    try {
-      final messenger = ScaffoldMessenger.of(context);
-      messenger.showSnackBar(
-        SnackBar(content: Text(l10n.settingsImportingData)),
-      );
-
-      await ref.read(exportImportViewModelProvider.notifier).importFromJson();
-
-      if (!context.mounted) {
-        return;
-      }
-      messenger.showSnackBar(
-        SnackBar(
-          content: Text(l10n.settingsDataImportSuccess),
-          backgroundColor: Colors.green,
-        ),
-      );
-    } catch (error) {
-      if (!context.mounted) {
-        return;
-      }
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(l10n.settingsImportFailed('$error')),
-          backgroundColor: Colors.red,
-        ),
-      );
-    }
   }
 
   Future<void> _showCloudSyncStatusSheet(

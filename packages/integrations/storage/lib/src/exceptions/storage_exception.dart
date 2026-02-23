@@ -35,3 +35,8 @@ class TypeMismatchException extends StorageException {
 class SerializationException extends StorageException {
   SerializationException(super.message, {super.key, super.originalError});
 }
+
+/// Exception for user-cancelled storage operations, such as picker dialogs.
+class UserCancelledStorageOperationException extends StorageException {
+  UserCancelledStorageOperationException(super.message);
+}
