@@ -4,6 +4,7 @@ import 'package:collection_tracker/core/auth/backend_auth_service.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:native_id/native_id.dart';
 import 'package:storage/storage.dart';
 import 'package:uuid/uuid.dart';
 
@@ -248,19 +249,40 @@ final backendDeviceIdProvider = FutureProvider<String>((ref) async {
   const currentKey = 'backend_device_id';
   const legacyKey = 'sync_device_id';
 
-  String? deviceId = await storage.get<String>(currentKey);
-  if (deviceId == null || deviceId.trim().isEmpty) {
-    deviceId = await storage.get<String>(legacyKey);
+  Future<void> persistDeviceId(String value) async {
+    await storage.save<String>(currentKey, value);
+    await storage.save<String>(legacyKey, value);
   }
 
-  if (deviceId == null || deviceId.trim().isEmpty) {
-    deviceId = const Uuid().v4();
+  String? normalize(String? value) {
+    final normalized = value?.trim();
+    if (normalized == null || normalized.isEmpty) {
+      return null;
+    }
+    return normalized;
   }
 
-  await storage.save<String>(currentKey, deviceId);
-  await storage.save<String>(legacyKey, deviceId);
+  final nativeId = normalize(await NativeIdService.getDeviceId());
+  if (nativeId != null) {
+    await persistDeviceId(nativeId);
+    return nativeId;
+  }
 
-  return deviceId;
+  final storedCurrent = normalize(await storage.get<String>(currentKey));
+  if (storedCurrent != null) {
+    await persistDeviceId(storedCurrent);
+    return storedCurrent;
+  }
+
+  final storedLegacy = normalize(await storage.get<String>(legacyKey));
+  if (storedLegacy != null) {
+    await persistDeviceId(storedLegacy);
+    return storedLegacy;
+  }
+
+  final fallbackId = const Uuid().v4();
+  await persistDeviceId(fallbackId);
+  return fallbackId;
 });
 
 final backendAuthServiceProvider = Provider<BackendAuthService?>((ref) {
