@@ -16,7 +16,7 @@ typedef SyncTraceRunner =
       Map<String, String>? attributes,
     });
 
-enum SyncEntityType { collection, item, tag }
+enum SyncEntityType { collection, item, tag, loan }
 
 enum SyncOperationType { upsert, delete }
 
@@ -32,14 +32,17 @@ class SyncAttemptResult {
     this.syncedCollections = 0,
     this.syncedItems = 0,
     this.syncedTags = 0,
+    this.syncedLoans = 0,
     this.conflictCount = 0,
     this.partial = false,
     this.appliedServerCollections = 0,
     this.appliedServerItems = 0,
     this.appliedServerTags = 0,
+    this.appliedServerLoans = 0,
     this.skippedServerCollections = 0,
     this.skippedServerItems = 0,
     this.skippedServerTags = 0,
+    this.skippedServerLoans = 0,
   });
 
   final bool executed;
@@ -52,14 +55,17 @@ class SyncAttemptResult {
   final int syncedCollections;
   final int syncedItems;
   final int syncedTags;
+  final int syncedLoans;
   final int conflictCount;
   final bool partial;
   final int appliedServerCollections;
   final int appliedServerItems;
   final int appliedServerTags;
+  final int appliedServerLoans;
   final int skippedServerCollections;
   final int skippedServerItems;
   final int skippedServerTags;
+  final int skippedServerLoans;
 }
 
 class SyncOrchestrator {
@@ -141,6 +147,13 @@ class SyncOrchestrator {
     bool forceFullSync = false,
   }) async {
     final pending = await _syncDao.getPendingOperations(limit: _maxBatchSize);
+    final capability = await _evaluateCapabilities();
+    final operationsToSync = capability.loansSupported
+        ? pending
+        : pending
+              .where((op) => op.entityType != SyncEntityType.loan.name)
+              .toList(growable: false);
+    final deferredLoanOperationCount = pending.length - operationsToSync.length;
 
     if (_backendClient is NoopSyncBackendClient) {
       final client = _backendClient;
@@ -157,9 +170,10 @@ class SyncOrchestrator {
 
     await _syncDao.upsertSyncState(lastAttemptedSyncAt: DateTime.now());
 
-    final changes = _buildChangesPayload(pending);
+    final changes = _buildChangesPayload(operationsToSync);
     final requestPayload = SyncRequestPayload(
       deviceId: deviceId,
+      schemaVersion: capability.schemaVersion,
       clientRequestId: _uuid.v4(),
       lastSyncAt: forceFullSync ? null : state?.lastSuccessfulSyncAt,
       changes: changes.isEmpty ? null : changes,
@@ -168,17 +182,17 @@ class SyncOrchestrator {
     try {
       final response = await _syncWithRetry(
         request: requestPayload,
-        pendingOperationCount: pending.length,
+        pendingOperationCount: operationsToSync.length,
         forceFullSync: forceFullSync,
       );
 
       final processedOperations = _processedOperationCount(response);
-      if (processedOperations < pending.length) {
+      if (processedOperations < operationsToSync.length) {
         final errorText =
             'Sync response did not process all operations '
-            '(processed: $processedOperations, pending: ${pending.length}).';
+            '(processed: $processedOperations, pending: ${operationsToSync.length}).';
 
-        for (final op in pending) {
+        for (final op in operationsToSync) {
           await _syncDao.markOperationFailed(op.id, errorText);
         }
 
@@ -192,7 +206,7 @@ class SyncOrchestrator {
           success: false,
           message:
               'Sync partially processed. Local queue kept for retry. '
-              'Processed $processedOperations of ${pending.length} change(s).',
+              'Processed $processedOperations of ${operationsToSync.length} change(s).',
           error: errorText,
           stackTrace: null,
           pendingOperations: pending.length,
@@ -200,6 +214,7 @@ class SyncOrchestrator {
           syncedCollections: response.syncedCollections,
           syncedItems: response.syncedItems,
           syncedTags: response.syncedTags,
+          syncedLoans: response.syncedLoans,
           conflictCount: response.conflicts.length,
           partial: true,
         );
@@ -209,7 +224,7 @@ class SyncOrchestrator {
         response.serverChanges,
       );
 
-      for (final op in pending) {
+      for (final op in operationsToSync) {
         await _syncDao.markOperationSynced(op.id);
       }
 
@@ -224,21 +239,26 @@ class SyncOrchestrator {
         success: true,
         message:
             'Sync completed: ${response.syncedCollections} collections, '
-            '${response.syncedItems} items, ${response.syncedTags} tags. '
-            'Applied ${applyResult.appliedTotal} remote change(s).',
+            '${response.syncedItems} items, ${response.syncedTags} tags, '
+            '${response.syncedLoans} loans. '
+            'Applied ${applyResult.appliedTotal} remote change(s).'
+            '${deferredLoanOperationCount > 0 ? ' Deferred $deferredLoanOperationCount loan change(s) until backend loan sync support is enabled.' : ''}',
         pendingOperations: pending.length,
         processedOperations: processedOperations,
         syncedCollections: response.syncedCollections,
         syncedItems: response.syncedItems,
         syncedTags: response.syncedTags,
+        syncedLoans: response.syncedLoans,
         conflictCount: response.conflicts.length,
         partial: false,
         appliedServerCollections: applyResult.appliedCollections,
         appliedServerItems: applyResult.appliedItems,
         appliedServerTags: applyResult.appliedTags,
+        appliedServerLoans: applyResult.appliedLoans,
         skippedServerCollections: applyResult.skippedCollections,
         skippedServerItems: applyResult.skippedItems,
         skippedServerTags: applyResult.skippedTags,
+        skippedServerLoans: applyResult.skippedLoans,
       );
     } on SyncAuthRequiredException catch (error) {
       await _syncDao.upsertSyncState(clearNextRetryAt: true);
@@ -253,7 +273,7 @@ class SyncOrchestrator {
       );
     } on DioException catch (error, stackTrace) {
       final errorText = _buildDioErrorMessage(error);
-      for (final op in pending) {
+      for (final op in operationsToSync) {
         await _syncDao.markOperationFailed(op.id, errorText);
       }
 
@@ -278,7 +298,7 @@ class SyncOrchestrator {
       );
     } catch (error, stackTrace) {
       final errorText = '$error';
-      for (final op in pending) {
+      for (final op in operationsToSync) {
         await _syncDao.markOperationFailed(op.id, errorText);
       }
 
@@ -343,6 +363,7 @@ class SyncOrchestrator {
     final collections = <Map<String, dynamic>>[];
     final items = <Map<String, dynamic>>[];
     final tags = <Map<String, dynamic>>[];
+    final loans = <Map<String, dynamic>>[];
 
     for (final op in pending) {
       final decoded = jsonDecode(op.payload);
@@ -357,6 +378,8 @@ class SyncOrchestrator {
         items.add(payload);
       } else if (op.entityType == SyncEntityType.tag.name) {
         tags.add(payload);
+      } else if (op.entityType == SyncEntityType.loan.name) {
+        loans.add(payload);
       }
     }
 
@@ -364,6 +387,7 @@ class SyncOrchestrator {
       collections: collections,
       items: items,
       tags: tags,
+      loans: loans,
     );
   }
 
@@ -371,7 +395,41 @@ class SyncOrchestrator {
     return response.syncedCollections +
         response.syncedItems +
         response.syncedTags +
+        response.syncedLoans +
         response.conflicts.length;
+  }
+
+  Future<_SyncCapabilityEvaluation> _evaluateCapabilities() async {
+    var schemaVersion = 'v1';
+    var loansSupported = false;
+
+    try {
+      final capabilities = await _backendClient.getCapabilities();
+      final acceptedVersions = capabilities.acceptedSchemaVersions
+          .map((version) => version.trim().toLowerCase())
+          .toSet();
+      if (acceptedVersions.contains('v2') ||
+          acceptedVersions.contains('v2-loans')) {
+        schemaVersion = 'v2';
+      }
+
+      final supportedEntities = capabilities.supportedEntities
+          .map((entity) => entity.trim().toLowerCase())
+          .toSet();
+      if (supportedEntities.contains('loan') ||
+          supportedEntities.contains('loans')) {
+        loansSupported = true;
+      } else if (schemaVersion == 'v2') {
+        loansSupported = true;
+      }
+    } catch (_) {
+      // Treat capabilities as unknown and stay with safest defaults.
+    }
+
+    return _SyncCapabilityEvaluation(
+      schemaVersion: schemaVersion,
+      loansSupported: loansSupported,
+    );
   }
 
   Future<SyncResponsePayload> _syncWithRetry({
@@ -468,4 +526,14 @@ class SyncOrchestrator {
       attributes: attributes,
     );
   }
+}
+
+class _SyncCapabilityEvaluation {
+  const _SyncCapabilityEvaluation({
+    required this.schemaVersion,
+    required this.loansSupported,
+  });
+
+  final String schemaVersion;
+  final bool loansSupported;
 }

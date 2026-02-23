@@ -3,18 +3,27 @@ class SyncChangesPayload {
     this.collections = const [],
     this.items = const [],
     this.tags = const [],
+    this.loans = const [],
   });
 
   final List<Map<String, dynamic>> collections;
   final List<Map<String, dynamic>> items;
   final List<Map<String, dynamic>> tags;
+  final List<Map<String, dynamic>> loans;
 
-  bool get isEmpty => collections.isEmpty && items.isEmpty && tags.isEmpty;
+  bool get isEmpty =>
+      collections.isEmpty && items.isEmpty && tags.isEmpty && loans.isEmpty;
 
-  int get totalCount => collections.length + items.length + tags.length;
+  int get totalCount =>
+      collections.length + items.length + tags.length + loans.length;
 
   Map<String, dynamic> toJson() {
-    return {'collections': collections, 'items': items, 'tags': tags};
+    return {
+      'collections': collections,
+      'items': items,
+      'tags': tags,
+      'loans': loans,
+    };
   }
 }
 
@@ -58,6 +67,7 @@ class SyncCapabilities {
     required this.maxBatchSize,
     required this.conflictStrategy,
     required this.acceptedSchemaVersions,
+    required this.supportedEntities,
   });
 
   final String apiVersion;
@@ -65,6 +75,7 @@ class SyncCapabilities {
   final int maxBatchSize;
   final String conflictStrategy;
   final List<String> acceptedSchemaVersions;
+  final List<String> supportedEntities;
 
   factory SyncCapabilities.fromJson(Map<String, dynamic> json) {
     return SyncCapabilities(
@@ -74,6 +85,7 @@ class SyncCapabilities {
       conflictStrategy:
           json['conflictStrategy'] as String? ?? 'last_write_wins',
       acceptedSchemaVersions: _toStringList(json['acceptedSchemaVersions']),
+      supportedEntities: _toStringList(json['supportedEntities']),
     );
   }
 
@@ -91,6 +103,7 @@ class SyncResponsePayload {
     required this.syncedCollections,
     required this.syncedItems,
     required this.syncedTags,
+    required this.syncedLoans,
     required this.conflictsResolved,
   });
 
@@ -100,6 +113,7 @@ class SyncResponsePayload {
   final int syncedCollections;
   final int syncedItems;
   final int syncedTags;
+  final int syncedLoans;
   final int conflictsResolved;
 
   factory SyncResponsePayload.fromJson(Map<String, dynamic> json) {
@@ -114,11 +128,13 @@ class SyncResponsePayload {
         collections: _toJsonMapList(serverChangesJson['collections']),
         items: _toJsonMapList(serverChangesJson['items']),
         tags: _toJsonMapList(serverChangesJson['tags']),
+        loans: _toJsonMapList(serverChangesJson['loans']),
       ),
       conflicts: _toJsonMapList(json['conflicts']),
       syncedCollections: (json['syncedCollections'] as num?)?.toInt() ?? 0,
       syncedItems: (json['syncedItems'] as num?)?.toInt() ?? 0,
       syncedTags: (json['syncedTags'] as num?)?.toInt() ?? 0,
+      syncedLoans: (json['syncedLoans'] as num?)?.toInt() ?? 0,
       conflictsResolved: (json['conflictsResolved'] as num?)?.toInt() ?? 0,
     );
   }

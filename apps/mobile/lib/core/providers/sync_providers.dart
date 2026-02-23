@@ -253,10 +253,12 @@ final syncOutboxBootstrapperProvider = Provider<SyncOutboxBootstrapper>((ref) {
   final syncDao = ref.watch(syncDaoProvider);
   final collectionDao = ref.watch(collectionDaoProvider);
   final itemDao = ref.watch(itemDaoProvider);
+  final loanDao = ref.watch(loanDaoProvider);
   return SyncOutboxBootstrapper(
     syncDao: syncDao,
     collectionDao: collectionDao,
     itemDao: itemDao,
+    loanDao: loanDao,
   );
 });
 

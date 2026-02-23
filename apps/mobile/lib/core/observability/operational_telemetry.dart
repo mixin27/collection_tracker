@@ -50,13 +50,16 @@ class OperationalTelemetry {
     required int syncedCollections,
     required int syncedItems,
     required int syncedTags,
+    int syncedLoans = 0,
     required int conflictCount,
     required int appliedServerCollections,
     required int appliedServerItems,
     required int appliedServerTags,
+    int appliedServerLoans = 0,
     required int skippedServerCollections,
     required int skippedServerItems,
     required int skippedServerTags,
+    int skippedServerLoans = 0,
     String? message,
     Object? error,
     StackTrace? stackTrace,
@@ -73,13 +76,16 @@ class OperationalTelemetry {
         'synced_collections': syncedCollections,
         'synced_items': syncedItems,
         'synced_tags': syncedTags,
+        'synced_loans': syncedLoans,
         'conflicts': conflictCount,
         'applied_server_collections': appliedServerCollections,
         'applied_server_items': appliedServerItems,
         'applied_server_tags': appliedServerTags,
+        'applied_server_loans': appliedServerLoans,
         'skipped_server_collections': skippedServerCollections,
         'skipped_server_items': skippedServerItems,
         'skipped_server_tags': skippedServerTags,
+        'skipped_server_loans': skippedServerLoans,
         if (message != null && message.trim().isNotEmpty) 'message': message,
       },
       crashlyticsLog: true,
@@ -94,9 +100,15 @@ class OperationalTelemetry {
         'sync_pending_ops': pendingOperations,
         'sync_processed_ops': processedOperations,
         'sync_applied_server':
-            appliedServerCollections + appliedServerItems + appliedServerTags,
+            appliedServerCollections +
+            appliedServerItems +
+            appliedServerTags +
+            appliedServerLoans,
         'sync_skipped_server':
-            skippedServerCollections + skippedServerItems + skippedServerTags,
+            skippedServerCollections +
+            skippedServerItems +
+            skippedServerTags +
+            skippedServerLoans,
       },
     );
   }

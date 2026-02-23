@@ -20,6 +20,12 @@ class ItemLoanWithItemData {
 class LoanDao extends DatabaseAccessor<AppDatabase> with _$LoanDaoMixin {
   LoanDao(super.db);
 
+  Future<List<ItemLoanData>> getAllLoans() {
+    return (select(
+      itemLoans,
+    )..orderBy([(tbl) => OrderingTerm.desc(tbl.loanedAt)])).get();
+  }
+
   Stream<List<ItemLoanWithItemData>> watchActiveLoans() {
     final query =
         select(itemLoans).join([

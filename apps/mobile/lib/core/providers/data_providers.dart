@@ -28,5 +28,8 @@ ItemRepository itemRepository(Ref ref) {
 @riverpod
 LoanRepository loanRepository(Ref ref) {
   final dao = ref.watch(loanDaoProvider);
-  return LoanRepositoryImpl(dao);
+  final syncDao = ref.watch(syncOutboxWritesEnabledProvider)
+      ? ref.watch(syncDaoProvider)
+      : null;
+  return LoanRepositoryImpl(dao, syncDao: syncDao);
 }

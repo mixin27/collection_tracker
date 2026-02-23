@@ -8,20 +8,26 @@ class SyncServerChangeApplyResult {
     required this.appliedCollections,
     required this.appliedItems,
     required this.appliedTags,
+    required this.appliedLoans,
     required this.skippedCollections,
     required this.skippedItems,
     required this.skippedTags,
+    required this.skippedLoans,
   });
 
   final int appliedCollections;
   final int appliedItems;
   final int appliedTags;
+  final int appliedLoans;
   final int skippedCollections;
   final int skippedItems;
   final int skippedTags;
+  final int skippedLoans;
 
-  int get appliedTotal => appliedCollections + appliedItems + appliedTags;
-  int get skippedTotal => skippedCollections + skippedItems + skippedTags;
+  int get appliedTotal =>
+      appliedCollections + appliedItems + appliedTags + appliedLoans;
+  int get skippedTotal =>
+      skippedCollections + skippedItems + skippedTags + skippedLoans;
 }
 
 class SyncServerChangesApplier {
@@ -38,9 +44,11 @@ class SyncServerChangesApplier {
     var appliedCollections = 0;
     var appliedItems = 0;
     var appliedTags = 0;
+    var appliedLoans = 0;
     var skippedCollections = 0;
     var skippedItems = 0;
     var skippedTags = 0;
+    var skippedLoans = 0;
     final affectedCollectionIds = <String>{};
 
     await _database.transaction(() async {
@@ -297,6 +305,86 @@ class SyncServerChangesApplier {
         }
       }
 
+      for (final payload in changes.loans) {
+        final loanId = _asString(payload['id']);
+        if (loanId == null || loanId.isEmpty) {
+          skippedLoans++;
+          continue;
+        }
+
+        if (await _hasPendingLocalOperation(
+          entityType: 'loan',
+          entityId: loanId,
+        )) {
+          skippedLoans++;
+          continue;
+        }
+
+        final existingLoan = await (_database.select(
+          _database.itemLoans,
+        )..where((tbl) => tbl.id.equals(loanId))).getSingleOrNull();
+        final serverUpdatedAt = _asDate(payload['updatedAt']);
+        if (_isServerPayloadOutdated(
+          localUpdatedAt: existingLoan?.updatedAt,
+          serverUpdatedAt: serverUpdatedAt,
+        )) {
+          skippedLoans++;
+          continue;
+        }
+
+        if (_asBool(payload['isDeleted'])) {
+          await (_database.delete(
+            _database.itemLoans,
+          )..where((tbl) => tbl.id.equals(loanId))).go();
+          appliedLoans++;
+          continue;
+        }
+
+        final itemId = _asString(payload['itemId']);
+        final borrowerName = _asString(payload['borrowerName']);
+        final loanedAt = _asDate(payload['loanedAt']);
+        if (itemId == null ||
+            itemId.isEmpty ||
+            borrowerName == null ||
+            borrowerName.trim().isEmpty ||
+            loanedAt == null) {
+          skippedLoans++;
+          continue;
+        }
+
+        final existingItem = await (_database.select(
+          _database.items,
+        )..where((tbl) => tbl.id.equals(itemId))).getSingleOrNull();
+        if (existingItem == null) {
+          skippedLoans++;
+          continue;
+        }
+
+        final now = DateTime.now().toUtc();
+        await _database
+            .into(_database.itemLoans)
+            .insert(
+              ItemLoansCompanion(
+                id: Value(loanId),
+                itemId: Value(itemId),
+                borrowerName: Value(borrowerName),
+                borrowerContact: Value(_asString(payload['borrowerContact'])),
+                notes: Value(_asString(payload['notes'])),
+                loanedAt: Value(loanedAt),
+                dueAt: Value(_asDate(payload['dueAt'])),
+                returnedAt: Value(_asDate(payload['returnedAt'])),
+                createdAt: Value(
+                  _asDate(payload['createdAt']) ??
+                      existingLoan?.createdAt ??
+                      now,
+                ),
+                updatedAt: Value(_asDate(payload['updatedAt']) ?? now),
+              ),
+              mode: InsertMode.insertOrReplace,
+            );
+        appliedLoans++;
+      }
+
       for (final collectionId in affectedCollectionIds) {
         final countRow = await _database
             .customSelect(
@@ -322,9 +410,11 @@ class SyncServerChangesApplier {
       appliedCollections: appliedCollections,
       appliedItems: appliedItems,
       appliedTags: appliedTags,
+      appliedLoans: appliedLoans,
       skippedCollections: skippedCollections,
       skippedItems: skippedItems,
       skippedTags: skippedTags,
+      skippedLoans: skippedLoans,
     );
   }
 

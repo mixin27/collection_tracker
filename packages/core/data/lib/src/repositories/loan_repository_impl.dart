@@ -4,11 +4,15 @@ import 'package:database/database.dart';
 import 'package:domain/domain.dart';
 import 'package:fpdart/fpdart.dart';
 
+import '../sync/outbox_sync_writer.dart';
+
 class LoanRepositoryImpl implements LoanRepository {
-  LoanRepositoryImpl(this._dao);
+  LoanRepositoryImpl(this._dao, {SyncDao? syncDao})
+    : _syncOutboxWriter = syncDao != null ? SyncOutboxWriter(syncDao) : null;
 
   final LoanDao _dao;
   final Random _random = Random();
+  final SyncOutboxWriter? _syncOutboxWriter;
 
   @override
   Stream<List<LoanRecord>> watchActiveLoans() {
@@ -92,7 +96,9 @@ class LoanRepositoryImpl implements LoanRepository {
         );
       }
 
-      return Right(_mapToEntity(created));
+      final createdEntity = _mapToEntity(created);
+      await _queueLoanUpsert(createdEntity);
+      return Right(createdEntity);
     } catch (error, stackTrace) {
       return Left(
         AppException.database(
@@ -147,7 +153,9 @@ class LoanRepositoryImpl implements LoanRepository {
         );
       }
 
-      return Right(_mapToEntity(updated));
+      final updatedEntity = _mapToEntity(updated);
+      await _queueLoanUpsert(updatedEntity);
+      return Right(updatedEntity);
     } catch (error, stackTrace) {
       return Left(
         AppException.database(
@@ -161,6 +169,7 @@ class LoanRepositoryImpl implements LoanRepository {
   @override
   Future<Either<AppException, void>> deleteLoan(String loanId) async {
     try {
+      final existing = await _dao.getLoanWithItemById(loanId);
       final rowsAffected = await _dao.deleteLoan(loanId);
       if (rowsAffected < 1) {
         return const Left(
@@ -169,6 +178,10 @@ class LoanRepositoryImpl implements LoanRepository {
             resourceType: 'Loan',
           ),
         );
+      }
+
+      if (existing != null) {
+        await _queueLoanDelete(_mapToEntity(existing));
       }
 
       return const Right(null);
@@ -214,5 +227,69 @@ class LoanRepositoryImpl implements LoanRepository {
       return null;
     }
     return normalized;
+  }
+
+  Future<void> _queueLoanUpsert(LoanRecord loan) async {
+    final writer = _syncOutboxWriter;
+    if (writer == null) {
+      return;
+    }
+
+    try {
+      await writer.queueUpsert(
+        entityType: 'loan',
+        entityId: loan.id,
+        payload: _loanSyncPayload(loan: loan),
+      );
+    } catch (_) {
+      // Keep local write successful even if sync queue persistence fails.
+    }
+  }
+
+  Future<void> _queueLoanDelete(LoanRecord loan) async {
+    final writer = _syncOutboxWriter;
+    if (writer == null) {
+      return;
+    }
+
+    final deletedAt = DateTime.now();
+    try {
+      await writer.queueDelete(
+        entityType: 'loan',
+        entityId: loan.id,
+        payload: _loanSyncPayload(
+          loan: loan,
+          isDeleted: true,
+          deletedAt: deletedAt,
+          updatedAt: deletedAt,
+        ),
+      );
+    } catch (_) {
+      // Keep local write successful even if sync queue persistence fails.
+    }
+  }
+
+  Map<String, dynamic> _loanSyncPayload({
+    required LoanRecord loan,
+    bool isDeleted = false,
+    DateTime? deletedAt,
+    DateTime? updatedAt,
+  }) {
+    final effectiveUpdatedAt = updatedAt ?? loan.updatedAt;
+    return {
+      'id': loan.id,
+      'itemId': loan.itemId,
+      'borrowerName': loan.borrowerName,
+      'borrowerContact': loan.borrowerContact,
+      'notes': loan.notes,
+      'loanedAt': loan.loanedAt.toUtc().toIso8601String(),
+      'dueAt': loan.dueAt?.toUtc().toIso8601String(),
+      'returnedAt': loan.returnedAt?.toUtc().toIso8601String(),
+      'version': 1,
+      'isDeleted': isDeleted,
+      if (deletedAt != null) 'deletedAt': deletedAt.toUtc().toIso8601String(),
+      'createdAt': loan.createdAt.toUtc().toIso8601String(),
+      'updatedAt': effectiveUpdatedAt.toUtc().toIso8601String(),
+    };
   }
 }
