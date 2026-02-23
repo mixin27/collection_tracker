@@ -1070,4 +1070,174 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get collectionTypeCustom => 'Custom';
+
+  @override
+  String get loanTrackingTitle => 'Loan Tracking';
+
+  @override
+  String get loanTrackingNewLoan => 'New Loan';
+
+  @override
+  String get loanTrackingFilterActive => 'Active';
+
+  @override
+  String get loanTrackingFilterHistory => 'History';
+
+  @override
+  String get loanTrackingEmptyHistoryTitle => 'No returned loans yet';
+
+  @override
+  String get loanTrackingEmptyHistoryMessage => 'Returned items will appear here.';
+
+  @override
+  String get loanTrackingEmptyActiveTitle => 'No active loans';
+
+  @override
+  String get loanTrackingEmptyActiveMessage => 'Create a loan to start tracking borrowed items.';
+
+  @override
+  String get loanTrackingLoadingLoans => 'Loading loans...';
+
+  @override
+  String loanTrackingLoadFailed(String error) {
+    return 'Failed to load loans: $error';
+  }
+
+  @override
+  String get loanTrackingMarkReturnedConfirmTitle => 'Mark as returned?';
+
+  @override
+  String loanTrackingMarkReturnedConfirmMessage(String itemTitle) {
+    return 'Confirm return for \"$itemTitle\".';
+  }
+
+  @override
+  String get loanTrackingMarkReturnedAction => 'Mark Returned';
+
+  @override
+  String get loanTrackingMarkedReturnedSuccess => 'Loan marked as returned.';
+
+  @override
+  String loanTrackingMarkReturnedFailed(String error) {
+    return 'Failed to mark return: $error';
+  }
+
+  @override
+  String get loanTrackingDeleteConfirmTitle => 'Delete loan record?';
+
+  @override
+  String loanTrackingDeleteConfirmMessage(String itemTitle) {
+    return 'Delete loan record for \"$itemTitle\".';
+  }
+
+  @override
+  String get loanTrackingDeleteSuccess => 'Loan deleted.';
+
+  @override
+  String loanTrackingDeleteFailed(String error) {
+    return 'Failed to delete loan: $error';
+  }
+
+  @override
+  String get loanTrackingSummaryActiveLabel => 'Active Loans';
+
+  @override
+  String get loanTrackingSummaryOverdueLabel => 'Overdue';
+
+  @override
+  String get loanTrackingSummaryLoadFailed => 'Unable to load loan summary.';
+
+  @override
+  String get loanTrackingFieldBorrower => 'Borrower';
+
+  @override
+  String get loanTrackingFieldContact => 'Contact';
+
+  @override
+  String get loanTrackingFieldLoaned => 'Loaned';
+
+  @override
+  String get loanTrackingFieldDue => 'Due';
+
+  @override
+  String get loanTrackingFieldReturned => 'Returned';
+
+  @override
+  String get loanTrackingStatusReturned => 'Returned';
+
+  @override
+  String get loanTrackingStatusOverdue => 'Overdue';
+
+  @override
+  String get loanTrackingStatusActive => 'Active';
+
+  @override
+  String get loanTrackingCreateTitle => 'Create Loan';
+
+  @override
+  String get loanTrackingCreateDescription => 'Track who borrowed an item and when it should be returned.';
+
+  @override
+  String get loanTrackingCreateNoItemsTitle => 'No available items';
+
+  @override
+  String get loanTrackingCreateNoItemsMessage => 'All items are currently loaned or there are no items yet.';
+
+  @override
+  String get loanTrackingCreateItemLabel => 'Item';
+
+  @override
+  String get loanTrackingCreateBorrowerLabel => 'Borrower name';
+
+  @override
+  String get loanTrackingCreateBorrowerHint => 'e.g. John Doe';
+
+  @override
+  String get loanTrackingCreateContactLabel => 'Contact (optional)';
+
+  @override
+  String get loanTrackingCreateContactHint => 'Phone, email, or @username';
+
+  @override
+  String get loanTrackingCreateNotesLabel => 'Notes (optional)';
+
+  @override
+  String get loanTrackingCreateNotesHint => 'Extra details for this loan';
+
+  @override
+  String get loanTrackingCreateSubmitting => 'Creating...';
+
+  @override
+  String get loanTrackingCreateAction => 'Create Loan';
+
+  @override
+  String get loanTrackingLoadingItems => 'Loading items...';
+
+  @override
+  String loanTrackingLoadItemsFailed(String error) {
+    return 'Failed to load items: $error';
+  }
+
+  @override
+  String get loanTrackingBorrowerRequired => 'Borrower name is required.';
+
+  @override
+  String get loanTrackingCreateSuccess => 'Loan created successfully.';
+
+  @override
+  String loanTrackingCreateFailed(String error) {
+    return 'Failed to create loan: $error';
+  }
+
+  @override
+  String get loanTrackingNoDueDate => 'No due date';
+
+  @override
+  String get loanTrackingPickDateAction => 'Pick';
+
+  @override
+  String get loanTrackingClearDateAction => 'Clear';
+
+  @override
+  String get loanTrackingDueDateLabel => 'Due date';
 }

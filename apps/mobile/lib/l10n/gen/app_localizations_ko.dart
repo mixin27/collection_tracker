@@ -1070,4 +1070,174 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get collectionTypeCustom => '사용자 지정';
+
+  @override
+  String get loanTrackingTitle => '대여 추적';
+
+  @override
+  String get loanTrackingNewLoan => '새 대여';
+
+  @override
+  String get loanTrackingFilterActive => '활성';
+
+  @override
+  String get loanTrackingFilterHistory => '기록';
+
+  @override
+  String get loanTrackingEmptyHistoryTitle => '아직 반납된 대여가 없습니다';
+
+  @override
+  String get loanTrackingEmptyHistoryMessage => '반납된 항목이 여기에 표시됩니다.';
+
+  @override
+  String get loanTrackingEmptyActiveTitle => '활성 대여가 없습니다';
+
+  @override
+  String get loanTrackingEmptyActiveMessage => '대여를 생성해 빌려준 항목을 추적해 보세요.';
+
+  @override
+  String get loanTrackingLoadingLoans => '대여 불러오는 중...';
+
+  @override
+  String loanTrackingLoadFailed(String error) {
+    return '대여를 불러오지 못했습니다: $error';
+  }
+
+  @override
+  String get loanTrackingMarkReturnedConfirmTitle => '반납으로 표시할까요?';
+
+  @override
+  String loanTrackingMarkReturnedConfirmMessage(String itemTitle) {
+    return '\"$itemTitle\" 반납을 확인합니다.';
+  }
+
+  @override
+  String get loanTrackingMarkReturnedAction => '반납 처리';
+
+  @override
+  String get loanTrackingMarkedReturnedSuccess => '대여가 반납 처리되었습니다.';
+
+  @override
+  String loanTrackingMarkReturnedFailed(String error) {
+    return '반납 처리에 실패했습니다: $error';
+  }
+
+  @override
+  String get loanTrackingDeleteConfirmTitle => '대여 기록을 삭제할까요?';
+
+  @override
+  String loanTrackingDeleteConfirmMessage(String itemTitle) {
+    return '\"$itemTitle\" 대여 기록을 삭제합니다.';
+  }
+
+  @override
+  String get loanTrackingDeleteSuccess => '대여가 삭제되었습니다.';
+
+  @override
+  String loanTrackingDeleteFailed(String error) {
+    return '대여 삭제에 실패했습니다: $error';
+  }
+
+  @override
+  String get loanTrackingSummaryActiveLabel => '활성 대여';
+
+  @override
+  String get loanTrackingSummaryOverdueLabel => '연체';
+
+  @override
+  String get loanTrackingSummaryLoadFailed => '대여 요약을 불러올 수 없습니다.';
+
+  @override
+  String get loanTrackingFieldBorrower => '대여자';
+
+  @override
+  String get loanTrackingFieldContact => '연락처';
+
+  @override
+  String get loanTrackingFieldLoaned => '대여일';
+
+  @override
+  String get loanTrackingFieldDue => '반납 예정일';
+
+  @override
+  String get loanTrackingFieldReturned => '반납일';
+
+  @override
+  String get loanTrackingStatusReturned => '반납됨';
+
+  @override
+  String get loanTrackingStatusOverdue => '연체';
+
+  @override
+  String get loanTrackingStatusActive => '활성';
+
+  @override
+  String get loanTrackingCreateTitle => '대여 생성';
+
+  @override
+  String get loanTrackingCreateDescription => '누가 항목을 빌렸는지와 반납 예정일을 추적합니다.';
+
+  @override
+  String get loanTrackingCreateNoItemsTitle => '사용 가능한 항목이 없습니다';
+
+  @override
+  String get loanTrackingCreateNoItemsMessage => '모든 항목이 이미 대여 중이거나 아직 항목이 없습니다.';
+
+  @override
+  String get loanTrackingCreateItemLabel => '항목';
+
+  @override
+  String get loanTrackingCreateBorrowerLabel => '대여자 이름';
+
+  @override
+  String get loanTrackingCreateBorrowerHint => '예: 홍길동';
+
+  @override
+  String get loanTrackingCreateContactLabel => '연락처 (선택)';
+
+  @override
+  String get loanTrackingCreateContactHint => '전화번호, 이메일 또는 @username';
+
+  @override
+  String get loanTrackingCreateNotesLabel => '메모 (선택)';
+
+  @override
+  String get loanTrackingCreateNotesHint => '이 대여에 대한 추가 정보';
+
+  @override
+  String get loanTrackingCreateSubmitting => '생성 중...';
+
+  @override
+  String get loanTrackingCreateAction => '대여 생성';
+
+  @override
+  String get loanTrackingLoadingItems => '항목 불러오는 중...';
+
+  @override
+  String loanTrackingLoadItemsFailed(String error) {
+    return '항목을 불러오지 못했습니다: $error';
+  }
+
+  @override
+  String get loanTrackingBorrowerRequired => '대여자 이름은 필수입니다.';
+
+  @override
+  String get loanTrackingCreateSuccess => '대여가 생성되었습니다.';
+
+  @override
+  String loanTrackingCreateFailed(String error) {
+    return '대여 생성에 실패했습니다: $error';
+  }
+
+  @override
+  String get loanTrackingNoDueDate => '반납 예정일 없음';
+
+  @override
+  String get loanTrackingPickDateAction => '선택';
+
+  @override
+  String get loanTrackingClearDateAction => '지우기';
+
+  @override
+  String get loanTrackingDueDateLabel => '반납 예정일';
 }

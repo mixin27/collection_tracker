@@ -1070,4 +1070,174 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get collectionTypeCustom => 'Kustom';
+
+  @override
+  String get loanTrackingTitle => 'Pelacakan Pinjaman';
+
+  @override
+  String get loanTrackingNewLoan => 'Pinjaman Baru';
+
+  @override
+  String get loanTrackingFilterActive => 'Aktif';
+
+  @override
+  String get loanTrackingFilterHistory => 'Riwayat';
+
+  @override
+  String get loanTrackingEmptyHistoryTitle => 'Belum ada pinjaman yang dikembalikan';
+
+  @override
+  String get loanTrackingEmptyHistoryMessage => 'Item yang sudah dikembalikan akan muncul di sini.';
+
+  @override
+  String get loanTrackingEmptyActiveTitle => 'Tidak ada pinjaman aktif';
+
+  @override
+  String get loanTrackingEmptyActiveMessage => 'Buat pinjaman untuk mulai melacak item yang dipinjam.';
+
+  @override
+  String get loanTrackingLoadingLoans => 'Memuat pinjaman...';
+
+  @override
+  String loanTrackingLoadFailed(String error) {
+    return 'Gagal memuat pinjaman: $error';
+  }
+
+  @override
+  String get loanTrackingMarkReturnedConfirmTitle => 'Tandai sudah dikembalikan?';
+
+  @override
+  String loanTrackingMarkReturnedConfirmMessage(String itemTitle) {
+    return 'Konfirmasi pengembalian untuk \"$itemTitle\".';
+  }
+
+  @override
+  String get loanTrackingMarkReturnedAction => 'Tandai Dikembalikan';
+
+  @override
+  String get loanTrackingMarkedReturnedSuccess => 'Pinjaman ditandai sudah dikembalikan.';
+
+  @override
+  String loanTrackingMarkReturnedFailed(String error) {
+    return 'Gagal menandai pengembalian: $error';
+  }
+
+  @override
+  String get loanTrackingDeleteConfirmTitle => 'Hapus catatan pinjaman?';
+
+  @override
+  String loanTrackingDeleteConfirmMessage(String itemTitle) {
+    return 'Hapus catatan pinjaman untuk \"$itemTitle\".';
+  }
+
+  @override
+  String get loanTrackingDeleteSuccess => 'Pinjaman dihapus.';
+
+  @override
+  String loanTrackingDeleteFailed(String error) {
+    return 'Gagal menghapus pinjaman: $error';
+  }
+
+  @override
+  String get loanTrackingSummaryActiveLabel => 'Pinjaman Aktif';
+
+  @override
+  String get loanTrackingSummaryOverdueLabel => 'Terlambat';
+
+  @override
+  String get loanTrackingSummaryLoadFailed => 'Tidak dapat memuat ringkasan pinjaman.';
+
+  @override
+  String get loanTrackingFieldBorrower => 'Peminjam';
+
+  @override
+  String get loanTrackingFieldContact => 'Kontak';
+
+  @override
+  String get loanTrackingFieldLoaned => 'Dipinjamkan';
+
+  @override
+  String get loanTrackingFieldDue => 'Jatuh tempo';
+
+  @override
+  String get loanTrackingFieldReturned => 'Dikembalikan';
+
+  @override
+  String get loanTrackingStatusReturned => 'Dikembalikan';
+
+  @override
+  String get loanTrackingStatusOverdue => 'Terlambat';
+
+  @override
+  String get loanTrackingStatusActive => 'Aktif';
+
+  @override
+  String get loanTrackingCreateTitle => 'Buat Pinjaman';
+
+  @override
+  String get loanTrackingCreateDescription => 'Lacak siapa yang meminjam item dan kapan harus dikembalikan.';
+
+  @override
+  String get loanTrackingCreateNoItemsTitle => 'Tidak ada item yang tersedia';
+
+  @override
+  String get loanTrackingCreateNoItemsMessage => 'Semua item sedang dipinjam atau belum ada item.';
+
+  @override
+  String get loanTrackingCreateItemLabel => 'Item';
+
+  @override
+  String get loanTrackingCreateBorrowerLabel => 'Nama peminjam';
+
+  @override
+  String get loanTrackingCreateBorrowerHint => 'mis. Budi Santoso';
+
+  @override
+  String get loanTrackingCreateContactLabel => 'Kontak (opsional)';
+
+  @override
+  String get loanTrackingCreateContactHint => 'Telepon, email, atau @username';
+
+  @override
+  String get loanTrackingCreateNotesLabel => 'Catatan (opsional)';
+
+  @override
+  String get loanTrackingCreateNotesHint => 'Detail tambahan untuk pinjaman ini';
+
+  @override
+  String get loanTrackingCreateSubmitting => 'Membuat...';
+
+  @override
+  String get loanTrackingCreateAction => 'Buat Pinjaman';
+
+  @override
+  String get loanTrackingLoadingItems => 'Memuat item...';
+
+  @override
+  String loanTrackingLoadItemsFailed(String error) {
+    return 'Gagal memuat item: $error';
+  }
+
+  @override
+  String get loanTrackingBorrowerRequired => 'Nama peminjam wajib diisi.';
+
+  @override
+  String get loanTrackingCreateSuccess => 'Pinjaman berhasil dibuat.';
+
+  @override
+  String loanTrackingCreateFailed(String error) {
+    return 'Gagal membuat pinjaman: $error';
+  }
+
+  @override
+  String get loanTrackingNoDueDate => 'Tanpa tanggal jatuh tempo';
+
+  @override
+  String get loanTrackingPickDateAction => 'Pilih';
+
+  @override
+  String get loanTrackingClearDateAction => 'Hapus';
+
+  @override
+  String get loanTrackingDueDateLabel => 'Tanggal jatuh tempo';
 }

@@ -980,5 +980,151 @@
   "collectionTypeMusic": "音楽",
   "@collectionTypeMusic": {},
   "collectionTypeCustom": "カスタム",
-  "@collectionTypeCustom": {}
+  "@collectionTypeCustom": {},
+  "loanTrackingTitle": "貸出管理",
+  "@loanTrackingTitle": {},
+  "loanTrackingNewLoan": "新しい貸出",
+  "@loanTrackingNewLoan": {},
+  "loanTrackingFilterActive": "アクティブ",
+  "@loanTrackingFilterActive": {},
+  "loanTrackingFilterHistory": "履歴",
+  "@loanTrackingFilterHistory": {},
+  "loanTrackingEmptyHistoryTitle": "返却済みの貸出はまだありません",
+  "@loanTrackingEmptyHistoryTitle": {},
+  "loanTrackingEmptyHistoryMessage": "返却されたアイテムはここに表示されます。",
+  "@loanTrackingEmptyHistoryMessage": {},
+  "loanTrackingEmptyActiveTitle": "アクティブな貸出はありません",
+  "@loanTrackingEmptyActiveTitle": {},
+  "loanTrackingEmptyActiveMessage": "貸出を作成して、借りられたアイテムの管理を始めましょう。",
+  "@loanTrackingEmptyActiveMessage": {},
+  "loanTrackingLoadingLoans": "貸出を読み込み中...",
+  "@loanTrackingLoadingLoans": {},
+  "loanTrackingLoadFailed": "貸出の読み込みに失敗しました: {error}",
+  "@loanTrackingLoadFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "loanTrackingMarkReturnedConfirmTitle": "返却済みにしますか？",
+  "@loanTrackingMarkReturnedConfirmTitle": {},
+  "loanTrackingMarkReturnedConfirmMessage": "\"{itemTitle}\" の返却を確認します。",
+  "@loanTrackingMarkReturnedConfirmMessage": {
+    "placeholders": {
+      "itemTitle": {
+        "type": "String"
+      }
+    }
+  },
+  "loanTrackingMarkReturnedAction": "返却済みにする",
+  "@loanTrackingMarkReturnedAction": {},
+  "loanTrackingMarkedReturnedSuccess": "貸出を返却済みにしました。",
+  "@loanTrackingMarkedReturnedSuccess": {},
+  "loanTrackingMarkReturnedFailed": "返却の更新に失敗しました: {error}",
+  "@loanTrackingMarkReturnedFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "loanTrackingDeleteConfirmTitle": "貸出記録を削除しますか？",
+  "@loanTrackingDeleteConfirmTitle": {},
+  "loanTrackingDeleteConfirmMessage": "\"{itemTitle}\" の貸出記録を削除します。",
+  "@loanTrackingDeleteConfirmMessage": {
+    "placeholders": {
+      "itemTitle": {
+        "type": "String"
+      }
+    }
+  },
+  "loanTrackingDeleteSuccess": "貸出記録を削除しました。",
+  "@loanTrackingDeleteSuccess": {},
+  "loanTrackingDeleteFailed": "貸出の削除に失敗しました: {error}",
+  "@loanTrackingDeleteFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "loanTrackingSummaryActiveLabel": "アクティブな貸出",
+  "@loanTrackingSummaryActiveLabel": {},
+  "loanTrackingSummaryOverdueLabel": "期限超過",
+  "@loanTrackingSummaryOverdueLabel": {},
+  "loanTrackingSummaryLoadFailed": "貸出サマリーを読み込めませんでした。",
+  "@loanTrackingSummaryLoadFailed": {},
+  "loanTrackingFieldBorrower": "借り手",
+  "@loanTrackingFieldBorrower": {},
+  "loanTrackingFieldContact": "連絡先",
+  "@loanTrackingFieldContact": {},
+  "loanTrackingFieldLoaned": "貸出日",
+  "@loanTrackingFieldLoaned": {},
+  "loanTrackingFieldDue": "返却期限",
+  "@loanTrackingFieldDue": {},
+  "loanTrackingFieldReturned": "返却日",
+  "@loanTrackingFieldReturned": {},
+  "loanTrackingStatusReturned": "返却済み",
+  "@loanTrackingStatusReturned": {},
+  "loanTrackingStatusOverdue": "期限超過",
+  "@loanTrackingStatusOverdue": {},
+  "loanTrackingStatusActive": "アクティブ",
+  "@loanTrackingStatusActive": {},
+  "loanTrackingCreateTitle": "貸出を作成",
+  "@loanTrackingCreateTitle": {},
+  "loanTrackingCreateDescription": "誰がアイテムを借りたか、いつ返却予定かを記録します。",
+  "@loanTrackingCreateDescription": {},
+  "loanTrackingCreateNoItemsTitle": "利用可能なアイテムがありません",
+  "@loanTrackingCreateNoItemsTitle": {},
+  "loanTrackingCreateNoItemsMessage": "すべて貸出中か、まだアイテムがありません。",
+  "@loanTrackingCreateNoItemsMessage": {},
+  "loanTrackingCreateItemLabel": "アイテム",
+  "@loanTrackingCreateItemLabel": {},
+  "loanTrackingCreateBorrowerLabel": "借り手の名前",
+  "@loanTrackingCreateBorrowerLabel": {},
+  "loanTrackingCreateBorrowerHint": "例: 山田 太郎",
+  "@loanTrackingCreateBorrowerHint": {},
+  "loanTrackingCreateContactLabel": "連絡先（任意）",
+  "@loanTrackingCreateContactLabel": {},
+  "loanTrackingCreateContactHint": "電話、メール、または @username",
+  "@loanTrackingCreateContactHint": {},
+  "loanTrackingCreateNotesLabel": "メモ（任意）",
+  "@loanTrackingCreateNotesLabel": {},
+  "loanTrackingCreateNotesHint": "この貸出の追加情報",
+  "@loanTrackingCreateNotesHint": {},
+  "loanTrackingCreateSubmitting": "作成中...",
+  "@loanTrackingCreateSubmitting": {},
+  "loanTrackingCreateAction": "貸出を作成",
+  "@loanTrackingCreateAction": {},
+  "loanTrackingLoadingItems": "アイテムを読み込み中...",
+  "@loanTrackingLoadingItems": {},
+  "loanTrackingLoadItemsFailed": "アイテムの読み込みに失敗しました: {error}",
+  "@loanTrackingLoadItemsFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "loanTrackingBorrowerRequired": "借り手の名前は必須です。",
+  "@loanTrackingBorrowerRequired": {},
+  "loanTrackingCreateSuccess": "貸出を作成しました。",
+  "@loanTrackingCreateSuccess": {},
+  "loanTrackingCreateFailed": "貸出の作成に失敗しました: {error}",
+  "@loanTrackingCreateFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "loanTrackingNoDueDate": "返却期限なし",
+  "@loanTrackingNoDueDate": {},
+  "loanTrackingPickDateAction": "選択",
+  "@loanTrackingPickDateAction": {},
+  "loanTrackingClearDateAction": "クリア",
+  "@loanTrackingClearDateAction": {},
+  "loanTrackingDueDateLabel": "返却期限",
+  "@loanTrackingDueDateLabel": {}
 }

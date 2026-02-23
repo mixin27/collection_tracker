@@ -1070,4 +1070,174 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get collectionTypeCustom => '自定义';
+
+  @override
+  String get loanTrackingTitle => '借出追踪';
+
+  @override
+  String get loanTrackingNewLoan => '新建借出';
+
+  @override
+  String get loanTrackingFilterActive => '进行中';
+
+  @override
+  String get loanTrackingFilterHistory => '历史';
+
+  @override
+  String get loanTrackingEmptyHistoryTitle => '暂无已归还借出';
+
+  @override
+  String get loanTrackingEmptyHistoryMessage => '已归还条目会显示在这里。';
+
+  @override
+  String get loanTrackingEmptyActiveTitle => '暂无进行中借出';
+
+  @override
+  String get loanTrackingEmptyActiveMessage => '创建一条借出记录来跟踪借出物品。';
+
+  @override
+  String get loanTrackingLoadingLoans => '正在加载借出记录...';
+
+  @override
+  String loanTrackingLoadFailed(String error) {
+    return '加载借出记录失败：$error';
+  }
+
+  @override
+  String get loanTrackingMarkReturnedConfirmTitle => '标记为已归还？';
+
+  @override
+  String loanTrackingMarkReturnedConfirmMessage(String itemTitle) {
+    return '确认「$itemTitle」已归还。';
+  }
+
+  @override
+  String get loanTrackingMarkReturnedAction => '标记已归还';
+
+  @override
+  String get loanTrackingMarkedReturnedSuccess => '借出已标记为归还。';
+
+  @override
+  String loanTrackingMarkReturnedFailed(String error) {
+    return '标记归还失败：$error';
+  }
+
+  @override
+  String get loanTrackingDeleteConfirmTitle => '删除借出记录？';
+
+  @override
+  String loanTrackingDeleteConfirmMessage(String itemTitle) {
+    return '删除「$itemTitle」的借出记录。';
+  }
+
+  @override
+  String get loanTrackingDeleteSuccess => '借出记录已删除。';
+
+  @override
+  String loanTrackingDeleteFailed(String error) {
+    return '删除借出记录失败：$error';
+  }
+
+  @override
+  String get loanTrackingSummaryActiveLabel => '进行中借出';
+
+  @override
+  String get loanTrackingSummaryOverdueLabel => '逾期';
+
+  @override
+  String get loanTrackingSummaryLoadFailed => '无法加载借出摘要。';
+
+  @override
+  String get loanTrackingFieldBorrower => '借用人';
+
+  @override
+  String get loanTrackingFieldContact => '联系方式';
+
+  @override
+  String get loanTrackingFieldLoaned => '借出日期';
+
+  @override
+  String get loanTrackingFieldDue => '到期日期';
+
+  @override
+  String get loanTrackingFieldReturned => '归还日期';
+
+  @override
+  String get loanTrackingStatusReturned => '已归还';
+
+  @override
+  String get loanTrackingStatusOverdue => '逾期';
+
+  @override
+  String get loanTrackingStatusActive => '进行中';
+
+  @override
+  String get loanTrackingCreateTitle => '创建借出';
+
+  @override
+  String get loanTrackingCreateDescription => '记录谁借走了物品以及应归还时间。';
+
+  @override
+  String get loanTrackingCreateNoItemsTitle => '暂无可借出条目';
+
+  @override
+  String get loanTrackingCreateNoItemsMessage => '所有条目都在借出中，或还没有条目。';
+
+  @override
+  String get loanTrackingCreateItemLabel => '条目';
+
+  @override
+  String get loanTrackingCreateBorrowerLabel => '借用人姓名';
+
+  @override
+  String get loanTrackingCreateBorrowerHint => '例如：张三';
+
+  @override
+  String get loanTrackingCreateContactLabel => '联系方式（可选）';
+
+  @override
+  String get loanTrackingCreateContactHint => '电话、邮箱或 @username';
+
+  @override
+  String get loanTrackingCreateNotesLabel => '备注（可选）';
+
+  @override
+  String get loanTrackingCreateNotesHint => '这次借出的额外说明';
+
+  @override
+  String get loanTrackingCreateSubmitting => '创建中...';
+
+  @override
+  String get loanTrackingCreateAction => '创建借出';
+
+  @override
+  String get loanTrackingLoadingItems => '正在加载条目...';
+
+  @override
+  String loanTrackingLoadItemsFailed(String error) {
+    return '加载条目失败：$error';
+  }
+
+  @override
+  String get loanTrackingBorrowerRequired => '借用人姓名不能为空。';
+
+  @override
+  String get loanTrackingCreateSuccess => '借出创建成功。';
+
+  @override
+  String loanTrackingCreateFailed(String error) {
+    return '创建借出失败：$error';
+  }
+
+  @override
+  String get loanTrackingNoDueDate => '无到期日期';
+
+  @override
+  String get loanTrackingPickDateAction => '选择';
+
+  @override
+  String get loanTrackingClearDateAction => '清除';
+
+  @override
+  String get loanTrackingDueDateLabel => '到期日期';
 }

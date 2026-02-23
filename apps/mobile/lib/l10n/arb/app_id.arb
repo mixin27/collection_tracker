@@ -980,5 +980,151 @@
   "collectionTypeMusic": "Musik",
   "@collectionTypeMusic": {},
   "collectionTypeCustom": "Kustom",
-  "@collectionTypeCustom": {}
+  "@collectionTypeCustom": {},
+  "loanTrackingTitle": "Pelacakan Pinjaman",
+  "@loanTrackingTitle": {},
+  "loanTrackingNewLoan": "Pinjaman Baru",
+  "@loanTrackingNewLoan": {},
+  "loanTrackingFilterActive": "Aktif",
+  "@loanTrackingFilterActive": {},
+  "loanTrackingFilterHistory": "Riwayat",
+  "@loanTrackingFilterHistory": {},
+  "loanTrackingEmptyHistoryTitle": "Belum ada pinjaman yang dikembalikan",
+  "@loanTrackingEmptyHistoryTitle": {},
+  "loanTrackingEmptyHistoryMessage": "Item yang sudah dikembalikan akan muncul di sini.",
+  "@loanTrackingEmptyHistoryMessage": {},
+  "loanTrackingEmptyActiveTitle": "Tidak ada pinjaman aktif",
+  "@loanTrackingEmptyActiveTitle": {},
+  "loanTrackingEmptyActiveMessage": "Buat pinjaman untuk mulai melacak item yang dipinjam.",
+  "@loanTrackingEmptyActiveMessage": {},
+  "loanTrackingLoadingLoans": "Memuat pinjaman...",
+  "@loanTrackingLoadingLoans": {},
+  "loanTrackingLoadFailed": "Gagal memuat pinjaman: {error}",
+  "@loanTrackingLoadFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "loanTrackingMarkReturnedConfirmTitle": "Tandai sudah dikembalikan?",
+  "@loanTrackingMarkReturnedConfirmTitle": {},
+  "loanTrackingMarkReturnedConfirmMessage": "Konfirmasi pengembalian untuk \"{itemTitle}\".",
+  "@loanTrackingMarkReturnedConfirmMessage": {
+    "placeholders": {
+      "itemTitle": {
+        "type": "String"
+      }
+    }
+  },
+  "loanTrackingMarkReturnedAction": "Tandai Dikembalikan",
+  "@loanTrackingMarkReturnedAction": {},
+  "loanTrackingMarkedReturnedSuccess": "Pinjaman ditandai sudah dikembalikan.",
+  "@loanTrackingMarkedReturnedSuccess": {},
+  "loanTrackingMarkReturnedFailed": "Gagal menandai pengembalian: {error}",
+  "@loanTrackingMarkReturnedFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "loanTrackingDeleteConfirmTitle": "Hapus catatan pinjaman?",
+  "@loanTrackingDeleteConfirmTitle": {},
+  "loanTrackingDeleteConfirmMessage": "Hapus catatan pinjaman untuk \"{itemTitle}\".",
+  "@loanTrackingDeleteConfirmMessage": {
+    "placeholders": {
+      "itemTitle": {
+        "type": "String"
+      }
+    }
+  },
+  "loanTrackingDeleteSuccess": "Pinjaman dihapus.",
+  "@loanTrackingDeleteSuccess": {},
+  "loanTrackingDeleteFailed": "Gagal menghapus pinjaman: {error}",
+  "@loanTrackingDeleteFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "loanTrackingSummaryActiveLabel": "Pinjaman Aktif",
+  "@loanTrackingSummaryActiveLabel": {},
+  "loanTrackingSummaryOverdueLabel": "Terlambat",
+  "@loanTrackingSummaryOverdueLabel": {},
+  "loanTrackingSummaryLoadFailed": "Tidak dapat memuat ringkasan pinjaman.",
+  "@loanTrackingSummaryLoadFailed": {},
+  "loanTrackingFieldBorrower": "Peminjam",
+  "@loanTrackingFieldBorrower": {},
+  "loanTrackingFieldContact": "Kontak",
+  "@loanTrackingFieldContact": {},
+  "loanTrackingFieldLoaned": "Dipinjamkan",
+  "@loanTrackingFieldLoaned": {},
+  "loanTrackingFieldDue": "Jatuh tempo",
+  "@loanTrackingFieldDue": {},
+  "loanTrackingFieldReturned": "Dikembalikan",
+  "@loanTrackingFieldReturned": {},
+  "loanTrackingStatusReturned": "Dikembalikan",
+  "@loanTrackingStatusReturned": {},
+  "loanTrackingStatusOverdue": "Terlambat",
+  "@loanTrackingStatusOverdue": {},
+  "loanTrackingStatusActive": "Aktif",
+  "@loanTrackingStatusActive": {},
+  "loanTrackingCreateTitle": "Buat Pinjaman",
+  "@loanTrackingCreateTitle": {},
+  "loanTrackingCreateDescription": "Lacak siapa yang meminjam item dan kapan harus dikembalikan.",
+  "@loanTrackingCreateDescription": {},
+  "loanTrackingCreateNoItemsTitle": "Tidak ada item yang tersedia",
+  "@loanTrackingCreateNoItemsTitle": {},
+  "loanTrackingCreateNoItemsMessage": "Semua item sedang dipinjam atau belum ada item.",
+  "@loanTrackingCreateNoItemsMessage": {},
+  "loanTrackingCreateItemLabel": "Item",
+  "@loanTrackingCreateItemLabel": {},
+  "loanTrackingCreateBorrowerLabel": "Nama peminjam",
+  "@loanTrackingCreateBorrowerLabel": {},
+  "loanTrackingCreateBorrowerHint": "mis. Budi Santoso",
+  "@loanTrackingCreateBorrowerHint": {},
+  "loanTrackingCreateContactLabel": "Kontak (opsional)",
+  "@loanTrackingCreateContactLabel": {},
+  "loanTrackingCreateContactHint": "Telepon, email, atau @username",
+  "@loanTrackingCreateContactHint": {},
+  "loanTrackingCreateNotesLabel": "Catatan (opsional)",
+  "@loanTrackingCreateNotesLabel": {},
+  "loanTrackingCreateNotesHint": "Detail tambahan untuk pinjaman ini",
+  "@loanTrackingCreateNotesHint": {},
+  "loanTrackingCreateSubmitting": "Membuat...",
+  "@loanTrackingCreateSubmitting": {},
+  "loanTrackingCreateAction": "Buat Pinjaman",
+  "@loanTrackingCreateAction": {},
+  "loanTrackingLoadingItems": "Memuat item...",
+  "@loanTrackingLoadingItems": {},
+  "loanTrackingLoadItemsFailed": "Gagal memuat item: {error}",
+  "@loanTrackingLoadItemsFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "loanTrackingBorrowerRequired": "Nama peminjam wajib diisi.",
+  "@loanTrackingBorrowerRequired": {},
+  "loanTrackingCreateSuccess": "Pinjaman berhasil dibuat.",
+  "@loanTrackingCreateSuccess": {},
+  "loanTrackingCreateFailed": "Gagal membuat pinjaman: {error}",
+  "@loanTrackingCreateFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "loanTrackingNoDueDate": "Tanpa tanggal jatuh tempo",
+  "@loanTrackingNoDueDate": {},
+  "loanTrackingPickDateAction": "Pilih",
+  "@loanTrackingPickDateAction": {},
+  "loanTrackingClearDateAction": "Hapus",
+  "@loanTrackingClearDateAction": {},
+  "loanTrackingDueDateLabel": "Tanggal jatuh tempo",
+  "@loanTrackingDueDateLabel": {}
 }

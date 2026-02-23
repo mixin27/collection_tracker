@@ -980,5 +980,151 @@
   "collectionTypeMusic": "음악",
   "@collectionTypeMusic": {},
   "collectionTypeCustom": "사용자 지정",
-  "@collectionTypeCustom": {}
+  "@collectionTypeCustom": {},
+  "loanTrackingTitle": "대여 추적",
+  "@loanTrackingTitle": {},
+  "loanTrackingNewLoan": "새 대여",
+  "@loanTrackingNewLoan": {},
+  "loanTrackingFilterActive": "활성",
+  "@loanTrackingFilterActive": {},
+  "loanTrackingFilterHistory": "기록",
+  "@loanTrackingFilterHistory": {},
+  "loanTrackingEmptyHistoryTitle": "아직 반납된 대여가 없습니다",
+  "@loanTrackingEmptyHistoryTitle": {},
+  "loanTrackingEmptyHistoryMessage": "반납된 항목이 여기에 표시됩니다.",
+  "@loanTrackingEmptyHistoryMessage": {},
+  "loanTrackingEmptyActiveTitle": "활성 대여가 없습니다",
+  "@loanTrackingEmptyActiveTitle": {},
+  "loanTrackingEmptyActiveMessage": "대여를 생성해 빌려준 항목을 추적해 보세요.",
+  "@loanTrackingEmptyActiveMessage": {},
+  "loanTrackingLoadingLoans": "대여 불러오는 중...",
+  "@loanTrackingLoadingLoans": {},
+  "loanTrackingLoadFailed": "대여를 불러오지 못했습니다: {error}",
+  "@loanTrackingLoadFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "loanTrackingMarkReturnedConfirmTitle": "반납으로 표시할까요?",
+  "@loanTrackingMarkReturnedConfirmTitle": {},
+  "loanTrackingMarkReturnedConfirmMessage": "\"{itemTitle}\" 반납을 확인합니다.",
+  "@loanTrackingMarkReturnedConfirmMessage": {
+    "placeholders": {
+      "itemTitle": {
+        "type": "String"
+      }
+    }
+  },
+  "loanTrackingMarkReturnedAction": "반납 처리",
+  "@loanTrackingMarkReturnedAction": {},
+  "loanTrackingMarkedReturnedSuccess": "대여가 반납 처리되었습니다.",
+  "@loanTrackingMarkedReturnedSuccess": {},
+  "loanTrackingMarkReturnedFailed": "반납 처리에 실패했습니다: {error}",
+  "@loanTrackingMarkReturnedFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "loanTrackingDeleteConfirmTitle": "대여 기록을 삭제할까요?",
+  "@loanTrackingDeleteConfirmTitle": {},
+  "loanTrackingDeleteConfirmMessage": "\"{itemTitle}\" 대여 기록을 삭제합니다.",
+  "@loanTrackingDeleteConfirmMessage": {
+    "placeholders": {
+      "itemTitle": {
+        "type": "String"
+      }
+    }
+  },
+  "loanTrackingDeleteSuccess": "대여가 삭제되었습니다.",
+  "@loanTrackingDeleteSuccess": {},
+  "loanTrackingDeleteFailed": "대여 삭제에 실패했습니다: {error}",
+  "@loanTrackingDeleteFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "loanTrackingSummaryActiveLabel": "활성 대여",
+  "@loanTrackingSummaryActiveLabel": {},
+  "loanTrackingSummaryOverdueLabel": "연체",
+  "@loanTrackingSummaryOverdueLabel": {},
+  "loanTrackingSummaryLoadFailed": "대여 요약을 불러올 수 없습니다.",
+  "@loanTrackingSummaryLoadFailed": {},
+  "loanTrackingFieldBorrower": "대여자",
+  "@loanTrackingFieldBorrower": {},
+  "loanTrackingFieldContact": "연락처",
+  "@loanTrackingFieldContact": {},
+  "loanTrackingFieldLoaned": "대여일",
+  "@loanTrackingFieldLoaned": {},
+  "loanTrackingFieldDue": "반납 예정일",
+  "@loanTrackingFieldDue": {},
+  "loanTrackingFieldReturned": "반납일",
+  "@loanTrackingFieldReturned": {},
+  "loanTrackingStatusReturned": "반납됨",
+  "@loanTrackingStatusReturned": {},
+  "loanTrackingStatusOverdue": "연체",
+  "@loanTrackingStatusOverdue": {},
+  "loanTrackingStatusActive": "활성",
+  "@loanTrackingStatusActive": {},
+  "loanTrackingCreateTitle": "대여 생성",
+  "@loanTrackingCreateTitle": {},
+  "loanTrackingCreateDescription": "누가 항목을 빌렸는지와 반납 예정일을 추적합니다.",
+  "@loanTrackingCreateDescription": {},
+  "loanTrackingCreateNoItemsTitle": "사용 가능한 항목이 없습니다",
+  "@loanTrackingCreateNoItemsTitle": {},
+  "loanTrackingCreateNoItemsMessage": "모든 항목이 이미 대여 중이거나 아직 항목이 없습니다.",
+  "@loanTrackingCreateNoItemsMessage": {},
+  "loanTrackingCreateItemLabel": "항목",
+  "@loanTrackingCreateItemLabel": {},
+  "loanTrackingCreateBorrowerLabel": "대여자 이름",
+  "@loanTrackingCreateBorrowerLabel": {},
+  "loanTrackingCreateBorrowerHint": "예: 홍길동",
+  "@loanTrackingCreateBorrowerHint": {},
+  "loanTrackingCreateContactLabel": "연락처 (선택)",
+  "@loanTrackingCreateContactLabel": {},
+  "loanTrackingCreateContactHint": "전화번호, 이메일 또는 @username",
+  "@loanTrackingCreateContactHint": {},
+  "loanTrackingCreateNotesLabel": "메모 (선택)",
+  "@loanTrackingCreateNotesLabel": {},
+  "loanTrackingCreateNotesHint": "이 대여에 대한 추가 정보",
+  "@loanTrackingCreateNotesHint": {},
+  "loanTrackingCreateSubmitting": "생성 중...",
+  "@loanTrackingCreateSubmitting": {},
+  "loanTrackingCreateAction": "대여 생성",
+  "@loanTrackingCreateAction": {},
+  "loanTrackingLoadingItems": "항목 불러오는 중...",
+  "@loanTrackingLoadingItems": {},
+  "loanTrackingLoadItemsFailed": "항목을 불러오지 못했습니다: {error}",
+  "@loanTrackingLoadItemsFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "loanTrackingBorrowerRequired": "대여자 이름은 필수입니다.",
+  "@loanTrackingBorrowerRequired": {},
+  "loanTrackingCreateSuccess": "대여가 생성되었습니다.",
+  "@loanTrackingCreateSuccess": {},
+  "loanTrackingCreateFailed": "대여 생성에 실패했습니다: {error}",
+  "@loanTrackingCreateFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "loanTrackingNoDueDate": "반납 예정일 없음",
+  "@loanTrackingNoDueDate": {},
+  "loanTrackingPickDateAction": "선택",
+  "@loanTrackingPickDateAction": {},
+  "loanTrackingClearDateAction": "지우기",
+  "@loanTrackingClearDateAction": {},
+  "loanTrackingDueDateLabel": "반납 예정일",
+  "@loanTrackingDueDateLabel": {}
 }

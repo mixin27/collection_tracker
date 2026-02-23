@@ -1070,4 +1070,174 @@ class AppLocalizationsMy extends AppLocalizations {
 
   @override
   String get collectionTypeCustom => 'စိတ်ကြိုက်';
+
+  @override
+  String get loanTrackingTitle => 'ငှားရမ်းမှု ခြေရာခံ';
+
+  @override
+  String get loanTrackingNewLoan => 'ငှားရမ်းမှု အသစ်';
+
+  @override
+  String get loanTrackingFilterActive => 'လက်ရှိ';
+
+  @override
+  String get loanTrackingFilterHistory => 'မှတ်တမ်း';
+
+  @override
+  String get loanTrackingEmptyHistoryTitle => 'ပြန်အပ်ပြီး ငှားရမ်းမှု မရှိသေးပါ';
+
+  @override
+  String get loanTrackingEmptyHistoryMessage => 'ပြန်အပ်ပြီး ပစ္စည်းများကို ဒီနေရာတွင် ပြပါမည်။';
+
+  @override
+  String get loanTrackingEmptyActiveTitle => 'လက်ရှိ ငှားရမ်းမှု မရှိပါ';
+
+  @override
+  String get loanTrackingEmptyActiveMessage => 'ငှားသွားသော ပစ္စည်းများကို ခြေရာခံရန် ငှားရမ်းမှု အသစ် ဖန်တီးပါ။';
+
+  @override
+  String get loanTrackingLoadingLoans => 'ငှားရမ်းမှုများ တင်နေသည်...';
+
+  @override
+  String loanTrackingLoadFailed(String error) {
+    return 'ငှားရမ်းမှုများ တင်မရပါ: $error';
+  }
+
+  @override
+  String get loanTrackingMarkReturnedConfirmTitle => 'ပြန်အပ်ပြီးဟု မှတ်မလား?';
+
+  @override
+  String loanTrackingMarkReturnedConfirmMessage(String itemTitle) {
+    return '\"$itemTitle\" ကို ပြန်အပ်ပြီးဟု အတည်ပြုမည်။';
+  }
+
+  @override
+  String get loanTrackingMarkReturnedAction => 'ပြန်အပ်ပြီး မှတ်မည်';
+
+  @override
+  String get loanTrackingMarkedReturnedSuccess => 'ငှားရမ်းမှုကို ပြန်အပ်ပြီးအဖြစ် မှတ်သားပြီးပါပြီ။';
+
+  @override
+  String loanTrackingMarkReturnedFailed(String error) {
+    return 'ပြန်အပ်ပြီး မှတ်မရပါ: $error';
+  }
+
+  @override
+  String get loanTrackingDeleteConfirmTitle => 'ငှားရမ်းမှု မှတ်တမ်း ဖျက်မလား?';
+
+  @override
+  String loanTrackingDeleteConfirmMessage(String itemTitle) {
+    return '\"$itemTitle\" အတွက် ငှားရမ်းမှု မှတ်တမ်းကို ဖျက်မည်။';
+  }
+
+  @override
+  String get loanTrackingDeleteSuccess => 'ငှားရမ်းမှုကို ဖျက်ပြီးပါပြီ။';
+
+  @override
+  String loanTrackingDeleteFailed(String error) {
+    return 'ငှားရမ်းမှု ဖျက်မရပါ: $error';
+  }
+
+  @override
+  String get loanTrackingSummaryActiveLabel => 'လက်ရှိ ငှားရမ်းမှု';
+
+  @override
+  String get loanTrackingSummaryOverdueLabel => 'ကျော်လွန်';
+
+  @override
+  String get loanTrackingSummaryLoadFailed => 'ငှားရမ်းမှု အနှစ်ချုပ် တင်မရပါ။';
+
+  @override
+  String get loanTrackingFieldBorrower => 'ငှားယူသူ';
+
+  @override
+  String get loanTrackingFieldContact => 'ဆက်သွယ်ရန်';
+
+  @override
+  String get loanTrackingFieldLoaned => 'ငှားသည့်နေ့';
+
+  @override
+  String get loanTrackingFieldDue => 'ပြန်အပ်ရမည့်နေ့';
+
+  @override
+  String get loanTrackingFieldReturned => 'ပြန်အပ်သည့်နေ့';
+
+  @override
+  String get loanTrackingStatusReturned => 'ပြန်အပ်ပြီး';
+
+  @override
+  String get loanTrackingStatusOverdue => 'ကျော်လွန်';
+
+  @override
+  String get loanTrackingStatusActive => 'လက်ရှိ';
+
+  @override
+  String get loanTrackingCreateTitle => 'ငှားရမ်းမှု ဖန်တီး';
+
+  @override
+  String get loanTrackingCreateDescription => 'ဘယ်သူငှားယူသွားသည်နှင့် ဘယ်နေ့ ပြန်အပ်ရမည်ကို မှတ်တမ်းတင်ပါ။';
+
+  @override
+  String get loanTrackingCreateNoItemsTitle => 'အသုံးပြုနိုင်သော ပစ္စည်း မရှိပါ';
+
+  @override
+  String get loanTrackingCreateNoItemsMessage => 'ပစ္စည်းအားလုံး ငှားထားပြီး သို့မဟုတ် ပစ္စည်းမရှိသေးပါ။';
+
+  @override
+  String get loanTrackingCreateItemLabel => 'ပစ္စည်း';
+
+  @override
+  String get loanTrackingCreateBorrowerLabel => 'ငှားယူသူ အမည်';
+
+  @override
+  String get loanTrackingCreateBorrowerHint => 'ဥပမာ - Aung Aung';
+
+  @override
+  String get loanTrackingCreateContactLabel => 'ဆက်သွယ်ရန် (မဖြည့်လည်းရ)';
+
+  @override
+  String get loanTrackingCreateContactHint => 'ဖုန်း၊ အီးမေးလ် သို့မဟုတ် @username';
+
+  @override
+  String get loanTrackingCreateNotesLabel => 'မှတ်စု (မဖြည့်လည်းရ)';
+
+  @override
+  String get loanTrackingCreateNotesHint => 'ဒီငှားရမ်းမှုအတွက် အသေးစိတ်';
+
+  @override
+  String get loanTrackingCreateSubmitting => 'ဖန်တီးနေသည်...';
+
+  @override
+  String get loanTrackingCreateAction => 'ငှားရမ်းမှု ဖန်တီး';
+
+  @override
+  String get loanTrackingLoadingItems => 'ပစ္စည်းများ တင်နေသည်...';
+
+  @override
+  String loanTrackingLoadItemsFailed(String error) {
+    return 'ပစ္စည်းများ တင်မရပါ: $error';
+  }
+
+  @override
+  String get loanTrackingBorrowerRequired => 'ငှားယူသူ အမည် မဖြစ်မနေလိုအပ်သည်။';
+
+  @override
+  String get loanTrackingCreateSuccess => 'ငှားရမ်းမှု အောင်မြင်စွာ ဖန်တီးပြီးပါပြီ။';
+
+  @override
+  String loanTrackingCreateFailed(String error) {
+    return 'ငှားရမ်းမှု ဖန်တီးမရပါ: $error';
+  }
+
+  @override
+  String get loanTrackingNoDueDate => 'ပြန်အပ်ရမည့်နေ့ မသတ်မှတ်ထားပါ';
+
+  @override
+  String get loanTrackingPickDateAction => 'ရွေးမည်';
+
+  @override
+  String get loanTrackingClearDateAction => 'ရှင်းမည်';
+
+  @override
+  String get loanTrackingDueDateLabel => 'ပြန်အပ်ရမည့်နေ့';
 }

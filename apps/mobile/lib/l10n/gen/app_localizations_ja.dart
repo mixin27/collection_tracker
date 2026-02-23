@@ -1070,4 +1070,174 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get collectionTypeCustom => 'カスタム';
+
+  @override
+  String get loanTrackingTitle => '貸出管理';
+
+  @override
+  String get loanTrackingNewLoan => '新しい貸出';
+
+  @override
+  String get loanTrackingFilterActive => 'アクティブ';
+
+  @override
+  String get loanTrackingFilterHistory => '履歴';
+
+  @override
+  String get loanTrackingEmptyHistoryTitle => '返却済みの貸出はまだありません';
+
+  @override
+  String get loanTrackingEmptyHistoryMessage => '返却されたアイテムはここに表示されます。';
+
+  @override
+  String get loanTrackingEmptyActiveTitle => 'アクティブな貸出はありません';
+
+  @override
+  String get loanTrackingEmptyActiveMessage => '貸出を作成して、借りられたアイテムの管理を始めましょう。';
+
+  @override
+  String get loanTrackingLoadingLoans => '貸出を読み込み中...';
+
+  @override
+  String loanTrackingLoadFailed(String error) {
+    return '貸出の読み込みに失敗しました: $error';
+  }
+
+  @override
+  String get loanTrackingMarkReturnedConfirmTitle => '返却済みにしますか？';
+
+  @override
+  String loanTrackingMarkReturnedConfirmMessage(String itemTitle) {
+    return '\"$itemTitle\" の返却を確認します。';
+  }
+
+  @override
+  String get loanTrackingMarkReturnedAction => '返却済みにする';
+
+  @override
+  String get loanTrackingMarkedReturnedSuccess => '貸出を返却済みにしました。';
+
+  @override
+  String loanTrackingMarkReturnedFailed(String error) {
+    return '返却の更新に失敗しました: $error';
+  }
+
+  @override
+  String get loanTrackingDeleteConfirmTitle => '貸出記録を削除しますか？';
+
+  @override
+  String loanTrackingDeleteConfirmMessage(String itemTitle) {
+    return '\"$itemTitle\" の貸出記録を削除します。';
+  }
+
+  @override
+  String get loanTrackingDeleteSuccess => '貸出記録を削除しました。';
+
+  @override
+  String loanTrackingDeleteFailed(String error) {
+    return '貸出の削除に失敗しました: $error';
+  }
+
+  @override
+  String get loanTrackingSummaryActiveLabel => 'アクティブな貸出';
+
+  @override
+  String get loanTrackingSummaryOverdueLabel => '期限超過';
+
+  @override
+  String get loanTrackingSummaryLoadFailed => '貸出サマリーを読み込めませんでした。';
+
+  @override
+  String get loanTrackingFieldBorrower => '借り手';
+
+  @override
+  String get loanTrackingFieldContact => '連絡先';
+
+  @override
+  String get loanTrackingFieldLoaned => '貸出日';
+
+  @override
+  String get loanTrackingFieldDue => '返却期限';
+
+  @override
+  String get loanTrackingFieldReturned => '返却日';
+
+  @override
+  String get loanTrackingStatusReturned => '返却済み';
+
+  @override
+  String get loanTrackingStatusOverdue => '期限超過';
+
+  @override
+  String get loanTrackingStatusActive => 'アクティブ';
+
+  @override
+  String get loanTrackingCreateTitle => '貸出を作成';
+
+  @override
+  String get loanTrackingCreateDescription => '誰がアイテムを借りたか、いつ返却予定かを記録します。';
+
+  @override
+  String get loanTrackingCreateNoItemsTitle => '利用可能なアイテムがありません';
+
+  @override
+  String get loanTrackingCreateNoItemsMessage => 'すべて貸出中か、まだアイテムがありません。';
+
+  @override
+  String get loanTrackingCreateItemLabel => 'アイテム';
+
+  @override
+  String get loanTrackingCreateBorrowerLabel => '借り手の名前';
+
+  @override
+  String get loanTrackingCreateBorrowerHint => '例: 山田 太郎';
+
+  @override
+  String get loanTrackingCreateContactLabel => '連絡先（任意）';
+
+  @override
+  String get loanTrackingCreateContactHint => '電話、メール、または @username';
+
+  @override
+  String get loanTrackingCreateNotesLabel => 'メモ（任意）';
+
+  @override
+  String get loanTrackingCreateNotesHint => 'この貸出の追加情報';
+
+  @override
+  String get loanTrackingCreateSubmitting => '作成中...';
+
+  @override
+  String get loanTrackingCreateAction => '貸出を作成';
+
+  @override
+  String get loanTrackingLoadingItems => 'アイテムを読み込み中...';
+
+  @override
+  String loanTrackingLoadItemsFailed(String error) {
+    return 'アイテムの読み込みに失敗しました: $error';
+  }
+
+  @override
+  String get loanTrackingBorrowerRequired => '借り手の名前は必須です。';
+
+  @override
+  String get loanTrackingCreateSuccess => '貸出を作成しました。';
+
+  @override
+  String loanTrackingCreateFailed(String error) {
+    return '貸出の作成に失敗しました: $error';
+  }
+
+  @override
+  String get loanTrackingNoDueDate => '返却期限なし';
+
+  @override
+  String get loanTrackingPickDateAction => '選択';
+
+  @override
+  String get loanTrackingClearDateAction => 'クリア';
+
+  @override
+  String get loanTrackingDueDateLabel => '返却期限';
 }

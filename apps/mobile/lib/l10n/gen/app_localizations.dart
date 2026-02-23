@@ -2014,6 +2014,318 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Custom'**
   String get collectionTypeCustom;
+
+  /// No description provided for @loanTrackingTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Loan Tracking'**
+  String get loanTrackingTitle;
+
+  /// No description provided for @loanTrackingNewLoan.
+  ///
+  /// In en, this message translates to:
+  /// **'New Loan'**
+  String get loanTrackingNewLoan;
+
+  /// No description provided for @loanTrackingFilterActive.
+  ///
+  /// In en, this message translates to:
+  /// **'Active'**
+  String get loanTrackingFilterActive;
+
+  /// No description provided for @loanTrackingFilterHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'History'**
+  String get loanTrackingFilterHistory;
+
+  /// No description provided for @loanTrackingEmptyHistoryTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No returned loans yet'**
+  String get loanTrackingEmptyHistoryTitle;
+
+  /// No description provided for @loanTrackingEmptyHistoryMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Returned items will appear here.'**
+  String get loanTrackingEmptyHistoryMessage;
+
+  /// No description provided for @loanTrackingEmptyActiveTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No active loans'**
+  String get loanTrackingEmptyActiveTitle;
+
+  /// No description provided for @loanTrackingEmptyActiveMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Create a loan to start tracking borrowed items.'**
+  String get loanTrackingEmptyActiveMessage;
+
+  /// No description provided for @loanTrackingLoadingLoans.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading loans...'**
+  String get loanTrackingLoadingLoans;
+
+  /// No description provided for @loanTrackingLoadFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to load loans: {error}'**
+  String loanTrackingLoadFailed(String error);
+
+  /// No description provided for @loanTrackingMarkReturnedConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Mark as returned?'**
+  String get loanTrackingMarkReturnedConfirmTitle;
+
+  /// No description provided for @loanTrackingMarkReturnedConfirmMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm return for \"{itemTitle}\".'**
+  String loanTrackingMarkReturnedConfirmMessage(String itemTitle);
+
+  /// No description provided for @loanTrackingMarkReturnedAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Mark Returned'**
+  String get loanTrackingMarkReturnedAction;
+
+  /// No description provided for @loanTrackingMarkedReturnedSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Loan marked as returned.'**
+  String get loanTrackingMarkedReturnedSuccess;
+
+  /// No description provided for @loanTrackingMarkReturnedFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to mark return: {error}'**
+  String loanTrackingMarkReturnedFailed(String error);
+
+  /// No description provided for @loanTrackingDeleteConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete loan record?'**
+  String get loanTrackingDeleteConfirmTitle;
+
+  /// No description provided for @loanTrackingDeleteConfirmMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete loan record for \"{itemTitle}\".'**
+  String loanTrackingDeleteConfirmMessage(String itemTitle);
+
+  /// No description provided for @loanTrackingDeleteSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Loan deleted.'**
+  String get loanTrackingDeleteSuccess;
+
+  /// No description provided for @loanTrackingDeleteFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to delete loan: {error}'**
+  String loanTrackingDeleteFailed(String error);
+
+  /// No description provided for @loanTrackingSummaryActiveLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Active Loans'**
+  String get loanTrackingSummaryActiveLabel;
+
+  /// No description provided for @loanTrackingSummaryOverdueLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Overdue'**
+  String get loanTrackingSummaryOverdueLabel;
+
+  /// No description provided for @loanTrackingSummaryLoadFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to load loan summary.'**
+  String get loanTrackingSummaryLoadFailed;
+
+  /// No description provided for @loanTrackingFieldBorrower.
+  ///
+  /// In en, this message translates to:
+  /// **'Borrower'**
+  String get loanTrackingFieldBorrower;
+
+  /// No description provided for @loanTrackingFieldContact.
+  ///
+  /// In en, this message translates to:
+  /// **'Contact'**
+  String get loanTrackingFieldContact;
+
+  /// No description provided for @loanTrackingFieldLoaned.
+  ///
+  /// In en, this message translates to:
+  /// **'Loaned'**
+  String get loanTrackingFieldLoaned;
+
+  /// No description provided for @loanTrackingFieldDue.
+  ///
+  /// In en, this message translates to:
+  /// **'Due'**
+  String get loanTrackingFieldDue;
+
+  /// No description provided for @loanTrackingFieldReturned.
+  ///
+  /// In en, this message translates to:
+  /// **'Returned'**
+  String get loanTrackingFieldReturned;
+
+  /// No description provided for @loanTrackingStatusReturned.
+  ///
+  /// In en, this message translates to:
+  /// **'Returned'**
+  String get loanTrackingStatusReturned;
+
+  /// No description provided for @loanTrackingStatusOverdue.
+  ///
+  /// In en, this message translates to:
+  /// **'Overdue'**
+  String get loanTrackingStatusOverdue;
+
+  /// No description provided for @loanTrackingStatusActive.
+  ///
+  /// In en, this message translates to:
+  /// **'Active'**
+  String get loanTrackingStatusActive;
+
+  /// No description provided for @loanTrackingCreateTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Create Loan'**
+  String get loanTrackingCreateTitle;
+
+  /// No description provided for @loanTrackingCreateDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Track who borrowed an item and when it should be returned.'**
+  String get loanTrackingCreateDescription;
+
+  /// No description provided for @loanTrackingCreateNoItemsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No available items'**
+  String get loanTrackingCreateNoItemsTitle;
+
+  /// No description provided for @loanTrackingCreateNoItemsMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'All items are currently loaned or there are no items yet.'**
+  String get loanTrackingCreateNoItemsMessage;
+
+  /// No description provided for @loanTrackingCreateItemLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Item'**
+  String get loanTrackingCreateItemLabel;
+
+  /// No description provided for @loanTrackingCreateBorrowerLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Borrower name'**
+  String get loanTrackingCreateBorrowerLabel;
+
+  /// No description provided for @loanTrackingCreateBorrowerHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. John Doe'**
+  String get loanTrackingCreateBorrowerHint;
+
+  /// No description provided for @loanTrackingCreateContactLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Contact (optional)'**
+  String get loanTrackingCreateContactLabel;
+
+  /// No description provided for @loanTrackingCreateContactHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone, email, or @username'**
+  String get loanTrackingCreateContactHint;
+
+  /// No description provided for @loanTrackingCreateNotesLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Notes (optional)'**
+  String get loanTrackingCreateNotesLabel;
+
+  /// No description provided for @loanTrackingCreateNotesHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Extra details for this loan'**
+  String get loanTrackingCreateNotesHint;
+
+  /// No description provided for @loanTrackingCreateSubmitting.
+  ///
+  /// In en, this message translates to:
+  /// **'Creating...'**
+  String get loanTrackingCreateSubmitting;
+
+  /// No description provided for @loanTrackingCreateAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Create Loan'**
+  String get loanTrackingCreateAction;
+
+  /// No description provided for @loanTrackingLoadingItems.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading items...'**
+  String get loanTrackingLoadingItems;
+
+  /// No description provided for @loanTrackingLoadItemsFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to load items: {error}'**
+  String loanTrackingLoadItemsFailed(String error);
+
+  /// No description provided for @loanTrackingBorrowerRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Borrower name is required.'**
+  String get loanTrackingBorrowerRequired;
+
+  /// No description provided for @loanTrackingCreateSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Loan created successfully.'**
+  String get loanTrackingCreateSuccess;
+
+  /// No description provided for @loanTrackingCreateFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to create loan: {error}'**
+  String loanTrackingCreateFailed(String error);
+
+  /// No description provided for @loanTrackingNoDueDate.
+  ///
+  /// In en, this message translates to:
+  /// **'No due date'**
+  String get loanTrackingNoDueDate;
+
+  /// No description provided for @loanTrackingPickDateAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick'**
+  String get loanTrackingPickDateAction;
+
+  /// No description provided for @loanTrackingClearDateAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear'**
+  String get loanTrackingClearDateAction;
+
+  /// No description provided for @loanTrackingDueDateLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Due date'**
+  String get loanTrackingDueDateLabel;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

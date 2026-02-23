@@ -1070,4 +1070,174 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get collectionTypeCustom => 'Personalizada';
+
+  @override
+  String get loanTrackingTitle => 'Seguimiento de préstamos';
+
+  @override
+  String get loanTrackingNewLoan => 'Nuevo préstamo';
+
+  @override
+  String get loanTrackingFilterActive => 'Activos';
+
+  @override
+  String get loanTrackingFilterHistory => 'Historial';
+
+  @override
+  String get loanTrackingEmptyHistoryTitle => 'Aún no hay préstamos devueltos';
+
+  @override
+  String get loanTrackingEmptyHistoryMessage => 'Los artículos devueltos aparecerán aquí.';
+
+  @override
+  String get loanTrackingEmptyActiveTitle => 'No hay préstamos activos';
+
+  @override
+  String get loanTrackingEmptyActiveMessage => 'Crea un préstamo para empezar a seguir artículos prestados.';
+
+  @override
+  String get loanTrackingLoadingLoans => 'Cargando préstamos...';
+
+  @override
+  String loanTrackingLoadFailed(String error) {
+    return 'No se pudieron cargar los préstamos: $error';
+  }
+
+  @override
+  String get loanTrackingMarkReturnedConfirmTitle => '¿Marcar como devuelto?';
+
+  @override
+  String loanTrackingMarkReturnedConfirmMessage(String itemTitle) {
+    return 'Confirmar devolución de \"$itemTitle\".';
+  }
+
+  @override
+  String get loanTrackingMarkReturnedAction => 'Marcar devuelto';
+
+  @override
+  String get loanTrackingMarkedReturnedSuccess => 'El préstamo se marcó como devuelto.';
+
+  @override
+  String loanTrackingMarkReturnedFailed(String error) {
+    return 'No se pudo marcar la devolución: $error';
+  }
+
+  @override
+  String get loanTrackingDeleteConfirmTitle => '¿Eliminar registro del préstamo?';
+
+  @override
+  String loanTrackingDeleteConfirmMessage(String itemTitle) {
+    return 'Eliminar registro del préstamo de \"$itemTitle\".';
+  }
+
+  @override
+  String get loanTrackingDeleteSuccess => 'Préstamo eliminado.';
+
+  @override
+  String loanTrackingDeleteFailed(String error) {
+    return 'No se pudo eliminar el préstamo: $error';
+  }
+
+  @override
+  String get loanTrackingSummaryActiveLabel => 'Préstamos activos';
+
+  @override
+  String get loanTrackingSummaryOverdueLabel => 'Vencidos';
+
+  @override
+  String get loanTrackingSummaryLoadFailed => 'No se pudo cargar el resumen de préstamos.';
+
+  @override
+  String get loanTrackingFieldBorrower => 'Prestatario';
+
+  @override
+  String get loanTrackingFieldContact => 'Contacto';
+
+  @override
+  String get loanTrackingFieldLoaned => 'Prestado';
+
+  @override
+  String get loanTrackingFieldDue => 'Vence';
+
+  @override
+  String get loanTrackingFieldReturned => 'Devuelto';
+
+  @override
+  String get loanTrackingStatusReturned => 'Devuelto';
+
+  @override
+  String get loanTrackingStatusOverdue => 'Vencido';
+
+  @override
+  String get loanTrackingStatusActive => 'Activo';
+
+  @override
+  String get loanTrackingCreateTitle => 'Crear préstamo';
+
+  @override
+  String get loanTrackingCreateDescription => 'Registra quién tomó un artículo prestado y cuándo debe devolverlo.';
+
+  @override
+  String get loanTrackingCreateNoItemsTitle => 'No hay artículos disponibles';
+
+  @override
+  String get loanTrackingCreateNoItemsMessage => 'Todos los artículos están prestados actualmente o aún no hay artículos.';
+
+  @override
+  String get loanTrackingCreateItemLabel => 'Artículo';
+
+  @override
+  String get loanTrackingCreateBorrowerLabel => 'Nombre del prestatario';
+
+  @override
+  String get loanTrackingCreateBorrowerHint => 'p. ej. Juan Pérez';
+
+  @override
+  String get loanTrackingCreateContactLabel => 'Contacto (opcional)';
+
+  @override
+  String get loanTrackingCreateContactHint => 'Teléfono, correo o @usuario';
+
+  @override
+  String get loanTrackingCreateNotesLabel => 'Notas (opcional)';
+
+  @override
+  String get loanTrackingCreateNotesHint => 'Detalles adicionales para este préstamo';
+
+  @override
+  String get loanTrackingCreateSubmitting => 'Creando...';
+
+  @override
+  String get loanTrackingCreateAction => 'Crear préstamo';
+
+  @override
+  String get loanTrackingLoadingItems => 'Cargando artículos...';
+
+  @override
+  String loanTrackingLoadItemsFailed(String error) {
+    return 'No se pudieron cargar los artículos: $error';
+  }
+
+  @override
+  String get loanTrackingBorrowerRequired => 'El nombre del prestatario es obligatorio.';
+
+  @override
+  String get loanTrackingCreateSuccess => 'Préstamo creado correctamente.';
+
+  @override
+  String loanTrackingCreateFailed(String error) {
+    return 'No se pudo crear el préstamo: $error';
+  }
+
+  @override
+  String get loanTrackingNoDueDate => 'Sin fecha de vencimiento';
+
+  @override
+  String get loanTrackingPickDateAction => 'Elegir';
+
+  @override
+  String get loanTrackingClearDateAction => 'Limpiar';
+
+  @override
+  String get loanTrackingDueDateLabel => 'Fecha de vencimiento';
 }

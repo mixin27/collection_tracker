@@ -980,5 +980,151 @@
   "collectionTypeMusic": "Música",
   "@collectionTypeMusic": {},
   "collectionTypeCustom": "Personalizada",
-  "@collectionTypeCustom": {}
+  "@collectionTypeCustom": {},
+  "loanTrackingTitle": "Seguimiento de préstamos",
+  "@loanTrackingTitle": {},
+  "loanTrackingNewLoan": "Nuevo préstamo",
+  "@loanTrackingNewLoan": {},
+  "loanTrackingFilterActive": "Activos",
+  "@loanTrackingFilterActive": {},
+  "loanTrackingFilterHistory": "Historial",
+  "@loanTrackingFilterHistory": {},
+  "loanTrackingEmptyHistoryTitle": "Aún no hay préstamos devueltos",
+  "@loanTrackingEmptyHistoryTitle": {},
+  "loanTrackingEmptyHistoryMessage": "Los artículos devueltos aparecerán aquí.",
+  "@loanTrackingEmptyHistoryMessage": {},
+  "loanTrackingEmptyActiveTitle": "No hay préstamos activos",
+  "@loanTrackingEmptyActiveTitle": {},
+  "loanTrackingEmptyActiveMessage": "Crea un préstamo para empezar a seguir artículos prestados.",
+  "@loanTrackingEmptyActiveMessage": {},
+  "loanTrackingLoadingLoans": "Cargando préstamos...",
+  "@loanTrackingLoadingLoans": {},
+  "loanTrackingLoadFailed": "No se pudieron cargar los préstamos: {error}",
+  "@loanTrackingLoadFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "loanTrackingMarkReturnedConfirmTitle": "¿Marcar como devuelto?",
+  "@loanTrackingMarkReturnedConfirmTitle": {},
+  "loanTrackingMarkReturnedConfirmMessage": "Confirmar devolución de \"{itemTitle}\".",
+  "@loanTrackingMarkReturnedConfirmMessage": {
+    "placeholders": {
+      "itemTitle": {
+        "type": "String"
+      }
+    }
+  },
+  "loanTrackingMarkReturnedAction": "Marcar devuelto",
+  "@loanTrackingMarkReturnedAction": {},
+  "loanTrackingMarkedReturnedSuccess": "El préstamo se marcó como devuelto.",
+  "@loanTrackingMarkedReturnedSuccess": {},
+  "loanTrackingMarkReturnedFailed": "No se pudo marcar la devolución: {error}",
+  "@loanTrackingMarkReturnedFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "loanTrackingDeleteConfirmTitle": "¿Eliminar registro del préstamo?",
+  "@loanTrackingDeleteConfirmTitle": {},
+  "loanTrackingDeleteConfirmMessage": "Eliminar registro del préstamo de \"{itemTitle}\".",
+  "@loanTrackingDeleteConfirmMessage": {
+    "placeholders": {
+      "itemTitle": {
+        "type": "String"
+      }
+    }
+  },
+  "loanTrackingDeleteSuccess": "Préstamo eliminado.",
+  "@loanTrackingDeleteSuccess": {},
+  "loanTrackingDeleteFailed": "No se pudo eliminar el préstamo: {error}",
+  "@loanTrackingDeleteFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "loanTrackingSummaryActiveLabel": "Préstamos activos",
+  "@loanTrackingSummaryActiveLabel": {},
+  "loanTrackingSummaryOverdueLabel": "Vencidos",
+  "@loanTrackingSummaryOverdueLabel": {},
+  "loanTrackingSummaryLoadFailed": "No se pudo cargar el resumen de préstamos.",
+  "@loanTrackingSummaryLoadFailed": {},
+  "loanTrackingFieldBorrower": "Prestatario",
+  "@loanTrackingFieldBorrower": {},
+  "loanTrackingFieldContact": "Contacto",
+  "@loanTrackingFieldContact": {},
+  "loanTrackingFieldLoaned": "Prestado",
+  "@loanTrackingFieldLoaned": {},
+  "loanTrackingFieldDue": "Vence",
+  "@loanTrackingFieldDue": {},
+  "loanTrackingFieldReturned": "Devuelto",
+  "@loanTrackingFieldReturned": {},
+  "loanTrackingStatusReturned": "Devuelto",
+  "@loanTrackingStatusReturned": {},
+  "loanTrackingStatusOverdue": "Vencido",
+  "@loanTrackingStatusOverdue": {},
+  "loanTrackingStatusActive": "Activo",
+  "@loanTrackingStatusActive": {},
+  "loanTrackingCreateTitle": "Crear préstamo",
+  "@loanTrackingCreateTitle": {},
+  "loanTrackingCreateDescription": "Registra quién tomó un artículo prestado y cuándo debe devolverlo.",
+  "@loanTrackingCreateDescription": {},
+  "loanTrackingCreateNoItemsTitle": "No hay artículos disponibles",
+  "@loanTrackingCreateNoItemsTitle": {},
+  "loanTrackingCreateNoItemsMessage": "Todos los artículos están prestados actualmente o aún no hay artículos.",
+  "@loanTrackingCreateNoItemsMessage": {},
+  "loanTrackingCreateItemLabel": "Artículo",
+  "@loanTrackingCreateItemLabel": {},
+  "loanTrackingCreateBorrowerLabel": "Nombre del prestatario",
+  "@loanTrackingCreateBorrowerLabel": {},
+  "loanTrackingCreateBorrowerHint": "p. ej. Juan Pérez",
+  "@loanTrackingCreateBorrowerHint": {},
+  "loanTrackingCreateContactLabel": "Contacto (opcional)",
+  "@loanTrackingCreateContactLabel": {},
+  "loanTrackingCreateContactHint": "Teléfono, correo o @usuario",
+  "@loanTrackingCreateContactHint": {},
+  "loanTrackingCreateNotesLabel": "Notas (opcional)",
+  "@loanTrackingCreateNotesLabel": {},
+  "loanTrackingCreateNotesHint": "Detalles adicionales para este préstamo",
+  "@loanTrackingCreateNotesHint": {},
+  "loanTrackingCreateSubmitting": "Creando...",
+  "@loanTrackingCreateSubmitting": {},
+  "loanTrackingCreateAction": "Crear préstamo",
+  "@loanTrackingCreateAction": {},
+  "loanTrackingLoadingItems": "Cargando artículos...",
+  "@loanTrackingLoadingItems": {},
+  "loanTrackingLoadItemsFailed": "No se pudieron cargar los artículos: {error}",
+  "@loanTrackingLoadItemsFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "loanTrackingBorrowerRequired": "El nombre del prestatario es obligatorio.",
+  "@loanTrackingBorrowerRequired": {},
+  "loanTrackingCreateSuccess": "Préstamo creado correctamente.",
+  "@loanTrackingCreateSuccess": {},
+  "loanTrackingCreateFailed": "No se pudo crear el préstamo: {error}",
+  "@loanTrackingCreateFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "loanTrackingNoDueDate": "Sin fecha de vencimiento",
+  "@loanTrackingNoDueDate": {},
+  "loanTrackingPickDateAction": "Elegir",
+  "@loanTrackingPickDateAction": {},
+  "loanTrackingClearDateAction": "Limpiar",
+  "@loanTrackingClearDateAction": {},
+  "loanTrackingDueDateLabel": "Fecha de vencimiento",
+  "@loanTrackingDueDateLabel": {}
 }

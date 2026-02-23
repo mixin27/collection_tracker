@@ -980,5 +980,151 @@
   "collectionTypeMusic": "Music",
   "@collectionTypeMusic": {},
   "collectionTypeCustom": "Custom",
-  "@collectionTypeCustom": {}
+  "@collectionTypeCustom": {},
+  "loanTrackingTitle": "Loan Tracking",
+  "@loanTrackingTitle": {},
+  "loanTrackingNewLoan": "New Loan",
+  "@loanTrackingNewLoan": {},
+  "loanTrackingFilterActive": "Active",
+  "@loanTrackingFilterActive": {},
+  "loanTrackingFilterHistory": "History",
+  "@loanTrackingFilterHistory": {},
+  "loanTrackingEmptyHistoryTitle": "No returned loans yet",
+  "@loanTrackingEmptyHistoryTitle": {},
+  "loanTrackingEmptyHistoryMessage": "Returned items will appear here.",
+  "@loanTrackingEmptyHistoryMessage": {},
+  "loanTrackingEmptyActiveTitle": "No active loans",
+  "@loanTrackingEmptyActiveTitle": {},
+  "loanTrackingEmptyActiveMessage": "Create a loan to start tracking borrowed items.",
+  "@loanTrackingEmptyActiveMessage": {},
+  "loanTrackingLoadingLoans": "Loading loans...",
+  "@loanTrackingLoadingLoans": {},
+  "loanTrackingLoadFailed": "Failed to load loans: {error}",
+  "@loanTrackingLoadFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "loanTrackingMarkReturnedConfirmTitle": "Mark as returned?",
+  "@loanTrackingMarkReturnedConfirmTitle": {},
+  "loanTrackingMarkReturnedConfirmMessage": "Confirm return for \"{itemTitle}\".",
+  "@loanTrackingMarkReturnedConfirmMessage": {
+    "placeholders": {
+      "itemTitle": {
+        "type": "String"
+      }
+    }
+  },
+  "loanTrackingMarkReturnedAction": "Mark Returned",
+  "@loanTrackingMarkReturnedAction": {},
+  "loanTrackingMarkedReturnedSuccess": "Loan marked as returned.",
+  "@loanTrackingMarkedReturnedSuccess": {},
+  "loanTrackingMarkReturnedFailed": "Failed to mark return: {error}",
+  "@loanTrackingMarkReturnedFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "loanTrackingDeleteConfirmTitle": "Delete loan record?",
+  "@loanTrackingDeleteConfirmTitle": {},
+  "loanTrackingDeleteConfirmMessage": "Delete loan record for \"{itemTitle}\".",
+  "@loanTrackingDeleteConfirmMessage": {
+    "placeholders": {
+      "itemTitle": {
+        "type": "String"
+      }
+    }
+  },
+  "loanTrackingDeleteSuccess": "Loan deleted.",
+  "@loanTrackingDeleteSuccess": {},
+  "loanTrackingDeleteFailed": "Failed to delete loan: {error}",
+  "@loanTrackingDeleteFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "loanTrackingSummaryActiveLabel": "Active Loans",
+  "@loanTrackingSummaryActiveLabel": {},
+  "loanTrackingSummaryOverdueLabel": "Overdue",
+  "@loanTrackingSummaryOverdueLabel": {},
+  "loanTrackingSummaryLoadFailed": "Unable to load loan summary.",
+  "@loanTrackingSummaryLoadFailed": {},
+  "loanTrackingFieldBorrower": "Borrower",
+  "@loanTrackingFieldBorrower": {},
+  "loanTrackingFieldContact": "Contact",
+  "@loanTrackingFieldContact": {},
+  "loanTrackingFieldLoaned": "Loaned",
+  "@loanTrackingFieldLoaned": {},
+  "loanTrackingFieldDue": "Due",
+  "@loanTrackingFieldDue": {},
+  "loanTrackingFieldReturned": "Returned",
+  "@loanTrackingFieldReturned": {},
+  "loanTrackingStatusReturned": "Returned",
+  "@loanTrackingStatusReturned": {},
+  "loanTrackingStatusOverdue": "Overdue",
+  "@loanTrackingStatusOverdue": {},
+  "loanTrackingStatusActive": "Active",
+  "@loanTrackingStatusActive": {},
+  "loanTrackingCreateTitle": "Create Loan",
+  "@loanTrackingCreateTitle": {},
+  "loanTrackingCreateDescription": "Track who borrowed an item and when it should be returned.",
+  "@loanTrackingCreateDescription": {},
+  "loanTrackingCreateNoItemsTitle": "No available items",
+  "@loanTrackingCreateNoItemsTitle": {},
+  "loanTrackingCreateNoItemsMessage": "All items are currently loaned or there are no items yet.",
+  "@loanTrackingCreateNoItemsMessage": {},
+  "loanTrackingCreateItemLabel": "Item",
+  "@loanTrackingCreateItemLabel": {},
+  "loanTrackingCreateBorrowerLabel": "Borrower name",
+  "@loanTrackingCreateBorrowerLabel": {},
+  "loanTrackingCreateBorrowerHint": "e.g. John Doe",
+  "@loanTrackingCreateBorrowerHint": {},
+  "loanTrackingCreateContactLabel": "Contact (optional)",
+  "@loanTrackingCreateContactLabel": {},
+  "loanTrackingCreateContactHint": "Phone, email, or @username",
+  "@loanTrackingCreateContactHint": {},
+  "loanTrackingCreateNotesLabel": "Notes (optional)",
+  "@loanTrackingCreateNotesLabel": {},
+  "loanTrackingCreateNotesHint": "Extra details for this loan",
+  "@loanTrackingCreateNotesHint": {},
+  "loanTrackingCreateSubmitting": "Creating...",
+  "@loanTrackingCreateSubmitting": {},
+  "loanTrackingCreateAction": "Create Loan",
+  "@loanTrackingCreateAction": {},
+  "loanTrackingLoadingItems": "Loading items...",
+  "@loanTrackingLoadingItems": {},
+  "loanTrackingLoadItemsFailed": "Failed to load items: {error}",
+  "@loanTrackingLoadItemsFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "loanTrackingBorrowerRequired": "Borrower name is required.",
+  "@loanTrackingBorrowerRequired": {},
+  "loanTrackingCreateSuccess": "Loan created successfully.",
+  "@loanTrackingCreateSuccess": {},
+  "loanTrackingCreateFailed": "Failed to create loan: {error}",
+  "@loanTrackingCreateFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "loanTrackingNoDueDate": "No due date",
+  "@loanTrackingNoDueDate": {},
+  "loanTrackingPickDateAction": "Pick",
+  "@loanTrackingPickDateAction": {},
+  "loanTrackingClearDateAction": "Clear",
+  "@loanTrackingClearDateAction": {},
+  "loanTrackingDueDateLabel": "Due date",
+  "@loanTrackingDueDateLabel": {}
 }

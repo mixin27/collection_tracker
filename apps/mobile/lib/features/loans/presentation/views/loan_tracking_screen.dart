@@ -18,17 +18,18 @@ class _LoanTrackingScreenState extends ConsumerState<LoanTrackingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     final activeAsync = ref.watch(activeLoansProvider);
     final historyAsync = ref.watch(loanHistoryProvider);
     final loansAsync = _showHistory ? historyAsync : activeAsync;
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Loan Tracking')),
+      appBar: AppBar(title: Text(l10n.loanTrackingTitle)),
       floatingActionButton: FloatingActionButton.extended(
         heroTag: 'loan_tracking_fab',
         onPressed: () => _showCreateLoanSheet(context),
         icon: const Icon(Icons.handshake_outlined),
-        label: const Text('New Loan'),
+        label: Text(l10n.loanTrackingNewLoan),
       ),
       body: ListView(
         padding: const EdgeInsets.fromLTRB(
@@ -47,12 +48,12 @@ class _LoanTrackingScreenState extends ConsumerState<LoanTrackingScreen> {
               children: [
                 ChoiceChip(
                   selected: !_showHistory,
-                  label: const Text('Active'),
+                  label: Text(l10n.loanTrackingFilterActive),
                   onSelected: (_) => setState(() => _showHistory = false),
                 ),
                 ChoiceChip(
                   selected: _showHistory,
-                  label: const Text('History'),
+                  label: Text(l10n.loanTrackingFilterHistory),
                   onSelected: (_) => setState(() => _showHistory = true),
                 ),
               ],
@@ -73,11 +74,11 @@ class _LoanTrackingScreenState extends ConsumerState<LoanTrackingScreen> {
                           ? Icons.history_toggle_off_rounded
                           : Icons.inventory_2_outlined,
                       title: _showHistory
-                          ? 'No returned loans yet'
-                          : 'No active loans',
+                          ? l10n.loanTrackingEmptyHistoryTitle
+                          : l10n.loanTrackingEmptyActiveTitle,
                       message: _showHistory
-                          ? 'Returned items will appear here.'
-                          : 'Create a loan to start tracking borrowed items.',
+                          ? l10n.loanTrackingEmptyHistoryMessage
+                          : l10n.loanTrackingEmptyActiveMessage,
                     );
                   }
 
@@ -101,12 +102,12 @@ class _LoanTrackingScreenState extends ConsumerState<LoanTrackingScreen> {
                     ],
                   );
                 },
-                loading: () => const Padding(
+                loading: () => Padding(
                   padding: EdgeInsets.only(top: AppSpacing.xxl),
-                  child: LoadingView(message: 'Loading loans...'),
+                  child: LoadingView(message: l10n.loanTrackingLoadingLoans),
                 ),
                 error: (error, _) => ErrorView(
-                  message: 'Failed to load loans: $error',
+                  message: l10n.loanTrackingLoadFailed('$error'),
                   onRetry: () {
                     ref.invalidate(activeLoansProvider);
                     ref.invalidate(loanHistoryProvider);
@@ -128,18 +129,21 @@ class _LoanTrackingScreenState extends ConsumerState<LoanTrackingScreen> {
   }
 
   Future<void> _markReturned(BuildContext context, LoanRecord loan) async {
+    final l10n = context.l10n;
     final confirmed = await showAppDialog<bool>(
       context: context,
-      title: const Text('Mark as returned?'),
-      content: Text('Confirm return for "${loan.itemTitle}".'),
+      title: Text(l10n.loanTrackingMarkReturnedConfirmTitle),
+      content: Text(
+        l10n.loanTrackingMarkReturnedConfirmMessage(loan.itemTitle),
+      ),
       actions: [
         AppButton(
-          label: context.l10n.actionCancel,
+          label: l10n.actionCancel,
           variant: AppButtonVariant.ghost,
           onPressed: () => closeAppDialog(context, false),
         ),
         AppButton(
-          label: 'Mark Returned',
+          label: l10n.loanTrackingMarkReturnedAction,
           onPressed: () => closeAppDialog(context, true),
         ),
       ],
@@ -154,16 +158,16 @@ class _LoanTrackingScreenState extends ConsumerState<LoanTrackingScreen> {
       if (!context.mounted) {
         return;
       }
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('Loan marked as returned.')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(l10n.loanTrackingMarkedReturnedSuccess)),
+      );
     } catch (error) {
       if (!context.mounted) {
         return;
       }
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Failed to mark return: $error'),
+          content: Text(l10n.loanTrackingMarkReturnedFailed('$error')),
           backgroundColor: Colors.red,
         ),
       );
@@ -171,13 +175,14 @@ class _LoanTrackingScreenState extends ConsumerState<LoanTrackingScreen> {
   }
 
   Future<void> _deleteLoan(BuildContext context, LoanRecord loan) async {
+    final l10n = context.l10n;
     final confirmed = await showAppDialog<bool>(
       context: context,
-      title: const Text('Delete loan record?'),
-      content: Text('Delete loan record for "${loan.itemTitle}".'),
+      title: Text(l10n.loanTrackingDeleteConfirmTitle),
+      content: Text(l10n.loanTrackingDeleteConfirmMessage(loan.itemTitle)),
       actions: [
         AppButton(
-          label: context.l10n.actionCancel,
+          label: l10n.actionCancel,
           variant: AppButtonVariant.ghost,
           onPressed: () => closeAppDialog(context, false),
         ),
@@ -200,14 +205,14 @@ class _LoanTrackingScreenState extends ConsumerState<LoanTrackingScreen> {
       }
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(const SnackBar(content: Text('Loan deleted.')));
+      ).showSnackBar(SnackBar(content: Text(l10n.loanTrackingDeleteSuccess)));
     } catch (error) {
       if (!context.mounted) {
         return;
       }
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Failed to delete loan: $error'),
+          content: Text(l10n.loanTrackingDeleteFailed('$error')),
           backgroundColor: Colors.red,
         ),
       );
@@ -222,6 +227,7 @@ class _LoanSummaryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     final theme = Theme.of(context);
 
     return AppCard(
@@ -236,7 +242,7 @@ class _LoanSummaryCard extends StatelessWidget {
               Expanded(
                 child: _StatPill(
                   icon: Icons.inventory_2_outlined,
-                  label: 'Active Loans',
+                  label: l10n.loanTrackingSummaryActiveLabel,
                   value: '${activeLoans.length}',
                 ),
               ),
@@ -244,7 +250,7 @@ class _LoanSummaryCard extends StatelessWidget {
               Expanded(
                 child: _StatPill(
                   icon: Icons.warning_amber_rounded,
-                  label: 'Overdue',
+                  label: l10n.loanTrackingSummaryOverdueLabel,
                   value: '$overdueCount',
                   tint: overdueCount > 0
                       ? theme.colorScheme.errorContainer
@@ -258,7 +264,7 @@ class _LoanSummaryCard extends StatelessWidget {
           height: 74,
           child: Center(child: LoadingView(indicatorSize: 30)),
         ),
-        error: (_, _) => const Text('Unable to load loan summary.'),
+        error: (_, _) => Text(l10n.loanTrackingSummaryLoadFailed),
       ),
     );
   }
@@ -330,6 +336,7 @@ class _LoanCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     final theme = Theme.of(context);
 
     return AppCard(
@@ -362,28 +369,28 @@ class _LoanCard extends StatelessWidget {
           const SizedBox(height: AppSpacing.md),
           _LoanMetaRow(
             icon: Icons.person_outline_rounded,
-            label: 'Borrower',
+            label: l10n.loanTrackingFieldBorrower,
             value: loan.borrowerName,
           ),
           if (loan.borrowerContact != null) ...[
             const SizedBox(height: AppSpacing.xs),
             _LoanMetaRow(
               icon: Icons.call_outlined,
-              label: 'Contact',
+              label: l10n.loanTrackingFieldContact,
               value: loan.borrowerContact!,
             ),
           ],
           const SizedBox(height: AppSpacing.xs),
           _LoanMetaRow(
             icon: Icons.calendar_today_outlined,
-            label: 'Loaned',
+            label: l10n.loanTrackingFieldLoaned,
             value: _formatDate(context, loan.loanedAt),
           ),
           if (loan.dueAt != null) ...[
             const SizedBox(height: AppSpacing.xs),
             _LoanMetaRow(
               icon: Icons.event_available_outlined,
-              label: 'Due',
+              label: l10n.loanTrackingFieldDue,
               value: _formatDate(context, loan.dueAt!),
               valueColor: loan.isOverdue
                   ? theme.colorScheme.error
@@ -394,7 +401,7 @@ class _LoanCard extends StatelessWidget {
             const SizedBox(height: AppSpacing.xs),
             _LoanMetaRow(
               icon: Icons.assignment_turned_in_outlined,
-              label: 'Returned',
+              label: l10n.loanTrackingFieldReturned,
               value: _formatDate(context, loan.returnedAt!),
             ),
           ],
@@ -416,7 +423,7 @@ class _LoanCard extends StatelessWidget {
             children: [
               if (onReturn != null)
                 AppButton(
-                  label: 'Mark Returned',
+                  label: l10n.loanTrackingMarkReturnedAction,
                   variant: AppButtonVariant.secondary,
                   onPressed: onReturn,
                 ),
@@ -491,6 +498,7 @@ class _LoanStatusBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
 
@@ -501,15 +509,15 @@ class _LoanStatusBadge extends StatelessWidget {
     if (loan.isReturned) {
       background = colorScheme.primary.withValues(alpha: 0.14);
       foreground = colorScheme.primary;
-      label = 'Returned';
+      label = l10n.loanTrackingStatusReturned;
     } else if (loan.isOverdue) {
       background = colorScheme.error.withValues(alpha: 0.14);
       foreground = colorScheme.error;
-      label = 'Overdue';
+      label = l10n.loanTrackingStatusOverdue;
     } else {
       background = colorScheme.tertiary.withValues(alpha: 0.14);
       foreground = colorScheme.tertiary;
-      label = 'Active';
+      label = l10n.loanTrackingStatusActive;
     }
 
     return Container(
@@ -555,6 +563,7 @@ class _CreateLoanSheetState extends ConsumerState<_CreateLoanSheet> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     final candidatesAsync = ref.watch(loanCandidateItemsProvider);
     final activeLoans =
         ref.watch(activeLoansProvider).asData?.value ?? const <LoanRecord>[];
@@ -595,14 +604,14 @@ class _CreateLoanSheetState extends ConsumerState<_CreateLoanSheet> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Create Loan',
+                      l10n.loanTrackingCreateTitle,
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.w700,
                       ),
                     ),
                     const SizedBox(height: AppSpacing.sm),
                     Text(
-                      'Track who borrowed an item and when it should be returned.',
+                      l10n.loanTrackingCreateDescription,
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         color: Theme.of(context).colorScheme.onSurfaceVariant,
                       ),
@@ -611,16 +620,17 @@ class _CreateLoanSheetState extends ConsumerState<_CreateLoanSheet> {
                     if (candidates.isEmpty)
                       EmptyState(
                         icon: Icons.inventory_2_outlined,
-                        title: 'No available items',
-                        message:
-                            'All items are currently loaned or there are no items yet.',
+                        title: l10n.loanTrackingCreateNoItemsTitle,
+                        message: l10n.loanTrackingCreateNoItemsMessage,
                       )
                     else
                       DropdownButtonFormField<String>(
                         key: ValueKey(_selectedItemId),
                         initialValue: _selectedItemId,
                         isExpanded: true,
-                        decoration: const InputDecoration(labelText: 'Item'),
+                        decoration: InputDecoration(
+                          labelText: l10n.loanTrackingCreateItemLabel,
+                        ),
                         items: candidates
                             .map(
                               (candidate) => DropdownMenuItem<String>(
@@ -640,15 +650,15 @@ class _CreateLoanSheetState extends ConsumerState<_CreateLoanSheet> {
                     const SizedBox(height: AppSpacing.md),
                     AppInput(
                       controller: _borrowerController,
-                      labelText: 'Borrower name',
-                      hintText: 'e.g. John Doe',
+                      labelText: l10n.loanTrackingCreateBorrowerLabel,
+                      hintText: l10n.loanTrackingCreateBorrowerHint,
                       enabled: !_submitting && candidates.isNotEmpty,
                     ),
                     const SizedBox(height: AppSpacing.md),
                     AppInput(
                       controller: _contactController,
-                      labelText: 'Contact (optional)',
-                      hintText: 'Phone, email, or @username',
+                      labelText: l10n.loanTrackingCreateContactLabel,
+                      hintText: l10n.loanTrackingCreateContactHint,
                       enabled: !_submitting && candidates.isNotEmpty,
                     ),
                     const SizedBox(height: AppSpacing.md),
@@ -663,14 +673,16 @@ class _CreateLoanSheetState extends ConsumerState<_CreateLoanSheet> {
                     const SizedBox(height: AppSpacing.md),
                     AppInput(
                       controller: _notesController,
-                      labelText: 'Notes (optional)',
-                      hintText: 'Extra details for this loan',
+                      labelText: l10n.loanTrackingCreateNotesLabel,
+                      hintText: l10n.loanTrackingCreateNotesHint,
                       maxLines: 3,
                       enabled: !_submitting && candidates.isNotEmpty,
                     ),
                     const SizedBox(height: AppSpacing.lg),
                     AppButton(
-                      label: _submitting ? 'Creating...' : 'Create Loan',
+                      label: _submitting
+                          ? l10n.loanTrackingCreateSubmitting
+                          : l10n.loanTrackingCreateAction,
                       onPressed: (_submitting || candidates.isEmpty)
                           ? null
                           : () => _submit(context),
@@ -687,12 +699,12 @@ class _CreateLoanSheetState extends ConsumerState<_CreateLoanSheet> {
                 ),
               );
             },
-            loading: () => const SizedBox(
+            loading: () => SizedBox(
               height: 180,
-              child: LoadingView(message: 'Loading items...'),
+              child: LoadingView(message: l10n.loanTrackingLoadingItems),
             ),
             error: (error, _) => ErrorView(
-              message: 'Failed to load items: $error',
+              message: l10n.loanTrackingLoadItemsFailed('$error'),
               onRetry: () => ref.invalidate(loanCandidateItemsProvider),
             ),
           ),
@@ -717,6 +729,7 @@ class _CreateLoanSheetState extends ConsumerState<_CreateLoanSheet> {
   }
 
   Future<void> _submit(BuildContext context) async {
+    final l10n = context.l10n;
     final itemId = _selectedItemId;
     if (itemId == null || itemId.isEmpty) {
       return;
@@ -725,7 +738,7 @@ class _CreateLoanSheetState extends ConsumerState<_CreateLoanSheet> {
     final borrowerName = _borrowerController.text.trim();
     if (borrowerName.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Borrower name is required.')),
+        SnackBar(content: Text(l10n.loanTrackingBorrowerRequired)),
       );
       return;
     }
@@ -754,16 +767,16 @@ class _CreateLoanSheetState extends ConsumerState<_CreateLoanSheet> {
       }
 
       Navigator.of(context).pop();
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Loan created successfully.')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(l10n.loanTrackingCreateSuccess)));
     } catch (error) {
       if (!context.mounted) {
         return;
       }
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Failed to create loan: $error'),
+          content: Text(l10n.loanTrackingCreateFailed('$error')),
           backgroundColor: Colors.red,
         ),
       );
@@ -790,20 +803,21 @@ class _DueDateField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     final locale = Localizations.localeOf(context).toLanguageTag();
     final label = dueDate == null
-        ? 'No due date'
+        ? l10n.loanTrackingNoDueDate
         : DateFormat.yMMMd(locale).format(dueDate!);
 
     final controls = <Widget>[
       AppButton(
-        label: 'Pick',
+        label: l10n.loanTrackingPickDateAction,
         variant: AppButtonVariant.secondary,
         onPressed: enabled ? onPick : null,
       ),
       if (dueDate != null)
         AppButton(
-          label: 'Clear',
+          label: l10n.loanTrackingClearDateAction,
           variant: AppButtonVariant.ghost,
           onPressed: enabled ? onClear : null,
         ),
@@ -826,7 +840,10 @@ class _DueDateField extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Due date', style: Theme.of(context).textTheme.labelMedium),
+              Text(
+                l10n.loanTrackingDueDateLabel,
+                style: Theme.of(context).textTheme.labelMedium,
+              ),
               const SizedBox(height: AppSpacing.xs),
               Text(label, style: Theme.of(context).textTheme.bodyMedium),
             ],

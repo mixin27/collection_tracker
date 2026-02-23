@@ -980,5 +980,151 @@
   "collectionTypeMusic": "ဂီတ",
   "@collectionTypeMusic": {},
   "collectionTypeCustom": "စိတ်ကြိုက်",
-  "@collectionTypeCustom": {}
+  "@collectionTypeCustom": {},
+  "loanTrackingTitle": "ငှားရမ်းမှု ခြေရာခံ",
+  "@loanTrackingTitle": {},
+  "loanTrackingNewLoan": "ငှားရမ်းမှု အသစ်",
+  "@loanTrackingNewLoan": {},
+  "loanTrackingFilterActive": "လက်ရှိ",
+  "@loanTrackingFilterActive": {},
+  "loanTrackingFilterHistory": "မှတ်တမ်း",
+  "@loanTrackingFilterHistory": {},
+  "loanTrackingEmptyHistoryTitle": "ပြန်အပ်ပြီး ငှားရမ်းမှု မရှိသေးပါ",
+  "@loanTrackingEmptyHistoryTitle": {},
+  "loanTrackingEmptyHistoryMessage": "ပြန်အပ်ပြီး ပစ္စည်းများကို ဒီနေရာတွင် ပြပါမည်။",
+  "@loanTrackingEmptyHistoryMessage": {},
+  "loanTrackingEmptyActiveTitle": "လက်ရှိ ငှားရမ်းမှု မရှိပါ",
+  "@loanTrackingEmptyActiveTitle": {},
+  "loanTrackingEmptyActiveMessage": "ငှားသွားသော ပစ္စည်းများကို ခြေရာခံရန် ငှားရမ်းမှု အသစ် ဖန်တီးပါ။",
+  "@loanTrackingEmptyActiveMessage": {},
+  "loanTrackingLoadingLoans": "ငှားရမ်းမှုများ တင်နေသည်...",
+  "@loanTrackingLoadingLoans": {},
+  "loanTrackingLoadFailed": "ငှားရမ်းမှုများ တင်မရပါ: {error}",
+  "@loanTrackingLoadFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "loanTrackingMarkReturnedConfirmTitle": "ပြန်အပ်ပြီးဟု မှတ်မလား?",
+  "@loanTrackingMarkReturnedConfirmTitle": {},
+  "loanTrackingMarkReturnedConfirmMessage": "\"{itemTitle}\" ကို ပြန်အပ်ပြီးဟု အတည်ပြုမည်။",
+  "@loanTrackingMarkReturnedConfirmMessage": {
+    "placeholders": {
+      "itemTitle": {
+        "type": "String"
+      }
+    }
+  },
+  "loanTrackingMarkReturnedAction": "ပြန်အပ်ပြီး မှတ်မည်",
+  "@loanTrackingMarkReturnedAction": {},
+  "loanTrackingMarkedReturnedSuccess": "ငှားရမ်းမှုကို ပြန်အပ်ပြီးအဖြစ် မှတ်သားပြီးပါပြီ။",
+  "@loanTrackingMarkedReturnedSuccess": {},
+  "loanTrackingMarkReturnedFailed": "ပြန်အပ်ပြီး မှတ်မရပါ: {error}",
+  "@loanTrackingMarkReturnedFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "loanTrackingDeleteConfirmTitle": "ငှားရမ်းမှု မှတ်တမ်း ဖျက်မလား?",
+  "@loanTrackingDeleteConfirmTitle": {},
+  "loanTrackingDeleteConfirmMessage": "\"{itemTitle}\" အတွက် ငှားရမ်းမှု မှတ်တမ်းကို ဖျက်မည်။",
+  "@loanTrackingDeleteConfirmMessage": {
+    "placeholders": {
+      "itemTitle": {
+        "type": "String"
+      }
+    }
+  },
+  "loanTrackingDeleteSuccess": "ငှားရမ်းမှုကို ဖျက်ပြီးပါပြီ။",
+  "@loanTrackingDeleteSuccess": {},
+  "loanTrackingDeleteFailed": "ငှားရမ်းမှု ဖျက်မရပါ: {error}",
+  "@loanTrackingDeleteFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "loanTrackingSummaryActiveLabel": "လက်ရှိ ငှားရမ်းမှု",
+  "@loanTrackingSummaryActiveLabel": {},
+  "loanTrackingSummaryOverdueLabel": "ကျော်လွန်",
+  "@loanTrackingSummaryOverdueLabel": {},
+  "loanTrackingSummaryLoadFailed": "ငှားရမ်းမှု အနှစ်ချုပ် တင်မရပါ။",
+  "@loanTrackingSummaryLoadFailed": {},
+  "loanTrackingFieldBorrower": "ငှားယူသူ",
+  "@loanTrackingFieldBorrower": {},
+  "loanTrackingFieldContact": "ဆက်သွယ်ရန်",
+  "@loanTrackingFieldContact": {},
+  "loanTrackingFieldLoaned": "ငှားသည့်နေ့",
+  "@loanTrackingFieldLoaned": {},
+  "loanTrackingFieldDue": "ပြန်အပ်ရမည့်နေ့",
+  "@loanTrackingFieldDue": {},
+  "loanTrackingFieldReturned": "ပြန်အပ်သည့်နေ့",
+  "@loanTrackingFieldReturned": {},
+  "loanTrackingStatusReturned": "ပြန်အပ်ပြီး",
+  "@loanTrackingStatusReturned": {},
+  "loanTrackingStatusOverdue": "ကျော်လွန်",
+  "@loanTrackingStatusOverdue": {},
+  "loanTrackingStatusActive": "လက်ရှိ",
+  "@loanTrackingStatusActive": {},
+  "loanTrackingCreateTitle": "ငှားရမ်းမှု ဖန်တီး",
+  "@loanTrackingCreateTitle": {},
+  "loanTrackingCreateDescription": "ဘယ်သူငှားယူသွားသည်နှင့် ဘယ်နေ့ ပြန်အပ်ရမည်ကို မှတ်တမ်းတင်ပါ။",
+  "@loanTrackingCreateDescription": {},
+  "loanTrackingCreateNoItemsTitle": "အသုံးပြုနိုင်သော ပစ္စည်း မရှိပါ",
+  "@loanTrackingCreateNoItemsTitle": {},
+  "loanTrackingCreateNoItemsMessage": "ပစ္စည်းအားလုံး ငှားထားပြီး သို့မဟုတ် ပစ္စည်းမရှိသေးပါ။",
+  "@loanTrackingCreateNoItemsMessage": {},
+  "loanTrackingCreateItemLabel": "ပစ္စည်း",
+  "@loanTrackingCreateItemLabel": {},
+  "loanTrackingCreateBorrowerLabel": "ငှားယူသူ အမည်",
+  "@loanTrackingCreateBorrowerLabel": {},
+  "loanTrackingCreateBorrowerHint": "ဥပမာ - Aung Aung",
+  "@loanTrackingCreateBorrowerHint": {},
+  "loanTrackingCreateContactLabel": "ဆက်သွယ်ရန် (မဖြည့်လည်းရ)",
+  "@loanTrackingCreateContactLabel": {},
+  "loanTrackingCreateContactHint": "ဖုန်း၊ အီးမေးလ် သို့မဟုတ် @username",
+  "@loanTrackingCreateContactHint": {},
+  "loanTrackingCreateNotesLabel": "မှတ်စု (မဖြည့်လည်းရ)",
+  "@loanTrackingCreateNotesLabel": {},
+  "loanTrackingCreateNotesHint": "ဒီငှားရမ်းမှုအတွက် အသေးစိတ်",
+  "@loanTrackingCreateNotesHint": {},
+  "loanTrackingCreateSubmitting": "ဖန်တီးနေသည်...",
+  "@loanTrackingCreateSubmitting": {},
+  "loanTrackingCreateAction": "ငှားရမ်းမှု ဖန်တီး",
+  "@loanTrackingCreateAction": {},
+  "loanTrackingLoadingItems": "ပစ္စည်းများ တင်နေသည်...",
+  "@loanTrackingLoadingItems": {},
+  "loanTrackingLoadItemsFailed": "ပစ္စည်းများ တင်မရပါ: {error}",
+  "@loanTrackingLoadItemsFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "loanTrackingBorrowerRequired": "ငှားယူသူ အမည် မဖြစ်မနေလိုအပ်သည်။",
+  "@loanTrackingBorrowerRequired": {},
+  "loanTrackingCreateSuccess": "ငှားရမ်းမှု အောင်မြင်စွာ ဖန်တီးပြီးပါပြီ။",
+  "@loanTrackingCreateSuccess": {},
+  "loanTrackingCreateFailed": "ငှားရမ်းမှု ဖန်တီးမရပါ: {error}",
+  "@loanTrackingCreateFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "loanTrackingNoDueDate": "ပြန်အပ်ရမည့်နေ့ မသတ်မှတ်ထားပါ",
+  "@loanTrackingNoDueDate": {},
+  "loanTrackingPickDateAction": "ရွေးမည်",
+  "@loanTrackingPickDateAction": {},
+  "loanTrackingClearDateAction": "ရှင်းမည်",
+  "@loanTrackingClearDateAction": {},
+  "loanTrackingDueDateLabel": "ပြန်အပ်ရမည့်နေ့",
+  "@loanTrackingDueDateLabel": {}
 }
