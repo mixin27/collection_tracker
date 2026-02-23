@@ -88,15 +88,13 @@ class SettingsScreen extends ConsumerWidget {
                   subtitle: analyticsSummary,
                   onTap: () => _showAnalyticsSettings(context, ref),
                 ),
-                SettingsTile(
-                  icon: Icons.person_outline_rounded,
-                  title: 'Account',
-                  subtitle: accountSummary,
-                  enabled: accountFeatureEnabled,
-                  onTap: accountFeatureEnabled
-                      ? () => context.push(Routes.auth)
-                      : null,
-                ),
+                if (accountFeatureEnabled)
+                  SettingsTile(
+                    icon: Icons.person_outline_rounded,
+                    title: 'Account',
+                    subtitle: accountSummary,
+                    onTap: () => context.push(Routes.auth),
+                  ),
                 SettingsTile(
                   icon: Icons.notifications_outlined,
                   title: 'Push Notifications',
@@ -496,7 +494,9 @@ class SettingsScreen extends ConsumerWidget {
         ? 'Prepared ${bootstrapResult.totalOperations} local change(s). '
         : '';
     final recoveryHint = bootstrapResult.skipped && !result.executed
-        ? ' If existing local data is missing on cloud, open Developer Tools and use "Rebuild local sync queue".'
+        ? kDebugMode
+              ? ' If existing local data is missing on cloud, open Developer Tools and use "Rebuild local sync queue".'
+              : ''
         : '';
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(

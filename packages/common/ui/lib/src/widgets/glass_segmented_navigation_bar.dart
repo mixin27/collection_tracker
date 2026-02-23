@@ -40,7 +40,7 @@ class GlassSegmentedNavigationBar extends StatelessWidget {
     final textScale = MediaQuery.textScalerOf(context).scale(1.0);
     final effectiveHeight =
         (height ?? tokens.navBarHeight) +
-        (textScale > 1 ? (textScale - 1) * 18 : 0);
+        (textScale > 1 ? (textScale - 1) * 24 : 0);
 
     return SafeArea(
       top: false,
@@ -120,7 +120,9 @@ class _GlassNavItem extends StatelessWidget {
           scale: selected ? 1 : 0.97,
           child: LayoutBuilder(
             builder: (context, constraints) {
-              final isTight = constraints.maxHeight < 52;
+              final isTight =
+                  constraints.maxHeight < 52 || constraints.maxWidth < 76;
+              final showLabel = !isTight || textScale <= 1.02;
               return Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -139,26 +141,28 @@ class _GlassNavItem extends StatelessWidget {
                           : theme.colorScheme.onSurfaceVariant,
                     ),
                   ),
-                  SizedBox(height: isTight ? 2 : 3),
-                  Flexible(
-                    child: Text(
-                      destination.label,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      textAlign: TextAlign.center,
-                      textScaler: TextScaler.linear(maxTextScale),
-                      style: theme.textTheme.labelSmall?.copyWith(
-                        fontSize: labelSize,
-                        height: 1.0,
-                        fontWeight: selected
-                            ? FontWeight.w700
-                            : FontWeight.w500,
-                        color: selected
-                            ? theme.colorScheme.primary
-                            : theme.colorScheme.onSurfaceVariant,
+                  if (showLabel) ...[
+                    SizedBox(height: isTight ? 2 : 3),
+                    Flexible(
+                      child: Text(
+                        destination.label,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.center,
+                        textScaler: TextScaler.linear(maxTextScale),
+                        style: theme.textTheme.labelSmall?.copyWith(
+                          fontSize: labelSize,
+                          height: 1.0,
+                          fontWeight: selected
+                              ? FontWeight.w700
+                              : FontWeight.w500,
+                          color: selected
+                              ? theme.colorScheme.primary
+                              : theme.colorScheme.onSurfaceVariant,
+                        ),
                       ),
                     ),
-                  ),
+                  ],
                 ],
               );
             },

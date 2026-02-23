@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:collection_tracker/l10n/l10n.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -334,7 +335,9 @@ class _AddItemScreenState extends ConsumerState<AddItemScreen> {
         },
       );
     } catch (e) {
-      debugPrint('Metadata fetch error: $e');
+      if (kDebugMode) {
+        debugPrint('Metadata fetch error: $e');
+      }
     } finally {
       if (mounted) {
         setState(() {

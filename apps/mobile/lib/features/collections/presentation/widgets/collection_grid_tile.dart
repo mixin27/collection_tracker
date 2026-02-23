@@ -36,6 +36,8 @@ class CollectionGridTile extends StatelessWidget {
           final hasDescription =
               collection.description != null &&
               collection.description!.trim().isNotEmpty;
+          final showDescription =
+              hasDescription && (!compact || constraints.maxHeight >= 232);
           final iconSize = compact ? 36.0 : 40.0;
 
           return ClipRRect(
@@ -125,15 +127,16 @@ class CollectionGridTile extends StatelessWidget {
                           icon: Icons.category_outlined,
                           label: collectionTypeLabel(context, collection.type),
                         ),
-                        if (hasDescription) ...[
-                          if (!compact) const Spacer(),
+                        if (showDescription) ...[
                           const SizedBox(height: AppSpacing.xs),
-                          Text(
-                            collection.description!,
-                            maxLines: compact ? 1 : 2,
-                            overflow: TextOverflow.ellipsis,
-                            style: theme.textTheme.bodySmall?.copyWith(
-                              color: theme.colorScheme.onSurfaceVariant,
+                          Flexible(
+                            child: Text(
+                              collection.description!,
+                              maxLines: compact ? 1 : 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: theme.textTheme.bodySmall?.copyWith(
+                                color: theme.colorScheme.onSurfaceVariant,
+                              ),
                             ),
                           ),
                         ],

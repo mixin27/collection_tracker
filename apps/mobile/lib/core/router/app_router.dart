@@ -1,5 +1,6 @@
 import 'package:collection_tracker/core/providers/providers.dart';
 import 'package:collection_tracker/core/analytics/analytics_consent_gate.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -34,12 +35,26 @@ final _rootNavigatorKey = GlobalKey<NavigatorState>();
 @riverpod
 GoRouter appRouter(Ref ref) {
   final onboardingComplete = ref.watch(onboardingCompleteProvider);
+  final authFeatureEnabled = ref.watch(backendAuthFeatureFlagProvider);
   Widget withAnalyticsConsent(Widget child) =>
       AnalyticsConsentGate(child: child);
 
   return GoRouter(
     navigatorKey: _rootNavigatorKey,
     observers: [AnalyticsObserver()],
+    redirect: (context, state) {
+      final path = state.uri.path;
+
+      if (path == Routes.auth && !authFeatureEnabled) {
+        return Routes.settings;
+      }
+
+      if (!kDebugMode && path == Routes.settingsDevtools) {
+        return Routes.settings;
+      }
+
+      return null;
+    },
     initialLocation: onboardingComplete
         ? Routes.collections
         : Routes.onboarding,
@@ -170,12 +185,13 @@ GoRouter appRouter(Ref ref) {
                     parentNavigatorKey: _rootNavigatorKey,
                     builder: (_, _) => const LoanTrackingScreen(),
                   ),
-                  GoRoute(
-                    path: 'devtools',
-                    name: 'settings-devtools',
-                    parentNavigatorKey: _rootNavigatorKey,
-                    builder: (_, _) => const SettingsDevToolsScreen(),
-                  ),
+                  if (kDebugMode)
+                    GoRoute(
+                      path: 'devtools',
+                      name: 'settings-devtools',
+                      parentNavigatorKey: _rootNavigatorKey,
+                      builder: (_, _) => const SettingsDevToolsScreen(),
+                    ),
                 ],
               ),
             ],

@@ -9,25 +9,26 @@ part 'metadata_providers.g.dart';
 
 @riverpod
 Dio metadataDio(Ref ref) {
-  return Dio(
-      BaseOptions(
-        connectTimeout: const Duration(seconds: 10),
-        receiveTimeout: const Duration(seconds: 10),
-        headers: {'Accept': 'application/json'},
-      ),
-    )
-    ..interceptors.addAll([
+  final dio = Dio(
+    BaseOptions(
+      connectTimeout: const Duration(seconds: 10),
+      receiveTimeout: const Duration(seconds: 10),
+      headers: {'Accept': 'application/json'},
+    ),
+  );
+
+  if (kDebugMode) {
+    dio.interceptors.add(
       LogInterceptor(
         requestBody: true,
         responseBody: true,
         error: true,
-        logPrint: (obj) {
-          // Use your logging package here
-          // logger.debug(obj.toString());
-          debugPrint(obj.toString());
-        },
+        logPrint: (obj) => debugPrint(obj.toString()),
       ),
-    ]);
+    );
+  }
+
+  return dio;
 }
 
 @riverpod
@@ -79,7 +80,9 @@ Future<String?> igdbAccessToken(Ref ref) async {
 
   return result.fold(
     (exception) {
-      debugPrint('IGDB Auth Error: $exception');
+      if (kDebugMode) {
+        debugPrint('IGDB Auth Error: $exception');
+      }
       return null;
     },
     (token) async {
