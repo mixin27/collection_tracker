@@ -242,7 +242,7 @@
   },
   "settingsImportDataTitle": "Importar datos",
   "@settingsImportDataTitle": {},
-  "settingsImportDataMessage": "Esto importará colecciones y artículos desde un archivo JSON. Los datos existentes no se eliminarán.\\n\\n¿Continuar?",
+  "settingsImportDataMessage": "Esto importará colecciones y artículos desde un archivo JSON. Los datos existentes no se eliminarán.\n\n¿Continuar?",
   "@settingsImportDataMessage": {},
   "settingsImportingData": "Importando datos...",
   "@settingsImportingData": {},
@@ -799,7 +799,7 @@
   },
   "tagManagementDeleteSelectedTitle": "Eliminar etiquetas seleccionadas",
   "@tagManagementDeleteSelectedTitle": {},
-  "tagManagementDeleteSelectedMessage": "¿Eliminar {count} etiquetas seleccionadas de todos los artículos?\\n\\nEsto no se puede deshacer.",
+  "tagManagementDeleteSelectedMessage": "¿Eliminar {count} etiquetas seleccionadas de todos los artículos?\n\nEsto no se puede deshacer.",
   "@tagManagementDeleteSelectedMessage": {
     "placeholders": {
       "count": {
@@ -830,7 +830,7 @@
   },
   "tagManagementDeleteTitle": "Eliminar etiqueta",
   "@tagManagementDeleteTitle": {},
-  "tagManagementDeleteMessage": "¿Eliminar \"{tagName}\" de todos los artículos?\\n\\nEsto no se puede deshacer.",
+  "tagManagementDeleteMessage": "¿Eliminar \"{tagName}\" de todos los artículos?\n\nEsto no se puede deshacer.",
   "@tagManagementDeleteMessage": {
     "placeholders": {
       "tagName": {

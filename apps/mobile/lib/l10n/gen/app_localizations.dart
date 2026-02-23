@@ -764,7 +764,7 @@ abstract class AppLocalizations {
   /// No description provided for @settingsImportDataMessage.
   ///
   /// In en, this message translates to:
-  /// **'This will import collections and items from a JSON file. Existing data will not be deleted.\\n\\nContinue?'**
+  /// **'This will import collections and items from a JSON file. Existing data will not be deleted.\n\nContinue?'**
   String get settingsImportDataMessage;
 
   /// No description provided for @settingsImportingData.
@@ -1832,7 +1832,7 @@ abstract class AppLocalizations {
   /// No description provided for @tagManagementDeleteSelectedMessage.
   ///
   /// In en, this message translates to:
-  /// **'Delete {count} selected tags from all items?\\n\\nThis cannot be undone.'**
+  /// **'Delete {count} selected tags from all items?\n\nThis cannot be undone.'**
   String tagManagementDeleteSelectedMessage(int count);
 
   /// No description provided for @tagManagementDeleteSelectedSuccess.
@@ -1862,7 +1862,7 @@ abstract class AppLocalizations {
   /// No description provided for @tagManagementDeleteMessage.
   ///
   /// In en, this message translates to:
-  /// **'Delete \"{tagName}\" from all items?\\n\\nThis cannot be undone.'**
+  /// **'Delete \"{tagName}\" from all items?\n\nThis cannot be undone.'**
   String tagManagementDeleteMessage(String tagName);
 
   /// No description provided for @tagManagementDeleteSuccess.

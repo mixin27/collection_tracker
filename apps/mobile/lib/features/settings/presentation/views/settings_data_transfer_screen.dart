@@ -200,33 +200,26 @@ class _SettingsDataTransferScreenState
       return;
     }
 
-    final confirmed = await showAppDialog<bool>(
-      context: context,
-      title: Text(l10n.settingsImportDataTitle),
-      content: Text(l10n.settingsImportDataMessage),
-      actions: [
-        AppButton(
-          label: l10n.actionCancel,
-          variant: AppButtonVariant.ghost,
-          onPressed: () => closeAppDialog(context, false),
-        ),
-        AppButton(
-          label: l10n.actionImport,
-          onPressed: () => closeAppDialog(context, true),
-        ),
-      ],
-    );
-
-    if (confirmed != true || !mounted) {
-      return;
-    }
-
     setState(() => _isBusy = true);
     try {
+      final preview = await ref
+          .read(exportImportViewModelProvider.notifier)
+          .prepareJsonImportPreview();
+      if (!mounted) {
+        return;
+      }
+
+      final confirmed = await _showImportPreviewDialog(preview);
+      if (confirmed != true || !mounted) {
+        return;
+      }
+
       messenger.showSnackBar(
         SnackBar(content: Text(l10n.settingsImportingData)),
       );
-      await ref.read(exportImportViewModelProvider.notifier).importFromJson();
+      await ref
+          .read(exportImportViewModelProvider.notifier)
+          .importFromJsonPayload(preview.payload);
       if (!mounted) {
         return;
       }
@@ -253,5 +246,123 @@ class _SettingsDataTransferScreenState
         setState(() => _isBusy = false);
       }
     }
+  }
+
+  Future<bool?> _showImportPreviewDialog(JsonImportPreview preview) {
+    final l10n = context.l10n;
+    final colorScheme = Theme.of(context).colorScheme;
+    final warningText = preview.warnings.join('\n');
+
+    return showAppDialog<bool>(
+      context: context,
+      title: Text(l10n.settingsImportDataTitle),
+      content: ConstrainedBox(
+        constraints: const BoxConstraints(maxHeight: 420),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                l10n.settingsImportDataMessage,
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: colorScheme.onSurfaceVariant,
+                ),
+              ),
+              const SizedBox(height: AppSpacing.md),
+              _PreviewRow(label: 'File', value: preview.fileName),
+              if (preview.version != null)
+                _PreviewRow(label: 'Version', value: preview.version!),
+              if (preview.schema != null)
+                _PreviewRow(label: 'Schema', value: preview.schema!),
+              const SizedBox(height: AppSpacing.sm),
+              _PreviewRow(
+                label: 'Collections',
+                value: preview.collectionCount.toString(),
+              ),
+              _PreviewRow(label: 'Items', value: preview.itemCount.toString()),
+              _PreviewRow(label: 'Tags', value: preview.tagCount.toString()),
+              _PreviewRow(
+                label: 'Item-Tag Links',
+                value: preview.itemTagCount.toString(),
+              ),
+              _PreviewRow(
+                label: 'Price History',
+                value: preview.priceHistoryCount.toString(),
+              ),
+              _PreviewRow(label: 'Loans', value: preview.loanCount.toString()),
+              if (warningText.isNotEmpty) ...[
+                const SizedBox(height: AppSpacing.md),
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(AppSpacing.sm),
+                  decoration: BoxDecoration(
+                    color: colorScheme.errorContainer.withValues(alpha: 0.85),
+                    borderRadius: BorderRadius.circular(AppRadii.sm),
+                    border: Border.all(
+                      color: colorScheme.error.withValues(alpha: 0.35),
+                    ),
+                  ),
+                  child: Text(
+                    warningText,
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: colorScheme.onErrorContainer,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              ],
+            ],
+          ),
+        ),
+      ),
+      actions: [
+        AppButton(
+          label: l10n.actionCancel,
+          variant: AppButtonVariant.ghost,
+          onPressed: () => closeAppDialog(context, false),
+        ),
+        AppButton(
+          label: l10n.actionImport,
+          onPressed: () => closeAppDialog(context, true),
+        ),
+      ],
+    );
+  }
+}
+
+class _PreviewRow extends StatelessWidget {
+  const _PreviewRow({required this.label, required this.value});
+
+  final String label;
+  final String value;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: AppSpacing.xs),
+      child: Row(
+        children: [
+          Expanded(
+            child: Text(
+              label,
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+          const SizedBox(width: AppSpacing.sm),
+          Flexible(
+            child: Text(
+              value,
+              textAlign: TextAlign.end,
+              style: Theme.of(
+                context,
+              ).textTheme.bodySmall?.copyWith(fontWeight: FontWeight.w700),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

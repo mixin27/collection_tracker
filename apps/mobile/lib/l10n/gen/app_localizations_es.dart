@@ -347,7 +347,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get settingsImportDataTitle => 'Importar datos';
 
   @override
-  String get settingsImportDataMessage => 'Esto importará colecciones y artículos desde un archivo JSON. Los datos existentes no se eliminarán.\\n\\n¿Continuar?';
+  String get settingsImportDataMessage => 'Esto importará colecciones y artículos desde un archivo JSON. Los datos existentes no se eliminarán.\n\n¿Continuar?';
 
   @override
   String get settingsImportingData => 'Importando datos...';
@@ -946,7 +946,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String tagManagementDeleteSelectedMessage(int count) {
-    return '¿Eliminar $count etiquetas seleccionadas de todos los artículos?\\n\\nEsto no se puede deshacer.';
+    return '¿Eliminar $count etiquetas seleccionadas de todos los artículos?\n\nEsto no se puede deshacer.';
   }
 
   @override
@@ -967,7 +967,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String tagManagementDeleteMessage(String tagName) {
-    return '¿Eliminar \"$tagName\" de todos los artículos?\\n\\nEsto no se puede deshacer.';
+    return '¿Eliminar \"$tagName\" de todos los artículos?\n\nEsto no se puede deshacer.';
   }
 
   @override

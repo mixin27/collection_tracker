@@ -347,7 +347,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get settingsImportDataTitle => 'Impor Data';
 
   @override
-  String get settingsImportDataMessage => 'Ini akan mengimpor koleksi dan item dari file JSON. Data yang sudah ada tidak akan dihapus.\\n\\nLanjutkan?';
+  String get settingsImportDataMessage => 'Ini akan mengimpor koleksi dan item dari file JSON. Data yang sudah ada tidak akan dihapus.\n\nLanjutkan?';
 
   @override
   String get settingsImportingData => 'Mengimpor data...';
@@ -946,7 +946,7 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String tagManagementDeleteSelectedMessage(int count) {
-    return 'Hapus $count tag terpilih dari semua item?\\n\\nTindakan ini tidak dapat dibatalkan.';
+    return 'Hapus $count tag terpilih dari semua item?\n\nTindakan ini tidak dapat dibatalkan.';
   }
 
   @override
@@ -967,7 +967,7 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String tagManagementDeleteMessage(String tagName) {
-    return 'Hapus \"$tagName\" dari semua item?\\n\\nTindakan ini tidak dapat dibatalkan.';
+    return 'Hapus \"$tagName\" dari semua item?\n\nTindakan ini tidak dapat dibatalkan.';
   }
 
   @override

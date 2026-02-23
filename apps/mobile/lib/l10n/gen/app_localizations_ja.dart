@@ -347,7 +347,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get settingsImportDataTitle => 'データをインポート';
 
   @override
-  String get settingsImportDataMessage => 'JSONファイルからコレクションとアイテムをインポートします。既存データは削除されません。\\n\\n続行しますか？';
+  String get settingsImportDataMessage => 'JSONファイルからコレクションとアイテムをインポートします。既存データは削除されません。\n\n続行しますか？';
 
   @override
   String get settingsImportingData => 'データをインポート中...';
@@ -946,7 +946,7 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String tagManagementDeleteSelectedMessage(int count) {
-    return 'すべてのアイテムから選択した $count 件のタグを削除しますか？\\n\\nこの操作は元に戻せません。';
+    return 'すべてのアイテムから選択した $count 件のタグを削除しますか？\n\nこの操作は元に戻せません。';
   }
 
   @override
@@ -967,7 +967,7 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String tagManagementDeleteMessage(String tagName) {
-    return 'すべてのアイテムから \"$tagName\" を削除しますか？\\n\\nこの操作は元に戻せません。';
+    return 'すべてのアイテムから \"$tagName\" を削除しますか？\n\nこの操作は元に戻せません。';
   }
 
   @override

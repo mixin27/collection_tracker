@@ -9,6 +9,34 @@ import 'package:storage/storage.dart';
 
 part 'export_import_view_model.g.dart';
 
+class JsonImportPreview {
+  const JsonImportPreview({
+    required this.fileName,
+    required this.version,
+    required this.schema,
+    required this.collectionCount,
+    required this.itemCount,
+    required this.tagCount,
+    required this.itemTagCount,
+    required this.priceHistoryCount,
+    required this.loanCount,
+    required this.warnings,
+    required this.payload,
+  });
+
+  final String fileName;
+  final String? version;
+  final String? schema;
+  final int collectionCount;
+  final int itemCount;
+  final int tagCount;
+  final int itemTagCount;
+  final int priceHistoryCount;
+  final int loanCount;
+  final List<String> warnings;
+  final Map<String, dynamic> payload;
+}
+
 @riverpod
 class ExportImportViewModel extends _$ExportImportViewModel {
   @override
@@ -267,20 +295,66 @@ class ExportImportViewModel extends _$ExportImportViewModel {
     return result.value!;
   }
 
+  Future<JsonImportPreview> prepareJsonImportPreview() async {
+    final exportService = ExportImportService();
+    final picked = await exportService.pickJsonImportFile();
+    final payload = picked.data;
+
+    final warnings = <String>[];
+    final version = _nullableString(payload['version']);
+    final schema = _nullableString(payload['schema']);
+
+    if (schema != null && schema != 'collection_tracker_backup') {
+      warnings.add('Backup schema "$schema" is not recognized.');
+    }
+
+    final collectionCount = _countListSection(payload, 'collections', warnings);
+    final itemCount = _countListSection(payload, 'items', warnings);
+    final tagCount = _countListSection(payload, 'tags', warnings);
+    final itemTagCount = _countListSection(payload, 'itemTags', warnings);
+    final priceHistoryCount = _countListSection(
+      payload,
+      'priceHistory',
+      warnings,
+    );
+    final loanCount = _countListSection(payload, 'loans', warnings);
+
+    if (collectionCount == 0 && itemCount == 0) {
+      warnings.add('No collections or items found in this backup.');
+    }
+
+    return JsonImportPreview(
+      fileName: picked.fileName,
+      version: version,
+      schema: schema,
+      collectionCount: collectionCount,
+      itemCount: itemCount,
+      tagCount: tagCount,
+      itemTagCount: itemTagCount,
+      priceHistoryCount: priceHistoryCount,
+      loanCount: loanCount,
+      warnings: warnings,
+      payload: payload,
+    );
+  }
+
   Future<void> importFromJson() async {
+    final exportService = ExportImportService();
+    final picked = await exportService.pickJsonImportFile();
+    await importFromJsonPayload(picked.data);
+  }
+
+  Future<void> importFromJsonPayload(Map<String, dynamic> data) async {
     state = const AsyncValue.loading();
     final performanceService = FirebasePerformanceService.instance;
     final stopwatch = Stopwatch()..start();
     final db = ref.read(appDatabaseProvider);
-    final exportService = ExportImportService();
     var collectionCount = 0;
     var itemCount = 0;
 
     final result = await AsyncValue.guard(
       () =>
           performanceService.traceAsync('settings_import_data_json', () async {
-            final data = await exportService.importFromJson();
-
             final collections = _readMapList(data, 'collections');
             final items = _readMapList(data, 'items');
             final tags = _readMapList(data, 'tags');
@@ -576,6 +650,22 @@ class ExportImportViewModel extends _$ExportImportViewModel {
         CollectionsCompanion(itemCount: Value(count), updatedAt: Value(now)),
       );
     }
+  }
+
+  int _countListSection(
+    Map<String, dynamic> source,
+    String key,
+    List<String> warnings,
+  ) {
+    final value = source[key];
+    if (value == null) {
+      return 0;
+    }
+    if (value is! List) {
+      warnings.add('Section "$key" has invalid format and will be skipped.');
+      return 0;
+    }
+    return value.length;
   }
 
   List<Map<String, dynamic>> _readMapList(

@@ -5,6 +5,13 @@ import 'package:file_picker/file_picker.dart' as fp;
 import 'package:share_plus/share_plus.dart';
 import 'package:storage/src/exceptions/storage_exception.dart';
 
+class PickedJsonImport {
+  const PickedJsonImport({required this.fileName, required this.data});
+
+  final String fileName;
+  final Map<String, dynamic> data;
+}
+
 class ExportImportService {
   Future<String> exportToJson(Map<String, dynamic> data) async {
     final jsonString = const JsonEncoder.withIndent('  ').convert(data);
@@ -102,7 +109,7 @@ class ExportImportService {
     }
   }
 
-  Future<Map<String, dynamic>> importFromJson() async {
+  Future<PickedJsonImport> pickJsonImportFile() async {
     try {
       final result = await fp.FilePicker.platform.pickFiles(
         type: fp.FileType.custom,
@@ -133,7 +140,10 @@ class ExportImportService {
       if (decoded is! Map<String, dynamic>) {
         throw StorageException('Invalid JSON format: expected an object root.');
       }
-      return decoded;
+      final fileName = selected.name.trim().isEmpty
+          ? 'backup.json'
+          : selected.name;
+      return PickedJsonImport(fileName: fileName, data: decoded);
     } on UserCancelledStorageOperationException {
       rethrow;
     } catch (error) {
@@ -142,6 +152,11 @@ class ExportImportService {
         originalError: error,
       );
     }
+  }
+
+  Future<Map<String, dynamic>> importFromJson() async {
+    final picked = await pickJsonImportFile();
+    return picked.data;
   }
 
   Future<List<Map<String, dynamic>>> importFromCsv() async {

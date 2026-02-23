@@ -242,7 +242,7 @@
   },
   "settingsImportDataTitle": "データをインポート",
   "@settingsImportDataTitle": {},
-  "settingsImportDataMessage": "JSONファイルからコレクションとアイテムをインポートします。既存データは削除されません。\\n\\n続行しますか？",
+  "settingsImportDataMessage": "JSONファイルからコレクションとアイテムをインポートします。既存データは削除されません。\n\n続行しますか？",
   "@settingsImportDataMessage": {},
   "settingsImportingData": "データをインポート中...",
   "@settingsImportingData": {},
@@ -799,7 +799,7 @@
   },
   "tagManagementDeleteSelectedTitle": "選択したタグを削除",
   "@tagManagementDeleteSelectedTitle": {},
-  "tagManagementDeleteSelectedMessage": "すべてのアイテムから選択した {count} 件のタグを削除しますか？\\n\\nこの操作は元に戻せません。",
+  "tagManagementDeleteSelectedMessage": "すべてのアイテムから選択した {count} 件のタグを削除しますか？\n\nこの操作は元に戻せません。",
   "@tagManagementDeleteSelectedMessage": {
     "placeholders": {
       "count": {
@@ -830,7 +830,7 @@
   },
   "tagManagementDeleteTitle": "タグを削除",
   "@tagManagementDeleteTitle": {},
-  "tagManagementDeleteMessage": "すべてのアイテムから \"{tagName}\" を削除しますか？\\n\\nこの操作は元に戻せません。",
+  "tagManagementDeleteMessage": "すべてのアイテムから \"{tagName}\" を削除しますか？\n\nこの操作は元に戻せません。",
   "@tagManagementDeleteMessage": {
     "placeholders": {
       "tagName": {

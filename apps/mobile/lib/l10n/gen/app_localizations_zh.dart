@@ -347,7 +347,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get settingsImportDataTitle => '导入数据';
 
   @override
-  String get settingsImportDataMessage => '这将从 JSON 文件导入集合和条目。现有数据不会被删除。\\n\\n是否继续？';
+  String get settingsImportDataMessage => '这将从 JSON 文件导入集合和条目。现有数据不会被删除。\n\n是否继续？';
 
   @override
   String get settingsImportingData => '正在导入数据...';
@@ -946,7 +946,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String tagManagementDeleteSelectedMessage(int count) {
-    return '要从所有条目中删除所选的 $count 个标签吗？\\n\\n此操作无法撤销。';
+    return '要从所有条目中删除所选的 $count 个标签吗？\n\n此操作无法撤销。';
   }
 
   @override
@@ -967,7 +967,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String tagManagementDeleteMessage(String tagName) {
-    return '要从所有条目中删除“$tagName”吗？\\n\\n此操作无法撤销。';
+    return '要从所有条目中删除“$tagName”吗？\n\n此操作无法撤销。';
   }
 
   @override

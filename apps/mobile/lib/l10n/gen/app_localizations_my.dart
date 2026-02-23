@@ -347,7 +347,7 @@ class AppLocalizationsMy extends AppLocalizations {
   String get settingsImportDataTitle => 'ဒေတာ ထည့်သွင်းရန်';
 
   @override
-  String get settingsImportDataMessage => 'ဤလုပ်ဆောင်မှုသည် JSON ဖိုင်မှ collection များနှင့် item များကို ထည့်သွင်းမည်ဖြစ်သည်။ ရှိပြီးသားဒေတာ မဖျက်ပါ။\\n\\nဆက်လုပ်မလား?';
+  String get settingsImportDataMessage => 'ဤလုပ်ဆောင်မှုသည် JSON ဖိုင်မှ collection များနှင့် item များကို ထည့်သွင်းမည်ဖြစ်သည်။ ရှိပြီးသားဒေတာ မဖျက်ပါ။\n\nဆက်လုပ်မလား?';
 
   @override
   String get settingsImportingData => 'ဒေတာ ထည့်သွင်းနေသည်...';
@@ -946,7 +946,7 @@ class AppLocalizationsMy extends AppLocalizations {
 
   @override
   String tagManagementDeleteSelectedMessage(int count) {
-    return 'Delete $count selected tags from all items?\\n\\nThis cannot be undone.';
+    return 'Delete $count selected tags from all items?\n\nThis cannot be undone.';
   }
 
   @override
@@ -967,7 +967,7 @@ class AppLocalizationsMy extends AppLocalizations {
 
   @override
   String tagManagementDeleteMessage(String tagName) {
-    return 'Delete \"$tagName\" from all items?\\n\\nThis cannot be undone.';
+    return 'Delete \"$tagName\" from all items?\n\nThis cannot be undone.';
   }
 
   @override

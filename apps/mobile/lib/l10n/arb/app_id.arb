@@ -242,7 +242,7 @@
   },
   "settingsImportDataTitle": "Impor Data",
   "@settingsImportDataTitle": {},
-  "settingsImportDataMessage": "Ini akan mengimpor koleksi dan item dari file JSON. Data yang sudah ada tidak akan dihapus.\\n\\nLanjutkan?",
+  "settingsImportDataMessage": "Ini akan mengimpor koleksi dan item dari file JSON. Data yang sudah ada tidak akan dihapus.\n\nLanjutkan?",
   "@settingsImportDataMessage": {},
   "settingsImportingData": "Mengimpor data...",
   "@settingsImportingData": {},
@@ -799,7 +799,7 @@
   },
   "tagManagementDeleteSelectedTitle": "Hapus Tag Terpilih",
   "@tagManagementDeleteSelectedTitle": {},
-  "tagManagementDeleteSelectedMessage": "Hapus {count} tag terpilih dari semua item?\\n\\nTindakan ini tidak dapat dibatalkan.",
+  "tagManagementDeleteSelectedMessage": "Hapus {count} tag terpilih dari semua item?\n\nTindakan ini tidak dapat dibatalkan.",
   "@tagManagementDeleteSelectedMessage": {
     "placeholders": {
       "count": {
@@ -830,7 +830,7 @@
   },
   "tagManagementDeleteTitle": "Hapus Tag",
   "@tagManagementDeleteTitle": {},
-  "tagManagementDeleteMessage": "Hapus \"{tagName}\" dari semua item?\\n\\nTindakan ini tidak dapat dibatalkan.",
+  "tagManagementDeleteMessage": "Hapus \"{tagName}\" dari semua item?\n\nTindakan ini tidak dapat dibatalkan.",
   "@tagManagementDeleteMessage": {
     "placeholders": {
       "tagName": {

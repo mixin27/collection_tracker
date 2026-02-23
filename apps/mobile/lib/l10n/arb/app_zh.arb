@@ -242,7 +242,7 @@
   },
   "settingsImportDataTitle": "导入数据",
   "@settingsImportDataTitle": {},
-  "settingsImportDataMessage": "这将从 JSON 文件导入集合和条目。现有数据不会被删除。\\n\\n是否继续？",
+  "settingsImportDataMessage": "这将从 JSON 文件导入集合和条目。现有数据不会被删除。\n\n是否继续？",
   "@settingsImportDataMessage": {},
   "settingsImportingData": "正在导入数据...",
   "@settingsImportingData": {},
@@ -799,7 +799,7 @@
   },
   "tagManagementDeleteSelectedTitle": "删除所选标签",
   "@tagManagementDeleteSelectedTitle": {},
-  "tagManagementDeleteSelectedMessage": "要从所有条目中删除所选的 {count} 个标签吗？\\n\\n此操作无法撤销。",
+  "tagManagementDeleteSelectedMessage": "要从所有条目中删除所选的 {count} 个标签吗？\n\n此操作无法撤销。",
   "@tagManagementDeleteSelectedMessage": {
     "placeholders": {
       "count": {
@@ -830,7 +830,7 @@
   },
   "tagManagementDeleteTitle": "删除标签",
   "@tagManagementDeleteTitle": {},
-  "tagManagementDeleteMessage": "要从所有条目中删除“{tagName}”吗？\\n\\n此操作无法撤销。",
+  "tagManagementDeleteMessage": "要从所有条目中删除“{tagName}”吗？\n\n此操作无法撤销。",
   "@tagManagementDeleteMessage": {
     "placeholders": {
       "tagName": {

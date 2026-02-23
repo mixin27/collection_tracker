@@ -242,7 +242,7 @@
   },
   "settingsImportDataTitle": "데이터 가져오기",
   "@settingsImportDataTitle": {},
-  "settingsImportDataMessage": "JSON 파일에서 컬렉션과 항목을 가져옵니다. 기존 데이터는 삭제되지 않습니다.\\n\\n계속할까요?",
+  "settingsImportDataMessage": "JSON 파일에서 컬렉션과 항목을 가져옵니다. 기존 데이터는 삭제되지 않습니다.\n\n계속할까요?",
   "@settingsImportDataMessage": {},
   "settingsImportingData": "데이터 가져오는 중...",
   "@settingsImportingData": {},
@@ -799,7 +799,7 @@
   },
   "tagManagementDeleteSelectedTitle": "선택한 태그 삭제",
   "@tagManagementDeleteSelectedTitle": {},
-  "tagManagementDeleteSelectedMessage": "모든 항목에서 선택한 태그 {count}개를 삭제할까요?\\n\\n이 작업은 되돌릴 수 없습니다.",
+  "tagManagementDeleteSelectedMessage": "모든 항목에서 선택한 태그 {count}개를 삭제할까요?\n\n이 작업은 되돌릴 수 없습니다.",
   "@tagManagementDeleteSelectedMessage": {
     "placeholders": {
       "count": {
@@ -830,7 +830,7 @@
   },
   "tagManagementDeleteTitle": "태그 삭제",
   "@tagManagementDeleteTitle": {},
-  "tagManagementDeleteMessage": "모든 항목에서 \"{tagName}\"을(를) 삭제할까요?\\n\\n이 작업은 되돌릴 수 없습니다.",
+  "tagManagementDeleteMessage": "모든 항목에서 \"{tagName}\"을(를) 삭제할까요?\n\n이 작업은 되돌릴 수 없습니다.",
   "@tagManagementDeleteMessage": {
     "placeholders": {
       "tagName": {

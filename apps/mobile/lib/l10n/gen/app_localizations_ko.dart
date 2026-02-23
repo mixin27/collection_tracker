@@ -347,7 +347,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get settingsImportDataTitle => '데이터 가져오기';
 
   @override
-  String get settingsImportDataMessage => 'JSON 파일에서 컬렉션과 항목을 가져옵니다. 기존 데이터는 삭제되지 않습니다.\\n\\n계속할까요?';
+  String get settingsImportDataMessage => 'JSON 파일에서 컬렉션과 항목을 가져옵니다. 기존 데이터는 삭제되지 않습니다.\n\n계속할까요?';
 
   @override
   String get settingsImportingData => '데이터 가져오는 중...';
@@ -946,7 +946,7 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String tagManagementDeleteSelectedMessage(int count) {
-    return '모든 항목에서 선택한 태그 $count개를 삭제할까요?\\n\\n이 작업은 되돌릴 수 없습니다.';
+    return '모든 항목에서 선택한 태그 $count개를 삭제할까요?\n\n이 작업은 되돌릴 수 없습니다.';
   }
 
   @override
@@ -967,7 +967,7 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String tagManagementDeleteMessage(String tagName) {
-    return '모든 항목에서 \"$tagName\"을(를) 삭제할까요?\\n\\n이 작업은 되돌릴 수 없습니다.';
+    return '모든 항목에서 \"$tagName\"을(를) 삭제할까요?\n\n이 작업은 되돌릴 수 없습니다.';
   }
 
   @override

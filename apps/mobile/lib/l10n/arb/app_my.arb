@@ -242,7 +242,7 @@
   },
   "settingsImportDataTitle": "ဒေတာ ထည့်သွင်းရန်",
   "@settingsImportDataTitle": {},
-  "settingsImportDataMessage": "ဤလုပ်ဆောင်မှုသည် JSON ဖိုင်မှ collection များနှင့် item များကို ထည့်သွင်းမည်ဖြစ်သည်။ ရှိပြီးသားဒေတာ မဖျက်ပါ။\\n\\nဆက်လုပ်မလား?",
+  "settingsImportDataMessage": "ဤလုပ်ဆောင်မှုသည် JSON ဖိုင်မှ collection များနှင့် item များကို ထည့်သွင်းမည်ဖြစ်သည်။ ရှိပြီးသားဒေတာ မဖျက်ပါ။\n\nဆက်လုပ်မလား?",
   "@settingsImportDataMessage": {},
   "settingsImportingData": "ဒေတာ ထည့်သွင်းနေသည်...",
   "@settingsImportingData": {},
@@ -799,7 +799,7 @@
   },
   "tagManagementDeleteSelectedTitle": "Delete Selected Tags",
   "@tagManagementDeleteSelectedTitle": {},
-  "tagManagementDeleteSelectedMessage": "Delete {count} selected tags from all items?\\n\\nThis cannot be undone.",
+  "tagManagementDeleteSelectedMessage": "Delete {count} selected tags from all items?\n\nThis cannot be undone.",
   "@tagManagementDeleteSelectedMessage": {
     "placeholders": {
       "count": {
@@ -830,7 +830,7 @@
   },
   "tagManagementDeleteTitle": "Delete Tag",
   "@tagManagementDeleteTitle": {},
-  "tagManagementDeleteMessage": "Delete \"{tagName}\" from all items?\\n\\nThis cannot be undone.",
+  "tagManagementDeleteMessage": "Delete \"{tagName}\" from all items?\n\nThis cannot be undone.",
   "@tagManagementDeleteMessage": {
     "placeholders": {
       "tagName": {

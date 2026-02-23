@@ -347,7 +347,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsImportDataTitle => 'Import Data';
 
   @override
-  String get settingsImportDataMessage => 'This will import collections and items from a JSON file. Existing data will not be deleted.\\n\\nContinue?';
+  String get settingsImportDataMessage => 'This will import collections and items from a JSON file. Existing data will not be deleted.\n\nContinue?';
 
   @override
   String get settingsImportingData => 'Importing data...';
@@ -946,7 +946,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String tagManagementDeleteSelectedMessage(int count) {
-    return 'Delete $count selected tags from all items?\\n\\nThis cannot be undone.';
+    return 'Delete $count selected tags from all items?\n\nThis cannot be undone.';
   }
 
   @override
@@ -967,7 +967,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String tagManagementDeleteMessage(String tagName) {
-    return 'Delete \"$tagName\" from all items?\\n\\nThis cannot be undone.';
+    return 'Delete \"$tagName\" from all items?\n\nThis cannot be undone.';
   }
 
   @override

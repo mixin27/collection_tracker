@@ -242,7 +242,7 @@
   },
   "settingsImportDataTitle": "Import Data",
   "@settingsImportDataTitle": {},
-  "settingsImportDataMessage": "This will import collections and items from a JSON file. Existing data will not be deleted.\\n\\nContinue?",
+  "settingsImportDataMessage": "This will import collections and items from a JSON file. Existing data will not be deleted.\n\nContinue?",
   "@settingsImportDataMessage": {},
   "settingsImportingData": "Importing data...",
   "@settingsImportingData": {},
@@ -799,7 +799,7 @@
   },
   "tagManagementDeleteSelectedTitle": "Delete Selected Tags",
   "@tagManagementDeleteSelectedTitle": {},
-  "tagManagementDeleteSelectedMessage": "Delete {count} selected tags from all items?\\n\\nThis cannot be undone.",
+  "tagManagementDeleteSelectedMessage": "Delete {count} selected tags from all items?\n\nThis cannot be undone.",
   "@tagManagementDeleteSelectedMessage": {
     "placeholders": {
       "count": {
@@ -830,7 +830,7 @@
   },
   "tagManagementDeleteTitle": "Delete Tag",
   "@tagManagementDeleteTitle": {},
-  "tagManagementDeleteMessage": "Delete \"{tagName}\" from all items?\\n\\nThis cannot be undone.",
+  "tagManagementDeleteMessage": "Delete \"{tagName}\" from all items?\n\nThis cannot be undone.",
   "@tagManagementDeleteMessage": {
     "placeholders": {
       "tagName": {
