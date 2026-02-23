@@ -17,7 +17,7 @@ echo "Updating launcher icons for Android and iOS..."
 )
 
 echo "Syncing Android adaptive foreground densities from source asset..."
-FOREGROUND_SRC="$APP_DIR/assets/icons/logo_light.png"
+FOREGROUND_SRC="$APP_DIR/assets/icons/logo_foreground.png"
 for entry in "mdpi:108" "hdpi:162" "xhdpi:216" "xxhdpi:324" "xxxhdpi:432"; do
   density="${entry%%:*}"
   size="${entry##*:}"

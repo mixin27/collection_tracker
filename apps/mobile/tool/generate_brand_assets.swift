@@ -1,15 +1,22 @@
 import AppKit
 
 struct Palette {
-    static let lightTop = NSColor(calibratedRed: 1.00, green: 0.91, blue: 0.76, alpha: 1)
-    static let lightBottom = NSColor(calibratedRed: 1.00, green: 0.60, blue: 0.00, alpha: 1) // App orange #FF9800
+    static let lightTop = NSColor(calibratedRed: 0.10, green: 0.57, blue: 0.90, alpha: 1.0)
+    static let lightBottom = NSColor(calibratedRed: 0.19, green: 0.34, blue: 0.82, alpha: 1.0)
+    static let darkTop = NSColor(calibratedRed: 0.08, green: 0.24, blue: 0.50, alpha: 1.0)
+    static let darkBottom = NSColor(calibratedRed: 0.05, green: 0.16, blue: 0.37, alpha: 1.0)
 
-    static let darkTop = NSColor(calibratedRed: 0.22, green: 0.14, blue: 0.04, alpha: 1)
-    static let darkBottom = NSColor(calibratedRed: 0.13, green: 0.08, blue: 0.03, alpha: 1)
+    static let orbTop = NSColor(calibratedRed: 0.54, green: 0.72, blue: 0.91, alpha: 0.18)
+    static let orbBottom = NSColor(calibratedRed: 0.57, green: 0.79, blue: 0.97, alpha: 0.16)
 
-    static let ink = NSColor(calibratedRed: 0.20, green: 0.12, blue: 0.03, alpha: 1)
-    static let inkSoft = NSColor(calibratedRed: 0.30, green: 0.18, blue: 0.06, alpha: 1)
-    static let cream = NSColor(calibratedRed: 1.00, green: 0.96, blue: 0.90, alpha: 1)
+    static let frame = NSColor(calibratedRed: 0.82, green: 0.85, blue: 0.89, alpha: 1.0)
+    static let frameDark = NSColor(calibratedRed: 0.74, green: 0.78, blue: 0.84, alpha: 1.0)
+    static let detail = NSColor(calibratedRed: 0.67, green: 0.75, blue: 0.86, alpha: 1.0)
+    static let detailDark = NSColor(calibratedRed: 0.59, green: 0.68, blue: 0.79, alpha: 1.0)
+
+    static let featureChip = NSColor(calibratedRed: 0.35, green: 0.54, blue: 0.83, alpha: 0.42)
+    static let featureText = NSColor(calibratedRed: 0.92, green: 0.96, blue: 1.0, alpha: 1.0)
+    static let featureSubText = NSColor(calibratedRed: 0.80, green: 0.89, blue: 0.98, alpha: 1.0)
 }
 
 func roundedRect(_ rect: NSRect, radius: CGFloat) -> NSBezierPath {
@@ -34,14 +41,21 @@ func savePng(_ image: NSImage, to url: URL) throws {
         let rep = NSBitmapImageRep(data: tiff),
         let data = rep.representation(using: .png, properties: [:])
     else {
-        throw NSError(domain: "BrandAssets", code: 1, userInfo: [NSLocalizedDescriptionKey: "PNG encoding failed"])
+        throw NSError(
+            domain: "BrandAssets",
+            code: 1,
+            userInfo: [NSLocalizedDescriptionKey: "PNG encoding failed"]
+        )
     }
-    try FileManager.default.createDirectory(at: url.deletingLastPathComponent(), withIntermediateDirectories: true)
+    try FileManager.default.createDirectory(
+        at: url.deletingLastPathComponent(),
+        withIntermediateDirectories: true
+    )
     try data.write(to: url)
 }
 
-func drawBackground(in rect: NSRect, dark: Bool) {
-    let clip = roundedRect(rect, radius: rect.width * 0.22)
+func drawBackground(in rect: NSRect, dark: Bool, cornerRadiusRatio: CGFloat = 0.22) {
+    let clip = roundedRect(rect, radius: rect.width * cornerRadiusRatio)
     clip.addClip()
 
     let gradient = dark
@@ -53,61 +67,27 @@ func drawBackground(in rect: NSRect, dark: Bool) {
             (Palette.lightTop, 0.0),
             (Palette.lightBottom, 1.0)
         )!
+    gradient.draw(in: clip, angle: -18)
 
-    gradient.draw(in: clip, angle: dark ? 95 : -18)
-
-    let orbColor = dark
-        ? NSColor.white.withAlphaComponent(0.06)
-        : NSColor.white.withAlphaComponent(0.18)
-    orbColor.setFill()
+    Palette.orbTop.setFill()
     NSBezierPath(
         ovalIn: NSRect(
-            x: rect.minX - rect.width * 0.14,
-            y: rect.minY + rect.height * 0.44,
-            width: rect.width * 0.66,
+            x: rect.minX - rect.width * 0.22,
+            y: rect.minY + rect.height * 0.50,
+            width: rect.width * 0.78,
+            height: rect.height * 0.78
+        )
+    ).fill()
+
+    Palette.orbBottom.setFill()
+    NSBezierPath(
+        ovalIn: NSRect(
+            x: rect.minX + rect.width * 0.62,
+            y: rect.minY - rect.height * 0.20,
+            width: rect.width * 0.56,
             height: rect.height * 0.56
         )
     ).fill()
-}
-
-func drawCenteredText(
-    _ text: String,
-    in rect: NSRect,
-    size: CGFloat,
-    weight: NSFont.Weight,
-    color: NSColor
-) {
-    let paragraph = NSMutableParagraphStyle()
-    paragraph.alignment = .center
-    let attributes: [NSAttributedString.Key: Any] = [
-        .font: NSFont.systemFont(ofSize: size, weight: weight),
-        .foregroundColor: color,
-        .paragraphStyle: paragraph,
-        .kern: 0.6,
-    ]
-    NSAttributedString(string: text, attributes: attributes).draw(in: rect)
-}
-
-func drawTextExactlyCentered(
-    _ text: String,
-    in rect: NSRect,
-    size: CGFloat,
-    weight: NSFont.Weight,
-    color: NSColor,
-    kerning: CGFloat = 0.0
-) {
-    let attributes: [NSAttributedString.Key: Any] = [
-        .font: NSFont.systemFont(ofSize: size, weight: weight),
-        .foregroundColor: color,
-        .kern: kerning,
-    ]
-    let nsText = text as NSString
-    let textSize = nsText.size(withAttributes: attributes)
-    let drawPoint = NSPoint(
-        x: rect.midX - textSize.width * 0.5,
-        y: rect.midY - textSize.height * 0.5
-    )
-    nsText.draw(at: drawPoint, withAttributes: attributes)
 }
 
 func drawOpenBook(
@@ -225,136 +205,101 @@ func drawClock(in rect: NSRect, stroke: NSColor, lineWidth: CGFloat) {
     hands.stroke()
 }
 
-func drawAdaptiveForegroundMark(in rect: NSRect, stroke: NSColor) {
-    let body = NSRect(
-        x: rect.minX + rect.width * 0.18,
-        y: rect.minY + rect.height * 0.20,
-        width: rect.width * 0.64,
-        height: rect.height * 0.60
-    )
+func drawWingedBookTimeMark(
+    in rect: NSRect,
+    stroke: NSColor,
+    includeRing: Bool,
+    lineWidthScale: CGFloat = 1.0
+) {
+    let emblemRect = includeRing ? rect.insetBy(dx: rect.width * 0.08, dy: rect.height * 0.08) : rect
+    if includeRing {
+        let ring = NSBezierPath(ovalIn: emblemRect)
+        ring.lineWidth = emblemRect.width * 0.028 * lineWidthScale
+        ring.lineJoinStyle = .round
+        stroke.setStroke()
+        ring.stroke()
+    }
 
-    let line = max(2, rect.width * 0.11)
-    let corner = body.width * 0.16
-
-    stroke.setStroke()
-
-    let outline = roundedRect(body, radius: corner)
-    outline.lineWidth = line
-    outline.lineCapStyle = .round
-    outline.lineJoinStyle = .round
-    outline.stroke()
-
-    let spine = NSBezierPath()
-    spine.lineWidth = line * 0.58
-    spine.lineCapStyle = .round
-    spine.move(
-        to: NSPoint(
-            x: body.minX + body.width * 0.27,
-            y: body.minY + body.height * 0.16
+    let symbolRect = includeRing
+        ? NSRect(
+            x: emblemRect.minX + emblemRect.width * 0.12,
+            y: emblemRect.minY + emblemRect.height * 0.12,
+            width: emblemRect.width * 0.76,
+            height: emblemRect.height * 0.70
         )
-    )
-    spine.line(
-        to: NSPoint(
-            x: body.minX + body.width * 0.27,
-            y: body.maxY - body.height * 0.14
+        : NSRect(
+            x: emblemRect.minX + emblemRect.width * 0.08,
+            y: emblemRect.minY + emblemRect.height * 0.08,
+            width: emblemRect.width * 0.84,
+            height: emblemRect.height * 0.76
         )
-    )
-    spine.stroke()
 
-    let line1 = NSBezierPath()
-    line1.lineWidth = line * 0.50
-    line1.lineCapStyle = .round
-    line1.move(
-        to: NSPoint(
-            x: body.minX + body.width * 0.42,
-            y: body.minY + body.height * 0.62
-        )
+    drawOpenBook(
+        in: symbolRect,
+        stroke: stroke,
+        lineWidth: emblemRect.width * 0.014 * lineWidthScale,
+        includeFingerDetails: true
     )
-    line1.line(
-        to: NSPoint(
-            x: body.maxX - body.width * 0.16,
-            y: body.minY + body.height * 0.62
-        )
-    )
-    line1.stroke()
-
-    let line2 = NSBezierPath()
-    line2.lineWidth = line * 0.50
-    line2.lineCapStyle = .round
-    line2.move(
-        to: NSPoint(
-            x: body.minX + body.width * 0.42,
-            y: body.minY + body.height * 0.42
-        )
-    )
-    line2.line(
-        to: NSPoint(
-            x: body.maxX - body.width * 0.30,
-            y: body.minY + body.height * 0.42
-        )
-    )
-    line2.stroke()
-
-    let tab = NSRect(
-        x: body.midX - body.width * 0.10,
-        y: body.maxY - body.height * 0.06,
-        width: body.width * 0.20,
-        height: body.height * 0.22
-    )
-    stroke.setFill()
-    roundedRect(tab, radius: tab.width * 0.30).fill()
-}
-
-func drawBadgeMark(in rect: NSRect, includeWords: Bool, ink: NSColor) {
-    let ringRect = rect.insetBy(dx: rect.width * 0.09, dy: rect.height * 0.09)
-    let ring = NSBezierPath(ovalIn: ringRect)
-    ring.lineWidth = ringRect.width * 0.032
-    ring.lineJoinStyle = .round
-    ink.setStroke()
-    ring.stroke()
 
     let clockRect = NSRect(
-        x: ringRect.midX - ringRect.width * 0.07,
-        y: ringRect.minY + ringRect.height * 0.24,
-        width: ringRect.width * 0.14,
-        height: ringRect.width * 0.14
+        x: symbolRect.midX - symbolRect.width * 0.10,
+        y: symbolRect.minY + symbolRect.height * 0.10,
+        width: symbolRect.width * 0.20,
+        height: symbolRect.width * 0.20
     )
-    drawClock(in: clockRect, stroke: ink, lineWidth: ringRect.width * 0.012)
-
-    let bookRect = NSRect(
-        x: ringRect.minX + ringRect.width * 0.12,
-        y: ringRect.minY + ringRect.height * 0.12,
-        width: ringRect.width * 0.76,
-        height: ringRect.height * 0.70
+    drawClock(
+        in: clockRect,
+        stroke: stroke,
+        lineWidth: emblemRect.width * 0.012 * lineWidthScale
     )
-    drawOpenBook(in: bookRect, stroke: ink, lineWidth: ringRect.width * 0.014)
+}
 
-    if includeWords {
-        drawCenteredText(
-            "COLLECTION",
-            in: NSRect(
-                x: ringRect.minX + ringRect.width * 0.08,
-                y: ringRect.minY + ringRect.height * 0.75,
-                width: ringRect.width * 0.84,
-                height: ringRect.height * 0.14
-            ),
-            size: ringRect.width * 0.10,
-            weight: .bold,
-            color: ink
-        )
-        drawCenteredText(
-            "TIME",
-            in: NSRect(
-                x: ringRect.minX + ringRect.width * 0.22,
-                y: ringRect.minY + ringRect.height * 0.02,
-                width: ringRect.width * 0.56,
-                height: ringRect.height * 0.12
-            ),
-            size: ringRect.width * 0.10,
-            weight: .bold,
-            color: ink
-        )
-    }
+func drawBrandMark(in rect: NSRect, dark: Bool) {
+    let stroke = dark ? Palette.frameDark : Palette.frame
+    drawWingedBookTimeMark(
+        in: rect,
+        stroke: stroke,
+        includeRing: false
+    )
+}
+
+func drawCenteredText(
+    _ text: String,
+    in rect: NSRect,
+    size: CGFloat,
+    weight: NSFont.Weight,
+    color: NSColor
+) {
+    let paragraph = NSMutableParagraphStyle()
+    paragraph.alignment = .center
+    let attributes: [NSAttributedString.Key: Any] = [
+        .font: NSFont.systemFont(ofSize: size, weight: weight),
+        .foregroundColor: color,
+        .paragraphStyle: paragraph,
+        .kern: 0.2,
+    ]
+    NSAttributedString(string: text, attributes: attributes).draw(in: rect)
+}
+
+func drawTextExactlyCentered(
+    _ text: String,
+    in rect: NSRect,
+    size: CGFloat,
+    weight: NSFont.Weight,
+    color: NSColor
+) {
+    let attributes: [NSAttributedString.Key: Any] = [
+        .font: NSFont.systemFont(ofSize: size, weight: weight),
+        .foregroundColor: color,
+        .kern: 0.0,
+    ]
+    let nsText = text as NSString
+    let textSize = nsText.size(withAttributes: attributes)
+    let drawPoint = NSPoint(
+        x: rect.midX - textSize.width * 0.5,
+        y: rect.midY - textSize.height * 0.5
+    )
+    nsText.draw(at: drawPoint, withAttributes: attributes)
 }
 
 func projectRoot(from scriptPath: String) -> URL {
@@ -375,83 +320,85 @@ let iconForegroundURL = appDir.appendingPathComponent("assets/icons/logo_foregro
 let featureURL = appDir.appendingPathComponent("assets/branding/play_store_feature_graphic.png")
 
 let iconLight = drawImage(width: 1024, height: 1024) { rect, _ in
-    let cardRect = rect.insetBy(dx: rect.width * 0.055, dy: rect.height * 0.055)
-    drawBackground(in: cardRect, dark: false)
-    drawBadgeMark(in: rect, includeWords: true, ink: Palette.ink)
+    let cardRect = rect
+    drawBackground(in: cardRect, dark: false, cornerRadiusRatio: 0.30)
+    drawBrandMark(
+        in: cardRect.insetBy(dx: rect.width * 0.12, dy: rect.height * 0.12),
+        dark: false
+    )
 }
 
 let iconDark = drawImage(width: 1024, height: 1024) { rect, _ in
-    let cardRect = rect.insetBy(dx: rect.width * 0.055, dy: rect.height * 0.055)
-    drawBackground(in: cardRect, dark: true)
-    drawBadgeMark(in: rect, includeWords: true, ink: Palette.cream)
+    let cardRect = rect
+    drawBackground(in: cardRect, dark: true, cornerRadiusRatio: 0.30)
+    drawBrandMark(
+        in: cardRect.insetBy(dx: rect.width * 0.12, dy: rect.height * 0.12),
+        dark: true
+    )
 }
 
 let iconForeground = drawImage(width: 432, height: 432) { rect, _ in
-    // Keep adaptive icon foreground bold and simple for small launcher sizes.
-    drawAdaptiveForegroundMark(
-        in: NSRect(
-            x: rect.minX + rect.width * 0.02,
-            y: rect.minY + rect.height * 0.02,
-            width: rect.width * 0.96,
-            height: rect.height * 0.96
-        ),
-        stroke: Palette.ink
+    drawWingedBookTimeMark(
+        in: rect.insetBy(dx: rect.width * 0.02, dy: rect.height * 0.02),
+        stroke: NSColor(calibratedRed: 0.93, green: 0.95, blue: 0.98, alpha: 1.0),
+        includeRing: false,
+        lineWidthScale: 1.08
     )
 }
 
-let featureGraphic = drawImage(width: 1024, height: 500) { rect, ctx in
-    let bg = NSBezierPath(rect: rect)
-    bg.addClip()
+let featureGraphic = drawImage(width: 1024, height: 500) { rect, _ in
+    let clip = NSBezierPath(rect: rect)
+    clip.addClip()
+
     let gradient = NSGradient(colorsAndLocations:
-        (NSColor(calibratedRed: 1.00, green: 0.93, blue: 0.79, alpha: 1), 0.0),
-        (NSColor(calibratedRed: 1.00, green: 0.66, blue: 0.15, alpha: 1), 1.0)
+        (Palette.darkTop, 0.0),
+        (NSColor(calibratedRed: 0.18, green: 0.41, blue: 0.79, alpha: 1.0), 1.0)
     )!
-    gradient.draw(in: bg, angle: -14)
+    gradient.draw(in: clip, angle: -16)
 
-    NSColor.white.withAlphaComponent(0.16).setFill()
-    NSBezierPath(ovalIn: NSRect(x: -100, y: 200, width: 380, height: 380)).fill()
+    Palette.orbTop.setFill()
+    NSBezierPath(ovalIn: NSRect(x: -90, y: 210, width: 360, height: 360)).fill()
+    Palette.orbBottom.setFill()
+    NSBezierPath(ovalIn: NSRect(x: 690, y: -120, width: 420, height: 420)).fill()
 
-    let emblemRect = NSRect(x: 60, y: 40, width: 420, height: 420)
-    let emblemCard = roundedRect(emblemRect, radius: 56)
-    ctx.saveGState()
-    ctx.setShadow(offset: CGSize(width: 0, height: -5), blur: 22, color: NSColor.black.withAlphaComponent(0.18).cgColor)
-    NSColor.white.withAlphaComponent(0.62).setFill()
-    emblemCard.fill()
-    ctx.restoreGState()
-
-    drawBadgeMark(in: emblemRect, includeWords: true, ink: Palette.inkSoft)
+    let iconRect = NSRect(x: 70, y: 40, width: 340, height: 340)
+    NSGraphicsContext.saveGraphicsState()
+    let iconClip = roundedRect(iconRect, radius: 56)
+    iconClip.addClip()
+    drawBackground(in: iconRect, dark: false)
+    drawBrandMark(in: iconRect, dark: false)
+    NSGraphicsContext.restoreGraphicsState()
 
     drawCenteredText(
         "Collectra",
-        in: NSRect(x: 520, y: 282, width: 470, height: 78),
-        size: 50,
+        in: NSRect(x: 450, y: 274, width: 520, height: 84),
+        size: 68,
         weight: .bold,
-        color: Palette.ink
+        color: Palette.featureText
     )
     drawCenteredText(
-        "Collect, organize, and remember what matters.",
-        in: NSRect(x: 520, y: 214, width: 470, height: 48),
+        "Catalog your things with clarity and confidence.",
+        in: NSRect(x: 450, y: 212, width: 520, height: 52),
         size: 20,
-        weight: .medium,
-        color: Palette.inkSoft
+        weight: .semibold,
+        color: Palette.featureSubText
     )
 
     let tags = [
-        ("Catalog", NSRect(x: 560, y: 118, width: 126, height: 44)),
-        ("Track Value", NSRect(x: 698, y: 118, width: 142, height: 44)),
-        ("Sync Ready", NSRect(x: 852, y: 118, width: 146, height: 44)),
+        ("Catalog", NSRect(x: 490, y: 118, width: 140, height: 44)),
+        ("Track Value", NSRect(x: 642, y: 118, width: 148, height: 44)),
+        ("Sync Ready", NSRect(x: 802, y: 118, width: 146, height: 44)),
     ]
 
     for (text, frame) in tags {
-        NSColor.white.withAlphaComponent(0.34).setFill()
+        Palette.featureChip.setFill()
         roundedRect(frame, radius: frame.height * 0.48).fill()
         drawTextExactlyCentered(
             text,
             in: frame,
-            size: 24,
+            size: 20,
             weight: .semibold,
-            color: Palette.ink,
-            kerning: 0.2
+            color: Palette.featureText
         )
     }
 }
