@@ -75,6 +75,9 @@ class AppLocalizationsMy extends AppLocalizations {
   String get settingsSectionAbout => 'အကြောင်းအရာ';
 
   @override
+  String get settingsSectionDeveloper => 'ဆော့ဖ်ဝဲရေးသားသူ';
+
+  @override
   String get settingsThemeTitle => 'အပြင်အဆင်';
 
   @override
@@ -118,6 +121,159 @@ class AppLocalizationsMy extends AppLocalizations {
 
   @override
   String get settingsTermsTitle => 'အသုံးပြုမှု စည်းမျဉ်းများ';
+
+  @override
+  String get settingsAnalyticsTitle => 'Analytics';
+
+  @override
+  String get settingsAnalyticsSummaryEnabled => 'ဖွင့်ထားသည်';
+
+  @override
+  String get settingsAnalyticsSummaryDisabled => 'ပိတ်ထားသည်';
+
+  @override
+  String get settingsAnalyticsSummaryPending => 'သဘောတူညီချက်လိုအပ်သည်';
+
+  @override
+  String get settingsAnalyticsSummaryDenied => 'သဘောတူညီချက် မပေးထားပါ';
+
+  @override
+  String get settingsAnalyticsSheetTitle => 'Analytics စိတ်ကြိုက်';
+
+  @override
+  String get settingsAnalyticsDescription => 'အမည်မဖော်ဘဲ အသုံးပြုမှု analytics နှင့် ဒေတာမျှဝေမှုဆိုင်ရာ စိတ်ကြိုက်များကို စီမံပါ။';
+
+  @override
+  String get settingsAnalyticsToggleTitle => 'Analytics ဖွင့်ရန်';
+
+  @override
+  String get settingsAnalyticsToggleSubtitle => 'အက်ပ်အသုံးပြုမှု event များကို အမည်မဖော်ဘဲ စုဆောင်းခွင့်ပြုမည်။';
+
+  @override
+  String get settingsAnalyticsConsentStatusTitle => 'သဘောတူညီချက်အခြေအနေ';
+
+  @override
+  String get settingsAnalyticsConsentStatusGranted => 'သဘောတူသည်';
+
+  @override
+  String get settingsAnalyticsConsentStatusDenied => 'ငြင်းဆိုထားသည်';
+
+  @override
+  String get settingsAnalyticsConsentStatusPending => 'စောင့်ဆိုင်းနေသည်';
+
+  @override
+  String get settingsAnalyticsReviewConsentAction => 'သဘောတူညီချက် ပြန်ကြည့်မည်';
+
+  @override
+  String get settingsAnalyticsRevokeConsentAction => 'သဘောတူညီချက် ရုပ်သိမ်းမည်';
+
+  @override
+  String get settingsAnalyticsConsentAccepted => 'Analytics သဘောတူညီချက် လက်ခံပြီးပါပြီ။';
+
+  @override
+  String get settingsAnalyticsConsentDeclined => 'Analytics သဘောတူညီချက် ငြင်းဆိုထားသည်။';
+
+  @override
+  String get analyticsConsentDialogTitle => 'Collection Tracker ကို တိုးတက်စေရန် ကူညီပါ';
+
+  @override
+  String get analyticsConsentDialogMessage => 'အက်ပ်အရည်အသွေးနှင့် အင်္ဂါရပ်များ တိုးတက်စေရန် အမည်မဖော်ထားသော အသုံးပြုမှု analytics ကို စုဆောင်းခွင့်ပြုမလား? ဤဆက်တင်ကို Settings တွင် အချိန်မရွေး ပြောင်းလဲနိုင်သည်။';
+
+  @override
+  String get analyticsConsentAllowAction => 'ခွင့်ပြုမည်';
+
+  @override
+  String get analyticsConsentDeclineAction => 'ယခုမဟုတ်သေး';
+
+  @override
+  String get settingsCrashlyticsTestTitle => 'Crashlytics စမ်းသပ်ရန်';
+
+  @override
+  String get settingsCrashlyticsTestSubtitle => 'Crash report ပို့မှုကို စစ်ဆေးရန် အက်ပ်ကို ရည်ရွယ်ချက်ရှိစွာ crash လုပ်မည်';
+
+  @override
+  String get settingsCrashlyticsTestConfirmTitle => 'စမ်းသပ် crash ကို စတင်မလား?';
+
+  @override
+  String get settingsCrashlyticsTestConfirmMessage => 'အက်ပ်သည် ချက်ချင်းပိတ်သွားမည်။ Firebase Crashlytics တွင် crash ကို စစ်ဆေးရန် အက်ပ်ကို ပြန်ဖွင့်ပါ။';
+
+  @override
+  String get settingsCrashlyticsTestConfirmAction => 'ယခုပဲ Crash လုပ်မည်';
+
+  @override
+  String get settingsCrashlyticsTestTriggered => 'စမ်းသပ် crash စတင်နေသည်...';
+
+  @override
+  String settingsCrashlyticsTestFailed(String error) {
+    return 'စမ်းသပ် crash စတင်မရပါ: $error';
+  }
+
+  @override
+  String get settingsFirebaseRuntimeConfigTitle => 'Firebase Runtime Config';
+
+  @override
+  String get settingsFirebaseRuntimeConfigSubtitle => 'runtime feature flags ကို စစ်ဆေးပြီး refresh လုပ်ပါ';
+
+  @override
+  String get settingsFirebaseRuntimeConfigSheetTitle => 'Firebase Runtime Config';
+
+  @override
+  String get settingsFirebaseRuntimeConfigDescription => 'values တွေကို Firebase Remote Config မှ ရယူပြီး runtime တွင် apply လုပ်ပါသည်။';
+
+  @override
+  String settingsFirebaseRuntimeConfigSummary(int enabledCount) {
+    return 'signal 3 ခုထဲမှ $enabledCount ခု ဖွင့်ထားသည်';
+  }
+
+  @override
+  String get settingsFirebaseRuntimeConfigAnalyticsLabel => 'Analytics collection';
+
+  @override
+  String get settingsFirebaseRuntimeConfigCrashlyticsLabel => 'Crashlytics collection';
+
+  @override
+  String get settingsFirebaseRuntimeConfigPerformanceLabel => 'Performance collection';
+
+  @override
+  String get settingsFirebaseRuntimeConfigFetchStatusTitle => 'နောက်ဆုံး fetch status';
+
+  @override
+  String get settingsFirebaseRuntimeConfigLastFetchTitle => 'နောက်ဆုံး fetch အချိန်';
+
+  @override
+  String get settingsFirebaseRuntimeConfigValueEnabled => 'ဖွင့်ထားသည်';
+
+  @override
+  String get settingsFirebaseRuntimeConfigValueDisabled => 'ပိတ်ထားသည်';
+
+  @override
+  String get settingsFirebaseRuntimeConfigFetchStatusSuccess => 'အောင်မြင်သည်';
+
+  @override
+  String get settingsFirebaseRuntimeConfigFetchStatusFailure => 'မအောင်မြင်ပါ';
+
+  @override
+  String get settingsFirebaseRuntimeConfigFetchStatusThrottled => 'ကန့်သတ်ထားသည်';
+
+  @override
+  String get settingsFirebaseRuntimeConfigFetchStatusNoFetch => 'မရယူရသေးပါ';
+
+  @override
+  String get settingsFirebaseRuntimeConfigRefreshAction => 'config refresh';
+
+  @override
+  String get settingsFirebaseRuntimeConfigRefreshingAction => 'refresh လုပ်နေသည်...';
+
+  @override
+  String get settingsFirebaseRuntimeConfigRefreshSuccess => 'Firebase runtime config ကို refresh လုပ်ပြီးပါပြီ။';
+
+  @override
+  String get settingsFirebaseRuntimeConfigRefreshNoChanges => 'Firebase runtime config သည် နောက်ဆုံး update ဖြစ်နေပါသည်။';
+
+  @override
+  String settingsFirebaseRuntimeConfigRefreshFailed(String error) {
+    return 'config refresh မအောင်မြင်ပါ: $error';
+  }
 
   @override
   String get settingsExportingData => 'ဒေတာ ထုတ်ယူနေသည်...';

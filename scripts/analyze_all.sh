@@ -1,6 +1,9 @@
 #!/bin/bash
 set -e
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "$SCRIPT_DIR/workspace_packages.sh"
+
 echo "🔍 Analyzing all packages..."
 echo ""
 
@@ -41,19 +44,11 @@ WORKSPACE_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$WORKSPACE_ROOT"
 
 # Analyze all packages
-analyze_package "packages/core/domain" "core_domain"
-analyze_package "packages/core/data" "core_data"
-analyze_package "packages/common/env" "common_env"
-analyze_package "packages/common/ui" "common_ui"
-analyze_package "packages/common/utils" "common_utils"
-analyze_package "packages/integrations/database" "integration_database"
-analyze_package "packages/integrations/barcode_scanner" "integration_barcode_scanner"
-analyze_package "packages/integrations/metadata_api" "integration_metadata_api"
-analyze_package "packages/integrations/analytics" "integration_analytics"
-analyze_package "packages/integrations/logger" "integration_logging"
-analyze_package "packages/integrations/storage" "integration_storage"
-analyze_package "packages/integrations/payment" "integration_payment"
-analyze_package "apps/mobile" "mobile_app"
+for entry in "${WORKSPACE_PACKAGES_WITH_APP[@]}"; do
+    package_path="${entry%%:*}"
+    package_name="${entry#*:}"
+    analyze_package "$package_path" "$package_name"
+done
 
 echo "════════════════════════════════════════"
 if [ $ANALYZE_ERRORS -eq 0 ]; then

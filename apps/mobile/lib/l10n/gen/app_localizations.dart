@@ -233,6 +233,12 @@ abstract class AppLocalizations {
   /// **'About'**
   String get settingsSectionAbout;
 
+  /// No description provided for @settingsSectionDeveloper.
+  ///
+  /// In en, this message translates to:
+  /// **'Developer'**
+  String get settingsSectionDeveloper;
+
   /// No description provided for @settingsThemeTitle.
   ///
   /// In en, this message translates to:
@@ -322,6 +328,300 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Terms of Service'**
   String get settingsTermsTitle;
+
+  /// No description provided for @settingsAnalyticsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Analytics'**
+  String get settingsAnalyticsTitle;
+
+  /// No description provided for @settingsAnalyticsSummaryEnabled.
+  ///
+  /// In en, this message translates to:
+  /// **'Enabled'**
+  String get settingsAnalyticsSummaryEnabled;
+
+  /// No description provided for @settingsAnalyticsSummaryDisabled.
+  ///
+  /// In en, this message translates to:
+  /// **'Disabled'**
+  String get settingsAnalyticsSummaryDisabled;
+
+  /// No description provided for @settingsAnalyticsSummaryPending.
+  ///
+  /// In en, this message translates to:
+  /// **'Consent required'**
+  String get settingsAnalyticsSummaryPending;
+
+  /// No description provided for @settingsAnalyticsSummaryDenied.
+  ///
+  /// In en, this message translates to:
+  /// **'Consent declined'**
+  String get settingsAnalyticsSummaryDenied;
+
+  /// No description provided for @settingsAnalyticsSheetTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Analytics Preferences'**
+  String get settingsAnalyticsSheetTitle;
+
+  /// No description provided for @settingsAnalyticsDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Control anonymous usage analytics and data sharing preferences.'**
+  String get settingsAnalyticsDescription;
+
+  /// No description provided for @settingsAnalyticsToggleTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Enable analytics'**
+  String get settingsAnalyticsToggleTitle;
+
+  /// No description provided for @settingsAnalyticsToggleSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow anonymous app usage events to be collected.'**
+  String get settingsAnalyticsToggleSubtitle;
+
+  /// No description provided for @settingsAnalyticsConsentStatusTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Consent status'**
+  String get settingsAnalyticsConsentStatusTitle;
+
+  /// No description provided for @settingsAnalyticsConsentStatusGranted.
+  ///
+  /// In en, this message translates to:
+  /// **'Granted'**
+  String get settingsAnalyticsConsentStatusGranted;
+
+  /// No description provided for @settingsAnalyticsConsentStatusDenied.
+  ///
+  /// In en, this message translates to:
+  /// **'Declined'**
+  String get settingsAnalyticsConsentStatusDenied;
+
+  /// No description provided for @settingsAnalyticsConsentStatusPending.
+  ///
+  /// In en, this message translates to:
+  /// **'Pending'**
+  String get settingsAnalyticsConsentStatusPending;
+
+  /// No description provided for @settingsAnalyticsReviewConsentAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Review Consent'**
+  String get settingsAnalyticsReviewConsentAction;
+
+  /// No description provided for @settingsAnalyticsRevokeConsentAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Revoke Consent'**
+  String get settingsAnalyticsRevokeConsentAction;
+
+  /// No description provided for @settingsAnalyticsConsentAccepted.
+  ///
+  /// In en, this message translates to:
+  /// **'Analytics consent accepted.'**
+  String get settingsAnalyticsConsentAccepted;
+
+  /// No description provided for @settingsAnalyticsConsentDeclined.
+  ///
+  /// In en, this message translates to:
+  /// **'Analytics consent declined.'**
+  String get settingsAnalyticsConsentDeclined;
+
+  /// No description provided for @analyticsConsentDialogTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Help Improve Collection Tracker'**
+  String get analyticsConsentDialogTitle;
+
+  /// No description provided for @analyticsConsentDialogMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Can we collect anonymous usage analytics to improve app quality and features? You can change this anytime in Settings.'**
+  String get analyticsConsentDialogMessage;
+
+  /// No description provided for @analyticsConsentAllowAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow'**
+  String get analyticsConsentAllowAction;
+
+  /// No description provided for @analyticsConsentDeclineAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Not now'**
+  String get analyticsConsentDeclineAction;
+
+  /// No description provided for @settingsCrashlyticsTestTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Test Crashlytics'**
+  String get settingsCrashlyticsTestTitle;
+
+  /// No description provided for @settingsCrashlyticsTestSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Intentionally crash the app to verify crash reporting'**
+  String get settingsCrashlyticsTestSubtitle;
+
+  /// No description provided for @settingsCrashlyticsTestConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Trigger test crash?'**
+  String get settingsCrashlyticsTestConfirmTitle;
+
+  /// No description provided for @settingsCrashlyticsTestConfirmMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'The app will crash immediately. Re-open the app to verify the crash in Firebase Crashlytics.'**
+  String get settingsCrashlyticsTestConfirmMessage;
+
+  /// No description provided for @settingsCrashlyticsTestConfirmAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Crash Now'**
+  String get settingsCrashlyticsTestConfirmAction;
+
+  /// No description provided for @settingsCrashlyticsTestTriggered.
+  ///
+  /// In en, this message translates to:
+  /// **'Triggering test crash...'**
+  String get settingsCrashlyticsTestTriggered;
+
+  /// No description provided for @settingsCrashlyticsTestFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to trigger crash test: {error}'**
+  String settingsCrashlyticsTestFailed(String error);
+
+  /// No description provided for @settingsFirebaseRuntimeConfigTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Firebase Runtime Config'**
+  String get settingsFirebaseRuntimeConfigTitle;
+
+  /// No description provided for @settingsFirebaseRuntimeConfigSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Inspect and refresh runtime feature flags'**
+  String get settingsFirebaseRuntimeConfigSubtitle;
+
+  /// No description provided for @settingsFirebaseRuntimeConfigSheetTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Firebase Runtime Config'**
+  String get settingsFirebaseRuntimeConfigSheetTitle;
+
+  /// No description provided for @settingsFirebaseRuntimeConfigDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Values are fetched from Firebase Remote Config and applied at runtime.'**
+  String get settingsFirebaseRuntimeConfigDescription;
+
+  /// No description provided for @settingsFirebaseRuntimeConfigSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'{enabledCount} of 3 signals enabled'**
+  String settingsFirebaseRuntimeConfigSummary(int enabledCount);
+
+  /// No description provided for @settingsFirebaseRuntimeConfigAnalyticsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Analytics collection'**
+  String get settingsFirebaseRuntimeConfigAnalyticsLabel;
+
+  /// No description provided for @settingsFirebaseRuntimeConfigCrashlyticsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Crashlytics collection'**
+  String get settingsFirebaseRuntimeConfigCrashlyticsLabel;
+
+  /// No description provided for @settingsFirebaseRuntimeConfigPerformanceLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Performance collection'**
+  String get settingsFirebaseRuntimeConfigPerformanceLabel;
+
+  /// No description provided for @settingsFirebaseRuntimeConfigFetchStatusTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Last fetch status'**
+  String get settingsFirebaseRuntimeConfigFetchStatusTitle;
+
+  /// No description provided for @settingsFirebaseRuntimeConfigLastFetchTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Last fetch time'**
+  String get settingsFirebaseRuntimeConfigLastFetchTitle;
+
+  /// No description provided for @settingsFirebaseRuntimeConfigValueEnabled.
+  ///
+  /// In en, this message translates to:
+  /// **'Enabled'**
+  String get settingsFirebaseRuntimeConfigValueEnabled;
+
+  /// No description provided for @settingsFirebaseRuntimeConfigValueDisabled.
+  ///
+  /// In en, this message translates to:
+  /// **'Disabled'**
+  String get settingsFirebaseRuntimeConfigValueDisabled;
+
+  /// No description provided for @settingsFirebaseRuntimeConfigFetchStatusSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Success'**
+  String get settingsFirebaseRuntimeConfigFetchStatusSuccess;
+
+  /// No description provided for @settingsFirebaseRuntimeConfigFetchStatusFailure.
+  ///
+  /// In en, this message translates to:
+  /// **'Failure'**
+  String get settingsFirebaseRuntimeConfigFetchStatusFailure;
+
+  /// No description provided for @settingsFirebaseRuntimeConfigFetchStatusThrottled.
+  ///
+  /// In en, this message translates to:
+  /// **'Throttled'**
+  String get settingsFirebaseRuntimeConfigFetchStatusThrottled;
+
+  /// No description provided for @settingsFirebaseRuntimeConfigFetchStatusNoFetch.
+  ///
+  /// In en, this message translates to:
+  /// **'No fetch yet'**
+  String get settingsFirebaseRuntimeConfigFetchStatusNoFetch;
+
+  /// No description provided for @settingsFirebaseRuntimeConfigRefreshAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Refresh config'**
+  String get settingsFirebaseRuntimeConfigRefreshAction;
+
+  /// No description provided for @settingsFirebaseRuntimeConfigRefreshingAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Refreshing...'**
+  String get settingsFirebaseRuntimeConfigRefreshingAction;
+
+  /// No description provided for @settingsFirebaseRuntimeConfigRefreshSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Firebase runtime config refreshed.'**
+  String get settingsFirebaseRuntimeConfigRefreshSuccess;
+
+  /// No description provided for @settingsFirebaseRuntimeConfigRefreshNoChanges.
+  ///
+  /// In en, this message translates to:
+  /// **'Firebase runtime config is already up to date.'**
+  String get settingsFirebaseRuntimeConfigRefreshNoChanges;
+
+  /// No description provided for @settingsFirebaseRuntimeConfigRefreshFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to refresh config: {error}'**
+  String settingsFirebaseRuntimeConfigRefreshFailed(String error);
 
   /// No description provided for @settingsExportingData.
   ///

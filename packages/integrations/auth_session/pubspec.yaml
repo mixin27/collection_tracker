@@ -1,0 +1,20 @@
+name: auth_session
+description: "Persistent auth/session state primitives for Collection Tracker."
+version: 1.0.0
+publish_to: none
+resolution: workspace
+
+environment:
+  sdk: ^3.11.0
+  flutter: ">=1.17.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  storage:
+    path: ../storage
+
+dev_dependencies:
+  flutter_lints: ^6.0.0
+  flutter_test:
+    sdk: flutter

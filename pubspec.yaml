@@ -21,9 +21,13 @@ workspace:
   - packages/common/ui
   - packages/common/utils
   - packages/integrations/analytics
+  - packages/integrations/auth_session
+  - packages/integrations/backend_api
   - packages/integrations/barcode_scanner
   - packages/integrations/database
   - packages/integrations/logger
   - packages/integrations/metadata_api
   - packages/integrations/payment
   - packages/integrations/storage
+  - packages/integrations/firebase_services
+  - packages/integrations/sync_api

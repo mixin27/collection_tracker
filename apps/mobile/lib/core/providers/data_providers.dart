@@ -3,17 +3,24 @@ import 'package:domain/domain.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'database_providers.dart';
+import 'sync_providers.dart';
 
 part 'data_providers.g.dart';
 
 @riverpod
 CollectionRepository collectionRepository(Ref ref) {
   final dao = ref.watch(collectionDaoProvider);
-  return CollectionRepositoryImpl(dao);
+  final syncDao = ref.watch(syncOutboxWritesEnabledProvider)
+      ? ref.watch(syncDaoProvider)
+      : null;
+  return CollectionRepositoryImpl(dao, syncDao: syncDao);
 }
 
 @riverpod
 ItemRepository itemRepository(Ref ref) {
   final dao = ref.watch(itemDaoProvider);
-  return ItemRepositoryImpl(dao);
+  final syncDao = ref.watch(syncOutboxWritesEnabledProvider)
+      ? ref.watch(syncDaoProvider)
+      : null;
+  return ItemRepositoryImpl(dao, syncDao: syncDao);
 }

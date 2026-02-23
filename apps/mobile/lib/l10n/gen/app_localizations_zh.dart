@@ -75,6 +75,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get settingsSectionAbout => '关于';
 
   @override
+  String get settingsSectionDeveloper => '开发者';
+
+  @override
   String get settingsThemeTitle => '主题';
 
   @override
@@ -118,6 +121,159 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get settingsTermsTitle => '服务条款';
+
+  @override
+  String get settingsAnalyticsTitle => '分析';
+
+  @override
+  String get settingsAnalyticsSummaryEnabled => '已启用';
+
+  @override
+  String get settingsAnalyticsSummaryDisabled => '已禁用';
+
+  @override
+  String get settingsAnalyticsSummaryPending => '需要同意';
+
+  @override
+  String get settingsAnalyticsSummaryDenied => '已拒绝同意';
+
+  @override
+  String get settingsAnalyticsSheetTitle => '分析偏好设置';
+
+  @override
+  String get settingsAnalyticsDescription => '管理匿名使用分析和数据共享偏好。';
+
+  @override
+  String get settingsAnalyticsToggleTitle => '启用分析';
+
+  @override
+  String get settingsAnalyticsToggleSubtitle => '允许收集匿名的应用使用事件。';
+
+  @override
+  String get settingsAnalyticsConsentStatusTitle => '同意状态';
+
+  @override
+  String get settingsAnalyticsConsentStatusGranted => '已同意';
+
+  @override
+  String get settingsAnalyticsConsentStatusDenied => '已拒绝';
+
+  @override
+  String get settingsAnalyticsConsentStatusPending => '待确认';
+
+  @override
+  String get settingsAnalyticsReviewConsentAction => '查看同意内容';
+
+  @override
+  String get settingsAnalyticsRevokeConsentAction => '撤销同意';
+
+  @override
+  String get settingsAnalyticsConsentAccepted => '已同意分析收集。';
+
+  @override
+  String get settingsAnalyticsConsentDeclined => '已拒绝分析收集。';
+
+  @override
+  String get analyticsConsentDialogTitle => '帮助改进 Collection Tracker';
+
+  @override
+  String get analyticsConsentDialogMessage => '我们可以收集匿名使用分析以改进应用质量和功能吗？你可以随时在设置中更改。';
+
+  @override
+  String get analyticsConsentAllowAction => '允许';
+
+  @override
+  String get analyticsConsentDeclineAction => '暂不';
+
+  @override
+  String get settingsCrashlyticsTestTitle => '测试 Crashlytics';
+
+  @override
+  String get settingsCrashlyticsTestSubtitle => '故意让应用崩溃以验证崩溃上报';
+
+  @override
+  String get settingsCrashlyticsTestConfirmTitle => '触发测试崩溃？';
+
+  @override
+  String get settingsCrashlyticsTestConfirmMessage => '应用将立即崩溃。请重新打开应用，并在 Firebase Crashlytics 中确认该崩溃。';
+
+  @override
+  String get settingsCrashlyticsTestConfirmAction => '立即崩溃';
+
+  @override
+  String get settingsCrashlyticsTestTriggered => '正在触发测试崩溃...';
+
+  @override
+  String settingsCrashlyticsTestFailed(String error) {
+    return '触发测试崩溃失败：$error';
+  }
+
+  @override
+  String get settingsFirebaseRuntimeConfigTitle => 'Firebase 运行时配置';
+
+  @override
+  String get settingsFirebaseRuntimeConfigSubtitle => '查看并刷新运行时功能开关';
+
+  @override
+  String get settingsFirebaseRuntimeConfigSheetTitle => 'Firebase 运行时配置';
+
+  @override
+  String get settingsFirebaseRuntimeConfigDescription => '这些值来自 Firebase Remote Config，并在运行时生效。';
+
+  @override
+  String settingsFirebaseRuntimeConfigSummary(int enabledCount) {
+    return '3 项信号中已启用 $enabledCount 项';
+  }
+
+  @override
+  String get settingsFirebaseRuntimeConfigAnalyticsLabel => '分析收集';
+
+  @override
+  String get settingsFirebaseRuntimeConfigCrashlyticsLabel => 'Crashlytics 收集';
+
+  @override
+  String get settingsFirebaseRuntimeConfigPerformanceLabel => '性能收集';
+
+  @override
+  String get settingsFirebaseRuntimeConfigFetchStatusTitle => '最近拉取状态';
+
+  @override
+  String get settingsFirebaseRuntimeConfigLastFetchTitle => '最近拉取时间';
+
+  @override
+  String get settingsFirebaseRuntimeConfigValueEnabled => '已启用';
+
+  @override
+  String get settingsFirebaseRuntimeConfigValueDisabled => '已禁用';
+
+  @override
+  String get settingsFirebaseRuntimeConfigFetchStatusSuccess => '成功';
+
+  @override
+  String get settingsFirebaseRuntimeConfigFetchStatusFailure => '失败';
+
+  @override
+  String get settingsFirebaseRuntimeConfigFetchStatusThrottled => '受限';
+
+  @override
+  String get settingsFirebaseRuntimeConfigFetchStatusNoFetch => '尚未拉取';
+
+  @override
+  String get settingsFirebaseRuntimeConfigRefreshAction => '刷新配置';
+
+  @override
+  String get settingsFirebaseRuntimeConfigRefreshingAction => '正在刷新...';
+
+  @override
+  String get settingsFirebaseRuntimeConfigRefreshSuccess => 'Firebase 运行时配置已刷新。';
+
+  @override
+  String get settingsFirebaseRuntimeConfigRefreshNoChanges => 'Firebase 运行时配置已是最新。';
+
+  @override
+  String settingsFirebaseRuntimeConfigRefreshFailed(String error) {
+    return '刷新配置失败：$error';
+  }
 
   @override
   String get settingsExportingData => '正在导出数据...';

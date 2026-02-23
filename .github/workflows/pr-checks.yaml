@@ -40,5 +40,5 @@ jobs:
 
       - name: 🔍 Check for outdated dependencies
         run: |
-          cd apps/mobile
-          flutter pub outdated
+          chmod +x scripts/check_dependencies.sh
+          ./scripts/check_dependencies.sh

@@ -75,6 +75,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsSectionAbout => 'About';
 
   @override
+  String get settingsSectionDeveloper => 'Developer';
+
+  @override
   String get settingsThemeTitle => 'Theme';
 
   @override
@@ -118,6 +121,159 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get settingsTermsTitle => 'Terms of Service';
+
+  @override
+  String get settingsAnalyticsTitle => 'Analytics';
+
+  @override
+  String get settingsAnalyticsSummaryEnabled => 'Enabled';
+
+  @override
+  String get settingsAnalyticsSummaryDisabled => 'Disabled';
+
+  @override
+  String get settingsAnalyticsSummaryPending => 'Consent required';
+
+  @override
+  String get settingsAnalyticsSummaryDenied => 'Consent declined';
+
+  @override
+  String get settingsAnalyticsSheetTitle => 'Analytics Preferences';
+
+  @override
+  String get settingsAnalyticsDescription => 'Control anonymous usage analytics and data sharing preferences.';
+
+  @override
+  String get settingsAnalyticsToggleTitle => 'Enable analytics';
+
+  @override
+  String get settingsAnalyticsToggleSubtitle => 'Allow anonymous app usage events to be collected.';
+
+  @override
+  String get settingsAnalyticsConsentStatusTitle => 'Consent status';
+
+  @override
+  String get settingsAnalyticsConsentStatusGranted => 'Granted';
+
+  @override
+  String get settingsAnalyticsConsentStatusDenied => 'Declined';
+
+  @override
+  String get settingsAnalyticsConsentStatusPending => 'Pending';
+
+  @override
+  String get settingsAnalyticsReviewConsentAction => 'Review Consent';
+
+  @override
+  String get settingsAnalyticsRevokeConsentAction => 'Revoke Consent';
+
+  @override
+  String get settingsAnalyticsConsentAccepted => 'Analytics consent accepted.';
+
+  @override
+  String get settingsAnalyticsConsentDeclined => 'Analytics consent declined.';
+
+  @override
+  String get analyticsConsentDialogTitle => 'Help Improve Collection Tracker';
+
+  @override
+  String get analyticsConsentDialogMessage => 'Can we collect anonymous usage analytics to improve app quality and features? You can change this anytime in Settings.';
+
+  @override
+  String get analyticsConsentAllowAction => 'Allow';
+
+  @override
+  String get analyticsConsentDeclineAction => 'Not now';
+
+  @override
+  String get settingsCrashlyticsTestTitle => 'Test Crashlytics';
+
+  @override
+  String get settingsCrashlyticsTestSubtitle => 'Intentionally crash the app to verify crash reporting';
+
+  @override
+  String get settingsCrashlyticsTestConfirmTitle => 'Trigger test crash?';
+
+  @override
+  String get settingsCrashlyticsTestConfirmMessage => 'The app will crash immediately. Re-open the app to verify the crash in Firebase Crashlytics.';
+
+  @override
+  String get settingsCrashlyticsTestConfirmAction => 'Crash Now';
+
+  @override
+  String get settingsCrashlyticsTestTriggered => 'Triggering test crash...';
+
+  @override
+  String settingsCrashlyticsTestFailed(String error) {
+    return 'Failed to trigger crash test: $error';
+  }
+
+  @override
+  String get settingsFirebaseRuntimeConfigTitle => 'Firebase Runtime Config';
+
+  @override
+  String get settingsFirebaseRuntimeConfigSubtitle => 'Inspect and refresh runtime feature flags';
+
+  @override
+  String get settingsFirebaseRuntimeConfigSheetTitle => 'Firebase Runtime Config';
+
+  @override
+  String get settingsFirebaseRuntimeConfigDescription => 'Values are fetched from Firebase Remote Config and applied at runtime.';
+
+  @override
+  String settingsFirebaseRuntimeConfigSummary(int enabledCount) {
+    return '$enabledCount of 3 signals enabled';
+  }
+
+  @override
+  String get settingsFirebaseRuntimeConfigAnalyticsLabel => 'Analytics collection';
+
+  @override
+  String get settingsFirebaseRuntimeConfigCrashlyticsLabel => 'Crashlytics collection';
+
+  @override
+  String get settingsFirebaseRuntimeConfigPerformanceLabel => 'Performance collection';
+
+  @override
+  String get settingsFirebaseRuntimeConfigFetchStatusTitle => 'Last fetch status';
+
+  @override
+  String get settingsFirebaseRuntimeConfigLastFetchTitle => 'Last fetch time';
+
+  @override
+  String get settingsFirebaseRuntimeConfigValueEnabled => 'Enabled';
+
+  @override
+  String get settingsFirebaseRuntimeConfigValueDisabled => 'Disabled';
+
+  @override
+  String get settingsFirebaseRuntimeConfigFetchStatusSuccess => 'Success';
+
+  @override
+  String get settingsFirebaseRuntimeConfigFetchStatusFailure => 'Failure';
+
+  @override
+  String get settingsFirebaseRuntimeConfigFetchStatusThrottled => 'Throttled';
+
+  @override
+  String get settingsFirebaseRuntimeConfigFetchStatusNoFetch => 'No fetch yet';
+
+  @override
+  String get settingsFirebaseRuntimeConfigRefreshAction => 'Refresh config';
+
+  @override
+  String get settingsFirebaseRuntimeConfigRefreshingAction => 'Refreshing...';
+
+  @override
+  String get settingsFirebaseRuntimeConfigRefreshSuccess => 'Firebase runtime config refreshed.';
+
+  @override
+  String get settingsFirebaseRuntimeConfigRefreshNoChanges => 'Firebase runtime config is already up to date.';
+
+  @override
+  String settingsFirebaseRuntimeConfigRefreshFailed(String error) {
+    return 'Failed to refresh config: $error';
+  }
 
   @override
   String get settingsExportingData => 'Exporting data...';

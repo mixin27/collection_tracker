@@ -11,18 +11,36 @@ void main() {
     late MockAnalyticsProvider mockProvider;
     late AnalyticsConfig config;
 
-    setUp(() {
+    setUp(() async {
       mockProvider = MockAnalyticsProvider();
       when(mockProvider.name).thenReturn('MockProvider');
       when(mockProvider.isEnabled).thenReturn(true);
       when(mockProvider.initialize()).thenAnswer((_) async => {});
+      when(mockProvider.trackEvent(any)).thenAnswer((_) async => {});
+      when(mockProvider.identifyUser(any)).thenAnswer((_) async => {});
+      when(
+        mockProvider.trackScreen(any, properties: anyNamed('properties')),
+      ).thenAnswer((_) async => {});
+      when(mockProvider.setUserProperties(any)).thenAnswer((_) async => {});
+      when(mockProvider.reset()).thenAnswer((_) async => {});
+      when(mockProvider.flush()).thenAnswer((_) async => {});
+      when(mockProvider.dispose()).thenAnswer((_) async => {});
 
       config = AnalyticsConfig(
         environment: AnalyticsEnvironment.development,
         providers: [mockProvider],
         enableLogging: true,
         requireConsent: false,
+        autoTrackAppLifecycle: false,
+        enableOfflineQueue: false,
+        flushInterval: 0,
       );
+
+      await AnalyticsService.instance.dispose();
+    });
+
+    tearDown(() async {
+      await AnalyticsService.instance.dispose();
     });
 
     test('initializes providers correctly', () async {
@@ -33,8 +51,6 @@ void main() {
     });
 
     test('tracks events when initialized', () async {
-      when(mockProvider.trackEvent(any)).thenAnswer((_) async => {});
-
       await AnalyticsService.initialize(config);
 
       final event = AnalyticsEvent.custom(
@@ -48,8 +64,6 @@ void main() {
     });
 
     test('identifies user correctly', () async {
-      when(mockProvider.identifyUser(any)).thenAnswer((_) async => {});
-
       await AnalyticsService.initialize(config);
 
       await AnalyticsService.instance.identifyUser(
@@ -76,6 +90,27 @@ void main() {
       await AnalyticsService.instance.track(event);
 
       verify(mockProvider.trackEvent(any)).called(1);
+    });
+
+    test('blocks events when tracking is disabled', () async {
+      await AnalyticsService.initialize(config);
+      await AnalyticsService.instance.setTrackingEnabled(false);
+
+      await AnalyticsService.instance.track(
+        AnalyticsEvent.custom(name: 'test'),
+      );
+
+      verifyNever(mockProvider.trackEvent(any));
+    });
+
+    test('trackScreen respects autoTrackScreenViews config', () async {
+      await AnalyticsService.initialize(
+        config.copyWith(autoTrackScreenViews: false),
+      );
+
+      await AnalyticsService.instance.trackScreen('Home');
+
+      verifyNever(mockProvider.trackEvent(any));
     });
   });
 }

@@ -1,5 +1,8 @@
 #!/bin/bash
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "$SCRIPT_DIR/workspace_packages.sh"
+
 echo "🔍 Checking for outdated dependencies..."
 echo ""
 
@@ -27,8 +30,10 @@ check_deps() {
 WORKSPACE_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$WORKSPACE_ROOT"
 
-check_deps "apps/mobile" "mobile_app"
-check_deps "packages/core/domain" "core_domain"
-check_deps "packages/core/data" "core_data"
+for entry in "${WORKSPACE_PACKAGES_APP_FIRST[@]}"; do
+    package_path="${entry%%:*}"
+    package_name="${entry#*:}"
+    check_deps "$package_path" "$package_name"
+done
 
 echo "✓ Dependency check complete"

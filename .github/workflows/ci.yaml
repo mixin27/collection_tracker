@@ -51,6 +51,14 @@ jobs:
           IGDB_CLIENT_SECRET=${{ secrets.IGDB_CLIENT_SECRET }}
           EOF
 
+      - name: 🔥 Setup Firebase config files
+        env:
+          FIREBASE_OPTIONS_DART: ${{ secrets.FIREBASE_OPTIONS_DART }}
+          FIREBASE_OPTIONS_DART_BASE64: ${{ secrets.FIREBASE_OPTIONS_DART_BASE64 }}
+        run: |
+          chmod +x scripts/setup_firebase.sh
+          ./scripts/setup_firebase.sh --require dart
+
       - name: 🔨 Generate code
         run: |
           chmod +x scripts/build_all.sh
@@ -92,6 +100,14 @@ jobs:
           IGDB_CLIENT_ID=${{ secrets.IGDB_CLIENT_ID }}
           IGDB_CLIENT_SECRET=${{ secrets.IGDB_CLIENT_SECRET }}
           EOF
+
+      - name: 🔥 Setup Firebase config files
+        env:
+          FIREBASE_OPTIONS_DART: ${{ secrets.FIREBASE_OPTIONS_DART }}
+          FIREBASE_OPTIONS_DART_BASE64: ${{ secrets.FIREBASE_OPTIONS_DART_BASE64 }}
+        run: |
+          chmod +x scripts/setup_firebase.sh
+          ./scripts/setup_firebase.sh --require dart
 
       - name: 🔨 Generate code
         run: |

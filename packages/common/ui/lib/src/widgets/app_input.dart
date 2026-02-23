@@ -16,6 +16,11 @@ class AppInput extends StatelessWidget {
   final bool readOnly;
   final bool autofocus;
   final bool enabled;
+  final bool obscureText;
+  final bool autocorrect;
+  final bool enableSuggestions;
+  final SmartDashesType? smartDashesType;
+  final SmartQuotesType? smartQuotesType;
   final int maxLines;
   final TextCapitalization textCapitalization;
   final FormFieldValidator<String>? validator;
@@ -37,6 +42,11 @@ class AppInput extends StatelessWidget {
     this.readOnly = false,
     this.autofocus = false,
     this.enabled = true,
+    this.obscureText = false,
+    this.autocorrect = true,
+    this.enableSuggestions = true,
+    this.smartDashesType,
+    this.smartQuotesType,
     this.maxLines = 1,
     this.textCapitalization = TextCapitalization.none,
     this.validator,
@@ -73,6 +83,11 @@ class AppInput extends StatelessWidget {
       readOnly: readOnly,
       autofocus: autofocus,
       enabled: enabled,
+      obscureText: obscureText,
+      autocorrect: autocorrect,
+      enableSuggestions: enableSuggestions,
+      smartDashesType: smartDashesType,
+      smartQuotesType: smartQuotesType,
       maxLines: maxLines,
       textCapitalization: textCapitalization,
       validator: validator,

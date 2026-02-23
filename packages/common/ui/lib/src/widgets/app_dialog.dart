@@ -12,10 +12,17 @@ Future<T?> showAppDialog<T>({
 }) {
   return showDialog<T>(
     context: context,
+    useRootNavigator: false,
     barrierDismissible: barrierDismissible,
     builder: (context) =>
         AppDialog(title: title, content: content, actions: actions),
   );
+}
+
+Future<void> closeAppDialog<T>(BuildContext context, [T? result]) async {
+  final navigator = Navigator.maybeOf(context);
+  if (navigator == null) return;
+  await navigator.maybePop<T>(result);
 }
 
 class AppDialog extends StatelessWidget {

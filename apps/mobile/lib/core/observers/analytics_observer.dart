@@ -26,9 +26,14 @@ class AnalyticsObserver extends NavigatorObserver {
   }
 
   void _trackScreenView(Route<dynamic> route) {
+    final analytics = AnalyticsService.instance;
+    if (!analytics.isInitialized || !analytics.shouldAutoTrackScreenViews) {
+      return;
+    }
+
     final screenName = route.settings.name;
-    if (screenName != null) {
-      AnalyticsService.instance.trackScreen(screenName);
+    if (screenName != null && screenName.isNotEmpty) {
+      analytics.trackScreen(screenName);
     }
   }
 }

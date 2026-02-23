@@ -75,6 +75,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get settingsSectionAbout => '情報';
 
   @override
+  String get settingsSectionDeveloper => '開発者';
+
+  @override
   String get settingsThemeTitle => 'テーマ';
 
   @override
@@ -118,6 +121,159 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get settingsTermsTitle => '利用規約';
+
+  @override
+  String get settingsAnalyticsTitle => 'アナリティクス';
+
+  @override
+  String get settingsAnalyticsSummaryEnabled => '有効';
+
+  @override
+  String get settingsAnalyticsSummaryDisabled => '無効';
+
+  @override
+  String get settingsAnalyticsSummaryPending => '同意が必要';
+
+  @override
+  String get settingsAnalyticsSummaryDenied => '同意しない';
+
+  @override
+  String get settingsAnalyticsSheetTitle => 'アナリティクス設定';
+
+  @override
+  String get settingsAnalyticsDescription => '匿名の利用状況分析とデータ共有設定を管理します。';
+
+  @override
+  String get settingsAnalyticsToggleTitle => 'アナリティクスを有効化';
+
+  @override
+  String get settingsAnalyticsToggleSubtitle => '匿名のアプリ利用イベントの収集を許可します。';
+
+  @override
+  String get settingsAnalyticsConsentStatusTitle => '同意ステータス';
+
+  @override
+  String get settingsAnalyticsConsentStatusGranted => '同意済み';
+
+  @override
+  String get settingsAnalyticsConsentStatusDenied => '拒否';
+
+  @override
+  String get settingsAnalyticsConsentStatusPending => '保留';
+
+  @override
+  String get settingsAnalyticsReviewConsentAction => '同意内容を確認';
+
+  @override
+  String get settingsAnalyticsRevokeConsentAction => '同意を取り消す';
+
+  @override
+  String get settingsAnalyticsConsentAccepted => 'アナリティクスへの同意を受け付けました。';
+
+  @override
+  String get settingsAnalyticsConsentDeclined => 'アナリティクスへの同意を拒否しました。';
+
+  @override
+  String get analyticsConsentDialogTitle => 'Collection Tracker の改善にご協力ください';
+
+  @override
+  String get analyticsConsentDialogMessage => 'アプリ品質と機能改善のため、匿名の利用データ収集にご協力いただけますか？この設定はいつでも設定画面で変更できます。';
+
+  @override
+  String get analyticsConsentAllowAction => '許可';
+
+  @override
+  String get analyticsConsentDeclineAction => '今はしない';
+
+  @override
+  String get settingsCrashlyticsTestTitle => 'Crashlytics をテスト';
+
+  @override
+  String get settingsCrashlyticsTestSubtitle => 'クラッシュレポートを確認するため、意図的にアプリをクラッシュさせます';
+
+  @override
+  String get settingsCrashlyticsTestConfirmTitle => 'テストクラッシュを実行しますか？';
+
+  @override
+  String get settingsCrashlyticsTestConfirmMessage => 'アプリはすぐにクラッシュします。再起動して Firebase Crashlytics でクラッシュを確認してください。';
+
+  @override
+  String get settingsCrashlyticsTestConfirmAction => '今すぐクラッシュ';
+
+  @override
+  String get settingsCrashlyticsTestTriggered => 'テストクラッシュを実行しています...';
+
+  @override
+  String settingsCrashlyticsTestFailed(String error) {
+    return 'テストクラッシュの実行に失敗しました: $error';
+  }
+
+  @override
+  String get settingsFirebaseRuntimeConfigTitle => 'Firebase ランタイム設定';
+
+  @override
+  String get settingsFirebaseRuntimeConfigSubtitle => 'ランタイム機能フラグを確認して更新';
+
+  @override
+  String get settingsFirebaseRuntimeConfigSheetTitle => 'Firebase ランタイム設定';
+
+  @override
+  String get settingsFirebaseRuntimeConfigDescription => '値は Firebase Remote Config から取得され、実行時に適用されます。';
+
+  @override
+  String settingsFirebaseRuntimeConfigSummary(int enabledCount) {
+    return '3 件中 $enabledCount 件が有効';
+  }
+
+  @override
+  String get settingsFirebaseRuntimeConfigAnalyticsLabel => 'アナリティクス収集';
+
+  @override
+  String get settingsFirebaseRuntimeConfigCrashlyticsLabel => 'Crashlytics 収集';
+
+  @override
+  String get settingsFirebaseRuntimeConfigPerformanceLabel => 'パフォーマンス収集';
+
+  @override
+  String get settingsFirebaseRuntimeConfigFetchStatusTitle => '最終取得ステータス';
+
+  @override
+  String get settingsFirebaseRuntimeConfigLastFetchTitle => '最終取得時刻';
+
+  @override
+  String get settingsFirebaseRuntimeConfigValueEnabled => '有効';
+
+  @override
+  String get settingsFirebaseRuntimeConfigValueDisabled => '無効';
+
+  @override
+  String get settingsFirebaseRuntimeConfigFetchStatusSuccess => '成功';
+
+  @override
+  String get settingsFirebaseRuntimeConfigFetchStatusFailure => '失敗';
+
+  @override
+  String get settingsFirebaseRuntimeConfigFetchStatusThrottled => '制限中';
+
+  @override
+  String get settingsFirebaseRuntimeConfigFetchStatusNoFetch => '未取得';
+
+  @override
+  String get settingsFirebaseRuntimeConfigRefreshAction => '設定を更新';
+
+  @override
+  String get settingsFirebaseRuntimeConfigRefreshingAction => '更新中...';
+
+  @override
+  String get settingsFirebaseRuntimeConfigRefreshSuccess => 'Firebase ランタイム設定を更新しました。';
+
+  @override
+  String get settingsFirebaseRuntimeConfigRefreshNoChanges => 'Firebase ランタイム設定は最新です。';
+
+  @override
+  String settingsFirebaseRuntimeConfigRefreshFailed(String error) {
+    return '設定の更新に失敗しました: $error';
+  }
 
   @override
   String get settingsExportingData => 'データをエクスポート中...';

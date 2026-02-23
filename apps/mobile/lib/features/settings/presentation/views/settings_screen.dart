@@ -1,5 +1,12 @@
+import 'package:app_firebase/app_firebase.dart';
+import 'package:auth_session/auth_session.dart';
+import 'package:collection_tracker/core/analytics/analytics_consent_dialog.dart';
+import 'package:collection_tracker/core/analytics/analytics_preferences.dart';
+import 'package:collection_tracker/core/observability/operational_telemetry.dart';
 import 'package:collection_tracker/core/providers/providers.dart';
+import 'package:collection_tracker/core/router/routes.dart';
 import 'package:collection_tracker/l10n/l10n.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -7,6 +14,7 @@ import 'package:storage/storage.dart';
 import 'package:ui/ui.dart';
 
 import '../view_models/export_import_view_model.dart';
+import '../widgets/settings_primitives.dart';
 
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
@@ -16,9 +24,26 @@ class SettingsScreen extends ConsumerWidget {
     final l10n = context.l10n;
     final themeSettings = ref.watch(themeSettingsProvider);
     final currentLanguage = ref.watch(localeSettingsProvider);
+    final analyticsPreferences = ref.watch(analyticsPreferencesProvider);
+    final pushPreferences = ref.watch(pushNotificationPreferencesProvider);
+    final syncReadiness = ref.watch(syncReadinessProvider);
+    final accountReadiness = ref.watch(backendAuthReadinessProvider);
+    final pendingSyncCount = ref.watch(syncOutboxCountProvider).value ?? 0;
+    final authSession = ref.watch(authSessionProvider).value;
+
     final themeSummary =
         '${_themeModeLabel(context, themeSettings.mode)} - ${themeSettings.variant.label}';
     final languageSummary = _languageLabel(context, currentLanguage);
+    final analyticsSummary = _analyticsSummary(context, analyticsPreferences);
+    final accountSummary = _authAccountSummary(authSession, accountReadiness);
+    final accountFeatureEnabled = accountReadiness.enabled;
+    final cloudSyncSummary = _cloudSyncSummary(
+      syncReadiness,
+      pendingSyncCount: pendingSyncCount,
+    );
+    final pushSummary = _pushNotificationSummary(pushPreferences);
+    final cloudSyncFeatureEnabled =
+        syncReadiness.status != SyncReadinessStatus.disabledByFeatureFlag;
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.settingsTitle)),
@@ -31,59 +56,52 @@ class SettingsScreen extends ConsumerWidget {
         ),
         children: [
           AppReveal(
-            child: _SettingsSection(
-              title: l10n.settingsSectionGeneral,
-              children: [
-                _SettingsTile(
-                  icon: Icons.palette,
-                  title: l10n.settingsThemeTitle,
-                  subtitle: themeSummary,
-                  onTap: () => _showThemeSelector(context, ref),
-                ),
-                _SettingsTile(
-                  icon: Icons.language,
-                  title: l10n.settingsLanguageTitle,
-                  subtitle: languageSummary,
-                  onTap: () => _showLanguageSelector(context, ref),
-                ),
-              ],
+            child: SettingsStatusCard(
+              title: l10n.settingsTitle,
+              firstLabel: l10n.settingsCloudSyncTitle,
+              secondLabel: 'Push',
+              syncStatus: cloudSyncSummary,
+              notificationStatus: pushSummary,
             ),
           ),
           const SizedBox(height: AppSpacing.lg),
           AppReveal(
             delay: AppMotion.stagger,
-            child: _SettingsSection(
-              title: l10n.settingsSectionData,
+            child: SettingsSection(
+              title: l10n.settingsSectionGeneral,
               children: [
-                _SettingsTile(
-                  icon: Icons.file_download,
-                  title: l10n.settingsExportJsonTitle,
-                  subtitle: l10n.settingsExportJsonSubtitle,
-                  onTap: () => _handleExportJson(context, ref),
+                SettingsTile(
+                  icon: Icons.palette,
+                  title: l10n.settingsThemeTitle,
+                  subtitle: themeSummary,
+                  onTap: () => _showThemeSelector(context, ref),
                 ),
-                _SettingsTile(
-                  icon: Icons.table_chart,
-                  title: l10n.settingsExportCsvTitle,
-                  subtitle: l10n.settingsExportCsvSubtitle,
-                  onTap: () => _handleExportCsv(context, ref),
+                SettingsTile(
+                  icon: Icons.language,
+                  title: l10n.settingsLanguageTitle,
+                  subtitle: languageSummary,
+                  onTap: () => _showLanguageSelector(context, ref),
                 ),
-                _SettingsTile(
-                  icon: Icons.file_upload,
-                  title: l10n.settingsImportJsonTitle,
-                  subtitle: l10n.settingsImportJsonSubtitle,
-                  onTap: () => _handleImportJson(context, ref),
+                SettingsTile(
+                  icon: Icons.insights_outlined,
+                  title: l10n.settingsAnalyticsTitle,
+                  subtitle: analyticsSummary,
+                  onTap: () => _showAnalyticsSettings(context, ref),
                 ),
-                _SettingsTile(
-                  icon: Icons.cloud_upload,
-                  title: l10n.settingsCloudSyncTitle,
-                  subtitle: l10n.settingsCloudSyncSubtitle,
-                  onTap: () {},
+                SettingsTile(
+                  icon: Icons.person_outline_rounded,
+                  title: 'Account',
+                  subtitle: accountSummary,
+                  enabled: accountFeatureEnabled,
+                  onTap: accountFeatureEnabled
+                      ? () => context.push(Routes.auth)
+                      : null,
                 ),
-                _SettingsTile(
-                  icon: Icons.sell_outlined,
-                  title: l10n.settingsManageTagsTitle,
-                  subtitle: l10n.settingsManageTagsSubtitle,
-                  onTap: () => context.push('/settings/tags'),
+                SettingsTile(
+                  icon: Icons.notifications_outlined,
+                  title: 'Push Notifications',
+                  subtitle: pushSummary,
+                  onTap: () => context.push(Routes.settingsNotifications),
                 ),
               ],
             ),
@@ -91,27 +109,76 @@ class SettingsScreen extends ConsumerWidget {
           const SizedBox(height: AppSpacing.lg),
           AppReveal(
             delay: AppMotion.stagger * 2,
-            child: _SettingsSection(
-              title: l10n.settingsSectionAbout,
+            child: SettingsSection(
+              title: l10n.settingsSectionData,
               children: [
-                _SettingsTile(
-                  icon: Icons.info,
-                  title: l10n.settingsVersionTitle,
-                  subtitle: '1.0.0',
+                SettingsTile(
+                  icon: Icons.file_download,
+                  title: l10n.settingsExportJsonTitle,
+                  subtitle: l10n.settingsExportJsonSubtitle,
+                  onTap: () => _handleExportJson(context, ref),
                 ),
-                _SettingsTile(
-                  icon: Icons.description,
-                  title: l10n.settingsPrivacyPolicyTitle,
-                  onTap: () {},
+                SettingsTile(
+                  icon: Icons.table_chart,
+                  title: l10n.settingsExportCsvTitle,
+                  subtitle: l10n.settingsExportCsvSubtitle,
+                  onTap: () => _handleExportCsv(context, ref),
                 ),
-                _SettingsTile(
-                  icon: Icons.gavel,
-                  title: l10n.settingsTermsTitle,
-                  onTap: () {},
+                SettingsTile(
+                  icon: Icons.file_upload,
+                  title: l10n.settingsImportJsonTitle,
+                  subtitle: l10n.settingsImportJsonSubtitle,
+                  onTap: () => _handleImportJson(context, ref),
+                ),
+                SettingsTile(
+                  icon: Icons.cloud_upload,
+                  title: l10n.settingsCloudSyncTitle,
+                  subtitle: cloudSyncSummary,
+                  enabled: cloudSyncFeatureEnabled,
+                  onTap: cloudSyncFeatureEnabled
+                      ? () => _showCloudSyncStatusSheet(context, ref)
+                      : null,
+                ),
+                SettingsTile(
+                  icon: Icons.sell_outlined,
+                  title: l10n.settingsManageTagsTitle,
+                  subtitle: l10n.settingsManageTagsSubtitle,
+                  onTap: () => context.push(Routes.settingsTags),
                 ),
               ],
             ),
           ),
+          const SizedBox(height: AppSpacing.lg),
+          AppReveal(
+            delay: AppMotion.stagger * 3,
+            child: SettingsSection(
+              title: l10n.settingsSectionAbout,
+              children: [
+                SettingsTile(
+                  icon: Icons.info,
+                  title: l10n.settingsVersionTitle,
+                  subtitle: '1.0.0',
+                ),
+              ],
+            ),
+          ),
+          if (kDebugMode) ...[
+            const SizedBox(height: AppSpacing.lg),
+            AppReveal(
+              delay: AppMotion.stagger * 4,
+              child: SettingsSection(
+                title: l10n.settingsSectionDeveloper,
+                children: [
+                  SettingsTile(
+                    icon: Icons.developer_mode_outlined,
+                    title: '${l10n.settingsSectionDeveloper} Tools',
+                    subtitle: 'Runtime flags, diagnostics, and crash testing',
+                    onTap: () => context.push(Routes.settingsDevtools),
+                  ),
+                ],
+              ),
+            ),
+          ],
         ],
       ),
     );
@@ -132,23 +199,25 @@ class SettingsScreen extends ConsumerWidget {
       final exportService = ExportImportService();
       await exportService.shareFile(filePath, 'collection_tracker_export.json');
 
-      if (context.mounted) {
-        messenger.showSnackBar(
-          SnackBar(
-            content: Text(l10n.settingsDataExportSuccess),
-            backgroundColor: Colors.green,
-          ),
-        );
+      if (!context.mounted) {
+        return;
       }
-    } catch (e) {
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(l10n.settingsExportFailed('$e')),
-            backgroundColor: Colors.red,
-          ),
-        );
+      messenger.showSnackBar(
+        SnackBar(
+          content: Text(l10n.settingsDataExportSuccess),
+          backgroundColor: Colors.green,
+        ),
+      );
+    } catch (error) {
+      if (!context.mounted) {
+        return;
       }
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(l10n.settingsExportFailed('$error')),
+          backgroundColor: Colors.red,
+        ),
+      );
     }
   }
 
@@ -167,23 +236,25 @@ class SettingsScreen extends ConsumerWidget {
       final exportService = ExportImportService();
       await exportService.shareFile(filePath, 'collection_tracker_export.csv');
 
-      if (context.mounted) {
-        messenger.showSnackBar(
-          SnackBar(
-            content: Text(l10n.settingsDataExportSuccess),
-            backgroundColor: Colors.green,
-          ),
-        );
+      if (!context.mounted) {
+        return;
       }
-    } catch (e) {
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(l10n.settingsExportFailed('$e')),
-            backgroundColor: Colors.red,
-          ),
-        );
+      messenger.showSnackBar(
+        SnackBar(
+          content: Text(l10n.settingsDataExportSuccess),
+          backgroundColor: Colors.green,
+        ),
+      );
+    } catch (error) {
+      if (!context.mounted) {
+        return;
       }
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(l10n.settingsExportFailed('$error')),
+          backgroundColor: Colors.red,
+        ),
+      );
     }
   }
 
@@ -197,16 +268,18 @@ class SettingsScreen extends ConsumerWidget {
         AppButton(
           label: l10n.actionCancel,
           variant: AppButtonVariant.ghost,
-          onPressed: () => Navigator.pop(context, false),
+          onPressed: () => closeAppDialog(context, false),
         ),
         AppButton(
           label: l10n.actionImport,
-          onPressed: () => Navigator.pop(context, true),
+          onPressed: () => closeAppDialog(context, true),
         ),
       ],
     );
 
-    if (confirmed != true || !context.mounted) return;
+    if (confirmed != true || !context.mounted) {
+      return;
+    }
 
     try {
       final messenger = ScaffoldMessenger.of(context);
@@ -216,32 +289,220 @@ class SettingsScreen extends ConsumerWidget {
 
       await ref.read(exportImportViewModelProvider.notifier).importFromJson();
 
-      if (context.mounted) {
-        messenger.showSnackBar(
-          SnackBar(
-            content: Text(l10n.settingsDataImportSuccess),
-            backgroundColor: Colors.green,
-          ),
-        );
+      if (!context.mounted) {
+        return;
       }
-    } catch (e) {
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(l10n.settingsImportFailed('$e')),
-            backgroundColor: Colors.red,
-          ),
-        );
+      messenger.showSnackBar(
+        SnackBar(
+          content: Text(l10n.settingsDataImportSuccess),
+          backgroundColor: Colors.green,
+        ),
+      );
+    } catch (error) {
+      if (!context.mounted) {
+        return;
       }
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(l10n.settingsImportFailed('$error')),
+          backgroundColor: Colors.red,
+        ),
+      );
     }
+  }
+
+  Future<void> _showCloudSyncStatusSheet(
+    BuildContext context,
+    WidgetRef ref,
+  ) async {
+    await showAppSheet(
+      context: context,
+      builder: (sheetContext) {
+        return Consumer(
+          builder: (sheetContext, ref, _) {
+            final readiness = ref.watch(syncReadinessProvider);
+            final pendingCount =
+                ref.watch(syncOutboxCountProvider).asData?.value ?? 0;
+            final isBusy =
+                readiness.status == SyncReadinessStatus.checkingAuthentication;
+
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  sheetContext.l10n.settingsCloudSyncTitle,
+                  style: Theme.of(sheetContext).textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                const SizedBox(height: AppSpacing.sm),
+                Text(
+                  _cloudSyncSummary(readiness, pendingSyncCount: pendingCount),
+                  style: Theme.of(sheetContext).textTheme.bodyMedium?.copyWith(
+                    color: Theme.of(sheetContext).colorScheme.onSurfaceVariant,
+                  ),
+                ),
+                const SizedBox(height: AppSpacing.lg),
+                AppButton(
+                  label: _cloudSyncPrimaryCta(readiness.status),
+                  onPressed: isBusy
+                      ? null
+                      : () => _handleCloudSyncPrimaryAction(
+                          context: context,
+                          sheetContext: sheetContext,
+                          ref: ref,
+                          readiness: readiness,
+                        ),
+                ),
+                if (kDebugMode) ...[
+                  const SizedBox(height: AppSpacing.sm),
+                  AppButton(
+                    label:
+                        '${sheetContext.l10n.settingsSectionDeveloper} Tools',
+                    variant: AppButtonVariant.secondary,
+                    onPressed: () {
+                      Navigator.of(sheetContext).pop();
+                      if (!context.mounted) {
+                        return;
+                      }
+                      context.push(Routes.settingsDevtools);
+                    },
+                  ),
+                ],
+                const SizedBox(height: AppSpacing.sm),
+                AppButton(
+                  label: sheetContext.l10n.actionDismiss,
+                  variant: AppButtonVariant.ghost,
+                  onPressed: () => Navigator.of(sheetContext).pop(),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
+
+  Future<void> _handleCloudSyncPrimaryAction({
+    required BuildContext context,
+    required BuildContext sheetContext,
+    required WidgetRef ref,
+    required SyncReadinessState readiness,
+  }) async {
+    switch (readiness.status) {
+      case SyncReadinessStatus.ready:
+        await _triggerSyncNow(context, ref);
+        return;
+      case SyncReadinessStatus.authenticationRequired:
+        Navigator.of(sheetContext).pop();
+        if (!context.mounted) {
+          return;
+        }
+        await context.push<bool>('${Routes.auth}?mode=signin');
+        return;
+      case SyncReadinessStatus.missingApiConfiguration:
+        Navigator.of(sheetContext).pop();
+        if (!context.mounted) {
+          return;
+        }
+        if (kDebugMode) {
+          context.push(Routes.settingsDevtools);
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Cloud sync is currently unavailable.'),
+            ),
+          );
+        }
+        return;
+      case SyncReadinessStatus.disabledByFeatureFlag:
+        return;
+      case SyncReadinessStatus.checkingAuthentication:
+        return;
+    }
+  }
+
+  Future<void> _triggerSyncNow(BuildContext context, WidgetRef ref) async {
+    final readiness = ref.read(syncReadinessProvider);
+    final pendingBefore = await ref
+        .read(syncOrchestratorProvider)
+        .getPendingOperationCount();
+    await OperationalTelemetry.trackSyncAttempt(
+      trigger: 'settings_manual_sync',
+      readinessStatus: readiness.status.name,
+      pendingBefore: pendingBefore,
+    );
+
+    final session = ref.read(authSessionProvider).asData?.value;
+    final deviceId = session?.deviceId;
+    if (deviceId == null || deviceId.trim().isEmpty) {
+      if (!context.mounted) {
+        return;
+      }
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Missing device id. Sign in again to enable sync.'),
+        ),
+      );
+      return;
+    }
+
+    final bootstrapResult = await ref
+        .read(syncOutboxBootstrapperProvider)
+        .seedFromLocalDataIfNeeded();
+    await OperationalTelemetry.trackSyncSeed(
+      queuedOperations: bootstrapResult.totalOperations,
+      skipped: bootstrapResult.skipped,
+    );
+
+    final result = await ref
+        .read(syncOrchestratorProvider)
+        .syncNow(deviceId: deviceId);
+    await OperationalTelemetry.trackSyncResult(
+      success: result.success,
+      executed: result.executed,
+      partial: result.partial,
+      pendingOperations: result.pendingOperations,
+      processedOperations: result.processedOperations,
+      syncedCollections: result.syncedCollections,
+      syncedItems: result.syncedItems,
+      syncedTags: result.syncedTags,
+      conflictCount: result.conflictCount,
+      appliedServerCollections: result.appliedServerCollections,
+      appliedServerItems: result.appliedServerItems,
+      appliedServerTags: result.appliedServerTags,
+      skippedServerCollections: result.skippedServerCollections,
+      skippedServerItems: result.skippedServerItems,
+      skippedServerTags: result.skippedServerTags,
+      message: result.message,
+      error: result.error,
+      stackTrace: result.stackTrace,
+    );
+
+    if (!context.mounted) {
+      return;
+    }
+    final bootstrapMessage = bootstrapResult.totalOperations > 0
+        ? 'Prepared ${bootstrapResult.totalOperations} local change(s). '
+        : '';
+    final recoveryHint = bootstrapResult.skipped && !result.executed
+        ? ' If existing local data is missing on cloud, open Developer Tools and use "Rebuild local sync queue".'
+        : '';
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('$bootstrapMessage${result.message}$recoveryHint'),
+        backgroundColor: result.success ? Colors.green : Colors.orange,
+      ),
+    );
   }
 
   Future<void> _showThemeSelector(BuildContext context, WidgetRef ref) async {
     await showAppSheet(
       context: context,
-      builder: (context) {
+      builder: (sheetContext) {
         return Consumer(
-          builder: (context, ref, _) {
+          builder: (sheetContext, ref, _) {
             final settings = ref.watch(themeSettingsProvider);
 
             return Column(
@@ -249,8 +510,8 @@ class SettingsScreen extends ConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  context.l10n.settingsThemeModeTitle,
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                  sheetContext.l10n.settingsThemeModeTitle,
+                  style: Theme.of(sheetContext).textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.w700,
                   ),
                 ),
@@ -261,10 +522,12 @@ class SettingsScreen extends ConsumerWidget {
                   children: ThemeMode.values.map((mode) {
                     final isSelected = settings.mode == mode;
                     return ChoiceChip(
-                      label: Text(_themeModeLabel(context, mode)),
+                      label: Text(_themeModeLabel(sheetContext, mode)),
                       selected: isSelected,
                       onSelected: (selected) {
-                        if (!selected) return;
+                        if (!selected) {
+                          return;
+                        }
                         ref
                             .read(themeSettingsProvider.notifier)
                             .setThemeMode(mode);
@@ -274,8 +537,8 @@ class SettingsScreen extends ConsumerWidget {
                 ),
                 const SizedBox(height: AppSpacing.xl),
                 Text(
-                  context.l10n.settingsThemeColorVariantTitle,
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                  sheetContext.l10n.settingsThemeColorVariantTitle,
+                  style: Theme.of(sheetContext).textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.w700,
                   ),
                 ),
@@ -307,7 +570,7 @@ class SettingsScreen extends ConsumerWidget {
                             border: isSelected
                                 ? Border.all(
                                     color: Theme.of(
-                                      context,
+                                      sheetContext,
                                     ).colorScheme.primary,
                                     width: 3,
                                   )
@@ -324,8 +587,8 @@ class SettingsScreen extends ConsumerWidget {
                 const SizedBox(height: AppSpacing.lg),
                 SwitchListTile(
                   contentPadding: EdgeInsets.zero,
-                  title: Text(context.l10n.settingsAmoledTitle),
-                  subtitle: Text(context.l10n.settingsAmoledSubtitle),
+                  title: Text(sheetContext.l10n.settingsAmoledTitle),
+                  subtitle: Text(sheetContext.l10n.settingsAmoledSubtitle),
                   value: settings.amoled,
                   onChanged: (value) {
                     ref.read(themeSettingsProvider.notifier).setAmoled(value);
@@ -345,17 +608,17 @@ class SettingsScreen extends ConsumerWidget {
   ) async {
     await showAppSheet(
       context: context,
-      builder: (context) {
+      builder: (sheetContext) {
         return Consumer(
-          builder: (context, ref, _) {
+          builder: (sheetContext, ref, _) {
             final selectedLanguage = ref.watch(localeSettingsProvider);
             return Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  context.l10n.settingsLanguageTitle,
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                  sheetContext.l10n.settingsLanguageTitle,
+                  style: Theme.of(sheetContext).textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.w700,
                   ),
                 ),
@@ -364,18 +627,18 @@ class SettingsScreen extends ConsumerWidget {
                   final selected = selectedLanguage == language;
                   return ListTile(
                     contentPadding: EdgeInsets.zero,
-                    title: Text(_languageLabel(context, language)),
+                    title: Text(_languageLabel(sheetContext, language)),
                     trailing: selected
                         ? Icon(
                             Icons.check_circle_rounded,
-                            color: Theme.of(context).colorScheme.primary,
+                            color: Theme.of(sheetContext).colorScheme.primary,
                           )
                         : null,
                     onTap: () {
                       ref
                           .read(localeSettingsProvider.notifier)
                           .setLanguage(language);
-                      Navigator.pop(context);
+                      Navigator.pop(sheetContext);
                     },
                   );
                 }),
@@ -385,6 +648,175 @@ class SettingsScreen extends ConsumerWidget {
         );
       },
     );
+  }
+
+  Future<void> _showAnalyticsSettings(
+    BuildContext context,
+    WidgetRef ref,
+  ) async {
+    await showAppSheet(
+      context: context,
+      builder: (sheetContext) {
+        return Consumer(
+          builder: (sheetContext, ref, _) {
+            final l10n = sheetContext.l10n;
+            final preferences = ref.watch(analyticsPreferencesProvider);
+            final notifier = ref.read(analyticsPreferencesProvider.notifier);
+            final consentLabel = switch (preferences.consentStatus) {
+              AnalyticsConsentStatus.granted =>
+                l10n.settingsAnalyticsConsentStatusGranted,
+              AnalyticsConsentStatus.denied =>
+                l10n.settingsAnalyticsConsentStatusDenied,
+              AnalyticsConsentStatus.unknown =>
+                l10n.settingsAnalyticsConsentStatusPending,
+            };
+
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  l10n.settingsAnalyticsSheetTitle,
+                  style: Theme.of(sheetContext).textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                const SizedBox(height: AppSpacing.sm),
+                Text(
+                  l10n.settingsAnalyticsDescription,
+                  style: Theme.of(sheetContext).textTheme.bodyMedium?.copyWith(
+                    color: Theme.of(sheetContext).colorScheme.onSurfaceVariant,
+                  ),
+                ),
+                const SizedBox(height: AppSpacing.md),
+                SwitchListTile(
+                  contentPadding: EdgeInsets.zero,
+                  title: Text(l10n.settingsAnalyticsToggleTitle),
+                  subtitle: Text(l10n.settingsAnalyticsToggleSubtitle),
+                  value: preferences.enabled,
+                  onChanged: (value) {
+                    notifier.setEnabled(value);
+                  },
+                ),
+                ListTile(
+                  contentPadding: EdgeInsets.zero,
+                  leading: const Icon(Icons.privacy_tip_outlined),
+                  title: Text(l10n.settingsAnalyticsConsentStatusTitle),
+                  subtitle: Text(consentLabel),
+                ),
+                const SizedBox(height: AppSpacing.sm),
+                Wrap(
+                  spacing: AppSpacing.sm,
+                  runSpacing: AppSpacing.sm,
+                  children: [
+                    if (preferences.enabled &&
+                        preferences.consentStatus !=
+                            AnalyticsConsentStatus.granted)
+                      AppButton(
+                        label: l10n.settingsAnalyticsReviewConsentAction,
+                        onPressed: () async {
+                          final decision = await showAnalyticsConsentDialog(
+                            sheetContext,
+                            barrierDismissible: true,
+                          );
+                          if (!sheetContext.mounted) {
+                            return;
+                          }
+                          if (decision == AnalyticsConsentDecision.allow) {
+                            await notifier.grantConsent();
+                            if (sheetContext.mounted) {
+                              ScaffoldMessenger.of(sheetContext).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                    l10n.settingsAnalyticsConsentAccepted,
+                                  ),
+                                ),
+                              );
+                            }
+                          } else {
+                            await notifier.denyConsent();
+                            if (sheetContext.mounted) {
+                              ScaffoldMessenger.of(sheetContext).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                    l10n.settingsAnalyticsConsentDeclined,
+                                  ),
+                                ),
+                              );
+                            }
+                          }
+                        },
+                      ),
+                    if (preferences.consentStatus ==
+                        AnalyticsConsentStatus.granted)
+                      AppButton(
+                        label: l10n.settingsAnalyticsRevokeConsentAction,
+                        variant: AppButtonVariant.ghost,
+                        onPressed: () async {
+                          await notifier.denyConsent();
+                          if (sheetContext.mounted) {
+                            ScaffoldMessenger.of(sheetContext).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  l10n.settingsAnalyticsConsentDeclined,
+                                ),
+                              ),
+                            );
+                          }
+                        },
+                      ),
+                  ],
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
+
+  String _cloudSyncSummary(
+    SyncReadinessState readiness, {
+    required int pendingSyncCount,
+  }) {
+    return switch (readiness.status) {
+      SyncReadinessStatus.ready =>
+        pendingSyncCount > 0
+            ? 'Ready • $pendingSyncCount pending change(s)'
+            : 'Ready',
+      SyncReadinessStatus.disabledByFeatureFlag => 'Unavailable',
+      SyncReadinessStatus.missingApiConfiguration => 'Configuration required',
+      SyncReadinessStatus.checkingAuthentication => 'Checking session...',
+      SyncReadinessStatus.authenticationRequired => 'Sign in required',
+    };
+  }
+
+  String _authAccountSummary(
+    AuthSession? session,
+    BackendApiReadiness readiness,
+  ) {
+    if (!readiness.enabled) {
+      final message = readiness.message.toLowerCase();
+      if (message.contains('missing') || message.contains('configure')) {
+        return 'Configuration required';
+      }
+      return 'Unavailable';
+    }
+    if (session == null || !session.isAuthenticated) {
+      return 'Not signed in';
+    }
+    return 'Signed in';
+  }
+
+  String _cloudSyncPrimaryCta(SyncReadinessStatus status) {
+    return switch (status) {
+      SyncReadinessStatus.ready => 'Sync now',
+      SyncReadinessStatus.authenticationRequired => 'Sign in',
+      SyncReadinessStatus.missingApiConfiguration =>
+        kDebugMode ? 'Open dev tools' : 'Unavailable',
+      SyncReadinessStatus.disabledByFeatureFlag => 'Feature disabled',
+      SyncReadinessStatus.checkingAuthentication => 'Checking session',
+    };
   }
 
   String _themeModeLabel(BuildContext context, ThemeMode mode) {
@@ -409,82 +841,43 @@ class SettingsScreen extends ConsumerWidget {
       AppLanguage.burmese => l10n.languageBurmese,
     };
   }
-}
 
-class _SettingsSection extends StatelessWidget {
-  final String title;
-  final List<Widget> children;
-
-  const _SettingsSection({required this.title, required this.children});
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(left: AppSpacing.xs),
-          child: Text(
-            title,
-            style: Theme.of(context).textTheme.titleSmall?.copyWith(
-              color: Theme.of(context).colorScheme.primary,
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-        ),
-        const SizedBox(height: AppSpacing.sm),
-        AppCard(
-          padding: EdgeInsets.zero,
-          child: Column(children: _withDividers(context, children)),
-        ),
-      ],
-    );
-  }
-
-  static List<Widget> _withDividers(BuildContext context, List<Widget> items) {
-    if (items.isEmpty) return const [];
-    final out = <Widget>[];
-    for (var i = 0; i < items.length; i++) {
-      out.add(items[i]);
-      if (i < items.length - 1) {
-        out.add(
-          Divider(
-            height: 1,
-            color: Theme.of(context).colorScheme.outlineVariant,
-          ),
-        );
-      }
+  String _analyticsSummary(
+    BuildContext context,
+    AnalyticsPreferences preferences,
+  ) {
+    final l10n = context.l10n;
+    if (!preferences.enabled) {
+      return l10n.settingsAnalyticsSummaryDisabled;
     }
-    return out;
+
+    return switch (preferences.consentStatus) {
+      AnalyticsConsentStatus.granted => l10n.settingsAnalyticsSummaryEnabled,
+      AnalyticsConsentStatus.denied => l10n.settingsAnalyticsSummaryDenied,
+      AnalyticsConsentStatus.unknown => l10n.settingsAnalyticsSummaryPending,
+    };
   }
-}
 
-class _SettingsTile extends StatelessWidget {
-  final IconData icon;
-  final String title;
-  final String? subtitle;
-  final VoidCallback? onTap;
+  String _pushNotificationSummary(
+    PushNotificationPreferencesState preferences,
+  ) {
+    if (!preferences.runtimeFeatureEnabled) {
+      return 'Feature disabled';
+    }
+    if (!preferences.preferenceEnabled) {
+      return 'Disabled';
+    }
+    if (!preferences.permissionStatus.isGranted) {
+      return 'Permission required';
+    }
 
-  const _SettingsTile({
-    required this.icon,
-    required this.title,
-    this.subtitle,
-    this.onTap,
-  });
+    final enabledTopics = [
+      preferences.syncNeededEnabled,
+      preferences.priceAlertsEnabled,
+      preferences.remindersEnabled,
+      preferences.accountSecurityEnabled,
+    ].where((enabled) => enabled).length;
 
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      leading: Icon(icon),
-      title: Text(title),
-      subtitle: subtitle != null ? Text(subtitle!) : null,
-      trailing: onTap != null
-          ? Icon(
-              Icons.chevron_right_rounded,
-              color: Theme.of(context).colorScheme.onSurfaceVariant,
-            )
-          : null,
-      onTap: onTap,
-    );
+    return 'Enabled ($enabledTopics topics)';
   }
 }

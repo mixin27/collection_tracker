@@ -75,6 +75,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get settingsSectionAbout => 'Acerca de';
 
   @override
+  String get settingsSectionDeveloper => 'Desarrollador';
+
+  @override
   String get settingsThemeTitle => 'Tema';
 
   @override
@@ -118,6 +121,159 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get settingsTermsTitle => 'Términos de servicio';
+
+  @override
+  String get settingsAnalyticsTitle => 'Analíticas';
+
+  @override
+  String get settingsAnalyticsSummaryEnabled => 'Activadas';
+
+  @override
+  String get settingsAnalyticsSummaryDisabled => 'Desactivadas';
+
+  @override
+  String get settingsAnalyticsSummaryPending => 'Se requiere consentimiento';
+
+  @override
+  String get settingsAnalyticsSummaryDenied => 'Consentimiento rechazado';
+
+  @override
+  String get settingsAnalyticsSheetTitle => 'Preferencias de analíticas';
+
+  @override
+  String get settingsAnalyticsDescription => 'Controla las analíticas de uso anónimas y las preferencias de compartición de datos.';
+
+  @override
+  String get settingsAnalyticsToggleTitle => 'Activar analíticas';
+
+  @override
+  String get settingsAnalyticsToggleSubtitle => 'Permite recopilar eventos anónimos de uso de la aplicación.';
+
+  @override
+  String get settingsAnalyticsConsentStatusTitle => 'Estado del consentimiento';
+
+  @override
+  String get settingsAnalyticsConsentStatusGranted => 'Concedido';
+
+  @override
+  String get settingsAnalyticsConsentStatusDenied => 'Rechazado';
+
+  @override
+  String get settingsAnalyticsConsentStatusPending => 'Pendiente';
+
+  @override
+  String get settingsAnalyticsReviewConsentAction => 'Revisar consentimiento';
+
+  @override
+  String get settingsAnalyticsRevokeConsentAction => 'Revocar consentimiento';
+
+  @override
+  String get settingsAnalyticsConsentAccepted => 'Consentimiento de analíticas aceptado.';
+
+  @override
+  String get settingsAnalyticsConsentDeclined => 'Consentimiento de analíticas rechazado.';
+
+  @override
+  String get analyticsConsentDialogTitle => 'Ayúdanos a mejorar Collection Tracker';
+
+  @override
+  String get analyticsConsentDialogMessage => '¿Podemos recopilar analíticas de uso anónimas para mejorar la calidad y las funciones de la app? Puedes cambiarlo en Configuración en cualquier momento.';
+
+  @override
+  String get analyticsConsentAllowAction => 'Permitir';
+
+  @override
+  String get analyticsConsentDeclineAction => 'Ahora no';
+
+  @override
+  String get settingsCrashlyticsTestTitle => 'Probar Crashlytics';
+
+  @override
+  String get settingsCrashlyticsTestSubtitle => 'Bloquea la app intencionalmente para verificar los reportes de fallos';
+
+  @override
+  String get settingsCrashlyticsTestConfirmTitle => '¿Activar bloqueo de prueba?';
+
+  @override
+  String get settingsCrashlyticsTestConfirmMessage => 'La aplicación se cerrará inmediatamente. Ábrela de nuevo para verificar el fallo en Firebase Crashlytics.';
+
+  @override
+  String get settingsCrashlyticsTestConfirmAction => 'Bloquear ahora';
+
+  @override
+  String get settingsCrashlyticsTestTriggered => 'Iniciando bloqueo de prueba...';
+
+  @override
+  String settingsCrashlyticsTestFailed(String error) {
+    return 'No se pudo iniciar la prueba de bloqueo: $error';
+  }
+
+  @override
+  String get settingsFirebaseRuntimeConfigTitle => 'Configuración de ejecución de Firebase';
+
+  @override
+  String get settingsFirebaseRuntimeConfigSubtitle => 'Inspecciona y actualiza las banderas de ejecución';
+
+  @override
+  String get settingsFirebaseRuntimeConfigSheetTitle => 'Configuración de ejecución de Firebase';
+
+  @override
+  String get settingsFirebaseRuntimeConfigDescription => 'Los valores se obtienen de Firebase Remote Config y se aplican en tiempo de ejecución.';
+
+  @override
+  String settingsFirebaseRuntimeConfigSummary(int enabledCount) {
+    return '$enabledCount de 3 señales activas';
+  }
+
+  @override
+  String get settingsFirebaseRuntimeConfigAnalyticsLabel => 'Recopilación de analíticas';
+
+  @override
+  String get settingsFirebaseRuntimeConfigCrashlyticsLabel => 'Recopilación de Crashlytics';
+
+  @override
+  String get settingsFirebaseRuntimeConfigPerformanceLabel => 'Recopilación de rendimiento';
+
+  @override
+  String get settingsFirebaseRuntimeConfigFetchStatusTitle => 'Estado de la última obtención';
+
+  @override
+  String get settingsFirebaseRuntimeConfigLastFetchTitle => 'Hora de la última obtención';
+
+  @override
+  String get settingsFirebaseRuntimeConfigValueEnabled => 'Activado';
+
+  @override
+  String get settingsFirebaseRuntimeConfigValueDisabled => 'Desactivado';
+
+  @override
+  String get settingsFirebaseRuntimeConfigFetchStatusSuccess => 'Correcto';
+
+  @override
+  String get settingsFirebaseRuntimeConfigFetchStatusFailure => 'Fallido';
+
+  @override
+  String get settingsFirebaseRuntimeConfigFetchStatusThrottled => 'Limitado';
+
+  @override
+  String get settingsFirebaseRuntimeConfigFetchStatusNoFetch => 'Aún sin obtención';
+
+  @override
+  String get settingsFirebaseRuntimeConfigRefreshAction => 'Actualizar configuración';
+
+  @override
+  String get settingsFirebaseRuntimeConfigRefreshingAction => 'Actualizando...';
+
+  @override
+  String get settingsFirebaseRuntimeConfigRefreshSuccess => 'La configuración de ejecución de Firebase se actualizó.';
+
+  @override
+  String get settingsFirebaseRuntimeConfigRefreshNoChanges => 'La configuración de ejecución de Firebase ya está actualizada.';
+
+  @override
+  String settingsFirebaseRuntimeConfigRefreshFailed(String error) {
+    return 'No se pudo actualizar la configuración: $error';
+  }
 
   @override
   String get settingsExportingData => 'Exportando datos...';

@@ -7,14 +7,22 @@ import 'package:path_provider/path_provider.dart';
 part 'app_database.g.dart';
 
 @DriftDatabase(
-  tables: [Collections, Items, Tags, ItemTags, ItemPriceHistory],
-  daos: [CollectionDao, ItemDao],
+  tables: [
+    Collections,
+    Items,
+    Tags,
+    ItemTags,
+    ItemPriceHistory,
+    SyncOutbox,
+    SyncState,
+  ],
+  daos: [CollectionDao, ItemDao, SyncDao],
 )
 class AppDatabase extends _$AppDatabase {
   AppDatabase([QueryExecutor? executor]) : super(executor ?? _openConnection());
 
   @override
-  int get schemaVersion => 5;
+  int get schemaVersion => 7;
 
   @override
   MigrationStrategy get migration {
@@ -30,6 +38,13 @@ class AppDatabase extends _$AppDatabase {
         await customStatement(
           'CREATE INDEX idx_item_price_history_item_time '
           'ON item_price_history(item_id, recorded_at DESC);',
+        );
+        await customStatement(
+          'CREATE INDEX idx_sync_outbox_created_at ON sync_outbox(created_at);',
+        );
+        await customStatement(
+          'CREATE INDEX idx_sync_outbox_entity '
+          'ON sync_outbox(entity_type, entity_id);',
         );
       },
       onUpgrade: (Migrator m, int from, int to) async {
@@ -52,6 +67,22 @@ class AppDatabase extends _$AppDatabase {
             'CREATE INDEX idx_item_price_history_item_time '
             'ON item_price_history(item_id, recorded_at DESC);',
           );
+        }
+
+        if (from < 6) {
+          await m.createTable(syncOutbox);
+          await m.createTable(syncState);
+          await customStatement(
+            'CREATE INDEX idx_sync_outbox_created_at ON sync_outbox(created_at);',
+          );
+          await customStatement(
+            'CREATE INDEX idx_sync_outbox_entity '
+            'ON sync_outbox(entity_type, entity_id);',
+          );
+        }
+
+        if (from < 7) {
+          await m.addColumn(syncState, syncState.nextRetryAt);
         }
       },
       beforeOpen: (details) async {

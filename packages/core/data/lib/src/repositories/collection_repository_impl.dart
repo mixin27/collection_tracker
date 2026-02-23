@@ -2,10 +2,14 @@ import 'package:database/database.dart';
 import 'package:domain/domain.dart';
 import 'package:fpdart/fpdart.dart';
 
+import '../sync/outbox_sync_writer.dart';
+
 class CollectionRepositoryImpl implements CollectionRepository {
   final CollectionDao _dao;
+  final SyncOutboxWriter? _syncOutboxWriter;
 
-  CollectionRepositoryImpl(this._dao);
+  CollectionRepositoryImpl(this._dao, {SyncDao? syncDao})
+    : _syncOutboxWriter = syncDao != null ? SyncOutboxWriter(syncDao) : null;
 
   @override
   Future<Either<AppException, List<Collection>>> getCollections() async {
@@ -53,6 +57,7 @@ class CollectionRepositoryImpl implements CollectionRepository {
     try {
       final companion = _mapToCompanion(collection);
       await _dao.insertCollection(companion);
+      await _queueCollectionUpsert(collection);
       return Right(collection);
     } catch (e, stack) {
       return Left(
@@ -79,6 +84,7 @@ class CollectionRepositoryImpl implements CollectionRepository {
           ),
         );
       }
+      await _queueCollectionUpsert(collection);
       return Right(collection);
     } catch (e, stack) {
       return Left(
@@ -93,7 +99,11 @@ class CollectionRepositoryImpl implements CollectionRepository {
   @override
   Future<Either<AppException, void>> deleteCollection(String id) async {
     try {
+      final existing = await _dao.getCollectionById(id);
       await _dao.deleteCollection(id);
+      if (existing != null) {
+        await _queueCollectionDelete(_mapToEntity(existing));
+      }
       return const Right(null);
     } catch (e, stack) {
       return Left(
@@ -146,5 +156,69 @@ class CollectionRepositoryImpl implements CollectionRepository {
       createdAt: Value(entity.createdAt),
       updatedAt: Value(entity.updatedAt),
     );
+  }
+
+  Future<void> _queueCollectionUpsert(Collection collection) async {
+    final writer = _syncOutboxWriter;
+    if (writer == null) {
+      return;
+    }
+
+    final payload = _collectionSyncPayload(collection: collection);
+    try {
+      await writer.queueUpsert(
+        entityType: 'collection',
+        entityId: collection.id,
+        payload: payload,
+      );
+    } catch (_) {
+      // Keep local write successful even if sync queue persistence fails.
+    }
+  }
+
+  Future<void> _queueCollectionDelete(Collection collection) async {
+    final writer = _syncOutboxWriter;
+    if (writer == null) {
+      return;
+    }
+
+    final deletedAt = DateTime.now();
+    final payload = _collectionSyncPayload(
+      collection: collection,
+      isDeleted: true,
+      deletedAt: deletedAt,
+      updatedAt: deletedAt,
+    );
+    try {
+      await writer.queueDelete(
+        entityType: 'collection',
+        entityId: collection.id,
+        payload: payload,
+      );
+    } catch (_) {
+      // Keep local write successful even if sync queue persistence fails.
+    }
+  }
+
+  Map<String, dynamic> _collectionSyncPayload({
+    required Collection collection,
+    bool isDeleted = false,
+    DateTime? deletedAt,
+    DateTime? updatedAt,
+  }) {
+    final effectiveUpdatedAt = updatedAt ?? collection.updatedAt;
+    return {
+      'id': collection.id,
+      'name': collection.name,
+      'type': collection.type.name,
+      'description': collection.description,
+      'coverImagePath': collection.coverImagePath,
+      'itemCount': collection.itemCount,
+      'version': 1,
+      'isDeleted': isDeleted,
+      if (deletedAt != null) 'deletedAt': deletedAt.toUtc().toIso8601String(),
+      'createdAt': collection.createdAt.toUtc().toIso8601String(),
+      'updatedAt': effectiveUpdatedAt.toUtc().toIso8601String(),
+    };
   }
 }

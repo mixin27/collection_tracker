@@ -48,6 +48,16 @@ jobs:
           IGDB_CLIENT_SECRET=${{ secrets.IGDB_CLIENT_SECRET }}
           EOF
 
+      - name: 🔥 Setup Firebase config files
+        env:
+          FIREBASE_OPTIONS_DART: ${{ secrets.FIREBASE_OPTIONS_DART }}
+          FIREBASE_OPTIONS_DART_BASE64: ${{ secrets.FIREBASE_OPTIONS_DART_BASE64 }}
+          FIREBASE_ANDROID_GOOGLE_SERVICES_JSON: ${{ secrets.FIREBASE_ANDROID_GOOGLE_SERVICES_JSON }}
+          FIREBASE_ANDROID_GOOGLE_SERVICES_JSON_BASE64: ${{ secrets.FIREBASE_ANDROID_GOOGLE_SERVICES_JSON_BASE64 }}
+        run: |
+          chmod +x scripts/setup_firebase.sh
+          ./scripts/setup_firebase.sh --require dart --require android
+
       - name: 🔨 Generate code
         run: |
           chmod +x scripts/build_all.sh

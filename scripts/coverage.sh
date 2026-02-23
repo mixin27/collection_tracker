@@ -1,6 +1,9 @@
 #!/bin/bash
 set -e
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "$SCRIPT_DIR/workspace_packages.sh"
+
 echo "📊 Generating consolidated test coverage report..."
 echo ""
 
@@ -61,19 +64,11 @@ run_coverage() {
 }
 
 # Process all relevant packages
-run_coverage "packages/core/domain" "core_domain"
-run_coverage "packages/core/data" "core_data"
-run_coverage "packages/common/env" "common_env"
-run_coverage "packages/common/ui" "common_ui"
-run_coverage "packages/common/utils" "common_utils"
-run_coverage "packages/integrations/database" "integration_database"
-run_coverage "packages/integrations/barcode_scanner" "integration_barcode_scanner"
-run_coverage "packages/integrations/metadata_api" "integration_metadata_api"
-run_coverage "packages/integrations/analytics" "integration_analytics"
-run_coverage "packages/integrations/logger" "integration_logging"
-run_coverage "packages/integrations/storage" "integration_storage"
-run_coverage "packages/integrations/payment" "integration_payment"
-run_coverage "apps/mobile" "mobile_app"
+for entry in "${WORKSPACE_PACKAGES_WITH_APP[@]}"; do
+    package_path="${entry%%:*}"
+    package_name="${entry#*:}"
+    run_coverage "$package_path" "$package_name"
+done
 
 echo "════════════════════════════════════════"
 

@@ -1,4 +1,5 @@
 import 'package:collection_tracker/core/providers/providers.dart';
+import 'package:collection_tracker/core/analytics/analytics_consent_gate.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -6,6 +7,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../../features/collections/presentation/views/collections_screen.dart';
 import '../../features/collections/presentation/views/create_collection_screen.dart';
 import '../../features/collections/presentation/views/edit_collection_screen.dart';
+import '../../features/auth/presentation/views/auth_screen.dart';
 import '../../features/items/presentation/views/add_item_screen.dart';
 import '../../features/items/presentation/views/edit_item_screen.dart';
 import '../../features/items/presentation/views/item_detail_screen.dart';
@@ -15,6 +17,8 @@ import '../../features/onboarding/presentation/views/onboarding_screen.dart';
 import '../../features/scanner/presentation/views/scanner_screen.dart';
 import '../../features/search/presentation/views/search_screen.dart';
 import '../../features/settings/presentation/views/settings_screen.dart';
+import '../../features/settings/presentation/views/settings_devtools_screen.dart';
+import '../../features/settings/presentation/views/settings_notifications_screen.dart';
 import '../../features/statistics/presentation/views/statistics_screen.dart';
 import '../../features/items/presentation/views/tag_management_screen.dart';
 import 'app_shell.dart';
@@ -29,6 +33,8 @@ final _rootNavigatorKey = GlobalKey<NavigatorState>();
 @riverpod
 GoRouter appRouter(Ref ref) {
   final onboardingComplete = ref.watch(onboardingCompleteProvider);
+  Widget withAnalyticsConsent(Widget child) =>
+      AnalyticsConsentGate(child: child);
 
   return GoRouter(
     navigatorKey: _rootNavigatorKey,
@@ -40,11 +46,28 @@ GoRouter appRouter(Ref ref) {
       GoRoute(
         path: Routes.onboarding,
         name: 'onboarding',
-        builder: (context, state) => const OnboardingScreen(),
+        builder: (context, state) =>
+            withAnalyticsConsent(const OnboardingScreen()),
+      ),
+      GoRoute(
+        path: Routes.auth,
+        name: 'auth',
+        parentNavigatorKey: _rootNavigatorKey,
+        builder: (context, state) {
+          final mode = state.uri.queryParameters['mode'];
+          final initialMode = mode == 'register'
+              ? AuthScreenMode.register
+              : AuthScreenMode.signIn;
+          return withAnalyticsConsent(
+            AuthScreen(initialMode: initialMode, popOnSuccess: true),
+          );
+        },
       ),
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) {
-          return AppShell(navigationShell: navigationShell);
+          return withAnalyticsConsent(
+            AppShell(navigationShell: navigationShell),
+          );
         },
         branches: [
           StatefulShellBranch(
@@ -134,6 +157,18 @@ GoRouter appRouter(Ref ref) {
                     parentNavigatorKey: _rootNavigatorKey,
                     builder: (_, _) => const TagManagementScreen(),
                   ),
+                  GoRoute(
+                    path: 'notifications',
+                    name: 'settings-notifications',
+                    parentNavigatorKey: _rootNavigatorKey,
+                    builder: (_, _) => const SettingsNotificationsScreen(),
+                  ),
+                  GoRoute(
+                    path: 'devtools',
+                    name: 'settings-devtools',
+                    parentNavigatorKey: _rootNavigatorKey,
+                    builder: (_, _) => const SettingsDevToolsScreen(),
+                  ),
                 ],
               ),
             ],
@@ -147,7 +182,9 @@ GoRouter appRouter(Ref ref) {
         builder: (context, state) {
           final id = state.pathParameters['id']!;
           final heroTag = state.uri.queryParameters['heroTag'];
-          return ItemDetailScreen(itemId: id, heroTag: heroTag);
+          return withAnalyticsConsent(
+            ItemDetailScreen(itemId: id, heroTag: heroTag),
+          );
         },
         routes: [
           GoRoute(
@@ -165,7 +202,7 @@ GoRouter appRouter(Ref ref) {
         name: 'tag-items',
         builder: (context, state) {
           final tag = state.uri.queryParameters['tag'] ?? '';
-          return TagItemsScreen(tagName: tag);
+          return withAnalyticsConsent(TagItemsScreen(tagName: tag));
         },
       ),
       GoRoute(
@@ -173,13 +210,16 @@ GoRouter appRouter(Ref ref) {
         name: 'scanner',
         builder: (context, state) {
           final collectionId = state.uri.queryParameters['collectionId'];
-          return ScannerScreen(collectionId: collectionId);
+          return withAnalyticsConsent(
+            ScannerScreen(collectionId: collectionId),
+          );
         },
       ),
       GoRoute(
         path: Routes.statistics,
         name: 'statistics',
-        builder: (context, state) => const StatisticsScreen(),
+        builder: (context, state) =>
+            withAnalyticsConsent(const StatisticsScreen()),
       ),
     ],
     // Error handling

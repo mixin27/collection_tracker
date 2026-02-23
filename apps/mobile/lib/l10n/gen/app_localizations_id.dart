@@ -75,6 +75,9 @@ class AppLocalizationsId extends AppLocalizations {
   String get settingsSectionAbout => 'Tentang';
 
   @override
+  String get settingsSectionDeveloper => 'Pengembang';
+
+  @override
   String get settingsThemeTitle => 'Tema';
 
   @override
@@ -118,6 +121,159 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get settingsTermsTitle => 'Ketentuan Layanan';
+
+  @override
+  String get settingsAnalyticsTitle => 'Analitik';
+
+  @override
+  String get settingsAnalyticsSummaryEnabled => 'Aktif';
+
+  @override
+  String get settingsAnalyticsSummaryDisabled => 'Nonaktif';
+
+  @override
+  String get settingsAnalyticsSummaryPending => 'Perlu persetujuan';
+
+  @override
+  String get settingsAnalyticsSummaryDenied => 'Persetujuan ditolak';
+
+  @override
+  String get settingsAnalyticsSheetTitle => 'Preferensi Analitik';
+
+  @override
+  String get settingsAnalyticsDescription => 'Atur analitik penggunaan anonim dan preferensi berbagi data.';
+
+  @override
+  String get settingsAnalyticsToggleTitle => 'Aktifkan analitik';
+
+  @override
+  String get settingsAnalyticsToggleSubtitle => 'Izinkan pengumpulan event penggunaan aplikasi secara anonim.';
+
+  @override
+  String get settingsAnalyticsConsentStatusTitle => 'Status persetujuan';
+
+  @override
+  String get settingsAnalyticsConsentStatusGranted => 'Disetujui';
+
+  @override
+  String get settingsAnalyticsConsentStatusDenied => 'Ditolak';
+
+  @override
+  String get settingsAnalyticsConsentStatusPending => 'Menunggu';
+
+  @override
+  String get settingsAnalyticsReviewConsentAction => 'Tinjau Persetujuan';
+
+  @override
+  String get settingsAnalyticsRevokeConsentAction => 'Cabut Persetujuan';
+
+  @override
+  String get settingsAnalyticsConsentAccepted => 'Persetujuan analitik diterima.';
+
+  @override
+  String get settingsAnalyticsConsentDeclined => 'Persetujuan analitik ditolak.';
+
+  @override
+  String get analyticsConsentDialogTitle => 'Bantu Tingkatkan Collection Tracker';
+
+  @override
+  String get analyticsConsentDialogMessage => 'Bolehkah kami mengumpulkan analitik penggunaan anonim untuk meningkatkan kualitas dan fitur aplikasi? Anda dapat mengubahnya kapan saja di Pengaturan.';
+
+  @override
+  String get analyticsConsentAllowAction => 'Izinkan';
+
+  @override
+  String get analyticsConsentDeclineAction => 'Nanti saja';
+
+  @override
+  String get settingsCrashlyticsTestTitle => 'Uji Crashlytics';
+
+  @override
+  String get settingsCrashlyticsTestSubtitle => 'Sengaja membuat aplikasi crash untuk memverifikasi pelaporan crash';
+
+  @override
+  String get settingsCrashlyticsTestConfirmTitle => 'Picu crash uji coba?';
+
+  @override
+  String get settingsCrashlyticsTestConfirmMessage => 'Aplikasi akan langsung crash. Buka kembali aplikasi untuk memverifikasi crash di Firebase Crashlytics.';
+
+  @override
+  String get settingsCrashlyticsTestConfirmAction => 'Crash Sekarang';
+
+  @override
+  String get settingsCrashlyticsTestTriggered => 'Memicu crash uji coba...';
+
+  @override
+  String settingsCrashlyticsTestFailed(String error) {
+    return 'Gagal memicu uji crash: $error';
+  }
+
+  @override
+  String get settingsFirebaseRuntimeConfigTitle => 'Konfigurasi Runtime Firebase';
+
+  @override
+  String get settingsFirebaseRuntimeConfigSubtitle => 'Periksa dan segarkan flag fitur runtime';
+
+  @override
+  String get settingsFirebaseRuntimeConfigSheetTitle => 'Konfigurasi Runtime Firebase';
+
+  @override
+  String get settingsFirebaseRuntimeConfigDescription => 'Nilai diambil dari Firebase Remote Config dan diterapkan saat runtime.';
+
+  @override
+  String settingsFirebaseRuntimeConfigSummary(int enabledCount) {
+    return '$enabledCount dari 3 sinyal aktif';
+  }
+
+  @override
+  String get settingsFirebaseRuntimeConfigAnalyticsLabel => 'Pengumpulan analitik';
+
+  @override
+  String get settingsFirebaseRuntimeConfigCrashlyticsLabel => 'Pengumpulan Crashlytics';
+
+  @override
+  String get settingsFirebaseRuntimeConfigPerformanceLabel => 'Pengumpulan performa';
+
+  @override
+  String get settingsFirebaseRuntimeConfigFetchStatusTitle => 'Status pengambilan terakhir';
+
+  @override
+  String get settingsFirebaseRuntimeConfigLastFetchTitle => 'Waktu pengambilan terakhir';
+
+  @override
+  String get settingsFirebaseRuntimeConfigValueEnabled => 'Aktif';
+
+  @override
+  String get settingsFirebaseRuntimeConfigValueDisabled => 'Nonaktif';
+
+  @override
+  String get settingsFirebaseRuntimeConfigFetchStatusSuccess => 'Berhasil';
+
+  @override
+  String get settingsFirebaseRuntimeConfigFetchStatusFailure => 'Gagal';
+
+  @override
+  String get settingsFirebaseRuntimeConfigFetchStatusThrottled => 'Dibatasi';
+
+  @override
+  String get settingsFirebaseRuntimeConfigFetchStatusNoFetch => 'Belum pernah diambil';
+
+  @override
+  String get settingsFirebaseRuntimeConfigRefreshAction => 'Segarkan konfigurasi';
+
+  @override
+  String get settingsFirebaseRuntimeConfigRefreshingAction => 'Menyegarkan...';
+
+  @override
+  String get settingsFirebaseRuntimeConfigRefreshSuccess => 'Konfigurasi runtime Firebase diperbarui.';
+
+  @override
+  String get settingsFirebaseRuntimeConfigRefreshNoChanges => 'Konfigurasi runtime Firebase sudah terbaru.';
+
+  @override
+  String settingsFirebaseRuntimeConfigRefreshFailed(String error) {
+    return 'Gagal menyegarkan konfigurasi: $error';
+  }
 
   @override
   String get settingsExportingData => 'Mengekspor data...';

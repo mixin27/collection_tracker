@@ -1,5 +1,8 @@
 import 'package:collection_tracker/core/providers/providers.dart';
+import 'package:collection_tracker/core/firebase/firebase_runtime_config_auto_refresh.dart';
+import 'package:collection_tracker/core/notifications/push_notification_bridge.dart';
 import 'package:collection_tracker/core/router/app_router.dart';
+import 'package:collection_tracker/core/sync/sync_auto_retry_on_resume.dart';
 import 'package:collection_tracker/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -56,7 +59,13 @@ class CollectionTrackerApp extends ConsumerWidget {
 
         return AnnotatedRegion<SystemUiOverlayStyle>(
           value: overlay,
-          child: child ?? const SizedBox.shrink(),
+          child: PushNotificationBridge(
+            child: SyncAutoRetryOnResume(
+              child: FirebaseRuntimeConfigAutoRefresh(
+                child: child ?? const SizedBox.shrink(),
+              ),
+            ),
+          ),
         );
       },
     );

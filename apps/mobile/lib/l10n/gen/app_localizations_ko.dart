@@ -75,6 +75,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get settingsSectionAbout => '정보';
 
   @override
+  String get settingsSectionDeveloper => '개발자';
+
+  @override
   String get settingsThemeTitle => '테마';
 
   @override
@@ -118,6 +121,159 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get settingsTermsTitle => '이용 약관';
+
+  @override
+  String get settingsAnalyticsTitle => '분석';
+
+  @override
+  String get settingsAnalyticsSummaryEnabled => '활성화됨';
+
+  @override
+  String get settingsAnalyticsSummaryDisabled => '비활성화됨';
+
+  @override
+  String get settingsAnalyticsSummaryPending => '동의 필요';
+
+  @override
+  String get settingsAnalyticsSummaryDenied => '동의 거부';
+
+  @override
+  String get settingsAnalyticsSheetTitle => '분석 설정';
+
+  @override
+  String get settingsAnalyticsDescription => '익명 사용 분석 및 데이터 공유 설정을 관리합니다.';
+
+  @override
+  String get settingsAnalyticsToggleTitle => '분석 활성화';
+
+  @override
+  String get settingsAnalyticsToggleSubtitle => '익명 앱 사용 이벤트 수집을 허용합니다.';
+
+  @override
+  String get settingsAnalyticsConsentStatusTitle => '동의 상태';
+
+  @override
+  String get settingsAnalyticsConsentStatusGranted => '동의함';
+
+  @override
+  String get settingsAnalyticsConsentStatusDenied => '거부됨';
+
+  @override
+  String get settingsAnalyticsConsentStatusPending => '대기 중';
+
+  @override
+  String get settingsAnalyticsReviewConsentAction => '동의 다시 보기';
+
+  @override
+  String get settingsAnalyticsRevokeConsentAction => '동의 철회';
+
+  @override
+  String get settingsAnalyticsConsentAccepted => '분석 동의가 수락되었습니다.';
+
+  @override
+  String get settingsAnalyticsConsentDeclined => '분석 동의가 거부되었습니다.';
+
+  @override
+  String get analyticsConsentDialogTitle => 'Collection Tracker 개선에 도움을 주세요';
+
+  @override
+  String get analyticsConsentDialogMessage => '앱 품질과 기능 개선을 위해 익명 사용 분석을 수집해도 될까요? 이 설정은 언제든지 설정에서 변경할 수 있습니다.';
+
+  @override
+  String get analyticsConsentAllowAction => '허용';
+
+  @override
+  String get analyticsConsentDeclineAction => '나중에';
+
+  @override
+  String get settingsCrashlyticsTestTitle => 'Crashlytics 테스트';
+
+  @override
+  String get settingsCrashlyticsTestSubtitle => '크래시 보고 확인을 위해 앱을 의도적으로 종료합니다';
+
+  @override
+  String get settingsCrashlyticsTestConfirmTitle => '테스트 크래시를 실행할까요?';
+
+  @override
+  String get settingsCrashlyticsTestConfirmMessage => '앱이 즉시 종료됩니다. 앱을 다시 열어 Firebase Crashlytics에서 크래시를 확인하세요.';
+
+  @override
+  String get settingsCrashlyticsTestConfirmAction => '지금 크래시';
+
+  @override
+  String get settingsCrashlyticsTestTriggered => '테스트 크래시를 실행하는 중...';
+
+  @override
+  String settingsCrashlyticsTestFailed(String error) {
+    return '테스트 크래시 실행 실패: $error';
+  }
+
+  @override
+  String get settingsFirebaseRuntimeConfigTitle => 'Firebase 런타임 구성';
+
+  @override
+  String get settingsFirebaseRuntimeConfigSubtitle => '런타임 기능 플래그 확인 및 새로고침';
+
+  @override
+  String get settingsFirebaseRuntimeConfigSheetTitle => 'Firebase 런타임 구성';
+
+  @override
+  String get settingsFirebaseRuntimeConfigDescription => '값은 Firebase Remote Config에서 가져와 런타임에 적용됩니다.';
+
+  @override
+  String settingsFirebaseRuntimeConfigSummary(int enabledCount) {
+    return '3개 신호 중 $enabledCount개 활성화';
+  }
+
+  @override
+  String get settingsFirebaseRuntimeConfigAnalyticsLabel => '애널리틱스 수집';
+
+  @override
+  String get settingsFirebaseRuntimeConfigCrashlyticsLabel => 'Crashlytics 수집';
+
+  @override
+  String get settingsFirebaseRuntimeConfigPerformanceLabel => '성능 수집';
+
+  @override
+  String get settingsFirebaseRuntimeConfigFetchStatusTitle => '마지막 가져오기 상태';
+
+  @override
+  String get settingsFirebaseRuntimeConfigLastFetchTitle => '마지막 가져오기 시간';
+
+  @override
+  String get settingsFirebaseRuntimeConfigValueEnabled => '사용';
+
+  @override
+  String get settingsFirebaseRuntimeConfigValueDisabled => '사용 안 함';
+
+  @override
+  String get settingsFirebaseRuntimeConfigFetchStatusSuccess => '성공';
+
+  @override
+  String get settingsFirebaseRuntimeConfigFetchStatusFailure => '실패';
+
+  @override
+  String get settingsFirebaseRuntimeConfigFetchStatusThrottled => '제한됨';
+
+  @override
+  String get settingsFirebaseRuntimeConfigFetchStatusNoFetch => '가져온 기록 없음';
+
+  @override
+  String get settingsFirebaseRuntimeConfigRefreshAction => '구성 새로고침';
+
+  @override
+  String get settingsFirebaseRuntimeConfigRefreshingAction => '새로고침 중...';
+
+  @override
+  String get settingsFirebaseRuntimeConfigRefreshSuccess => 'Firebase 런타임 구성을 새로고침했습니다.';
+
+  @override
+  String get settingsFirebaseRuntimeConfigRefreshNoChanges => 'Firebase 런타임 구성이 이미 최신입니다.';
+
+  @override
+  String settingsFirebaseRuntimeConfigRefreshFailed(String error) {
+    return '구성 새로고침 실패: $error';
+  }
 
   @override
   String get settingsExportingData => '데이터 내보내는 중...';
