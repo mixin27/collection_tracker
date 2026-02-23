@@ -112,6 +112,9 @@ GitHub Actions currently runs:
 
 Firebase secrets are materialized during CI using `scripts/setup_firebase.sh`.
 
+- `CI analyze/test` requires: `FIREBASE_OPTIONS_DART` (or `_BASE64`)
+- `Release Android` requires: `FIREBASE_OPTIONS_DART` + `FIREBASE_ANDROID_GOOGLE_SERVICES_JSON` (or `_BASE64`)
+
 ## License
 
 MIT. See [LICENSE](LICENSE).

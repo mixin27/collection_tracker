@@ -60,6 +60,25 @@ Supported env vars (raw or base64):
 - `FIREBASE_IOS_GOOGLE_SERVICE_INFO_PLIST` or `FIREBASE_IOS_GOOGLE_SERVICE_INFO_PLIST_BASE64`
 - `FIREBASE_MACOS_GOOGLE_SERVICE_INFO_PLIST` or `FIREBASE_MACOS_GOOGLE_SERVICE_INFO_PLIST_BASE64`
 
+### CI secret format recommendations
+
+For GitHub Actions, prefer `*_BASE64` secrets to avoid multiline/escaping issues:
+
+```bash
+# macOS/Linux examples from workspace root
+base64 < apps/mobile/lib/firebase_options.dart | tr -d '\n'
+base64 < apps/mobile/android/app/google-services.json | tr -d '\n'
+base64 < apps/mobile/ios/Runner/GoogleService-Info.plist | tr -d '\n'
+base64 < apps/mobile/macos/Runner/GoogleService-Info.plist | tr -d '\n'
+```
+
+Notes:
+
+- Do not store file paths in secrets (store full file contents or base64 only).
+- Do not wrap secret values in extra quotes.
+- CI `analyze`/`test` currently requires only Dart Firebase options.
+- CI `release` currently requires Dart + Android Firebase config.
+
 ## 5. Generate Code
 
 ```bash
