@@ -27,6 +27,7 @@ Runtime flags are read in `FirebaseServicesBootstrap`.
 | `app_crashlytics_collection_enabled` | `true` | Enables/disables Crashlytics collection |
 | `app_performance_collection_enabled` | `true` | Enables/disables Firebase Performance collection |
 | `app_app_check_enabled` | `false` | Enables/disables Firebase App Check activation |
+| `app_fcm_enabled` | `false` | Enables/disables Firebase Cloud Messaging runtime activation |
 | `app_backend_integration_enabled` | `false` | Gates backend-auth integration paths |
 | `app_auth_feature_enabled` | `true` | Gates account authentication UI/service availability |
 | `app_sync_feature_enabled` | `false` | Gates sync transport and sync UI readiness |
@@ -91,7 +92,19 @@ Crashlytics collection is also constrained by debug behavior:
   - Apple release: `AppleAppAttestWithDeviceCheckFallbackProvider`
 - On web/unsupported desktop platforms, App Check activation is skipped.
 
-## 8. Troubleshooting Checklist
+## 8. FCM Notes
+
+- FCM is activated from runtime config via `app_fcm_enabled`.
+- User-level push preference is stored locally and can be toggled from settings.
+- Topic subscriptions currently used:
+  - `sync_needed`
+  - `price_alerts`
+  - `reminders`
+  - `account_security` (subscribed only when authenticated)
+- iOS simulator may not provide an APNs token for FCM delivery. Validate end-to-end push delivery on a physical iPhone.
+- Android 13+ requires notification runtime permission; iOS requires APNs capability + notification permission.
+
+## 9. Troubleshooting Checklist
 
 If sync tile does not enable after toggling Remote Config keys:
 

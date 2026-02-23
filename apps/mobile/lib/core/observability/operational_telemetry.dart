@@ -152,6 +152,7 @@ class OperationalTelemetry {
     required bool crashlyticsEnabled,
     required bool performanceEnabled,
     required bool appCheckEnabled,
+    required bool fcmEnabled,
     required bool backendEnabled,
     required bool authEnabled,
     required bool syncEnabled,
@@ -166,6 +167,7 @@ class OperationalTelemetry {
         'crashlytics_enabled': crashlyticsEnabled,
         'performance_enabled': performanceEnabled,
         'app_check_enabled': appCheckEnabled,
+        'fcm_enabled': fcmEnabled,
         'backend_enabled': backendEnabled,
         'auth_enabled': authEnabled,
         'sync_enabled': syncEnabled,
@@ -177,10 +179,72 @@ class OperationalTelemetry {
         'flag_crashlytics_enabled': crashlyticsEnabled,
         'flag_performance_enabled': performanceEnabled,
         'flag_app_check_enabled': appCheckEnabled,
+        'flag_fcm_enabled': fcmEnabled,
         'flag_backend_enabled': backendEnabled,
         'flag_auth_enabled': authEnabled,
         'flag_sync_enabled': syncEnabled,
       },
+    );
+  }
+
+  static Future<void> trackPushPermission({
+    required String status,
+    required bool preferenceEnabled,
+    required bool runtimeEnabled,
+  }) {
+    return _trackEvent(
+      name: 'push_permission_updated',
+      category: 'push',
+      properties: {
+        'status': status,
+        'preference_enabled': preferenceEnabled,
+        'runtime_enabled': runtimeEnabled,
+      },
+      crashlyticsLog: true,
+    );
+  }
+
+  static Future<void> trackPushTokenUpdate({
+    required bool hasToken,
+    required String source,
+  }) {
+    return _trackEvent(
+      name: 'push_token_updated',
+      category: 'push',
+      properties: {'has_token': hasToken, 'source': source},
+      crashlyticsLog: true,
+    );
+  }
+
+  static Future<void> trackPushMessageReceived({
+    required String notificationType,
+    required bool hasRoute,
+  }) {
+    return _trackEvent(
+      name: 'push_message_received',
+      category: 'push',
+      properties: {
+        'notification_type': notificationType,
+        'has_route': hasRoute,
+      },
+      crashlyticsLog: true,
+    );
+  }
+
+  static Future<void> trackPushMessageOpened({
+    required String notificationType,
+    required bool hasRoute,
+    required bool launchedFromTerminated,
+  }) {
+    return _trackEvent(
+      name: 'push_message_opened',
+      category: 'push',
+      properties: {
+        'notification_type': notificationType,
+        'has_route': hasRoute,
+        'from_terminated': launchedFromTerminated,
+      },
+      crashlyticsLog: true,
     );
   }
 

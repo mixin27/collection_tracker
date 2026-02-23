@@ -11,6 +11,7 @@ export 'theme_provider.dart';
 export 'items_view_mode_provider.dart';
 export 'collections_view_mode_provider.dart';
 export 'locale_provider.dart';
+export 'push_notifications_provider.dart';
 export 'sync_providers.dart';
 
 final onboardingCompleteProvider = Provider<bool>((ref) => false);

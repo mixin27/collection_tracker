@@ -15,7 +15,7 @@ This repository is actively developed and already includes:
 - Barcode scanner flow
 - Localization support for 7 languages
 - Custom design system and glass bottom navigation
-- Firebase Crashlytics, Analytics (consent-based), Performance, Remote Config, App Check
+- Firebase Crashlytics, Analytics (consent-based), Performance, Remote Config, App Check, FCM
 - Optional backend auth and sync (feature-flag gated)
 
 For a detailed status matrix, see [documentation/APP_PROGRESS.md](documentation/APP_PROGRESS.md).

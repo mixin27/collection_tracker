@@ -1,5 +1,6 @@
 import 'package:app_logger/app_logger.dart';
 import 'package:auth_session/auth_session.dart';
+import 'package:app_firebase/app_firebase.dart';
 import 'package:collection_tracker/core/analytics/analytics_consent_dialog.dart';
 import 'package:collection_tracker/core/analytics/analytics_preferences.dart';
 import 'package:collection_tracker/core/firebase/firebase_runtime_config.dart';
@@ -27,6 +28,7 @@ class SettingsScreen extends ConsumerWidget {
     final currentLanguage = ref.watch(localeSettingsProvider);
     final analyticsPreferences = ref.watch(analyticsPreferencesProvider);
     final firebaseRuntimeConfig = ref.watch(firebaseRuntimeConfigProvider);
+    final pushPreferences = ref.watch(pushNotificationPreferencesProvider);
     final syncReadiness = ref.watch(syncReadinessProvider);
     final accountReadiness = ref.watch(backendAuthReadinessProvider);
     final pendingSyncCount = ref.watch(syncOutboxCountProvider).value ?? 0;
@@ -41,6 +43,7 @@ class SettingsScreen extends ConsumerWidget {
       syncReadiness,
       pendingSyncCount: pendingSyncCount,
     );
+    final pushSummary = _pushNotificationSummary(pushPreferences);
     final cloudSyncFeatureEnabled =
         syncReadiness.status != SyncReadinessStatus.disabledByFeatureFlag;
     final firebaseRuntimeSummary = _firebaseRuntimeSummary(
@@ -88,6 +91,12 @@ class SettingsScreen extends ConsumerWidget {
                   onTap: accountFeatureEnabled
                       ? () => context.push(Routes.auth)
                       : null,
+                ),
+                _SettingsTile(
+                  icon: Icons.notifications_outlined,
+                  title: 'Push Notifications',
+                  subtitle: pushSummary,
+                  onTap: () => _showPushNotificationSettings(context, ref),
                 ),
               ],
             ),
@@ -1130,6 +1139,199 @@ class SettingsScreen extends ConsumerWidget {
     );
   }
 
+  Future<void> _showPushNotificationSettings(
+    BuildContext context,
+    WidgetRef ref,
+  ) async {
+    await showAppSheet(
+      context: context,
+      builder: (context) {
+        return Consumer(
+          builder: (context, ref, _) {
+            final preferences = ref.watch(pushNotificationPreferencesProvider);
+            final notifier = ref.read(
+              pushNotificationPreferencesProvider.notifier,
+            );
+
+            return SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Push Notifications',
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  const SizedBox(height: AppSpacing.sm),
+                  Text(
+                    preferences.runtimeFeatureEnabled
+                        ? 'Manage sync-needed, price alert, reminder, and account security notifications.'
+                        : 'Push notifications are currently disabled by runtime feature flag.',
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    ),
+                  ),
+                  const SizedBox(height: AppSpacing.md),
+                  SwitchListTile(
+                    contentPadding: EdgeInsets.zero,
+                    title: const Text('Enable push notifications'),
+                    subtitle: Text(
+                      _pushPermissionLabel(preferences.permissionStatus),
+                    ),
+                    value: preferences.preferenceEnabled,
+                    onChanged: preferences.runtimeFeatureEnabled
+                        ? (value) async {
+                            await notifier.setPreferenceEnabled(value);
+                            if (!context.mounted) {
+                              return;
+                            }
+                            final updated = ref.read(
+                              pushNotificationPreferencesProvider,
+                            );
+                            if (value && !updated.preferenceEnabled) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text(
+                                    'Notification permission is not granted.',
+                                  ),
+                                ),
+                              );
+                            }
+                          }
+                        : null,
+                  ),
+                  ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    leading: const Icon(Icons.tune_outlined),
+                    title: const Text('Feature flag'),
+                    subtitle: const Text('app_fcm_enabled'),
+                    trailing: Text(
+                      _enabledDisabledLabel(
+                        context,
+                        preferences.runtimeFeatureEnabled,
+                      ),
+                    ),
+                  ),
+                  ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    leading: const Icon(Icons.perm_device_information_outlined),
+                    title: const Text('Permission'),
+                    subtitle: Text(
+                      _pushPermissionLabel(preferences.permissionStatus),
+                    ),
+                  ),
+                  SwitchListTile(
+                    contentPadding: EdgeInsets.zero,
+                    title: const Text('Sync needed'),
+                    subtitle: const Text('Topic: sync_needed'),
+                    value: preferences.syncNeededEnabled,
+                    onChanged: preferences.isEffectivelyEnabled
+                        ? (value) {
+                            notifier.setTopicEnabled(
+                              PushNotificationTopic.syncNeeded,
+                              value,
+                            );
+                          }
+                        : null,
+                  ),
+                  SwitchListTile(
+                    contentPadding: EdgeInsets.zero,
+                    title: const Text('Price alerts'),
+                    subtitle: const Text('Topic: price_alerts'),
+                    value: preferences.priceAlertsEnabled,
+                    onChanged: preferences.isEffectivelyEnabled
+                        ? (value) {
+                            notifier.setTopicEnabled(
+                              PushNotificationTopic.priceAlerts,
+                              value,
+                            );
+                          }
+                        : null,
+                  ),
+                  SwitchListTile(
+                    contentPadding: EdgeInsets.zero,
+                    title: const Text('Reminders'),
+                    subtitle: const Text('Topic: reminders'),
+                    value: preferences.remindersEnabled,
+                    onChanged: preferences.isEffectivelyEnabled
+                        ? (value) {
+                            notifier.setTopicEnabled(
+                              PushNotificationTopic.reminders,
+                              value,
+                            );
+                          }
+                        : null,
+                  ),
+                  SwitchListTile(
+                    contentPadding: EdgeInsets.zero,
+                    title: const Text('Account security'),
+                    subtitle: const Text('Topic: account_security'),
+                    value: preferences.accountSecurityEnabled,
+                    onChanged: preferences.isEffectivelyEnabled
+                        ? (value) {
+                            notifier.setTopicEnabled(
+                              PushNotificationTopic.accountSecurity,
+                              value,
+                            );
+                          }
+                        : null,
+                  ),
+                  if (defaultTargetPlatform == TargetPlatform.iOS ||
+                      defaultTargetPlatform == TargetPlatform.macOS)
+                    ListTile(
+                      contentPadding: EdgeInsets.zero,
+                      leading: const Icon(Icons.phone_iphone_outlined),
+                      title: const Text('APNs token'),
+                      subtitle: Text(
+                        _apnsTokenLabel(preferences.apnsToken),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    leading: const Icon(Icons.vpn_key_outlined),
+                    title: const Text('Device token'),
+                    subtitle: Text(
+                      preferences.deviceToken != null &&
+                              preferences.deviceToken!.trim().isNotEmpty
+                          ? _truncateToken(preferences.deviceToken!)
+                          : 'Not available yet',
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  if (defaultTargetPlatform == TargetPlatform.iOS &&
+                      (preferences.apnsToken == null ||
+                          preferences.apnsToken!.trim().isEmpty))
+                    ListTile(
+                      contentPadding: EdgeInsets.zero,
+                      leading: const Icon(Icons.info_outline),
+                      title: const Text('iOS Simulator note'),
+                      subtitle: Text(
+                        'APNs token is often unavailable on simulator. Test FCM delivery on a physical iPhone.',
+                      ),
+                    ),
+                  const SizedBox(height: AppSpacing.sm),
+                  AppButton(
+                    label: preferences.isApplying
+                        ? 'Applying...'
+                        : 'Refresh permission status',
+                    onPressed: preferences.isApplying
+                        ? null
+                        : () => notifier.refreshPermissionStatus(),
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
   Future<void> _showFirebaseRuntimeConfigSheet(
     BuildContext context,
     WidgetRef ref,
@@ -1220,6 +1422,15 @@ class SettingsScreen extends ConsumerWidget {
                       context,
                       runtimeConfig.appCheckEnabled,
                     ),
+                  ),
+                ),
+                ListTile(
+                  contentPadding: EdgeInsets.zero,
+                  leading: const Icon(Icons.notifications_active_outlined),
+                  title: const Text('Push notifications'),
+                  subtitle: const Text('app_fcm_enabled'),
+                  trailing: Text(
+                    _enabledDisabledLabel(context, runtimeConfig.fcmEnabled),
                   ),
                 ),
                 ListTile(
@@ -1483,6 +1694,55 @@ class SettingsScreen extends ConsumerWidget {
       AnalyticsConsentStatus.denied => l10n.settingsAnalyticsSummaryDenied,
       AnalyticsConsentStatus.unknown => l10n.settingsAnalyticsSummaryPending,
     };
+  }
+
+  String _pushNotificationSummary(
+    PushNotificationPreferencesState preferences,
+  ) {
+    if (!preferences.runtimeFeatureEnabled) {
+      return 'Feature disabled';
+    }
+    if (!preferences.preferenceEnabled) {
+      return 'Disabled';
+    }
+    if (!preferences.permissionStatus.isGranted) {
+      return 'Permission required';
+    }
+
+    final enabledTopics = [
+      preferences.syncNeededEnabled,
+      preferences.priceAlertsEnabled,
+      preferences.remindersEnabled,
+      preferences.accountSecurityEnabled,
+    ].where((enabled) => enabled).length;
+
+    return 'Enabled ($enabledTopics topics)';
+  }
+
+  String _pushPermissionLabel(FirebaseMessagingPermissionStatus status) {
+    return switch (status) {
+      FirebaseMessagingPermissionStatus.notDetermined => 'Not determined',
+      FirebaseMessagingPermissionStatus.denied => 'Denied',
+      FirebaseMessagingPermissionStatus.authorized => 'Authorized',
+      FirebaseMessagingPermissionStatus.provisional => 'Provisional',
+      FirebaseMessagingPermissionStatus.unsupported => 'Unsupported',
+    };
+  }
+
+  String _truncateToken(String token) {
+    final sanitized = token.trim();
+    if (sanitized.length <= 18) {
+      return sanitized;
+    }
+    return '${sanitized.substring(0, 10)}...${sanitized.substring(sanitized.length - 8)}';
+  }
+
+  String _apnsTokenLabel(String? apnsToken) {
+    final sanitized = apnsToken?.trim() ?? '';
+    if (sanitized.isEmpty) {
+      return 'Not available';
+    }
+    return _truncateToken(sanitized);
   }
 
   String _firebaseRuntimeSummary(

@@ -1,16 +1,20 @@
 import 'package:app_analytics/app_analytics.dart';
+import 'package:app_firebase/app_firebase.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:storage/storage.dart';
 
-class OnboardingScreen extends StatefulWidget {
+import '../../../../core/providers/push_notifications_provider.dart';
+
+class OnboardingScreen extends ConsumerStatefulWidget {
   const OnboardingScreen({super.key});
 
   @override
-  State<OnboardingScreen> createState() => _OnboardingScreenState();
+  ConsumerState<OnboardingScreen> createState() => _OnboardingScreenState();
 }
 
-class _OnboardingScreenState extends State<OnboardingScreen> {
+class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   final PageController _pageController = PageController();
   int _currentPage = 0;
 
@@ -66,8 +70,56 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       AnalyticsEvent.custom(name: 'onboarding_completed'),
     );
 
+    await _maybeShowNotificationPrePrompt();
+
     if (mounted) {
       context.go('/collections');
+    }
+  }
+
+  Future<void> _maybeShowNotificationPrePrompt() async {
+    final preferences = ref.read(pushNotificationPreferencesProvider);
+    if (!preferences.runtimeFeatureEnabled) {
+      return;
+    }
+    if (preferences.preferenceEnabled ||
+        preferences.permissionStatus.isGranted) {
+      return;
+    }
+
+    final shouldEnable = await showDialog<bool>(
+      context: context,
+      barrierDismissible: true,
+      builder: (context) {
+        final theme = Theme.of(context);
+        return AlertDialog(
+          title: const Text('Stay in sync'),
+          content: const Text(
+            'Enable notifications for sync-needed updates, price alerts, reminders, and account security events.',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(false),
+              child: const Text('Not now'),
+            ),
+            FilledButton(
+              onPressed: () => Navigator.of(context).pop(true),
+              child: Text(
+                'Enable',
+                style: theme.textTheme.labelLarge?.copyWith(
+                  color: theme.colorScheme.onPrimary,
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (shouldEnable == true && mounted) {
+      await ref
+          .read(pushNotificationPreferencesProvider.notifier)
+          .setPreferenceEnabled(true);
     }
   }
 
