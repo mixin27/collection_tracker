@@ -50,13 +50,16 @@ class OperationalTelemetry {
     required int syncedCollections,
     required int syncedItems,
     required int syncedTags,
+    int syncedLoans = 0,
     required int conflictCount,
     required int appliedServerCollections,
     required int appliedServerItems,
     required int appliedServerTags,
+    int appliedServerLoans = 0,
     required int skippedServerCollections,
     required int skippedServerItems,
     required int skippedServerTags,
+    int skippedServerLoans = 0,
     String? message,
     Object? error,
     StackTrace? stackTrace,
@@ -73,13 +76,16 @@ class OperationalTelemetry {
         'synced_collections': syncedCollections,
         'synced_items': syncedItems,
         'synced_tags': syncedTags,
+        'synced_loans': syncedLoans,
         'conflicts': conflictCount,
         'applied_server_collections': appliedServerCollections,
         'applied_server_items': appliedServerItems,
         'applied_server_tags': appliedServerTags,
+        'applied_server_loans': appliedServerLoans,
         'skipped_server_collections': skippedServerCollections,
         'skipped_server_items': skippedServerItems,
         'skipped_server_tags': skippedServerTags,
+        'skipped_server_loans': skippedServerLoans,
         if (message != null && message.trim().isNotEmpty) 'message': message,
       },
       crashlyticsLog: true,
@@ -94,9 +100,15 @@ class OperationalTelemetry {
         'sync_pending_ops': pendingOperations,
         'sync_processed_ops': processedOperations,
         'sync_applied_server':
-            appliedServerCollections + appliedServerItems + appliedServerTags,
+            appliedServerCollections +
+            appliedServerItems +
+            appliedServerTags +
+            appliedServerLoans,
         'sync_skipped_server':
-            skippedServerCollections + skippedServerItems + skippedServerTags,
+            skippedServerCollections +
+            skippedServerItems +
+            skippedServerTags +
+            skippedServerLoans,
       },
     );
   }
@@ -153,6 +165,7 @@ class OperationalTelemetry {
     required bool performanceEnabled,
     required bool appCheckEnabled,
     required bool fcmEnabled,
+    required bool metadataEnabled,
     required bool backendEnabled,
     required bool authEnabled,
     required bool syncEnabled,
@@ -168,6 +181,7 @@ class OperationalTelemetry {
         'performance_enabled': performanceEnabled,
         'app_check_enabled': appCheckEnabled,
         'fcm_enabled': fcmEnabled,
+        'metadata_enabled': metadataEnabled,
         'backend_enabled': backendEnabled,
         'auth_enabled': authEnabled,
         'sync_enabled': syncEnabled,
@@ -180,6 +194,7 @@ class OperationalTelemetry {
         'flag_performance_enabled': performanceEnabled,
         'flag_app_check_enabled': appCheckEnabled,
         'flag_fcm_enabled': fcmEnabled,
+        'flag_metadata_enabled': metadataEnabled,
         'flag_backend_enabled': backendEnabled,
         'flag_auth_enabled': authEnabled,
         'flag_sync_enabled': syncEnabled,

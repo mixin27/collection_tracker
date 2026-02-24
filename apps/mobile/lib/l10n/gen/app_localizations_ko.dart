@@ -12,7 +12,7 @@ class AppLocalizationsKo extends AppLocalizations {
   AppLocalizationsKo([String locale = 'ko']) : super(locale);
 
   @override
-  String get appTitle => '컬렉션 트래커';
+  String get appTitle => 'Collectra';
 
   @override
   String get navHome => '홈';
@@ -114,6 +114,12 @@ class AppLocalizationsKo extends AppLocalizations {
   String get settingsManageTagsSubtitle => '태그 이름 변경, 병합, 삭제';
 
   @override
+  String get settingsLoanTrackingTitle => '대여 추적';
+
+  @override
+  String get settingsLoanTrackingSubtitle => '대여한 항목과 반납 예정일을 추적합니다';
+
+  @override
   String get settingsVersionTitle => '버전';
 
   @override
@@ -174,7 +180,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get settingsAnalyticsConsentDeclined => '분석 동의가 거부되었습니다.';
 
   @override
-  String get analyticsConsentDialogTitle => 'Collection Tracker 개선에 도움을 주세요';
+  String get analyticsConsentDialogTitle => 'Collectra 개선에 도움을 주세요';
 
   @override
   String get analyticsConsentDialogMessage => '앱 품질과 기능 개선을 위해 익명 사용 분석을 수집해도 될까요? 이 설정은 언제든지 설정에서 변경할 수 있습니다.';
@@ -213,6 +219,57 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get settingsFirebaseRuntimeConfigSubtitle => '런타임 기능 플래그 확인 및 새로고침';
+
+  @override
+  String get settingsMetadataTitle => '메타데이터 및 자동완성';
+
+  @override
+  String get settingsMetadataSummaryEnabled => '자동 바코드 조회로 사용 중';
+
+  @override
+  String get settingsMetadataSummaryManual => '수동 조회로 사용 중';
+
+  @override
+  String get settingsMetadataSummaryDisabled => '사용 안 함';
+
+  @override
+  String get settingsMetadataSummaryFeatureDisabled => '런타임 기능 플래그로 비활성화됨';
+
+  @override
+  String get settingsMetadataEnableToggleTitle => '메타데이터 보조 사용';
+
+  @override
+  String get settingsMetadataEnableToggleSubtitle => '아이템 폼에서 메타데이터 검색과 바코드 자동완성을 허용합니다.';
+
+  @override
+  String get settingsMetadataAutoFetchToggleTitle => '바코드 스캔 시 자동 조회';
+
+  @override
+  String get settingsMetadataAutoFetchToggleSubtitle => '바코드를 스캔한 뒤 메타데이터를 자동으로 가져옵니다.';
+
+  @override
+  String get settingsMetadataFillEmptyOnlyToggleTitle => '빈 필드만 채우기';
+
+  @override
+  String get settingsMetadataFillEmptyOnlyToggleSubtitle => '메타데이터를 찾았을 때 기존 제목이나 설명을 덮어쓰지 않습니다.';
+
+  @override
+  String get settingsMetadataSourcesSectionTitle => '소스';
+
+  @override
+  String get settingsMetadataSourceAvailable => '사용 가능';
+
+  @override
+  String get settingsMetadataSourceNotConfigured => '미설정';
+
+  @override
+  String get settingsMetadataSourceManualOnly => '수동만';
+
+  @override
+  String get settingsMetadataManualCollectionsLabel => '코믹, 음악 및 사용자 지정';
+
+  @override
+  String get settingsMetadataFeatureDisabledMessage => '메타데이터 보조가 런타임 구성으로 비활성화되었습니다.';
 
   @override
   String get settingsFirebaseRuntimeConfigSheetTitle => 'Firebase 런타임 구성';
@@ -290,7 +347,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get settingsImportDataTitle => '데이터 가져오기';
 
   @override
-  String get settingsImportDataMessage => 'JSON 파일에서 컬렉션과 항목을 가져옵니다. 기존 데이터는 삭제되지 않습니다.\\n\\n계속할까요?';
+  String get settingsImportDataMessage => 'JSON 파일에서 컬렉션과 항목을 가져옵니다. 기존 데이터는 삭제되지 않습니다.\n\n계속할까요?';
 
   @override
   String get settingsImportingData => '데이터 가져오는 중...';
@@ -746,6 +803,17 @@ class AppLocalizationsKo extends AppLocalizations {
   String get metadataSearchSuggestionMessage => '메타데이터를 찾으려면 입력하세요.';
 
   @override
+  String get metadataSearchDisabledHint => '이 컬렉션 유형에서는 메타데이터 검색을 사용할 수 없거나 현재 비활성화되어 있습니다.';
+
+  @override
+  String get metadataNoMatchForBarcode => '이 바코드와 일치하는 메타데이터를 찾지 못했습니다.';
+
+  @override
+  String metadataSearchUnavailableForType(String collectionType) {
+    return '$collectionType에는 메타데이터 검색을 사용할 수 없습니다.';
+  }
+
+  @override
   String tagItemsTitle(String tag) {
     return '태그: $tag';
   }
@@ -878,7 +946,7 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String tagManagementDeleteSelectedMessage(int count) {
-    return '모든 항목에서 선택한 태그 $count개를 삭제할까요?\\n\\n이 작업은 되돌릴 수 없습니다.';
+    return '모든 항목에서 선택한 태그 $count개를 삭제할까요?\n\n이 작업은 되돌릴 수 없습니다.';
   }
 
   @override
@@ -899,7 +967,7 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String tagManagementDeleteMessage(String tagName) {
-    return '모든 항목에서 \"$tagName\"을(를) 삭제할까요?\\n\\n이 작업은 되돌릴 수 없습니다.';
+    return '모든 항목에서 \"$tagName\"을(를) 삭제할까요?\n\n이 작업은 되돌릴 수 없습니다.';
   }
 
   @override
@@ -1064,4 +1132,350 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get collectionTypeCustom => '사용자 지정';
+
+  @override
+  String get loanTrackingTitle => '대여 추적';
+
+  @override
+  String get loanTrackingNewLoan => '새 대여';
+
+  @override
+  String get loanTrackingFilterActive => '활성';
+
+  @override
+  String get loanTrackingFilterHistory => '기록';
+
+  @override
+  String get loanTrackingEmptyHistoryTitle => '아직 반납된 대여가 없습니다';
+
+  @override
+  String get loanTrackingEmptyHistoryMessage => '반납된 항목이 여기에 표시됩니다.';
+
+  @override
+  String get loanTrackingEmptyActiveTitle => '활성 대여가 없습니다';
+
+  @override
+  String get loanTrackingEmptyActiveMessage => '대여를 생성해 빌려준 항목을 추적해 보세요.';
+
+  @override
+  String get loanTrackingLoadingLoans => '대여 불러오는 중...';
+
+  @override
+  String loanTrackingLoadFailed(String error) {
+    return '대여를 불러오지 못했습니다: $error';
+  }
+
+  @override
+  String get loanTrackingMarkReturnedConfirmTitle => '반납으로 표시할까요?';
+
+  @override
+  String loanTrackingMarkReturnedConfirmMessage(String itemTitle) {
+    return '\"$itemTitle\" 반납을 확인합니다.';
+  }
+
+  @override
+  String get loanTrackingMarkReturnedAction => '반납 처리';
+
+  @override
+  String get loanTrackingMarkedReturnedSuccess => '대여가 반납 처리되었습니다.';
+
+  @override
+  String loanTrackingMarkReturnedFailed(String error) {
+    return '반납 처리에 실패했습니다: $error';
+  }
+
+  @override
+  String get loanTrackingDeleteConfirmTitle => '대여 기록을 삭제할까요?';
+
+  @override
+  String loanTrackingDeleteConfirmMessage(String itemTitle) {
+    return '\"$itemTitle\" 대여 기록을 삭제합니다.';
+  }
+
+  @override
+  String get loanTrackingDeleteSuccess => '대여가 삭제되었습니다.';
+
+  @override
+  String loanTrackingDeleteFailed(String error) {
+    return '대여 삭제에 실패했습니다: $error';
+  }
+
+  @override
+  String get loanTrackingSummaryActiveLabel => '활성 대여';
+
+  @override
+  String get loanTrackingSummaryOverdueLabel => '연체';
+
+  @override
+  String get loanTrackingSummaryLoadFailed => '대여 요약을 불러올 수 없습니다.';
+
+  @override
+  String get loanTrackingFieldBorrower => '대여자';
+
+  @override
+  String get loanTrackingFieldContact => '연락처';
+
+  @override
+  String get loanTrackingFieldLoaned => '대여일';
+
+  @override
+  String get loanTrackingFieldDue => '반납 예정일';
+
+  @override
+  String get loanTrackingFieldReturned => '반납일';
+
+  @override
+  String get loanTrackingStatusReturned => '반납됨';
+
+  @override
+  String get loanTrackingStatusOverdue => '연체';
+
+  @override
+  String get loanTrackingStatusActive => '활성';
+
+  @override
+  String get loanTrackingCreateTitle => '대여 생성';
+
+  @override
+  String get loanTrackingCreateDescription => '누가 항목을 빌렸는지와 반납 예정일을 추적합니다.';
+
+  @override
+  String get loanTrackingCreateNoItemsTitle => '사용 가능한 항목이 없습니다';
+
+  @override
+  String get loanTrackingCreateNoItemsMessage => '모든 항목이 이미 대여 중이거나 아직 항목이 없습니다.';
+
+  @override
+  String get loanTrackingCreateItemLabel => '항목';
+
+  @override
+  String get loanTrackingCreateBorrowerLabel => '대여자 이름';
+
+  @override
+  String get loanTrackingCreateBorrowerHint => '예: 홍길동';
+
+  @override
+  String get loanTrackingCreateContactLabel => '연락처 (선택)';
+
+  @override
+  String get loanTrackingCreateContactHint => '전화번호, 이메일 또는 @username';
+
+  @override
+  String get loanTrackingCreateNotesLabel => '메모 (선택)';
+
+  @override
+  String get loanTrackingCreateNotesHint => '이 대여에 대한 추가 정보';
+
+  @override
+  String get loanTrackingCreateSubmitting => '생성 중...';
+
+  @override
+  String get loanTrackingCreateAction => '대여 생성';
+
+  @override
+  String get loanTrackingLoadingItems => '항목 불러오는 중...';
+
+  @override
+  String loanTrackingLoadItemsFailed(String error) {
+    return '항목을 불러오지 못했습니다: $error';
+  }
+
+  @override
+  String get loanTrackingBorrowerRequired => '대여자 이름은 필수입니다.';
+
+  @override
+  String get loanTrackingCreateSuccess => '대여가 생성되었습니다.';
+
+  @override
+  String loanTrackingCreateFailed(String error) {
+    return '대여 생성에 실패했습니다: $error';
+  }
+
+  @override
+  String get loanTrackingNoDueDate => '반납 예정일 없음';
+
+  @override
+  String get loanTrackingPickDateAction => '선택';
+
+  @override
+  String get loanTrackingClearDateAction => '지우기';
+
+  @override
+  String get loanTrackingDueDateLabel => '반납 예정일';
+
+  @override
+  String get authTitleAccount => '계정';
+
+  @override
+  String get authCreateAccountHeading => '계정 만들기';
+
+  @override
+  String get authSignInHeading => '로그인';
+
+  @override
+  String get authCreateAccountDescription => '계정을 만들어 컬렉션을 여러 기기에서 동기화하세요.';
+
+  @override
+  String get authSignInDescription => '로그인하면 클라우드 동기화와 계정 기능을 사용할 수 있습니다.';
+
+  @override
+  String get authSignInChoice => '로그인';
+
+  @override
+  String get authRegisterChoice => '회원가입';
+
+  @override
+  String get authEmailLabel => '이메일';
+
+  @override
+  String get authEmailHint => 'you@example.com';
+
+  @override
+  String get authEmailRequiredError => '이메일은 필수입니다.';
+
+  @override
+  String get authEmailInvalidError => '유효한 이메일을 입력하세요.';
+
+  @override
+  String get authPasswordLabel => '비밀번호';
+
+  @override
+  String get authPasswordHint => '최소 8자, A-Z, a-z, 0-9';
+
+  @override
+  String get authPasswordRequiredError => '비밀번호는 필수입니다.';
+
+  @override
+  String get authPasswordLengthError => '비밀번호는 최소 8자 이상이어야 합니다.';
+
+  @override
+  String get authPasswordPolicyError => '비밀번호에는 대문자, 소문자, 숫자가 포함되어야 합니다.';
+
+  @override
+  String get authDisplayNameLabel => '표시 이름 (선택)';
+
+  @override
+  String get authDisplayNameHint => '어떻게 불러드릴까요?';
+
+  @override
+  String get authCreateAccountAction => '계정 만들기';
+
+  @override
+  String get authNotNowAction => '나중에';
+
+  @override
+  String get authUnavailableMessage => '현재 인증을 사용할 수 없습니다.';
+
+  @override
+  String get authRegisterSuccess => '계정이 생성되었고 로그인되었습니다.';
+
+  @override
+  String get authSignInSuccess => '로그인되었습니다.';
+
+  @override
+  String authSignInFailed(String error) {
+    return '로그인 실패: $error';
+  }
+
+  @override
+  String get authSignedOut => '로그아웃되었습니다.';
+
+  @override
+  String get authFinalConfirmationTitle => '최종 확인';
+
+  @override
+  String get authFinalConfirmationMessage => '지금 계정 삭제 요청을 제출할까요? 이 기기에서 즉시 로그아웃됩니다.';
+
+  @override
+  String get authBackAction => '뒤로';
+
+  @override
+  String get authSubmitRequestAction => '요청 제출';
+
+  @override
+  String get authDeletionRequestSubmitted => '계정 삭제 요청이 제출되었습니다. 로그아웃되었습니다.';
+
+  @override
+  String get authDeletionEndpointMissing => '계정 삭제 요청 엔드포인트가 아직 백엔드에 구성되지 않았습니다.';
+
+  @override
+  String get authDeletionImpactDialogTitle => '계정 삭제를 요청하기 전에';
+
+  @override
+  String get authDeletionImpactReviewPrompt => '영향을 신중히 확인해 주세요.';
+
+  @override
+  String get authIrreversibleRequestTitle => '되돌릴 수 없는 요청';
+
+  @override
+  String get authImpactLineSessionRevoked => '요청 즉시 계정 세션이 취소됩니다.';
+
+  @override
+  String get authImpactLineCloudDataDeleted => '이 계정과 연결된 동기화 클라우드 데이터는 처리 중 영구 삭제될 수 있습니다.';
+
+  @override
+  String get authImpactLineCannotRestore => '삭제된 계정 데이터는 처리 후 복구할 수 없습니다.';
+
+  @override
+  String get authUnderstandAction => '이해했습니다';
+
+  @override
+  String get authPasswordPolicySuffix => '영문 키보드 문자와 숫자(A-Z, a-z, 0-9)를 사용하세요.';
+
+  @override
+  String get authAccountConnected => '계정 연결됨';
+
+  @override
+  String get authSignedInReadySubtitle => '로그인되어 클라우드 동기화 준비 완료';
+
+  @override
+  String get authActiveStatus => '활성';
+
+  @override
+  String get authSessionDetailsTitle => '세션 정보';
+
+  @override
+  String get authUserIdLabel => '사용자 ID';
+
+  @override
+  String get authDeviceIdLabel => '기기 ID';
+
+  @override
+  String get authUnknownValue => '알 수 없음';
+
+  @override
+  String get authDeletionNoticeTitle => '계정 삭제 안내';
+
+  @override
+  String get authDeletionNoticeSubtitle => '삭제 요청은 처리되면 되돌릴 수 없습니다.';
+
+  @override
+  String get authDeletionNoticeLineProfileSessions => '계정 프로필과 활성 세션은 클라우드 접근에서 제거됩니다.';
+
+  @override
+  String get authDeletionNoticeLineSyncedData => '동기화된 컬렉션, 항목, 태그, 대여 데이터가 영구 삭제될 수 있습니다.';
+
+  @override
+  String get authRequestDeletionAction => '계정 삭제 요청';
+
+  @override
+  String get authSignOutAction => '로그아웃';
+
+  @override
+  String get authDoneAction => '완료';
+
+  @override
+  String get authHeaderCreateTitle => '계정을 만들어 보세요';
+
+  @override
+  String get authHeaderWelcomeTitle => '다시 오신 것을 환영합니다';
+
+  @override
+  String get authHeaderCreateSubtitle => '계정은 선택 사항이지만 클라우드 동기화와 다중 기기 접근에 필요합니다.';
+
+  @override
+  String get authHeaderSignInSubtitle => '로그인하여 클라우드 동기화와 계정 기능을 사용하세요.';
+
+  @override
+  String get authUnavailableTitle => '인증을 사용할 수 없음';
 }

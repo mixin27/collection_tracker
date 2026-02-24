@@ -5,15 +5,14 @@ import 'package:collection_tracker/core/analytics/analytics_preferences.dart';
 import 'package:collection_tracker/core/observability/operational_telemetry.dart';
 import 'package:collection_tracker/core/providers/providers.dart';
 import 'package:collection_tracker/core/router/routes.dart';
+import 'package:collection_tracker/features/app_update/presentation/providers/app_update_providers.dart';
 import 'package:collection_tracker/l10n/l10n.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:storage/storage.dart';
 import 'package:ui/ui.dart';
 
-import '../view_models/export_import_view_model.dart';
 import '../widgets/settings_primitives.dart';
 
 class SettingsScreen extends ConsumerWidget {
@@ -26,10 +25,13 @@ class SettingsScreen extends ConsumerWidget {
     final currentLanguage = ref.watch(localeSettingsProvider);
     final analyticsPreferences = ref.watch(analyticsPreferencesProvider);
     final pushPreferences = ref.watch(pushNotificationPreferencesProvider);
+    final metadataPreferences = ref.watch(metadataPreferencesProvider);
     final syncReadiness = ref.watch(syncReadinessProvider);
     final accountReadiness = ref.watch(backendAuthReadinessProvider);
+    final appUpdateSummary = ref.watch(appUpdateSummaryProvider);
     final pendingSyncCount = ref.watch(syncOutboxCountProvider).value ?? 0;
     final authSession = ref.watch(authSessionProvider).value;
+    final appVersionLabel = ref.watch(appDisplayVersionProvider);
 
     final themeSummary =
         '${_themeModeLabel(context, themeSettings.mode)} - ${themeSettings.variant.label}';
@@ -42,6 +44,7 @@ class SettingsScreen extends ConsumerWidget {
       pendingSyncCount: pendingSyncCount,
     );
     final pushSummary = _pushNotificationSummary(pushPreferences);
+    final metadataSummary = _metadataSummary(context, metadataPreferences);
     final cloudSyncFeatureEnabled =
         syncReadiness.status != SyncReadinessStatus.disabledByFeatureFlag;
 
@@ -88,20 +91,30 @@ class SettingsScreen extends ConsumerWidget {
                   subtitle: analyticsSummary,
                   onTap: () => _showAnalyticsSettings(context, ref),
                 ),
-                SettingsTile(
-                  icon: Icons.person_outline_rounded,
-                  title: 'Account',
-                  subtitle: accountSummary,
-                  enabled: accountFeatureEnabled,
-                  onTap: accountFeatureEnabled
-                      ? () => context.push(Routes.auth)
-                      : null,
-                ),
+                if (accountFeatureEnabled)
+                  SettingsTile(
+                    icon: Icons.person_outline_rounded,
+                    title: 'Account',
+                    subtitle: accountSummary,
+                    onTap: () => context.push(Routes.auth),
+                  ),
                 SettingsTile(
                   icon: Icons.notifications_outlined,
                   title: 'Push Notifications',
                   subtitle: pushSummary,
                   onTap: () => context.push(Routes.settingsNotifications),
+                ),
+                SettingsTile(
+                  icon: Icons.auto_awesome_outlined,
+                  title: l10n.settingsMetadataTitle,
+                  subtitle: metadataSummary,
+                  onTap: () => context.push(Routes.settingsMetadata),
+                ),
+                SettingsTile(
+                  icon: Icons.system_update_alt_rounded,
+                  title: 'App Update',
+                  subtitle: appUpdateSummary,
+                  onTap: () => context.push(Routes.settingsAppUpdate),
                 ),
               ],
             ),
@@ -113,22 +126,12 @@ class SettingsScreen extends ConsumerWidget {
               title: l10n.settingsSectionData,
               children: [
                 SettingsTile(
-                  icon: Icons.file_download,
-                  title: l10n.settingsExportJsonTitle,
-                  subtitle: l10n.settingsExportJsonSubtitle,
-                  onTap: () => _handleExportJson(context, ref),
-                ),
-                SettingsTile(
-                  icon: Icons.table_chart,
-                  title: l10n.settingsExportCsvTitle,
-                  subtitle: l10n.settingsExportCsvSubtitle,
-                  onTap: () => _handleExportCsv(context, ref),
-                ),
-                SettingsTile(
-                  icon: Icons.file_upload,
-                  title: l10n.settingsImportJsonTitle,
-                  subtitle: l10n.settingsImportJsonSubtitle,
-                  onTap: () => _handleImportJson(context, ref),
+                  icon: Icons.folder_shared_outlined,
+                  title:
+                      '${l10n.settingsExportJsonTitle} / ${l10n.settingsImportJsonTitle}',
+                  subtitle:
+                      '${l10n.settingsExportJsonSubtitle}. ${l10n.settingsImportJsonSubtitle}.',
+                  onTap: () => context.push(Routes.settingsDataTransfer),
                 ),
                 SettingsTile(
                   icon: Icons.cloud_upload,
@@ -145,6 +148,12 @@ class SettingsScreen extends ConsumerWidget {
                   subtitle: l10n.settingsManageTagsSubtitle,
                   onTap: () => context.push(Routes.settingsTags),
                 ),
+                SettingsTile(
+                  icon: Icons.handshake_outlined,
+                  title: l10n.settingsLoanTrackingTitle,
+                  subtitle: l10n.settingsLoanTrackingSubtitle,
+                  onTap: () => context.push(Routes.settingsLoans),
+                ),
               ],
             ),
           ),
@@ -157,7 +166,7 @@ class SettingsScreen extends ConsumerWidget {
                 SettingsTile(
                   icon: Icons.info,
                   title: l10n.settingsVersionTitle,
-                  subtitle: '1.0.0',
+                  subtitle: appVersionLabel,
                 ),
               ],
             ),
@@ -182,133 +191,6 @@ class SettingsScreen extends ConsumerWidget {
         ],
       ),
     );
-  }
-
-  Future<void> _handleExportJson(BuildContext context, WidgetRef ref) async {
-    final l10n = context.l10n;
-    try {
-      final messenger = ScaffoldMessenger.of(context);
-      messenger.showSnackBar(
-        SnackBar(content: Text(l10n.settingsExportingData)),
-      );
-
-      final filePath = await ref
-          .read(exportImportViewModelProvider.notifier)
-          .exportAllDataToJson();
-
-      final exportService = ExportImportService();
-      await exportService.shareFile(filePath, 'collection_tracker_export.json');
-
-      if (!context.mounted) {
-        return;
-      }
-      messenger.showSnackBar(
-        SnackBar(
-          content: Text(l10n.settingsDataExportSuccess),
-          backgroundColor: Colors.green,
-        ),
-      );
-    } catch (error) {
-      if (!context.mounted) {
-        return;
-      }
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(l10n.settingsExportFailed('$error')),
-          backgroundColor: Colors.red,
-        ),
-      );
-    }
-  }
-
-  Future<void> _handleExportCsv(BuildContext context, WidgetRef ref) async {
-    final l10n = context.l10n;
-    try {
-      final messenger = ScaffoldMessenger.of(context);
-      messenger.showSnackBar(
-        SnackBar(content: Text(l10n.settingsExportingData)),
-      );
-
-      final filePath = await ref
-          .read(exportImportViewModelProvider.notifier)
-          .exportItemsToCsv();
-
-      final exportService = ExportImportService();
-      await exportService.shareFile(filePath, 'collection_tracker_export.csv');
-
-      if (!context.mounted) {
-        return;
-      }
-      messenger.showSnackBar(
-        SnackBar(
-          content: Text(l10n.settingsDataExportSuccess),
-          backgroundColor: Colors.green,
-        ),
-      );
-    } catch (error) {
-      if (!context.mounted) {
-        return;
-      }
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(l10n.settingsExportFailed('$error')),
-          backgroundColor: Colors.red,
-        ),
-      );
-    }
-  }
-
-  Future<void> _handleImportJson(BuildContext context, WidgetRef ref) async {
-    final l10n = context.l10n;
-    final confirmed = await showAppDialog<bool>(
-      context: context,
-      title: Text(l10n.settingsImportDataTitle),
-      content: Text(l10n.settingsImportDataMessage),
-      actions: [
-        AppButton(
-          label: l10n.actionCancel,
-          variant: AppButtonVariant.ghost,
-          onPressed: () => closeAppDialog(context, false),
-        ),
-        AppButton(
-          label: l10n.actionImport,
-          onPressed: () => closeAppDialog(context, true),
-        ),
-      ],
-    );
-
-    if (confirmed != true || !context.mounted) {
-      return;
-    }
-
-    try {
-      final messenger = ScaffoldMessenger.of(context);
-      messenger.showSnackBar(
-        SnackBar(content: Text(l10n.settingsImportingData)),
-      );
-
-      await ref.read(exportImportViewModelProvider.notifier).importFromJson();
-
-      if (!context.mounted) {
-        return;
-      }
-      messenger.showSnackBar(
-        SnackBar(
-          content: Text(l10n.settingsDataImportSuccess),
-          backgroundColor: Colors.green,
-        ),
-      );
-    } catch (error) {
-      if (!context.mounted) {
-        return;
-      }
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(l10n.settingsImportFailed('$error')),
-          backgroundColor: Colors.red,
-        ),
-      );
-    }
   }
 
   Future<void> _showCloudSyncStatusSheet(
@@ -468,13 +350,16 @@ class SettingsScreen extends ConsumerWidget {
       syncedCollections: result.syncedCollections,
       syncedItems: result.syncedItems,
       syncedTags: result.syncedTags,
+      syncedLoans: result.syncedLoans,
       conflictCount: result.conflictCount,
       appliedServerCollections: result.appliedServerCollections,
       appliedServerItems: result.appliedServerItems,
       appliedServerTags: result.appliedServerTags,
+      appliedServerLoans: result.appliedServerLoans,
       skippedServerCollections: result.skippedServerCollections,
       skippedServerItems: result.skippedServerItems,
       skippedServerTags: result.skippedServerTags,
+      skippedServerLoans: result.skippedServerLoans,
       message: result.message,
       error: result.error,
       stackTrace: result.stackTrace,
@@ -487,7 +372,9 @@ class SettingsScreen extends ConsumerWidget {
         ? 'Prepared ${bootstrapResult.totalOperations} local change(s). '
         : '';
     final recoveryHint = bootstrapResult.skipped && !result.executed
-        ? ' If existing local data is missing on cloud, open Developer Tools and use "Rebuild local sync queue".'
+        ? kDebugMode
+              ? ' If existing local data is missing on cloud, open Developer Tools and use "Rebuild local sync queue".'
+              : ''
         : '';
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -879,5 +766,22 @@ class SettingsScreen extends ConsumerWidget {
     ].where((enabled) => enabled).length;
 
     return 'Enabled ($enabledTopics topics)';
+  }
+
+  String _metadataSummary(
+    BuildContext context,
+    MetadataPreferencesState preferences,
+  ) {
+    final l10n = context.l10n;
+    if (!preferences.runtimeFeatureEnabled) {
+      return l10n.settingsMetadataSummaryFeatureDisabled;
+    }
+    if (!preferences.preferenceEnabled) {
+      return l10n.settingsMetadataSummaryDisabled;
+    }
+    if (!preferences.autoFetchBarcodeEnabled) {
+      return l10n.settingsMetadataSummaryManual;
+    }
+    return l10n.settingsMetadataSummaryEnabled;
   }
 }

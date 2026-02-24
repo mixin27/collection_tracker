@@ -2,13 +2,14 @@ import 'dart:io';
 
 import 'package:auth_session/auth_session.dart';
 import 'package:backend_api/backend_api.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 class BackendAuthService {
   BackendAuthService({
     required BackendAuthClient client,
     required AuthSessionStore sessionStore,
     required Future<String> Function() resolveDeviceId,
-    this.appVersion = '1.0.0',
+    this.appVersion,
   }) : _client = client,
        _sessionStore = sessionStore,
        _resolveDeviceId = resolveDeviceId;
@@ -16,13 +17,14 @@ class BackendAuthService {
   final BackendAuthClient _client;
   final AuthSessionStore _sessionStore;
   final Future<String> Function() _resolveDeviceId;
-  final String appVersion;
+  final String? appVersion;
 
   Future<AuthSession> signIn({
     required String email,
     required String password,
   }) async {
     final deviceId = await _resolveDeviceId();
+    final resolvedAppVersion = await _resolveAppVersion();
     final response = await _client.login(
       BackendLoginRequest(
         email: email,
@@ -30,7 +32,7 @@ class BackendAuthService {
         deviceId: deviceId,
         deviceName: _deviceName(),
         deviceOs: _deviceOs(),
-        appVersion: appVersion,
+        appVersion: resolvedAppVersion,
       ),
     );
 
@@ -43,6 +45,7 @@ class BackendAuthService {
     String? displayName,
   }) async {
     final deviceId = await _resolveDeviceId();
+    final resolvedAppVersion = await _resolveAppVersion();
     final response = await _client.register(
       BackendRegisterRequest(
         email: email,
@@ -51,7 +54,7 @@ class BackendAuthService {
         deviceId: deviceId,
         deviceName: _deviceName(),
         deviceOs: _deviceOs(),
-        appVersion: appVersion,
+        appVersion: resolvedAppVersion,
       ),
     );
 
@@ -115,6 +118,26 @@ class BackendAuthService {
     return response.user;
   }
 
+  Future<void> requestAccountDeletion({String? reason}) async {
+    final existing = await _sessionStore.readSession();
+    if (!existing.hasAccessToken || existing.accessToken == null) {
+      throw const BackendApiException(
+        message: 'Sign in is required to request account deletion.',
+        code: 'AUTH_REQUIRED',
+      );
+    }
+
+    await _client.requestAccountDeletion(
+      accessToken: existing.accessToken!,
+      request: BackendAccountDeletionRequest(
+        reason: reason,
+        source: 'mobile_app',
+      ),
+    );
+
+    await _sessionStore.clearSession();
+  }
+
   Future<AuthSession> _persistAuthResponse(BackendAuthResponse response) async {
     final session = AuthSession(
       status: AuthSessionStatus.signedIn,
@@ -142,5 +165,24 @@ class BackendAuthService {
     final os = Platform.operatingSystem.trim();
     final version = Platform.operatingSystemVersion.trim();
     return '$os $version'.trim();
+  }
+
+  Future<String?> _resolveAppVersion() async {
+    final configured = appVersion?.trim();
+    if (configured != null && configured.isNotEmpty) {
+      return configured;
+    }
+
+    try {
+      final packageInfo = await PackageInfo.fromPlatform();
+      final detected = packageInfo.version.trim();
+      if (detected.isNotEmpty) {
+        return detected;
+      }
+    } catch (_) {
+      // Keep auth non-blocking if package info is unavailable.
+    }
+
+    return null;
   }
 }

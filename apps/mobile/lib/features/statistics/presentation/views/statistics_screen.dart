@@ -83,7 +83,7 @@ class StatisticsScreen extends ConsumerWidget {
                         final isCompact = width < 900 || textScale > 1.05;
                         final crossAxisCount = isCompact ? 2 : 4;
                         final tileHeight = switch (crossAxisCount) {
-                          2 => width < 460 || textScale > 1.0 ? 184.0 : 160.0,
+                          2 => width < 460 || textScale > 1.0 ? 210.0 : 186.0,
                           _ => 136.0,
                         };
                         final cards = [

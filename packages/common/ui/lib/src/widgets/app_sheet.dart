@@ -8,7 +8,7 @@ import 'glass_surface.dart';
 Future<T?> showAppSheet<T>({
   required BuildContext context,
   required WidgetBuilder builder,
-  bool isScrollControlled = false,
+  bool isScrollControlled = true,
   bool useSafeArea = true,
 }) {
   return showModalBottomSheet<T>(

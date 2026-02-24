@@ -12,7 +12,7 @@ class AppLocalizationsZh extends AppLocalizations {
   AppLocalizationsZh([String locale = 'zh']) : super(locale);
 
   @override
-  String get appTitle => 'Collection Tracker';
+  String get appTitle => 'Collectra';
 
   @override
   String get navHome => '首页';
@@ -114,6 +114,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String get settingsManageTagsSubtitle => '重命名、合并和删除标签';
 
   @override
+  String get settingsLoanTrackingTitle => '借出追踪';
+
+  @override
+  String get settingsLoanTrackingSubtitle => '跟踪借出物品和归还日期';
+
+  @override
   String get settingsVersionTitle => '版本';
 
   @override
@@ -174,7 +180,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get settingsAnalyticsConsentDeclined => '已拒绝分析收集。';
 
   @override
-  String get analyticsConsentDialogTitle => '帮助改进 Collection Tracker';
+  String get analyticsConsentDialogTitle => '帮助改进 Collectra';
 
   @override
   String get analyticsConsentDialogMessage => '我们可以收集匿名使用分析以改进应用质量和功能吗？你可以随时在设置中更改。';
@@ -213,6 +219,57 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get settingsFirebaseRuntimeConfigSubtitle => '查看并刷新运行时功能开关';
+
+  @override
+  String get settingsMetadataTitle => '元数据与自动填充';
+
+  @override
+  String get settingsMetadataSummaryEnabled => '已启用（自动条码查询）';
+
+  @override
+  String get settingsMetadataSummaryManual => '已启用（手动查询）';
+
+  @override
+  String get settingsMetadataSummaryDisabled => '已禁用';
+
+  @override
+  String get settingsMetadataSummaryFeatureDisabled => '已被运行时功能开关禁用';
+
+  @override
+  String get settingsMetadataEnableToggleTitle => '启用元数据辅助';
+
+  @override
+  String get settingsMetadataEnableToggleSubtitle => '在条目表单中允许元数据搜索和基于条码的自动填充。';
+
+  @override
+  String get settingsMetadataAutoFetchToggleTitle => '扫描条码后自动获取';
+
+  @override
+  String get settingsMetadataAutoFetchToggleSubtitle => '扫描条码后自动获取元数据。';
+
+  @override
+  String get settingsMetadataFillEmptyOnlyToggleTitle => '仅填充空字段';
+
+  @override
+  String get settingsMetadataFillEmptyOnlyToggleSubtitle => '找到元数据时不覆盖现有标题或描述。';
+
+  @override
+  String get settingsMetadataSourcesSectionTitle => '数据源';
+
+  @override
+  String get settingsMetadataSourceAvailable => '可用';
+
+  @override
+  String get settingsMetadataSourceNotConfigured => '未配置';
+
+  @override
+  String get settingsMetadataSourceManualOnly => '仅手动';
+
+  @override
+  String get settingsMetadataManualCollectionsLabel => '漫画、音乐和自定义';
+
+  @override
+  String get settingsMetadataFeatureDisabledMessage => '元数据辅助已被运行时配置禁用。';
 
   @override
   String get settingsFirebaseRuntimeConfigSheetTitle => 'Firebase 运行时配置';
@@ -290,7 +347,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get settingsImportDataTitle => '导入数据';
 
   @override
-  String get settingsImportDataMessage => '这将从 JSON 文件导入集合和条目。现有数据不会被删除。\\n\\n是否继续？';
+  String get settingsImportDataMessage => '这将从 JSON 文件导入集合和条目。现有数据不会被删除。\n\n是否继续？';
 
   @override
   String get settingsImportingData => '正在导入数据...';
@@ -746,6 +803,17 @@ class AppLocalizationsZh extends AppLocalizations {
   String get metadataSearchSuggestionMessage => '开始输入以查找元数据。';
 
   @override
+  String get metadataSearchDisabledHint => '此集合类型不支持元数据搜索，或当前已禁用。';
+
+  @override
+  String get metadataNoMatchForBarcode => '未找到与此条码匹配的元数据。';
+
+  @override
+  String metadataSearchUnavailableForType(String collectionType) {
+    return '$collectionType 不支持元数据搜索。';
+  }
+
+  @override
   String tagItemsTitle(String tag) {
     return '标签：$tag';
   }
@@ -878,7 +946,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String tagManagementDeleteSelectedMessage(int count) {
-    return '要从所有条目中删除所选的 $count 个标签吗？\\n\\n此操作无法撤销。';
+    return '要从所有条目中删除所选的 $count 个标签吗？\n\n此操作无法撤销。';
   }
 
   @override
@@ -899,7 +967,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String tagManagementDeleteMessage(String tagName) {
-    return '要从所有条目中删除“$tagName”吗？\\n\\n此操作无法撤销。';
+    return '要从所有条目中删除“$tagName”吗？\n\n此操作无法撤销。';
   }
 
   @override
@@ -1064,4 +1132,350 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get collectionTypeCustom => '自定义';
+
+  @override
+  String get loanTrackingTitle => '借出追踪';
+
+  @override
+  String get loanTrackingNewLoan => '新建借出';
+
+  @override
+  String get loanTrackingFilterActive => '进行中';
+
+  @override
+  String get loanTrackingFilterHistory => '历史';
+
+  @override
+  String get loanTrackingEmptyHistoryTitle => '暂无已归还借出';
+
+  @override
+  String get loanTrackingEmptyHistoryMessage => '已归还条目会显示在这里。';
+
+  @override
+  String get loanTrackingEmptyActiveTitle => '暂无进行中借出';
+
+  @override
+  String get loanTrackingEmptyActiveMessage => '创建一条借出记录来跟踪借出物品。';
+
+  @override
+  String get loanTrackingLoadingLoans => '正在加载借出记录...';
+
+  @override
+  String loanTrackingLoadFailed(String error) {
+    return '加载借出记录失败：$error';
+  }
+
+  @override
+  String get loanTrackingMarkReturnedConfirmTitle => '标记为已归还？';
+
+  @override
+  String loanTrackingMarkReturnedConfirmMessage(String itemTitle) {
+    return '确认「$itemTitle」已归还。';
+  }
+
+  @override
+  String get loanTrackingMarkReturnedAction => '标记已归还';
+
+  @override
+  String get loanTrackingMarkedReturnedSuccess => '借出已标记为归还。';
+
+  @override
+  String loanTrackingMarkReturnedFailed(String error) {
+    return '标记归还失败：$error';
+  }
+
+  @override
+  String get loanTrackingDeleteConfirmTitle => '删除借出记录？';
+
+  @override
+  String loanTrackingDeleteConfirmMessage(String itemTitle) {
+    return '删除「$itemTitle」的借出记录。';
+  }
+
+  @override
+  String get loanTrackingDeleteSuccess => '借出记录已删除。';
+
+  @override
+  String loanTrackingDeleteFailed(String error) {
+    return '删除借出记录失败：$error';
+  }
+
+  @override
+  String get loanTrackingSummaryActiveLabel => '进行中借出';
+
+  @override
+  String get loanTrackingSummaryOverdueLabel => '逾期';
+
+  @override
+  String get loanTrackingSummaryLoadFailed => '无法加载借出摘要。';
+
+  @override
+  String get loanTrackingFieldBorrower => '借用人';
+
+  @override
+  String get loanTrackingFieldContact => '联系方式';
+
+  @override
+  String get loanTrackingFieldLoaned => '借出日期';
+
+  @override
+  String get loanTrackingFieldDue => '到期日期';
+
+  @override
+  String get loanTrackingFieldReturned => '归还日期';
+
+  @override
+  String get loanTrackingStatusReturned => '已归还';
+
+  @override
+  String get loanTrackingStatusOverdue => '逾期';
+
+  @override
+  String get loanTrackingStatusActive => '进行中';
+
+  @override
+  String get loanTrackingCreateTitle => '创建借出';
+
+  @override
+  String get loanTrackingCreateDescription => '记录谁借走了物品以及应归还时间。';
+
+  @override
+  String get loanTrackingCreateNoItemsTitle => '暂无可借出条目';
+
+  @override
+  String get loanTrackingCreateNoItemsMessage => '所有条目都在借出中，或还没有条目。';
+
+  @override
+  String get loanTrackingCreateItemLabel => '条目';
+
+  @override
+  String get loanTrackingCreateBorrowerLabel => '借用人姓名';
+
+  @override
+  String get loanTrackingCreateBorrowerHint => '例如：张三';
+
+  @override
+  String get loanTrackingCreateContactLabel => '联系方式（可选）';
+
+  @override
+  String get loanTrackingCreateContactHint => '电话、邮箱或 @username';
+
+  @override
+  String get loanTrackingCreateNotesLabel => '备注（可选）';
+
+  @override
+  String get loanTrackingCreateNotesHint => '这次借出的额外说明';
+
+  @override
+  String get loanTrackingCreateSubmitting => '创建中...';
+
+  @override
+  String get loanTrackingCreateAction => '创建借出';
+
+  @override
+  String get loanTrackingLoadingItems => '正在加载条目...';
+
+  @override
+  String loanTrackingLoadItemsFailed(String error) {
+    return '加载条目失败：$error';
+  }
+
+  @override
+  String get loanTrackingBorrowerRequired => '借用人姓名不能为空。';
+
+  @override
+  String get loanTrackingCreateSuccess => '借出创建成功。';
+
+  @override
+  String loanTrackingCreateFailed(String error) {
+    return '创建借出失败：$error';
+  }
+
+  @override
+  String get loanTrackingNoDueDate => '无到期日期';
+
+  @override
+  String get loanTrackingPickDateAction => '选择';
+
+  @override
+  String get loanTrackingClearDateAction => '清除';
+
+  @override
+  String get loanTrackingDueDateLabel => '到期日期';
+
+  @override
+  String get authTitleAccount => '账户';
+
+  @override
+  String get authCreateAccountHeading => '创建账户';
+
+  @override
+  String get authSignInHeading => '登录';
+
+  @override
+  String get authCreateAccountDescription => '创建账户以在多台设备间同步你的收藏。';
+
+  @override
+  String get authSignInDescription => '登录以启用云同步和账户功能。';
+
+  @override
+  String get authSignInChoice => '登录';
+
+  @override
+  String get authRegisterChoice => '注册';
+
+  @override
+  String get authEmailLabel => '邮箱';
+
+  @override
+  String get authEmailHint => 'you@example.com';
+
+  @override
+  String get authEmailRequiredError => '邮箱为必填项。';
+
+  @override
+  String get authEmailInvalidError => '请输入有效的邮箱地址。';
+
+  @override
+  String get authPasswordLabel => '密码';
+
+  @override
+  String get authPasswordHint => '至少8位，A-Z、a-z、0-9';
+
+  @override
+  String get authPasswordRequiredError => '密码为必填项。';
+
+  @override
+  String get authPasswordLengthError => '密码至少需要8位字符。';
+
+  @override
+  String get authPasswordPolicyError => '密码必须包含大写字母、小写字母和数字。';
+
+  @override
+  String get authDisplayNameLabel => '显示名称（可选）';
+
+  @override
+  String get authDisplayNameHint => '我们应该如何称呼你？';
+
+  @override
+  String get authCreateAccountAction => '创建账户';
+
+  @override
+  String get authNotNowAction => '暂不';
+
+  @override
+  String get authUnavailableMessage => '当前无法使用身份验证。';
+
+  @override
+  String get authRegisterSuccess => '账户已创建并已登录。';
+
+  @override
+  String get authSignInSuccess => '登录成功。';
+
+  @override
+  String authSignInFailed(String error) {
+    return '登录失败：$error';
+  }
+
+  @override
+  String get authSignedOut => '已退出登录。';
+
+  @override
+  String get authFinalConfirmationTitle => '最终确认';
+
+  @override
+  String get authFinalConfirmationMessage => '现在提交账户删除请求吗？你将立即在此设备上退出登录。';
+
+  @override
+  String get authBackAction => '返回';
+
+  @override
+  String get authSubmitRequestAction => '提交请求';
+
+  @override
+  String get authDeletionRequestSubmitted => '账户删除请求已提交。你已退出登录。';
+
+  @override
+  String get authDeletionEndpointMissing => '后端尚未配置删除请求接口。';
+
+  @override
+  String get authDeletionImpactDialogTitle => '请求删除账户前';
+
+  @override
+  String get authDeletionImpactReviewPrompt => '请仔细确认影响。';
+
+  @override
+  String get authIrreversibleRequestTitle => '不可逆请求';
+
+  @override
+  String get authImpactLineSessionRevoked => '提交请求后，你的账户会话将立即失效。';
+
+  @override
+  String get authImpactLineCloudDataDeleted => '与该账户关联的云端同步数据在处理过程中可能被永久删除。';
+
+  @override
+  String get authImpactLineCannotRestore => '账户数据一旦删除并处理完成将无法恢复。';
+
+  @override
+  String get authUnderstandAction => '我已了解';
+
+  @override
+  String get authPasswordPolicySuffix => '请使用英文键盘字母和数字（A-Z、a-z、0-9）。';
+
+  @override
+  String get authAccountConnected => '账户已连接';
+
+  @override
+  String get authSignedInReadySubtitle => '已登录并可进行云同步';
+
+  @override
+  String get authActiveStatus => '已激活';
+
+  @override
+  String get authSessionDetailsTitle => '会话详情';
+
+  @override
+  String get authUserIdLabel => '用户 ID';
+
+  @override
+  String get authDeviceIdLabel => '设备 ID';
+
+  @override
+  String get authUnknownValue => '未知';
+
+  @override
+  String get authDeletionNoticeTitle => '账户删除提示';
+
+  @override
+  String get authDeletionNoticeSubtitle => '删除请求一旦处理即不可撤销。';
+
+  @override
+  String get authDeletionNoticeLineProfileSessions => '账户资料和活跃会话将从云端访问中移除。';
+
+  @override
+  String get authDeletionNoticeLineSyncedData => '已同步的收藏、条目、标签和借出记录可能被永久删除。';
+
+  @override
+  String get authRequestDeletionAction => '请求删除账户';
+
+  @override
+  String get authSignOutAction => '退出登录';
+
+  @override
+  String get authDoneAction => '完成';
+
+  @override
+  String get authHeaderCreateTitle => '创建你的账户';
+
+  @override
+  String get authHeaderWelcomeTitle => '欢迎回来';
+
+  @override
+  String get authHeaderCreateSubtitle => '账户不是必需的，但云同步和多设备访问需要登录账户。';
+
+  @override
+  String get authHeaderSignInSubtitle => '登录以使用云同步和账户相关功能。';
+
+  @override
+  String get authUnavailableTitle => '身份验证不可用';
 }

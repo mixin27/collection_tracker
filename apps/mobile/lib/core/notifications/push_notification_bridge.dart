@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:app_analytics/app_analytics.dart';
 import 'package:app_firebase/app_firebase.dart';
 import 'package:collection_tracker/core/observability/operational_telemetry.dart';
+import 'package:collection_tracker/core/providers/backend_api_providers.dart';
 import 'package:collection_tracker/core/providers/push_notifications_provider.dart';
 import 'package:collection_tracker/core/router/routes.dart';
 import 'package:flutter/material.dart';
@@ -171,11 +172,13 @@ class _PushNotificationBridgeState
       return '/collections/$collectionId';
     }
 
+    final authFeatureEnabled = ref.read(backendAuthFeatureFlagProvider);
     return switch (_notificationType(message.data)) {
       'sync_needed' => Routes.settings,
       'price_alert' => Routes.statistics,
       'reminder' => Routes.collections,
-      'account_security' => '${Routes.auth}?mode=signin',
+      'account_security' =>
+        authFeatureEnabled ? '${Routes.auth}?mode=signin' : Routes.settings,
       _ => null,
     };
   }

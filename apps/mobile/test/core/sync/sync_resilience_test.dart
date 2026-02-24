@@ -74,6 +74,7 @@ void main() {
             syncedCollections: 1,
             syncedItems: 0,
             syncedTags: 0,
+            syncedLoans: 0,
             conflictsResolved: 0,
           ),
         ],
@@ -225,6 +226,7 @@ class _SequenceBackendClient implements SyncBackendClient {
       maxBatchSize: 1000,
       conflictStrategy: 'last_write_wins',
       acceptedSchemaVersions: <String>['v1'],
+      supportedEntities: <String>['collection', 'item', 'tag'],
     );
   }
 

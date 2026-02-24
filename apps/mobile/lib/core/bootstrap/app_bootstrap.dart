@@ -40,6 +40,7 @@ abstract final class AppBootstrap {
       performanceEnabled: firebaseRuntimeConfig.performanceCollectionEnabled,
       appCheckEnabled: firebaseRuntimeConfig.appCheckEnabled,
       fcmEnabled: firebaseRuntimeConfig.fcmEnabled,
+      metadataEnabled: firebaseRuntimeConfig.metadataFeatureEnabled,
       backendEnabled: firebaseRuntimeConfig.backendIntegrationEnabled,
       authEnabled: firebaseRuntimeConfig.authFeatureEnabled,
       syncEnabled: firebaseRuntimeConfig.syncFeatureEnabled,

@@ -12,7 +12,7 @@ class AppLocalizationsEs extends AppLocalizations {
   AppLocalizationsEs([String locale = 'es']) : super(locale);
 
   @override
-  String get appTitle => 'Collection Tracker';
+  String get appTitle => 'Collectra';
 
   @override
   String get navHome => 'Inicio';
@@ -114,6 +114,12 @@ class AppLocalizationsEs extends AppLocalizations {
   String get settingsManageTagsSubtitle => 'Renombrar, combinar y eliminar etiquetas';
 
   @override
+  String get settingsLoanTrackingTitle => 'Seguimiento de préstamos';
+
+  @override
+  String get settingsLoanTrackingSubtitle => 'Controla artículos prestados y fechas de devolución';
+
+  @override
   String get settingsVersionTitle => 'Versión';
 
   @override
@@ -174,7 +180,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get settingsAnalyticsConsentDeclined => 'Consentimiento de analíticas rechazado.';
 
   @override
-  String get analyticsConsentDialogTitle => 'Ayúdanos a mejorar Collection Tracker';
+  String get analyticsConsentDialogTitle => 'Ayúdanos a mejorar Collectra';
 
   @override
   String get analyticsConsentDialogMessage => '¿Podemos recopilar analíticas de uso anónimas para mejorar la calidad y las funciones de la app? Puedes cambiarlo en Configuración en cualquier momento.';
@@ -213,6 +219,57 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get settingsFirebaseRuntimeConfigSubtitle => 'Inspecciona y actualiza las banderas de ejecución';
+
+  @override
+  String get settingsMetadataTitle => 'Metadatos y Autorrelleno';
+
+  @override
+  String get settingsMetadataSummaryEnabled => 'Activado con búsqueda automática por código de barras';
+
+  @override
+  String get settingsMetadataSummaryManual => 'Activado con búsqueda manual';
+
+  @override
+  String get settingsMetadataSummaryDisabled => 'Desactivado';
+
+  @override
+  String get settingsMetadataSummaryFeatureDisabled => 'Desactivado por bandera de ejecución';
+
+  @override
+  String get settingsMetadataEnableToggleTitle => 'Activar asistencia de metadatos';
+
+  @override
+  String get settingsMetadataEnableToggleSubtitle => 'Permite la búsqueda de metadatos y el autorrelleno por código de barras en formularios de artículos.';
+
+  @override
+  String get settingsMetadataAutoFetchToggleTitle => 'Buscar automáticamente al escanear código';
+
+  @override
+  String get settingsMetadataAutoFetchToggleSubtitle => 'Después de escanear un código de barras, obtiene metadatos automáticamente.';
+
+  @override
+  String get settingsMetadataFillEmptyOnlyToggleTitle => 'Rellenar solo campos vacíos';
+
+  @override
+  String get settingsMetadataFillEmptyOnlyToggleSubtitle => 'No sobrescribe el título ni la descripción existentes cuando se encuentran metadatos.';
+
+  @override
+  String get settingsMetadataSourcesSectionTitle => 'Fuentes';
+
+  @override
+  String get settingsMetadataSourceAvailable => 'Disponible';
+
+  @override
+  String get settingsMetadataSourceNotConfigured => 'Sin configurar';
+
+  @override
+  String get settingsMetadataSourceManualOnly => 'Solo manual';
+
+  @override
+  String get settingsMetadataManualCollectionsLabel => 'Cómics, Música y Personalizado';
+
+  @override
+  String get settingsMetadataFeatureDisabledMessage => 'La asistencia de metadatos está desactivada por configuración de ejecución.';
 
   @override
   String get settingsFirebaseRuntimeConfigSheetTitle => 'Configuración de ejecución de Firebase';
@@ -290,7 +347,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get settingsImportDataTitle => 'Importar datos';
 
   @override
-  String get settingsImportDataMessage => 'Esto importará colecciones y artículos desde un archivo JSON. Los datos existentes no se eliminarán.\\n\\n¿Continuar?';
+  String get settingsImportDataMessage => 'Esto importará colecciones y artículos desde un archivo JSON. Los datos existentes no se eliminarán.\n\n¿Continuar?';
 
   @override
   String get settingsImportingData => 'Importando datos...';
@@ -746,6 +803,17 @@ class AppLocalizationsEs extends AppLocalizations {
   String get metadataSearchSuggestionMessage => 'Empieza a escribir para buscar metadatos.';
 
   @override
+  String get metadataSearchDisabledHint => 'La búsqueda de metadatos no está disponible para este tipo de colección o está desactivada.';
+
+  @override
+  String get metadataNoMatchForBarcode => 'No se encontraron metadatos para este código de barras.';
+
+  @override
+  String metadataSearchUnavailableForType(String collectionType) {
+    return 'La búsqueda de metadatos no está disponible para $collectionType.';
+  }
+
+  @override
   String tagItemsTitle(String tag) {
     return 'Etiqueta: $tag';
   }
@@ -878,7 +946,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String tagManagementDeleteSelectedMessage(int count) {
-    return '¿Eliminar $count etiquetas seleccionadas de todos los artículos?\\n\\nEsto no se puede deshacer.';
+    return '¿Eliminar $count etiquetas seleccionadas de todos los artículos?\n\nEsto no se puede deshacer.';
   }
 
   @override
@@ -899,7 +967,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String tagManagementDeleteMessage(String tagName) {
-    return '¿Eliminar \"$tagName\" de todos los artículos?\\n\\nEsto no se puede deshacer.';
+    return '¿Eliminar \"$tagName\" de todos los artículos?\n\nEsto no se puede deshacer.';
   }
 
   @override
@@ -1064,4 +1132,350 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get collectionTypeCustom => 'Personalizada';
+
+  @override
+  String get loanTrackingTitle => 'Seguimiento de préstamos';
+
+  @override
+  String get loanTrackingNewLoan => 'Nuevo préstamo';
+
+  @override
+  String get loanTrackingFilterActive => 'Activos';
+
+  @override
+  String get loanTrackingFilterHistory => 'Historial';
+
+  @override
+  String get loanTrackingEmptyHistoryTitle => 'Aún no hay préstamos devueltos';
+
+  @override
+  String get loanTrackingEmptyHistoryMessage => 'Los artículos devueltos aparecerán aquí.';
+
+  @override
+  String get loanTrackingEmptyActiveTitle => 'No hay préstamos activos';
+
+  @override
+  String get loanTrackingEmptyActiveMessage => 'Crea un préstamo para empezar a seguir artículos prestados.';
+
+  @override
+  String get loanTrackingLoadingLoans => 'Cargando préstamos...';
+
+  @override
+  String loanTrackingLoadFailed(String error) {
+    return 'No se pudieron cargar los préstamos: $error';
+  }
+
+  @override
+  String get loanTrackingMarkReturnedConfirmTitle => '¿Marcar como devuelto?';
+
+  @override
+  String loanTrackingMarkReturnedConfirmMessage(String itemTitle) {
+    return 'Confirmar devolución de \"$itemTitle\".';
+  }
+
+  @override
+  String get loanTrackingMarkReturnedAction => 'Marcar devuelto';
+
+  @override
+  String get loanTrackingMarkedReturnedSuccess => 'El préstamo se marcó como devuelto.';
+
+  @override
+  String loanTrackingMarkReturnedFailed(String error) {
+    return 'No se pudo marcar la devolución: $error';
+  }
+
+  @override
+  String get loanTrackingDeleteConfirmTitle => '¿Eliminar registro del préstamo?';
+
+  @override
+  String loanTrackingDeleteConfirmMessage(String itemTitle) {
+    return 'Eliminar registro del préstamo de \"$itemTitle\".';
+  }
+
+  @override
+  String get loanTrackingDeleteSuccess => 'Préstamo eliminado.';
+
+  @override
+  String loanTrackingDeleteFailed(String error) {
+    return 'No se pudo eliminar el préstamo: $error';
+  }
+
+  @override
+  String get loanTrackingSummaryActiveLabel => 'Préstamos activos';
+
+  @override
+  String get loanTrackingSummaryOverdueLabel => 'Vencidos';
+
+  @override
+  String get loanTrackingSummaryLoadFailed => 'No se pudo cargar el resumen de préstamos.';
+
+  @override
+  String get loanTrackingFieldBorrower => 'Prestatario';
+
+  @override
+  String get loanTrackingFieldContact => 'Contacto';
+
+  @override
+  String get loanTrackingFieldLoaned => 'Prestado';
+
+  @override
+  String get loanTrackingFieldDue => 'Vence';
+
+  @override
+  String get loanTrackingFieldReturned => 'Devuelto';
+
+  @override
+  String get loanTrackingStatusReturned => 'Devuelto';
+
+  @override
+  String get loanTrackingStatusOverdue => 'Vencido';
+
+  @override
+  String get loanTrackingStatusActive => 'Activo';
+
+  @override
+  String get loanTrackingCreateTitle => 'Crear préstamo';
+
+  @override
+  String get loanTrackingCreateDescription => 'Registra quién tomó un artículo prestado y cuándo debe devolverlo.';
+
+  @override
+  String get loanTrackingCreateNoItemsTitle => 'No hay artículos disponibles';
+
+  @override
+  String get loanTrackingCreateNoItemsMessage => 'Todos los artículos están prestados actualmente o aún no hay artículos.';
+
+  @override
+  String get loanTrackingCreateItemLabel => 'Artículo';
+
+  @override
+  String get loanTrackingCreateBorrowerLabel => 'Nombre del prestatario';
+
+  @override
+  String get loanTrackingCreateBorrowerHint => 'p. ej. Juan Pérez';
+
+  @override
+  String get loanTrackingCreateContactLabel => 'Contacto (opcional)';
+
+  @override
+  String get loanTrackingCreateContactHint => 'Teléfono, correo o @usuario';
+
+  @override
+  String get loanTrackingCreateNotesLabel => 'Notas (opcional)';
+
+  @override
+  String get loanTrackingCreateNotesHint => 'Detalles adicionales para este préstamo';
+
+  @override
+  String get loanTrackingCreateSubmitting => 'Creando...';
+
+  @override
+  String get loanTrackingCreateAction => 'Crear préstamo';
+
+  @override
+  String get loanTrackingLoadingItems => 'Cargando artículos...';
+
+  @override
+  String loanTrackingLoadItemsFailed(String error) {
+    return 'No se pudieron cargar los artículos: $error';
+  }
+
+  @override
+  String get loanTrackingBorrowerRequired => 'El nombre del prestatario es obligatorio.';
+
+  @override
+  String get loanTrackingCreateSuccess => 'Préstamo creado correctamente.';
+
+  @override
+  String loanTrackingCreateFailed(String error) {
+    return 'No se pudo crear el préstamo: $error';
+  }
+
+  @override
+  String get loanTrackingNoDueDate => 'Sin fecha de vencimiento';
+
+  @override
+  String get loanTrackingPickDateAction => 'Elegir';
+
+  @override
+  String get loanTrackingClearDateAction => 'Limpiar';
+
+  @override
+  String get loanTrackingDueDateLabel => 'Fecha de vencimiento';
+
+  @override
+  String get authTitleAccount => 'Cuenta';
+
+  @override
+  String get authCreateAccountHeading => 'Crear cuenta';
+
+  @override
+  String get authSignInHeading => 'Iniciar sesión';
+
+  @override
+  String get authCreateAccountDescription => 'Crea una cuenta para sincronizar tus colecciones entre dispositivos.';
+
+  @override
+  String get authSignInDescription => 'Inicia sesión para habilitar la sincronización en la nube y funciones de cuenta.';
+
+  @override
+  String get authSignInChoice => 'Iniciar sesión';
+
+  @override
+  String get authRegisterChoice => 'Registrarse';
+
+  @override
+  String get authEmailLabel => 'Correo electrónico';
+
+  @override
+  String get authEmailHint => 'tu@ejemplo.com';
+
+  @override
+  String get authEmailRequiredError => 'El correo electrónico es obligatorio.';
+
+  @override
+  String get authEmailInvalidError => 'Introduce un correo electrónico válido.';
+
+  @override
+  String get authPasswordLabel => 'Contraseña';
+
+  @override
+  String get authPasswordHint => 'Mín. 8 caracteres, A-Z, a-z, 0-9';
+
+  @override
+  String get authPasswordRequiredError => 'La contraseña es obligatoria.';
+
+  @override
+  String get authPasswordLengthError => 'La contraseña debe tener al menos 8 caracteres.';
+
+  @override
+  String get authPasswordPolicyError => 'La contraseña debe incluir mayúsculas, minúsculas y números.';
+
+  @override
+  String get authDisplayNameLabel => 'Nombre para mostrar (opcional)';
+
+  @override
+  String get authDisplayNameHint => '¿Cómo debemos llamarte?';
+
+  @override
+  String get authCreateAccountAction => 'Crear cuenta';
+
+  @override
+  String get authNotNowAction => 'Ahora no';
+
+  @override
+  String get authUnavailableMessage => 'La autenticación no está disponible en este momento.';
+
+  @override
+  String get authRegisterSuccess => 'Cuenta creada e inicio de sesión completado.';
+
+  @override
+  String get authSignInSuccess => 'Inicio de sesión exitoso.';
+
+  @override
+  String authSignInFailed(String error) {
+    return 'Error al iniciar sesión: $error';
+  }
+
+  @override
+  String get authSignedOut => 'Sesión cerrada.';
+
+  @override
+  String get authFinalConfirmationTitle => 'Confirmación final';
+
+  @override
+  String get authFinalConfirmationMessage => '¿Enviar solicitud de eliminación de cuenta ahora? Se cerrará la sesión de inmediato en este dispositivo.';
+
+  @override
+  String get authBackAction => 'Atrás';
+
+  @override
+  String get authSubmitRequestAction => 'Enviar solicitud';
+
+  @override
+  String get authDeletionRequestSubmitted => 'Solicitud de eliminación enviada. Se cerró tu sesión.';
+
+  @override
+  String get authDeletionEndpointMissing => 'El endpoint de solicitud de eliminación aún no está configurado en el backend.';
+
+  @override
+  String get authDeletionImpactDialogTitle => 'Antes de solicitar la eliminación de la cuenta';
+
+  @override
+  String get authDeletionImpactReviewPrompt => 'Revisa cuidadosamente el impacto.';
+
+  @override
+  String get authIrreversibleRequestTitle => 'Solicitud irreversible';
+
+  @override
+  String get authImpactLineSessionRevoked => 'La sesión de tu cuenta se revoca inmediatamente al solicitarla.';
+
+  @override
+  String get authImpactLineCloudDataDeleted => 'Los datos sincronizados en la nube vinculados a esta cuenta pueden eliminarse permanentemente durante el proceso.';
+
+  @override
+  String get authImpactLineCannotRestore => 'Los datos eliminados de la cuenta no se pueden restaurar una vez procesados.';
+
+  @override
+  String get authUnderstandAction => 'Entiendo';
+
+  @override
+  String get authPasswordPolicySuffix => 'Usa letras y dígitos del teclado en inglés (A-Z, a-z, 0-9).';
+
+  @override
+  String get authAccountConnected => 'Cuenta conectada';
+
+  @override
+  String get authSignedInReadySubtitle => 'Sesión iniciada y lista para sincronización en la nube';
+
+  @override
+  String get authActiveStatus => 'Activa';
+
+  @override
+  String get authSessionDetailsTitle => 'Detalles de la sesión';
+
+  @override
+  String get authUserIdLabel => 'ID de usuario';
+
+  @override
+  String get authDeviceIdLabel => 'ID del dispositivo';
+
+  @override
+  String get authUnknownValue => 'Desconocido';
+
+  @override
+  String get authDeletionNoticeTitle => 'Aviso de eliminación de cuenta';
+
+  @override
+  String get authDeletionNoticeSubtitle => 'Las solicitudes de eliminación son irreversibles una vez procesadas.';
+
+  @override
+  String get authDeletionNoticeLineProfileSessions => 'El perfil de la cuenta y las sesiones activas se eliminarán del acceso en la nube.';
+
+  @override
+  String get authDeletionNoticeLineSyncedData => 'Las colecciones, artículos, etiquetas y préstamos sincronizados pueden eliminarse permanentemente.';
+
+  @override
+  String get authRequestDeletionAction => 'Solicitar eliminación de cuenta';
+
+  @override
+  String get authSignOutAction => 'Cerrar sesión';
+
+  @override
+  String get authDoneAction => 'Listo';
+
+  @override
+  String get authHeaderCreateTitle => 'Crea tu cuenta';
+
+  @override
+  String get authHeaderWelcomeTitle => 'Bienvenido de nuevo';
+
+  @override
+  String get authHeaderCreateSubtitle => 'Las cuentas son opcionales, pero necesarias para sincronización en la nube y acceso multidispositivo.';
+
+  @override
+  String get authHeaderSignInSubtitle => 'Inicia sesión para acceder a sincronización en la nube y funciones de cuenta.';
+
+  @override
+  String get authUnavailableTitle => 'Autenticación no disponible';
 }

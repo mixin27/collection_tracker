@@ -12,7 +12,7 @@ class AppLocalizationsJa extends AppLocalizations {
   AppLocalizationsJa([String locale = 'ja']) : super(locale);
 
   @override
-  String get appTitle => 'Collection Tracker';
+  String get appTitle => 'Collectra';
 
   @override
   String get navHome => 'ホーム';
@@ -114,6 +114,12 @@ class AppLocalizationsJa extends AppLocalizations {
   String get settingsManageTagsSubtitle => 'タグの名前変更・統合・削除';
 
   @override
+  String get settingsLoanTrackingTitle => '貸出管理';
+
+  @override
+  String get settingsLoanTrackingSubtitle => '貸し出したアイテムと返却予定日を追跡';
+
+  @override
   String get settingsVersionTitle => 'バージョン';
 
   @override
@@ -174,7 +180,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get settingsAnalyticsConsentDeclined => 'アナリティクスへの同意を拒否しました。';
 
   @override
-  String get analyticsConsentDialogTitle => 'Collection Tracker の改善にご協力ください';
+  String get analyticsConsentDialogTitle => 'Collectra の改善にご協力ください';
 
   @override
   String get analyticsConsentDialogMessage => 'アプリ品質と機能改善のため、匿名の利用データ収集にご協力いただけますか？この設定はいつでも設定画面で変更できます。';
@@ -213,6 +219,57 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get settingsFirebaseRuntimeConfigSubtitle => 'ランタイム機能フラグを確認して更新';
+
+  @override
+  String get settingsMetadataTitle => 'メタデータと自動入力';
+
+  @override
+  String get settingsMetadataSummaryEnabled => 'バーコード自動検索で有効';
+
+  @override
+  String get settingsMetadataSummaryManual => '手動検索で有効';
+
+  @override
+  String get settingsMetadataSummaryDisabled => '無効';
+
+  @override
+  String get settingsMetadataSummaryFeatureDisabled => '実行時の機能フラグにより無効';
+
+  @override
+  String get settingsMetadataEnableToggleTitle => 'メタデータ補助を有効化';
+
+  @override
+  String get settingsMetadataEnableToggleSubtitle => 'アイテムフォームでメタデータ検索とバーコード自動入力を利用します。';
+
+  @override
+  String get settingsMetadataAutoFetchToggleTitle => 'バーコード読み取り時に自動取得';
+
+  @override
+  String get settingsMetadataAutoFetchToggleSubtitle => 'バーコードを読み取った後、メタデータを自動取得します。';
+
+  @override
+  String get settingsMetadataFillEmptyOnlyToggleTitle => '空欄のみ入力';
+
+  @override
+  String get settingsMetadataFillEmptyOnlyToggleSubtitle => 'メタデータ検出時に既存のタイトルや説明を上書きしません。';
+
+  @override
+  String get settingsMetadataSourcesSectionTitle => 'ソース';
+
+  @override
+  String get settingsMetadataSourceAvailable => '利用可能';
+
+  @override
+  String get settingsMetadataSourceNotConfigured => '未設定';
+
+  @override
+  String get settingsMetadataSourceManualOnly => '手動のみ';
+
+  @override
+  String get settingsMetadataManualCollectionsLabel => 'コミック・音楽・カスタム';
+
+  @override
+  String get settingsMetadataFeatureDisabledMessage => 'メタデータ補助は実行時設定で無効化されています。';
 
   @override
   String get settingsFirebaseRuntimeConfigSheetTitle => 'Firebase ランタイム設定';
@@ -290,7 +347,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get settingsImportDataTitle => 'データをインポート';
 
   @override
-  String get settingsImportDataMessage => 'JSONファイルからコレクションとアイテムをインポートします。既存データは削除されません。\\n\\n続行しますか？';
+  String get settingsImportDataMessage => 'JSONファイルからコレクションとアイテムをインポートします。既存データは削除されません。\n\n続行しますか？';
 
   @override
   String get settingsImportingData => 'データをインポート中...';
@@ -746,6 +803,17 @@ class AppLocalizationsJa extends AppLocalizations {
   String get metadataSearchSuggestionMessage => '入力してメタデータを検索してください。';
 
   @override
+  String get metadataSearchDisabledHint => 'このコレクション種別ではメタデータ検索が利用できないか、現在無効です。';
+
+  @override
+  String get metadataNoMatchForBarcode => 'このバーコードに一致するメタデータが見つかりません。';
+
+  @override
+  String metadataSearchUnavailableForType(String collectionType) {
+    return '$collectionType ではメタデータ検索を利用できません。';
+  }
+
+  @override
   String tagItemsTitle(String tag) {
     return 'タグ: $tag';
   }
@@ -878,7 +946,7 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String tagManagementDeleteSelectedMessage(int count) {
-    return 'すべてのアイテムから選択した $count 件のタグを削除しますか？\\n\\nこの操作は元に戻せません。';
+    return 'すべてのアイテムから選択した $count 件のタグを削除しますか？\n\nこの操作は元に戻せません。';
   }
 
   @override
@@ -899,7 +967,7 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String tagManagementDeleteMessage(String tagName) {
-    return 'すべてのアイテムから \"$tagName\" を削除しますか？\\n\\nこの操作は元に戻せません。';
+    return 'すべてのアイテムから \"$tagName\" を削除しますか？\n\nこの操作は元に戻せません。';
   }
 
   @override
@@ -1064,4 +1132,350 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get collectionTypeCustom => 'カスタム';
+
+  @override
+  String get loanTrackingTitle => '貸出管理';
+
+  @override
+  String get loanTrackingNewLoan => '新しい貸出';
+
+  @override
+  String get loanTrackingFilterActive => 'アクティブ';
+
+  @override
+  String get loanTrackingFilterHistory => '履歴';
+
+  @override
+  String get loanTrackingEmptyHistoryTitle => '返却済みの貸出はまだありません';
+
+  @override
+  String get loanTrackingEmptyHistoryMessage => '返却されたアイテムはここに表示されます。';
+
+  @override
+  String get loanTrackingEmptyActiveTitle => 'アクティブな貸出はありません';
+
+  @override
+  String get loanTrackingEmptyActiveMessage => '貸出を作成して、借りられたアイテムの管理を始めましょう。';
+
+  @override
+  String get loanTrackingLoadingLoans => '貸出を読み込み中...';
+
+  @override
+  String loanTrackingLoadFailed(String error) {
+    return '貸出の読み込みに失敗しました: $error';
+  }
+
+  @override
+  String get loanTrackingMarkReturnedConfirmTitle => '返却済みにしますか？';
+
+  @override
+  String loanTrackingMarkReturnedConfirmMessage(String itemTitle) {
+    return '\"$itemTitle\" の返却を確認します。';
+  }
+
+  @override
+  String get loanTrackingMarkReturnedAction => '返却済みにする';
+
+  @override
+  String get loanTrackingMarkedReturnedSuccess => '貸出を返却済みにしました。';
+
+  @override
+  String loanTrackingMarkReturnedFailed(String error) {
+    return '返却の更新に失敗しました: $error';
+  }
+
+  @override
+  String get loanTrackingDeleteConfirmTitle => '貸出記録を削除しますか？';
+
+  @override
+  String loanTrackingDeleteConfirmMessage(String itemTitle) {
+    return '\"$itemTitle\" の貸出記録を削除します。';
+  }
+
+  @override
+  String get loanTrackingDeleteSuccess => '貸出記録を削除しました。';
+
+  @override
+  String loanTrackingDeleteFailed(String error) {
+    return '貸出の削除に失敗しました: $error';
+  }
+
+  @override
+  String get loanTrackingSummaryActiveLabel => 'アクティブな貸出';
+
+  @override
+  String get loanTrackingSummaryOverdueLabel => '期限超過';
+
+  @override
+  String get loanTrackingSummaryLoadFailed => '貸出サマリーを読み込めませんでした。';
+
+  @override
+  String get loanTrackingFieldBorrower => '借り手';
+
+  @override
+  String get loanTrackingFieldContact => '連絡先';
+
+  @override
+  String get loanTrackingFieldLoaned => '貸出日';
+
+  @override
+  String get loanTrackingFieldDue => '返却期限';
+
+  @override
+  String get loanTrackingFieldReturned => '返却日';
+
+  @override
+  String get loanTrackingStatusReturned => '返却済み';
+
+  @override
+  String get loanTrackingStatusOverdue => '期限超過';
+
+  @override
+  String get loanTrackingStatusActive => 'アクティブ';
+
+  @override
+  String get loanTrackingCreateTitle => '貸出を作成';
+
+  @override
+  String get loanTrackingCreateDescription => '誰がアイテムを借りたか、いつ返却予定かを記録します。';
+
+  @override
+  String get loanTrackingCreateNoItemsTitle => '利用可能なアイテムがありません';
+
+  @override
+  String get loanTrackingCreateNoItemsMessage => 'すべて貸出中か、まだアイテムがありません。';
+
+  @override
+  String get loanTrackingCreateItemLabel => 'アイテム';
+
+  @override
+  String get loanTrackingCreateBorrowerLabel => '借り手の名前';
+
+  @override
+  String get loanTrackingCreateBorrowerHint => '例: 山田 太郎';
+
+  @override
+  String get loanTrackingCreateContactLabel => '連絡先（任意）';
+
+  @override
+  String get loanTrackingCreateContactHint => '電話、メール、または @username';
+
+  @override
+  String get loanTrackingCreateNotesLabel => 'メモ（任意）';
+
+  @override
+  String get loanTrackingCreateNotesHint => 'この貸出の追加情報';
+
+  @override
+  String get loanTrackingCreateSubmitting => '作成中...';
+
+  @override
+  String get loanTrackingCreateAction => '貸出を作成';
+
+  @override
+  String get loanTrackingLoadingItems => 'アイテムを読み込み中...';
+
+  @override
+  String loanTrackingLoadItemsFailed(String error) {
+    return 'アイテムの読み込みに失敗しました: $error';
+  }
+
+  @override
+  String get loanTrackingBorrowerRequired => '借り手の名前は必須です。';
+
+  @override
+  String get loanTrackingCreateSuccess => '貸出を作成しました。';
+
+  @override
+  String loanTrackingCreateFailed(String error) {
+    return '貸出の作成に失敗しました: $error';
+  }
+
+  @override
+  String get loanTrackingNoDueDate => '返却期限なし';
+
+  @override
+  String get loanTrackingPickDateAction => '選択';
+
+  @override
+  String get loanTrackingClearDateAction => 'クリア';
+
+  @override
+  String get loanTrackingDueDateLabel => '返却期限';
+
+  @override
+  String get authTitleAccount => 'アカウント';
+
+  @override
+  String get authCreateAccountHeading => 'アカウント作成';
+
+  @override
+  String get authSignInHeading => 'サインイン';
+
+  @override
+  String get authCreateAccountDescription => 'アカウントを作成すると、コレクションを複数端末で同期できます。';
+
+  @override
+  String get authSignInDescription => 'サインインするとクラウド同期とアカウント機能を利用できます。';
+
+  @override
+  String get authSignInChoice => 'サインイン';
+
+  @override
+  String get authRegisterChoice => '登録';
+
+  @override
+  String get authEmailLabel => 'メールアドレス';
+
+  @override
+  String get authEmailHint => 'you@example.com';
+
+  @override
+  String get authEmailRequiredError => 'メールアドレスは必須です。';
+
+  @override
+  String get authEmailInvalidError => '有効なメールアドレスを入力してください。';
+
+  @override
+  String get authPasswordLabel => 'パスワード';
+
+  @override
+  String get authPasswordHint => '8文字以上、A-Z、a-z、0-9';
+
+  @override
+  String get authPasswordRequiredError => 'パスワードは必須です。';
+
+  @override
+  String get authPasswordLengthError => 'パスワードは8文字以上で入力してください。';
+
+  @override
+  String get authPasswordPolicyError => 'パスワードには大文字、小文字、数字を含めてください。';
+
+  @override
+  String get authDisplayNameLabel => '表示名（任意）';
+
+  @override
+  String get authDisplayNameHint => '呼び名を入力してください';
+
+  @override
+  String get authCreateAccountAction => 'アカウントを作成';
+
+  @override
+  String get authNotNowAction => '今はしない';
+
+  @override
+  String get authUnavailableMessage => '認証は現在利用できません。';
+
+  @override
+  String get authRegisterSuccess => 'アカウントを作成してサインインしました。';
+
+  @override
+  String get authSignInSuccess => 'サインインしました。';
+
+  @override
+  String authSignInFailed(String error) {
+    return 'サインインに失敗しました: $error';
+  }
+
+  @override
+  String get authSignedOut => 'サインアウトしました。';
+
+  @override
+  String get authFinalConfirmationTitle => '最終確認';
+
+  @override
+  String get authFinalConfirmationMessage => '今すぐアカウント削除リクエストを送信しますか？この端末では直ちにサインアウトされます。';
+
+  @override
+  String get authBackAction => '戻る';
+
+  @override
+  String get authSubmitRequestAction => 'リクエストを送信';
+
+  @override
+  String get authDeletionRequestSubmitted => 'アカウント削除リクエストを送信しました。サインアウトされました。';
+
+  @override
+  String get authDeletionEndpointMissing => '削除リクエストのエンドポイントがバックエンドにまだ設定されていません。';
+
+  @override
+  String get authDeletionImpactDialogTitle => 'アカウント削除をリクエストする前に';
+
+  @override
+  String get authDeletionImpactReviewPrompt => '影響をよくご確認ください。';
+
+  @override
+  String get authIrreversibleRequestTitle => '取り消し不可のリクエスト';
+
+  @override
+  String get authImpactLineSessionRevoked => 'リクエスト送信後、アカウントセッションはすぐに無効化されます。';
+
+  @override
+  String get authImpactLineCloudDataDeleted => 'このアカウントに紐づく同期済みクラウドデータは、処理中に完全削除される可能性があります。';
+
+  @override
+  String get authImpactLineCannotRestore => '削除されたアカウントデータは処理後に復元できません。';
+
+  @override
+  String get authUnderstandAction => '理解しました';
+
+  @override
+  String get authPasswordPolicySuffix => '英字キーボードの文字と数字（A-Z、a-z、0-9）を使用してください。';
+
+  @override
+  String get authAccountConnected => 'アカウント接続済み';
+
+  @override
+  String get authSignedInReadySubtitle => 'サインイン済みでクラウド同期の準備ができています';
+
+  @override
+  String get authActiveStatus => '有効';
+
+  @override
+  String get authSessionDetailsTitle => 'セッション詳細';
+
+  @override
+  String get authUserIdLabel => 'ユーザーID';
+
+  @override
+  String get authDeviceIdLabel => 'デバイスID';
+
+  @override
+  String get authUnknownValue => '不明';
+
+  @override
+  String get authDeletionNoticeTitle => 'アカウント削除に関する注意';
+
+  @override
+  String get authDeletionNoticeSubtitle => '削除リクエストは処理されると元に戻せません。';
+
+  @override
+  String get authDeletionNoticeLineProfileSessions => 'アカウントプロフィールと有効なセッションはクラウドアクセスから削除されます。';
+
+  @override
+  String get authDeletionNoticeLineSyncedData => '同期済みのコレクション、アイテム、タグ、貸出データは完全に削除される可能性があります。';
+
+  @override
+  String get authRequestDeletionAction => 'アカウント削除をリクエスト';
+
+  @override
+  String get authSignOutAction => 'サインアウト';
+
+  @override
+  String get authDoneAction => '完了';
+
+  @override
+  String get authHeaderCreateTitle => 'アカウントを作成';
+
+  @override
+  String get authHeaderWelcomeTitle => 'おかえりなさい';
+
+  @override
+  String get authHeaderCreateSubtitle => 'アカウントは任意ですが、クラウド同期と複数端末アクセスには必要です。';
+
+  @override
+  String get authHeaderSignInSubtitle => 'サインインしてクラウド同期とアカウント機能を利用しましょう。';
+
+  @override
+  String get authUnavailableTitle => '認証を利用できません';
 }

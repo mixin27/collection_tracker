@@ -1,12 +1,13 @@
-import 'dart:developer';
-
 import 'package:collection_tracker/l10n/l10n.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:domain/domain.dart';
 import 'package:storage/storage.dart';
 import 'package:ui/ui.dart';
+import 'package:collection_tracker/core/providers/metadata_preferences_provider.dart';
 import 'package:collection_tracker/core/providers/metadata_providers.dart';
 import 'package:collection_tracker/features/collections/presentation/view_models/collections_view_model.dart';
 import 'package:metadata_api/metadata_api.dart';
@@ -56,8 +57,16 @@ class _AddItemScreenState extends ConsumerState<AddItemScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    // Watch collection details so they are available for search/scan actions
-    ref.watch(collectionDetailProvider(widget.collectionId));
+    final collectionAsync = ref.watch(
+      collectionDetailProvider(widget.collectionId),
+    );
+    final collection = collectionAsync.asData?.value;
+    final metadataPreferences = ref.watch(metadataPreferencesProvider);
+    final metadataService = ref.read(metadataLookupServiceProvider);
+    final metadataSearchSupported =
+        collection != null &&
+        metadataPreferences.isEnabled &&
+        metadataService.supportsSearch(collection.type);
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.addItemTitle)),
@@ -111,9 +120,14 @@ class _AddItemScreenState extends ConsumerState<AddItemScreen> {
                     labelText: l10n.itemFormTitleLabel,
                     hintText: l10n.addItemTitleHint,
                     prefixIcon: const Icon(Icons.title),
-                    suffixIcon: IconButton(
-                      icon: const Icon(Icons.search),
-                      onPressed: () => _showMetadataSearch(context),
+                    suffixIcon: Tooltip(
+                      message: metadataSearchSupported
+                          ? l10n.metadataSearchSuggestionTitle
+                          : l10n.metadataSearchDisabledHint,
+                      child: IconButton(
+                        icon: const Icon(Icons.search),
+                        onPressed: () => _showMetadataSearch(context),
+                      ),
                     ),
                     textCapitalization: TextCapitalization.words,
                     validator: (value) {
@@ -138,7 +152,9 @@ class _AddItemScreenState extends ConsumerState<AddItemScreen> {
 
                         if (barcode != null && mounted) {
                           _barcodeController.text = barcode;
-                          _fetchMetadata(barcode);
+                          if (metadataPreferences.canAutoFetchFromBarcode) {
+                            _fetchMetadata(barcode, showNoMatchFeedback: false);
+                          }
                         }
                       },
                     ),
@@ -258,12 +274,26 @@ class _AddItemScreenState extends ConsumerState<AddItemScreen> {
   }
 
   Future<void> _showMetadataSearch(BuildContext context) async {
-    log('show metadata search');
     final collectionAsync = ref.read(
       collectionDetailProvider(widget.collectionId),
     );
     final collection = collectionAsync.asData?.value;
     if (collection == null) return;
+    final metadataPreferences = ref.read(metadataPreferencesProvider);
+    if (!metadataPreferences.isEnabled) {
+      _showMetadataMessage(context.l10n.settingsMetadataFeatureDisabledMessage);
+      return;
+    }
+
+    final metadataService = ref.read(metadataLookupServiceProvider);
+    if (!metadataService.supportsSearch(collection.type)) {
+      _showMetadataMessage(
+        context.l10n.metadataSearchUnavailableForType(
+          _collectionTypeLabel(collection.type),
+        ),
+      );
+      return;
+    }
 
     final result = await showSearch<MetadataBase?>(
       context: context,
@@ -271,7 +301,7 @@ class _AddItemScreenState extends ConsumerState<AddItemScreen> {
         ref: ref,
         collectionType: collection.type,
         searchFieldLabelText: context.l10n.metadataSearchFieldLabel(
-          collection.type.name,
+          _collectionTypeLabel(collection.type),
         ),
       ),
       query: _titleController.text,
@@ -279,16 +309,32 @@ class _AddItemScreenState extends ConsumerState<AddItemScreen> {
 
     if (result != null && mounted) {
       setState(() {
-        _titleController.text = result.title;
-        if (_descriptionController.text.isEmpty) {
-          _descriptionController.text = result.description ?? '';
-        }
-        _coverImageUrl = result.thumbnailUrl;
+        _applyMetadata(
+          result,
+          fillOnlyEmptyFields: metadataPreferences.fillOnlyEmptyFields,
+        );
       });
     }
   }
 
-  Future<void> _fetchMetadata(String barcode) async {
+  Future<void> _fetchMetadata(
+    String barcode, {
+    bool showNoMatchFeedback = true,
+  }) async {
+    if (_isFetchingMetadata) {
+      return;
+    }
+
+    final metadataPreferences = ref.read(metadataPreferencesProvider);
+    if (!metadataPreferences.isEnabled) {
+      if (showNoMatchFeedback) {
+        _showMetadataMessage(
+          context.l10n.settingsMetadataFeatureDisabledMessage,
+        );
+      }
+      return;
+    }
+
     final collectionAsync = ref.read(
       collectionDetailProvider(widget.collectionId),
     );
@@ -296,45 +342,57 @@ class _AddItemScreenState extends ConsumerState<AddItemScreen> {
     final collection = collectionAsync.value;
     if (collection == null) return;
 
+    final metadataService = ref.read(metadataLookupServiceProvider);
+    if (!metadataService.supportsBarcodeLookup(primaryType: collection.type)) {
+      if (showNoMatchFeedback) {
+        _showMetadataMessage(
+          context.l10n.metadataSearchUnavailableForType(
+            _collectionTypeLabel(collection.type),
+          ),
+        );
+      }
+      return;
+    }
+
     setState(() {
       _isFetchingMetadata = true;
     });
 
     try {
-      final matcher = await ref.read(smartMetadataMatcherProvider.future);
-      final result = await matcher.findBestMatch(
+      final result = await metadataService.findBestBarcodeMatch(
         barcode: barcode,
         primaryType: collection.type,
       );
 
-      result.fold(
-        (exception) => null, // Ignore errors for now
-        (match) {
-          if (match.metadata != null && mounted) {
-            final metadata = match.metadata!;
-            setState(() {
-              if (_titleController.text.isEmpty) {
-                _titleController.text = metadata.title;
-              }
-              if (_descriptionController.text.isEmpty) {
-                _descriptionController.text = metadata.description ?? '';
-              }
-              _coverImageUrl = metadata.thumbnailUrl;
-            });
+      if (result.metadata != null && mounted) {
+        final metadata = result.metadata!;
+        setState(() {
+          _applyMetadata(
+            metadata,
+            fillOnlyEmptyFields: metadataPreferences.fillOnlyEmptyFields,
+          );
+        });
 
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(
-                  context.l10n.addItemMatchedMetadata(match.source),
-                ),
-                duration: const Duration(seconds: 2),
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              context.l10n.addItemMatchedMetadata(
+                _metadataSourceLabel(result.source),
               ),
-            );
-          }
-        },
-      );
+            ),
+            duration: const Duration(seconds: 2),
+          ),
+        );
+      } else if (showNoMatchFeedback && mounted) {
+        _showMetadataMessage(context.l10n.metadataNoMatchForBarcode);
+      }
     } catch (e) {
-      debugPrint('Metadata fetch error: $e');
+      if (kDebugMode) {
+        debugPrint('Metadata fetch error: $e');
+      }
+      if (showNoMatchFeedback && mounted) {
+        _showMetadataMessage(context.l10n.metadataNoMatchForBarcode);
+      }
     } finally {
       if (mounted) {
         setState(() {
@@ -434,5 +492,71 @@ class _AddItemScreenState extends ConsumerState<AddItemScreen> {
   String _currencySymbol(BuildContext context) {
     final locale = Localizations.localeOf(context).toLanguageTag();
     return NumberFormat.simpleCurrency(locale: locale).currencySymbol;
+  }
+
+  void _applyMetadata(
+    MetadataBase metadata, {
+    required bool fillOnlyEmptyFields,
+  }) {
+    final title = metadata.title.trim();
+    final description = metadata.description?.trim();
+    final thumbnail = metadata.thumbnailUrl?.trim();
+
+    if (fillOnlyEmptyFields) {
+      if (_titleController.text.trim().isEmpty && title.isNotEmpty) {
+        _titleController.text = title;
+      }
+      if (_descriptionController.text.trim().isEmpty &&
+          description != null &&
+          description.isNotEmpty) {
+        _descriptionController.text = description;
+      }
+      final hasImage =
+          _imagePath != null || (_coverImageUrl?.trim().isNotEmpty ?? false);
+      if (!hasImage && thumbnail != null && thumbnail.isNotEmpty) {
+        _coverImageUrl = thumbnail;
+      }
+      return;
+    }
+
+    if (title.isNotEmpty) {
+      _titleController.text = title;
+    }
+    if (description != null && description.isNotEmpty) {
+      _descriptionController.text = description;
+    }
+    if (_imagePath == null && thumbnail != null && thumbnail.isNotEmpty) {
+      _coverImageUrl = thumbnail;
+    }
+  }
+
+  String _collectionTypeLabel(CollectionType type) {
+    final l10n = context.l10n;
+    return switch (type) {
+      CollectionType.book => l10n.collectionTypeBooks,
+      CollectionType.game => l10n.collectionTypeGames,
+      CollectionType.movie => l10n.collectionTypeMovies,
+      CollectionType.comic => l10n.collectionTypeComics,
+      CollectionType.music => l10n.collectionTypeMusic,
+      CollectionType.custom => l10n.collectionTypeCustom,
+    };
+  }
+
+  String _metadataSourceLabel(String source) {
+    return switch (source.toLowerCase()) {
+      'book' => context.l10n.collectionTypeBooks,
+      'game' => context.l10n.collectionTypeGames,
+      'movie' => context.l10n.collectionTypeMovies,
+      _ => source,
+    };
+  }
+
+  void _showMetadataMessage(String message) {
+    if (!mounted) {
+      return;
+    }
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(message)));
   }
 }

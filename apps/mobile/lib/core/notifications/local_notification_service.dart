@@ -10,7 +10,7 @@ class LocalNotificationService {
     : _plugin = plugin ?? FlutterLocalNotificationsPlugin();
 
   static const _channelId = 'collection_tracker_general';
-  static const _channelName = 'Collection Tracker';
+  static const _channelName = 'Collectra';
   static const _channelDescription =
       'Sync updates, price alerts, reminders, and account notifications.';
 
@@ -42,7 +42,7 @@ class LocalNotificationService {
     }
 
     const initializationSettings = InitializationSettings(
-      android: AndroidInitializationSettings('launcher_icon'),
+      android: AndroidInitializationSettings('@mipmap/launcher_icon'),
       // Permission prompts are handled by FirebaseMessagingService to keep
       // consent flow centralized (onboarding/settings).
       iOS: DarwinInitializationSettings(
@@ -158,7 +158,7 @@ class LocalNotificationService {
       'price_alert' => 'Price alert',
       'reminder' => 'Reminder',
       'account_security' => 'Account security',
-      _ => 'Collection Tracker',
+      _ => 'Collectra',
     };
   }
 
@@ -171,7 +171,7 @@ class LocalNotificationService {
     return switch (type) {
       'sync_needed' => 'Open the app to sync your latest changes.',
       'price_alert' => 'One of your tracked item prices changed.',
-      'reminder' => 'You have a reminder from Collection Tracker.',
+      'reminder' => 'You have a reminder from Collectra.',
       'account_security' => 'Please review a recent account security event.',
       _ => 'You have a new notification.',
     };

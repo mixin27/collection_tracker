@@ -12,7 +12,7 @@ class AppLocalizationsId extends AppLocalizations {
   AppLocalizationsId([String locale = 'id']) : super(locale);
 
   @override
-  String get appTitle => 'Collection Tracker';
+  String get appTitle => 'Collectra';
 
   @override
   String get navHome => 'Beranda';
@@ -114,6 +114,12 @@ class AppLocalizationsId extends AppLocalizations {
   String get settingsManageTagsSubtitle => 'Ubah nama, gabungkan, dan hapus tag';
 
   @override
+  String get settingsLoanTrackingTitle => 'Pelacakan Pinjaman';
+
+  @override
+  String get settingsLoanTrackingSubtitle => 'Lacak item yang dipinjam dan tanggal pengembalian';
+
+  @override
   String get settingsVersionTitle => 'Versi';
 
   @override
@@ -174,7 +180,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get settingsAnalyticsConsentDeclined => 'Persetujuan analitik ditolak.';
 
   @override
-  String get analyticsConsentDialogTitle => 'Bantu Tingkatkan Collection Tracker';
+  String get analyticsConsentDialogTitle => 'Bantu Tingkatkan Collectra';
 
   @override
   String get analyticsConsentDialogMessage => 'Bolehkah kami mengumpulkan analitik penggunaan anonim untuk meningkatkan kualitas dan fitur aplikasi? Anda dapat mengubahnya kapan saja di Pengaturan.';
@@ -213,6 +219,57 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get settingsFirebaseRuntimeConfigSubtitle => 'Periksa dan segarkan flag fitur runtime';
+
+  @override
+  String get settingsMetadataTitle => 'Metadata & Isi Otomatis';
+
+  @override
+  String get settingsMetadataSummaryEnabled => 'Aktif dengan pencarian barcode otomatis';
+
+  @override
+  String get settingsMetadataSummaryManual => 'Aktif dengan pencarian manual';
+
+  @override
+  String get settingsMetadataSummaryDisabled => 'Nonaktif';
+
+  @override
+  String get settingsMetadataSummaryFeatureDisabled => 'Dinonaktifkan oleh flag fitur runtime';
+
+  @override
+  String get settingsMetadataEnableToggleTitle => 'Aktifkan bantuan metadata';
+
+  @override
+  String get settingsMetadataEnableToggleSubtitle => 'Izinkan pencarian metadata dan isi otomatis berbasis barcode pada formulir item.';
+
+  @override
+  String get settingsMetadataAutoFetchToggleTitle => 'Ambil otomatis saat barcode dipindai';
+
+  @override
+  String get settingsMetadataAutoFetchToggleSubtitle => 'Setelah barcode dipindai, metadata diambil secara otomatis.';
+
+  @override
+  String get settingsMetadataFillEmptyOnlyToggleTitle => 'Isi hanya kolom kosong';
+
+  @override
+  String get settingsMetadataFillEmptyOnlyToggleSubtitle => 'Jangan menimpa judul atau deskripsi yang sudah ada saat metadata ditemukan.';
+
+  @override
+  String get settingsMetadataSourcesSectionTitle => 'Sumber';
+
+  @override
+  String get settingsMetadataSourceAvailable => 'Tersedia';
+
+  @override
+  String get settingsMetadataSourceNotConfigured => 'Belum dikonfigurasi';
+
+  @override
+  String get settingsMetadataSourceManualOnly => 'Manual saja';
+
+  @override
+  String get settingsMetadataManualCollectionsLabel => 'Komik, Musik, dan Kustom';
+
+  @override
+  String get settingsMetadataFeatureDisabledMessage => 'Bantuan metadata dinonaktifkan oleh konfigurasi runtime.';
 
   @override
   String get settingsFirebaseRuntimeConfigSheetTitle => 'Konfigurasi Runtime Firebase';
@@ -290,7 +347,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get settingsImportDataTitle => 'Impor Data';
 
   @override
-  String get settingsImportDataMessage => 'Ini akan mengimpor koleksi dan item dari file JSON. Data yang sudah ada tidak akan dihapus.\\n\\nLanjutkan?';
+  String get settingsImportDataMessage => 'Ini akan mengimpor koleksi dan item dari file JSON. Data yang sudah ada tidak akan dihapus.\n\nLanjutkan?';
 
   @override
   String get settingsImportingData => 'Mengimpor data...';
@@ -746,6 +803,17 @@ class AppLocalizationsId extends AppLocalizations {
   String get metadataSearchSuggestionMessage => 'Mulai mengetik untuk mencari metadata.';
 
   @override
+  String get metadataSearchDisabledHint => 'Pencarian metadata tidak tersedia untuk tipe koleksi ini atau sedang dinonaktifkan.';
+
+  @override
+  String get metadataNoMatchForBarcode => 'Tidak ditemukan metadata yang cocok untuk barcode ini.';
+
+  @override
+  String metadataSearchUnavailableForType(String collectionType) {
+    return 'Pencarian metadata tidak tersedia untuk $collectionType.';
+  }
+
+  @override
   String tagItemsTitle(String tag) {
     return 'Tag: $tag';
   }
@@ -878,7 +946,7 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String tagManagementDeleteSelectedMessage(int count) {
-    return 'Hapus $count tag terpilih dari semua item?\\n\\nTindakan ini tidak dapat dibatalkan.';
+    return 'Hapus $count tag terpilih dari semua item?\n\nTindakan ini tidak dapat dibatalkan.';
   }
 
   @override
@@ -899,7 +967,7 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String tagManagementDeleteMessage(String tagName) {
-    return 'Hapus \"$tagName\" dari semua item?\\n\\nTindakan ini tidak dapat dibatalkan.';
+    return 'Hapus \"$tagName\" dari semua item?\n\nTindakan ini tidak dapat dibatalkan.';
   }
 
   @override
@@ -1064,4 +1132,350 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get collectionTypeCustom => 'Kustom';
+
+  @override
+  String get loanTrackingTitle => 'Pelacakan Pinjaman';
+
+  @override
+  String get loanTrackingNewLoan => 'Pinjaman Baru';
+
+  @override
+  String get loanTrackingFilterActive => 'Aktif';
+
+  @override
+  String get loanTrackingFilterHistory => 'Riwayat';
+
+  @override
+  String get loanTrackingEmptyHistoryTitle => 'Belum ada pinjaman yang dikembalikan';
+
+  @override
+  String get loanTrackingEmptyHistoryMessage => 'Item yang sudah dikembalikan akan muncul di sini.';
+
+  @override
+  String get loanTrackingEmptyActiveTitle => 'Tidak ada pinjaman aktif';
+
+  @override
+  String get loanTrackingEmptyActiveMessage => 'Buat pinjaman untuk mulai melacak item yang dipinjam.';
+
+  @override
+  String get loanTrackingLoadingLoans => 'Memuat pinjaman...';
+
+  @override
+  String loanTrackingLoadFailed(String error) {
+    return 'Gagal memuat pinjaman: $error';
+  }
+
+  @override
+  String get loanTrackingMarkReturnedConfirmTitle => 'Tandai sudah dikembalikan?';
+
+  @override
+  String loanTrackingMarkReturnedConfirmMessage(String itemTitle) {
+    return 'Konfirmasi pengembalian untuk \"$itemTitle\".';
+  }
+
+  @override
+  String get loanTrackingMarkReturnedAction => 'Tandai Dikembalikan';
+
+  @override
+  String get loanTrackingMarkedReturnedSuccess => 'Pinjaman ditandai sudah dikembalikan.';
+
+  @override
+  String loanTrackingMarkReturnedFailed(String error) {
+    return 'Gagal menandai pengembalian: $error';
+  }
+
+  @override
+  String get loanTrackingDeleteConfirmTitle => 'Hapus catatan pinjaman?';
+
+  @override
+  String loanTrackingDeleteConfirmMessage(String itemTitle) {
+    return 'Hapus catatan pinjaman untuk \"$itemTitle\".';
+  }
+
+  @override
+  String get loanTrackingDeleteSuccess => 'Pinjaman dihapus.';
+
+  @override
+  String loanTrackingDeleteFailed(String error) {
+    return 'Gagal menghapus pinjaman: $error';
+  }
+
+  @override
+  String get loanTrackingSummaryActiveLabel => 'Pinjaman Aktif';
+
+  @override
+  String get loanTrackingSummaryOverdueLabel => 'Terlambat';
+
+  @override
+  String get loanTrackingSummaryLoadFailed => 'Tidak dapat memuat ringkasan pinjaman.';
+
+  @override
+  String get loanTrackingFieldBorrower => 'Peminjam';
+
+  @override
+  String get loanTrackingFieldContact => 'Kontak';
+
+  @override
+  String get loanTrackingFieldLoaned => 'Dipinjamkan';
+
+  @override
+  String get loanTrackingFieldDue => 'Jatuh tempo';
+
+  @override
+  String get loanTrackingFieldReturned => 'Dikembalikan';
+
+  @override
+  String get loanTrackingStatusReturned => 'Dikembalikan';
+
+  @override
+  String get loanTrackingStatusOverdue => 'Terlambat';
+
+  @override
+  String get loanTrackingStatusActive => 'Aktif';
+
+  @override
+  String get loanTrackingCreateTitle => 'Buat Pinjaman';
+
+  @override
+  String get loanTrackingCreateDescription => 'Lacak siapa yang meminjam item dan kapan harus dikembalikan.';
+
+  @override
+  String get loanTrackingCreateNoItemsTitle => 'Tidak ada item yang tersedia';
+
+  @override
+  String get loanTrackingCreateNoItemsMessage => 'Semua item sedang dipinjam atau belum ada item.';
+
+  @override
+  String get loanTrackingCreateItemLabel => 'Item';
+
+  @override
+  String get loanTrackingCreateBorrowerLabel => 'Nama peminjam';
+
+  @override
+  String get loanTrackingCreateBorrowerHint => 'mis. Budi Santoso';
+
+  @override
+  String get loanTrackingCreateContactLabel => 'Kontak (opsional)';
+
+  @override
+  String get loanTrackingCreateContactHint => 'Telepon, email, atau @username';
+
+  @override
+  String get loanTrackingCreateNotesLabel => 'Catatan (opsional)';
+
+  @override
+  String get loanTrackingCreateNotesHint => 'Detail tambahan untuk pinjaman ini';
+
+  @override
+  String get loanTrackingCreateSubmitting => 'Membuat...';
+
+  @override
+  String get loanTrackingCreateAction => 'Buat Pinjaman';
+
+  @override
+  String get loanTrackingLoadingItems => 'Memuat item...';
+
+  @override
+  String loanTrackingLoadItemsFailed(String error) {
+    return 'Gagal memuat item: $error';
+  }
+
+  @override
+  String get loanTrackingBorrowerRequired => 'Nama peminjam wajib diisi.';
+
+  @override
+  String get loanTrackingCreateSuccess => 'Pinjaman berhasil dibuat.';
+
+  @override
+  String loanTrackingCreateFailed(String error) {
+    return 'Gagal membuat pinjaman: $error';
+  }
+
+  @override
+  String get loanTrackingNoDueDate => 'Tanpa tanggal jatuh tempo';
+
+  @override
+  String get loanTrackingPickDateAction => 'Pilih';
+
+  @override
+  String get loanTrackingClearDateAction => 'Hapus';
+
+  @override
+  String get loanTrackingDueDateLabel => 'Tanggal jatuh tempo';
+
+  @override
+  String get authTitleAccount => 'Akun';
+
+  @override
+  String get authCreateAccountHeading => 'Buat Akun';
+
+  @override
+  String get authSignInHeading => 'Masuk';
+
+  @override
+  String get authCreateAccountDescription => 'Buat akun untuk menyinkronkan koleksi Anda di berbagai perangkat.';
+
+  @override
+  String get authSignInDescription => 'Masuk untuk mengaktifkan sinkronisasi cloud dan fitur akun.';
+
+  @override
+  String get authSignInChoice => 'Masuk';
+
+  @override
+  String get authRegisterChoice => 'Daftar';
+
+  @override
+  String get authEmailLabel => 'Email';
+
+  @override
+  String get authEmailHint => 'anda@contoh.com';
+
+  @override
+  String get authEmailRequiredError => 'Email wajib diisi.';
+
+  @override
+  String get authEmailInvalidError => 'Masukkan email yang valid.';
+
+  @override
+  String get authPasswordLabel => 'Kata sandi';
+
+  @override
+  String get authPasswordHint => 'Min 8 karakter, A-Z, a-z, 0-9';
+
+  @override
+  String get authPasswordRequiredError => 'Kata sandi wajib diisi.';
+
+  @override
+  String get authPasswordLengthError => 'Kata sandi minimal 8 karakter.';
+
+  @override
+  String get authPasswordPolicyError => 'Kata sandi harus mengandung huruf besar, huruf kecil, dan angka.';
+
+  @override
+  String get authDisplayNameLabel => 'Nama tampilan (opsional)';
+
+  @override
+  String get authDisplayNameHint => 'Kami memanggil Anda dengan nama apa?';
+
+  @override
+  String get authCreateAccountAction => 'Buat akun';
+
+  @override
+  String get authNotNowAction => 'Nanti saja';
+
+  @override
+  String get authUnavailableMessage => 'Autentikasi sedang tidak tersedia.';
+
+  @override
+  String get authRegisterSuccess => 'Akun berhasil dibuat dan Anda sudah masuk.';
+
+  @override
+  String get authSignInSuccess => 'Berhasil masuk.';
+
+  @override
+  String authSignInFailed(String error) {
+    return 'Gagal masuk: $error';
+  }
+
+  @override
+  String get authSignedOut => 'Berhasil keluar.';
+
+  @override
+  String get authFinalConfirmationTitle => 'Konfirmasi akhir';
+
+  @override
+  String get authFinalConfirmationMessage => 'Kirim permintaan penghapusan akun sekarang? Anda akan langsung keluar dari perangkat ini.';
+
+  @override
+  String get authBackAction => 'Kembali';
+
+  @override
+  String get authSubmitRequestAction => 'Kirim Permintaan';
+
+  @override
+  String get authDeletionRequestSubmitted => 'Permintaan penghapusan akun dikirim. Anda telah keluar.';
+
+  @override
+  String get authDeletionEndpointMissing => 'Endpoint permintaan penghapusan belum dikonfigurasi di backend.';
+
+  @override
+  String get authDeletionImpactDialogTitle => 'Sebelum meminta penghapusan akun';
+
+  @override
+  String get authDeletionImpactReviewPrompt => 'Tinjau dampaknya dengan saksama.';
+
+  @override
+  String get authIrreversibleRequestTitle => 'Permintaan tidak dapat dibatalkan';
+
+  @override
+  String get authImpactLineSessionRevoked => 'Sesi akun Anda dicabut segera setelah permintaan dikirim.';
+
+  @override
+  String get authImpactLineCloudDataDeleted => 'Data cloud tersinkron yang terkait akun ini dapat dihapus permanen saat diproses.';
+
+  @override
+  String get authImpactLineCannotRestore => 'Data akun yang sudah dihapus tidak dapat dipulihkan setelah diproses.';
+
+  @override
+  String get authUnderstandAction => 'Saya mengerti';
+
+  @override
+  String get authPasswordPolicySuffix => 'Gunakan huruf dan angka keyboard Inggris (A-Z, a-z, 0-9).';
+
+  @override
+  String get authAccountConnected => 'Akun terhubung';
+
+  @override
+  String get authSignedInReadySubtitle => 'Sudah masuk dan siap untuk sinkronisasi cloud';
+
+  @override
+  String get authActiveStatus => 'Aktif';
+
+  @override
+  String get authSessionDetailsTitle => 'Detail sesi';
+
+  @override
+  String get authUserIdLabel => 'ID Pengguna';
+
+  @override
+  String get authDeviceIdLabel => 'ID Perangkat';
+
+  @override
+  String get authUnknownValue => 'Tidak diketahui';
+
+  @override
+  String get authDeletionNoticeTitle => 'Pemberitahuan penghapusan akun';
+
+  @override
+  String get authDeletionNoticeSubtitle => 'Permintaan penghapusan bersifat permanen setelah diproses.';
+
+  @override
+  String get authDeletionNoticeLineProfileSessions => 'Profil akun dan sesi aktif akan dihapus dari akses cloud.';
+
+  @override
+  String get authDeletionNoticeLineSyncedData => 'Koleksi, item, tag, dan pinjaman tersinkron dapat dihapus permanen.';
+
+  @override
+  String get authRequestDeletionAction => 'Minta penghapusan akun';
+
+  @override
+  String get authSignOutAction => 'Keluar';
+
+  @override
+  String get authDoneAction => 'Selesai';
+
+  @override
+  String get authHeaderCreateTitle => 'Buat akun Anda';
+
+  @override
+  String get authHeaderWelcomeTitle => 'Selamat datang kembali';
+
+  @override
+  String get authHeaderCreateSubtitle => 'Akun bersifat opsional, tetapi diperlukan untuk sinkronisasi cloud dan akses multi-perangkat.';
+
+  @override
+  String get authHeaderSignInSubtitle => 'Masuk untuk menggunakan sinkronisasi cloud dan fitur berbasis akun.';
+
+  @override
+  String get authUnavailableTitle => 'Autentikasi tidak tersedia';
 }

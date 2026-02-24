@@ -13,16 +13,17 @@ part 'app_database.g.dart';
     Tags,
     ItemTags,
     ItemPriceHistory,
+    ItemLoans,
     SyncOutbox,
     SyncState,
   ],
-  daos: [CollectionDao, ItemDao, SyncDao],
+  daos: [CollectionDao, ItemDao, LoanDao, SyncDao],
 )
 class AppDatabase extends _$AppDatabase {
   AppDatabase([QueryExecutor? executor]) : super(executor ?? _openConnection());
 
   @override
-  int get schemaVersion => 7;
+  int get schemaVersion => 8;
 
   @override
   MigrationStrategy get migration {
@@ -38,6 +39,13 @@ class AppDatabase extends _$AppDatabase {
         await customStatement(
           'CREATE INDEX idx_item_price_history_item_time '
           'ON item_price_history(item_id, recorded_at DESC);',
+        );
+        await customStatement(
+          'CREATE INDEX idx_item_loans_item_active '
+          'ON item_loans(item_id, returned_at);',
+        );
+        await customStatement(
+          'CREATE INDEX idx_item_loans_due_at ON item_loans(due_at);',
         );
         await customStatement(
           'CREATE INDEX idx_sync_outbox_created_at ON sync_outbox(created_at);',
@@ -83,6 +91,17 @@ class AppDatabase extends _$AppDatabase {
 
         if (from < 7) {
           await m.addColumn(syncState, syncState.nextRetryAt);
+        }
+
+        if (from < 8) {
+          await m.createTable(itemLoans);
+          await customStatement(
+            'CREATE INDEX idx_item_loans_item_active '
+            'ON item_loans(item_id, returned_at);',
+          );
+          await customStatement(
+            'CREATE INDEX idx_item_loans_due_at ON item_loans(due_at);',
+          );
         }
       },
       beforeOpen: (details) async {

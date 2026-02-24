@@ -100,6 +100,8 @@ If either is `false`, sync UI/actions are disabled. Full explanation: [documenta
 - [documentation/APP_PROGRESS.md](documentation/APP_PROGRESS.md) - implemented vs in-progress features
 - [documentation/SYNC_AND_AUTH.md](documentation/SYNC_AND_AUTH.md) - sync/auth integration details
 - [documentation/LOCALIZATION.md](documentation/LOCALIZATION.md) - i18n status and workflow
+- [documentation/PLAY_STORE_LISTING.md](documentation/PLAY_STORE_LISTING.md) - Play Store listing and ASO package
+- [documentation/PRIVACY_POLICY.md](documentation/PRIVACY_POLICY.md) - MDX-ready privacy policy template
 
 ## CI/CD
 

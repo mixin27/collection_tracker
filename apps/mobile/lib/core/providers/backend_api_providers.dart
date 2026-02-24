@@ -4,9 +4,11 @@ import 'package:collection_tracker/core/auth/backend_auth_service.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:native_id/native_id.dart';
 import 'package:storage/storage.dart';
 import 'package:uuid/uuid.dart';
 
+import 'app_info_provider.dart';
 import 'auth_session_providers.dart';
 import 'firebase_runtime_config_provider.dart';
 
@@ -242,25 +244,63 @@ final backendAuthClientProvider = Provider<BackendAuthClient?>((ref) {
   );
 });
 
+final backendAppUpdateClientProvider = Provider<BackendAppUpdateClient?>((ref) {
+  final readiness = ref.watch(backendApiReadinessProvider);
+  if (!readiness.enabled) {
+    return null;
+  }
+
+  final root = ref.watch(backendApiRootProvider);
+  if (root.isEmpty) {
+    return null;
+  }
+
+  return BackendAppUpdateClient(
+    dio: ref.watch(backendApiDioProvider),
+    apiBaseUrl: root,
+  );
+});
+
 final backendDeviceIdProvider = FutureProvider<String>((ref) async {
   final storage = SecureStorageService.instance;
 
   const currentKey = 'backend_device_id';
   const legacyKey = 'sync_device_id';
 
-  String? deviceId = await storage.get<String>(currentKey);
-  if (deviceId == null || deviceId.trim().isEmpty) {
-    deviceId = await storage.get<String>(legacyKey);
+  Future<void> persistDeviceId(String value) async {
+    await storage.save<String>(currentKey, value);
+    await storage.save<String>(legacyKey, value);
   }
 
-  if (deviceId == null || deviceId.trim().isEmpty) {
-    deviceId = const Uuid().v4();
+  String? normalize(String? value) {
+    final normalized = value?.trim();
+    if (normalized == null || normalized.isEmpty) {
+      return null;
+    }
+    return normalized;
   }
 
-  await storage.save<String>(currentKey, deviceId);
-  await storage.save<String>(legacyKey, deviceId);
+  final nativeId = normalize(await NativeIdService.getDeviceId());
+  if (nativeId != null) {
+    await persistDeviceId(nativeId);
+    return nativeId;
+  }
 
-  return deviceId;
+  final storedCurrent = normalize(await storage.get<String>(currentKey));
+  if (storedCurrent != null) {
+    await persistDeviceId(storedCurrent);
+    return storedCurrent;
+  }
+
+  final storedLegacy = normalize(await storage.get<String>(legacyKey));
+  if (storedLegacy != null) {
+    await persistDeviceId(storedLegacy);
+    return storedLegacy;
+  }
+
+  final fallbackId = const Uuid().v4();
+  await persistDeviceId(fallbackId);
+  return fallbackId;
 });
 
 final backendAuthServiceProvider = Provider<BackendAuthService?>((ref) {
@@ -270,16 +310,38 @@ final backendAuthServiceProvider = Provider<BackendAuthService?>((ref) {
   }
 
   final sessionStore = ref.watch(authSessionStoreProvider);
+  final detectedAppVersion = ref.watch(appSemanticVersionProvider);
+  const envAppVersion = String.fromEnvironment('APP_VERSION', defaultValue: '');
+  final appVersion = envAppVersion.trim().isNotEmpty
+      ? envAppVersion.trim()
+      : detectedAppVersion;
 
   return BackendAuthService(
     client: client,
     sessionStore: sessionStore,
     resolveDeviceId: () => ref.read(backendDeviceIdProvider.future),
-    appVersion: const String.fromEnvironment(
-      'APP_VERSION',
-      defaultValue: '1.0.0',
-    ),
+    appVersion: appVersion,
   );
+});
+
+final backendAuthProfileProvider = FutureProvider<BackendAuthUser?>((
+  ref,
+) async {
+  final service = ref.watch(backendAuthServiceProvider);
+  if (service == null) {
+    return null;
+  }
+
+  final session = ref.watch(authSessionProvider).value;
+  if (session == null || !session.isAuthenticated) {
+    return null;
+  }
+
+  try {
+    return await service.fetchProfile();
+  } on BackendApiException {
+    return null;
+  }
 });
 
 final backendSessionStoreProvider = Provider<AuthSessionStore>((ref) {

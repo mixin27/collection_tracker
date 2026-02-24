@@ -1,5 +1,6 @@
 import 'package:collection_tracker/core/providers/providers.dart';
 import 'package:collection_tracker/core/analytics/analytics_consent_gate.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -16,11 +17,16 @@ import '../../features/items/presentation/views/tag_items_screen.dart';
 import '../../features/onboarding/presentation/views/onboarding_screen.dart';
 import '../../features/scanner/presentation/views/scanner_screen.dart';
 import '../../features/search/presentation/views/search_screen.dart';
+import '../../features/app_update/presentation/views/settings_app_update_screen.dart';
+import '../../features/app_update/presentation/widgets/app_update_gate.dart';
 import '../../features/settings/presentation/views/settings_screen.dart';
 import '../../features/settings/presentation/views/settings_devtools_screen.dart';
+import '../../features/settings/presentation/views/settings_data_transfer_screen.dart';
+import '../../features/settings/presentation/views/settings_metadata_screen.dart';
 import '../../features/settings/presentation/views/settings_notifications_screen.dart';
 import '../../features/statistics/presentation/views/statistics_screen.dart';
 import '../../features/items/presentation/views/tag_management_screen.dart';
+import '../../features/loans/presentation/views/loan_tracking_screen.dart';
 import 'app_shell.dart';
 import 'package:collection_tracker/core/observers/analytics_observer.dart';
 import 'routes.dart';
@@ -28,17 +34,31 @@ import '../../features/items/presentation/views/global_items_screen.dart';
 
 part 'app_router.g.dart';
 
-final _rootNavigatorKey = GlobalKey<NavigatorState>();
+final rootNavigatorKey = GlobalKey<NavigatorState>();
 
 @riverpod
 GoRouter appRouter(Ref ref) {
   final onboardingComplete = ref.watch(onboardingCompleteProvider);
+  final authFeatureEnabled = ref.watch(backendAuthFeatureFlagProvider);
   Widget withAnalyticsConsent(Widget child) =>
       AnalyticsConsentGate(child: child);
 
   return GoRouter(
-    navigatorKey: _rootNavigatorKey,
+    navigatorKey: rootNavigatorKey,
     observers: [AnalyticsObserver()],
+    redirect: (context, state) {
+      final path = state.uri.path;
+
+      if (path == Routes.auth && !authFeatureEnabled) {
+        return Routes.settings;
+      }
+
+      if (!kDebugMode && path == Routes.settingsDevtools) {
+        return Routes.settings;
+      }
+
+      return null;
+    },
     initialLocation: onboardingComplete
         ? Routes.collections
         : Routes.onboarding,
@@ -52,7 +72,7 @@ GoRouter appRouter(Ref ref) {
       GoRoute(
         path: Routes.auth,
         name: 'auth',
-        parentNavigatorKey: _rootNavigatorKey,
+        parentNavigatorKey: rootNavigatorKey,
         builder: (context, state) {
           final mode = state.uri.queryParameters['mode'];
           final initialMode = mode == 'register'
@@ -66,7 +86,7 @@ GoRouter appRouter(Ref ref) {
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) {
           return withAnalyticsConsent(
-            AppShell(navigationShell: navigationShell),
+            AppUpdateGate(child: AppShell(navigationShell: navigationShell)),
           );
         },
         branches: [
@@ -80,7 +100,7 @@ GoRouter appRouter(Ref ref) {
                   GoRoute(
                     path: 'create',
                     name: 'create-collection',
-                    parentNavigatorKey: _rootNavigatorKey,
+                    parentNavigatorKey: rootNavigatorKey,
                     builder: (context, state) => const CreateCollectionScreen(),
                   ),
                   GoRoute(
@@ -94,7 +114,7 @@ GoRouter appRouter(Ref ref) {
                       GoRoute(
                         path: 'edit',
                         name: 'edit-collection',
-                        parentNavigatorKey: _rootNavigatorKey,
+                        parentNavigatorKey: rootNavigatorKey,
                         builder: (context, state) {
                           final id = state.pathParameters['id']!;
                           return EditCollectionScreen(collectionId: id);
@@ -103,7 +123,7 @@ GoRouter appRouter(Ref ref) {
                       GoRoute(
                         path: 'search',
                         name: 'search',
-                        parentNavigatorKey: _rootNavigatorKey,
+                        parentNavigatorKey: rootNavigatorKey,
                         builder: (context, state) {
                           final id = state.pathParameters['id']!;
                           return SearchScreen(collectionId: id);
@@ -112,7 +132,7 @@ GoRouter appRouter(Ref ref) {
                       GoRoute(
                         path: 'add-item',
                         name: 'add-item',
-                        parentNavigatorKey: _rootNavigatorKey,
+                        parentNavigatorKey: rootNavigatorKey,
                         builder: (context, state) {
                           final id = state.pathParameters['id']!;
                           return AddItemScreen(collectionId: id);
@@ -154,21 +174,46 @@ GoRouter appRouter(Ref ref) {
                   GoRoute(
                     path: 'tags',
                     name: 'manage-tags',
-                    parentNavigatorKey: _rootNavigatorKey,
+                    parentNavigatorKey: rootNavigatorKey,
                     builder: (_, _) => const TagManagementScreen(),
+                  ),
+                  GoRoute(
+                    path: 'data-transfer',
+                    name: 'settings-data-transfer',
+                    parentNavigatorKey: rootNavigatorKey,
+                    builder: (_, _) => const SettingsDataTransferScreen(),
                   ),
                   GoRoute(
                     path: 'notifications',
                     name: 'settings-notifications',
-                    parentNavigatorKey: _rootNavigatorKey,
+                    parentNavigatorKey: rootNavigatorKey,
                     builder: (_, _) => const SettingsNotificationsScreen(),
                   ),
                   GoRoute(
-                    path: 'devtools',
-                    name: 'settings-devtools',
-                    parentNavigatorKey: _rootNavigatorKey,
-                    builder: (_, _) => const SettingsDevToolsScreen(),
+                    path: 'metadata',
+                    name: 'settings-metadata',
+                    parentNavigatorKey: rootNavigatorKey,
+                    builder: (_, _) => const SettingsMetadataScreen(),
                   ),
+                  GoRoute(
+                    path: 'app-update',
+                    name: 'settings-app-update',
+                    parentNavigatorKey: rootNavigatorKey,
+                    builder: (_, _) => const SettingsAppUpdateScreen(),
+                  ),
+                  GoRoute(
+                    path: 'loans',
+                    name: 'settings-loans',
+                    parentNavigatorKey: rootNavigatorKey,
+                    builder: (_, _) => const LoanTrackingScreen(),
+                  ),
+                  if (kDebugMode)
+                    GoRoute(
+                      path: 'devtools',
+                      name: 'settings-devtools',
+                      parentNavigatorKey: rootNavigatorKey,
+                      builder: (_, _) => const SettingsDevToolsScreen(),
+                    ),
                 ],
               ),
             ],

@@ -8,16 +8,18 @@ class SyncOutboxBootstrapResult {
     required this.collectionOperations,
     required this.itemOperations,
     required this.tagOperations,
+    required this.loanOperations,
     required this.skipped,
   });
 
   final int collectionOperations;
   final int itemOperations;
   final int tagOperations;
+  final int loanOperations;
   final bool skipped;
 
   int get totalOperations =>
-      collectionOperations + itemOperations + tagOperations;
+      collectionOperations + itemOperations + tagOperations + loanOperations;
 }
 
 class SyncOutboxBootstrapper {
@@ -29,13 +31,16 @@ class SyncOutboxBootstrapper {
     required SyncDao syncDao,
     required CollectionDao collectionDao,
     required ItemDao itemDao,
+    required LoanDao loanDao,
   }) : _syncDao = syncDao,
        _collectionDao = collectionDao,
-       _itemDao = itemDao;
+       _itemDao = itemDao,
+       _loanDao = loanDao;
 
   final SyncDao _syncDao;
   final CollectionDao _collectionDao;
   final ItemDao _itemDao;
+  final LoanDao _loanDao;
 
   Future<SyncOutboxBootstrapResult> seedFromLocalDataIfNeeded() async {
     final pending = await _syncDao.getPendingOperations(limit: 1);
@@ -44,6 +49,7 @@ class SyncOutboxBootstrapper {
         collectionOperations: 0,
         itemOperations: 0,
         tagOperations: 0,
+        loanOperations: 0,
         skipped: true,
       );
     }
@@ -60,6 +66,7 @@ class SyncOutboxBootstrapper {
         collectionOperations: 0,
         itemOperations: 0,
         tagOperations: 0,
+        loanOperations: 0,
         skipped: true,
       );
     }
@@ -94,6 +101,7 @@ class SyncOutboxBootstrapper {
     var collectionOperations = 0;
     var itemOperations = 0;
     var tagOperations = 0;
+    var loanOperations = 0;
 
     for (final tag in tags) {
       await _queueUpsert(
@@ -132,10 +140,21 @@ class SyncOutboxBootstrapper {
       }
     }
 
+    final loans = await _loanDao.getAllLoans();
+    for (final loan in loans) {
+      await _queueUpsert(
+        entityType: 'loan',
+        entityId: loan.id,
+        payload: _loanPayload(loan),
+      );
+      loanOperations++;
+    }
+
     return SyncOutboxBootstrapResult(
       collectionOperations: collectionOperations,
       itemOperations: itemOperations,
       tagOperations: tagOperations,
+      loanOperations: loanOperations,
       skipped: false,
     );
   }
@@ -220,6 +239,23 @@ class SyncOutboxBootstrapper {
       'isDeleted': false,
       'createdAt': tag.createdAt.toUtc().toIso8601String(),
       'updatedAt': tag.updatedAt.toUtc().toIso8601String(),
+    };
+  }
+
+  Map<String, dynamic> _loanPayload(ItemLoanData loan) {
+    return {
+      'id': loan.id,
+      'itemId': loan.itemId,
+      'borrowerName': loan.borrowerName,
+      'borrowerContact': loan.borrowerContact,
+      'notes': loan.notes,
+      'loanedAt': loan.loanedAt.toUtc().toIso8601String(),
+      'dueAt': loan.dueAt?.toUtc().toIso8601String(),
+      'returnedAt': loan.returnedAt?.toUtc().toIso8601String(),
+      'version': 1,
+      'isDeleted': false,
+      'createdAt': loan.createdAt.toUtc().toIso8601String(),
+      'updatedAt': loan.updatedAt.toUtc().toIso8601String(),
     };
   }
 }

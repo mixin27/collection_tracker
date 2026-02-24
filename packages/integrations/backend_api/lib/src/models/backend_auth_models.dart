@@ -181,3 +181,17 @@ class BackendRefreshTokenRequest {
     return {'refreshToken': refreshToken, 'deviceId': deviceId};
   }
 }
+
+class BackendAccountDeletionRequest {
+  const BackendAccountDeletionRequest({
+    this.reason,
+    this.source = 'mobile_app',
+  });
+
+  final String? reason;
+  final String source;
+
+  Map<String, dynamic> toJson() {
+    return {'reason': reason, 'source': source};
+  }
+}

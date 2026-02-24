@@ -161,7 +161,7 @@ class ItemFilterSheet extends ConsumerWidget {
                 onPressed: () => Navigator.pop(context),
               ),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 64),
           ],
         ),
       ),

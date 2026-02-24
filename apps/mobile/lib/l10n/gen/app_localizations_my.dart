@@ -12,7 +12,7 @@ class AppLocalizationsMy extends AppLocalizations {
   AppLocalizationsMy([String locale = 'my']) : super(locale);
 
   @override
-  String get appTitle => 'Collection Tracker';
+  String get appTitle => 'Collectra';
 
   @override
   String get navHome => 'ပင်မ';
@@ -114,6 +114,12 @@ class AppLocalizationsMy extends AppLocalizations {
   String get settingsManageTagsSubtitle => 'Tag အမည်ပြောင်း၊ ပေါင်းစည်း၊ ဖျက်နိုင်သည်';
 
   @override
+  String get settingsLoanTrackingTitle => 'ငှားရမ်းမှု ခြေရာခံ';
+
+  @override
+  String get settingsLoanTrackingSubtitle => 'ငှားထားသော ပစ္စည်းများနှင့် ပြန်အပ်ရမည့်ရက်ကို ခြေရာခံပါ';
+
+  @override
   String get settingsVersionTitle => 'ဗားရှင်း';
 
   @override
@@ -174,7 +180,7 @@ class AppLocalizationsMy extends AppLocalizations {
   String get settingsAnalyticsConsentDeclined => 'Analytics သဘောတူညီချက် ငြင်းဆိုထားသည်။';
 
   @override
-  String get analyticsConsentDialogTitle => 'Collection Tracker ကို တိုးတက်စေရန် ကူညီပါ';
+  String get analyticsConsentDialogTitle => 'Collectra ကို တိုးတက်စေရန် ကူညီပါ';
 
   @override
   String get analyticsConsentDialogMessage => 'အက်ပ်အရည်အသွေးနှင့် အင်္ဂါရပ်များ တိုးတက်စေရန် အမည်မဖော်ထားသော အသုံးပြုမှု analytics ကို စုဆောင်းခွင့်ပြုမလား? ဤဆက်တင်ကို Settings တွင် အချိန်မရွေး ပြောင်းလဲနိုင်သည်။';
@@ -213,6 +219,57 @@ class AppLocalizationsMy extends AppLocalizations {
 
   @override
   String get settingsFirebaseRuntimeConfigSubtitle => 'runtime feature flags ကို စစ်ဆေးပြီး refresh လုပ်ပါ';
+
+  @override
+  String get settingsMetadataTitle => 'Metadata နှင့် Auto-fill';
+
+  @override
+  String get settingsMetadataSummaryEnabled => 'Barcode အလိုအလျောက်ရှာဖွေမှုဖြင့် ဖွင့်ထားသည်';
+
+  @override
+  String get settingsMetadataSummaryManual => 'လက်ဖြင့်ရှာဖွေမှုဖြင့် ဖွင့်ထားသည်';
+
+  @override
+  String get settingsMetadataSummaryDisabled => 'ပိတ်ထားသည်';
+
+  @override
+  String get settingsMetadataSummaryFeatureDisabled => 'Runtime feature flag ကြောင့် ပိတ်ထားသည်';
+
+  @override
+  String get settingsMetadataEnableToggleTitle => 'Metadata အကူအညီ ဖွင့်မည်';
+
+  @override
+  String get settingsMetadataEnableToggleSubtitle => 'Item form များတွင် metadata ရှာဖွေမှုနှင့် barcode auto-fill ကို ခွင့်ပြုပါသည်။';
+
+  @override
+  String get settingsMetadataAutoFetchToggleTitle => 'Barcode scan ပြီးနောက် အလိုအလျောက် ရယူမည်';
+
+  @override
+  String get settingsMetadataAutoFetchToggleSubtitle => 'Barcode scan ပြီးနောက် metadata ကို အလိုအလျောက် ရယူပါသည်။';
+
+  @override
+  String get settingsMetadataFillEmptyOnlyToggleTitle => 'လွတ်နေသော fields များကိုသာ ဖြည့်မည်';
+
+  @override
+  String get settingsMetadataFillEmptyOnlyToggleSubtitle => 'Metadata တွေ့ရှိသောအခါ ရှိပြီးသား title သို့မဟုတ် description ကို မရေးကျော်ပါ။';
+
+  @override
+  String get settingsMetadataSourcesSectionTitle => 'Sources';
+
+  @override
+  String get settingsMetadataSourceAvailable => 'အသုံးပြုနိုင်သည်';
+
+  @override
+  String get settingsMetadataSourceNotConfigured => 'မသတ်မှတ်ရသေးပါ';
+
+  @override
+  String get settingsMetadataSourceManualOnly => 'လက်ဖြင့်သာ';
+
+  @override
+  String get settingsMetadataManualCollectionsLabel => 'Comics, Music နှင့် Custom';
+
+  @override
+  String get settingsMetadataFeatureDisabledMessage => 'Metadata အကူအညီကို runtime configuration ဖြင့် ပိတ်ထားသည်။';
 
   @override
   String get settingsFirebaseRuntimeConfigSheetTitle => 'Firebase Runtime Config';
@@ -290,7 +347,7 @@ class AppLocalizationsMy extends AppLocalizations {
   String get settingsImportDataTitle => 'ဒေတာ ထည့်သွင်းရန်';
 
   @override
-  String get settingsImportDataMessage => 'ဤလုပ်ဆောင်မှုသည် JSON ဖိုင်မှ collection များနှင့် item များကို ထည့်သွင်းမည်ဖြစ်သည်။ ရှိပြီးသားဒေတာ မဖျက်ပါ။\\n\\nဆက်လုပ်မလား?';
+  String get settingsImportDataMessage => 'ဤလုပ်ဆောင်မှုသည် JSON ဖိုင်မှ collection များနှင့် item များကို ထည့်သွင်းမည်ဖြစ်သည်။ ရှိပြီးသားဒေတာ မဖျက်ပါ။\n\nဆက်လုပ်မလား?';
 
   @override
   String get settingsImportingData => 'ဒေတာ ထည့်သွင်းနေသည်...';
@@ -746,6 +803,17 @@ class AppLocalizationsMy extends AppLocalizations {
   String get metadataSearchSuggestionMessage => 'Start typing to look up metadata.';
 
   @override
+  String get metadataSearchDisabledHint => 'ဤ collection type အတွက် metadata ရှာဖွေမှု မရနိုင်ပါ သို့မဟုတ် လက်ရှိပိတ်ထားသည်။';
+
+  @override
+  String get metadataNoMatchForBarcode => 'ဤ barcode အတွက် ကိုက်ညီသော metadata မတွေ့ပါ။';
+
+  @override
+  String metadataSearchUnavailableForType(String collectionType) {
+    return '$collectionType အတွက် metadata ရှာဖွေမှု မရနိုင်ပါ။';
+  }
+
+  @override
   String tagItemsTitle(String tag) {
     return 'Tag: $tag';
   }
@@ -878,7 +946,7 @@ class AppLocalizationsMy extends AppLocalizations {
 
   @override
   String tagManagementDeleteSelectedMessage(int count) {
-    return 'Delete $count selected tags from all items?\\n\\nThis cannot be undone.';
+    return 'Delete $count selected tags from all items?\n\nThis cannot be undone.';
   }
 
   @override
@@ -899,7 +967,7 @@ class AppLocalizationsMy extends AppLocalizations {
 
   @override
   String tagManagementDeleteMessage(String tagName) {
-    return 'Delete \"$tagName\" from all items?\\n\\nThis cannot be undone.';
+    return 'Delete \"$tagName\" from all items?\n\nThis cannot be undone.';
   }
 
   @override
@@ -1064,4 +1132,350 @@ class AppLocalizationsMy extends AppLocalizations {
 
   @override
   String get collectionTypeCustom => 'စိတ်ကြိုက်';
+
+  @override
+  String get loanTrackingTitle => 'ငှားရမ်းမှု ခြေရာခံ';
+
+  @override
+  String get loanTrackingNewLoan => 'ငှားရမ်းမှု အသစ်';
+
+  @override
+  String get loanTrackingFilterActive => 'လက်ရှိ';
+
+  @override
+  String get loanTrackingFilterHistory => 'မှတ်တမ်း';
+
+  @override
+  String get loanTrackingEmptyHistoryTitle => 'ပြန်အပ်ပြီး ငှားရမ်းမှု မရှိသေးပါ';
+
+  @override
+  String get loanTrackingEmptyHistoryMessage => 'ပြန်အပ်ပြီး ပစ္စည်းများကို ဒီနေရာတွင် ပြပါမည်။';
+
+  @override
+  String get loanTrackingEmptyActiveTitle => 'လက်ရှိ ငှားရမ်းမှု မရှိပါ';
+
+  @override
+  String get loanTrackingEmptyActiveMessage => 'ငှားသွားသော ပစ္စည်းများကို ခြေရာခံရန် ငှားရမ်းမှု အသစ် ဖန်တီးပါ။';
+
+  @override
+  String get loanTrackingLoadingLoans => 'ငှားရမ်းမှုများ တင်နေသည်...';
+
+  @override
+  String loanTrackingLoadFailed(String error) {
+    return 'ငှားရမ်းမှုများ တင်မရပါ: $error';
+  }
+
+  @override
+  String get loanTrackingMarkReturnedConfirmTitle => 'ပြန်အပ်ပြီးဟု မှတ်မလား?';
+
+  @override
+  String loanTrackingMarkReturnedConfirmMessage(String itemTitle) {
+    return '\"$itemTitle\" ကို ပြန်အပ်ပြီးဟု အတည်ပြုမည်။';
+  }
+
+  @override
+  String get loanTrackingMarkReturnedAction => 'ပြန်အပ်ပြီး မှတ်မည်';
+
+  @override
+  String get loanTrackingMarkedReturnedSuccess => 'ငှားရမ်းမှုကို ပြန်အပ်ပြီးအဖြစ် မှတ်သားပြီးပါပြီ။';
+
+  @override
+  String loanTrackingMarkReturnedFailed(String error) {
+    return 'ပြန်အပ်ပြီး မှတ်မရပါ: $error';
+  }
+
+  @override
+  String get loanTrackingDeleteConfirmTitle => 'ငှားရမ်းမှု မှတ်တမ်း ဖျက်မလား?';
+
+  @override
+  String loanTrackingDeleteConfirmMessage(String itemTitle) {
+    return '\"$itemTitle\" အတွက် ငှားရမ်းမှု မှတ်တမ်းကို ဖျက်မည်။';
+  }
+
+  @override
+  String get loanTrackingDeleteSuccess => 'ငှားရမ်းမှုကို ဖျက်ပြီးပါပြီ။';
+
+  @override
+  String loanTrackingDeleteFailed(String error) {
+    return 'ငှားရမ်းမှု ဖျက်မရပါ: $error';
+  }
+
+  @override
+  String get loanTrackingSummaryActiveLabel => 'လက်ရှိ ငှားရမ်းမှု';
+
+  @override
+  String get loanTrackingSummaryOverdueLabel => 'ကျော်လွန်';
+
+  @override
+  String get loanTrackingSummaryLoadFailed => 'ငှားရမ်းမှု အနှစ်ချုပ် တင်မရပါ။';
+
+  @override
+  String get loanTrackingFieldBorrower => 'ငှားယူသူ';
+
+  @override
+  String get loanTrackingFieldContact => 'ဆက်သွယ်ရန်';
+
+  @override
+  String get loanTrackingFieldLoaned => 'ငှားသည့်နေ့';
+
+  @override
+  String get loanTrackingFieldDue => 'ပြန်အပ်ရမည့်နေ့';
+
+  @override
+  String get loanTrackingFieldReturned => 'ပြန်အပ်သည့်နေ့';
+
+  @override
+  String get loanTrackingStatusReturned => 'ပြန်အပ်ပြီး';
+
+  @override
+  String get loanTrackingStatusOverdue => 'ကျော်လွန်';
+
+  @override
+  String get loanTrackingStatusActive => 'လက်ရှိ';
+
+  @override
+  String get loanTrackingCreateTitle => 'ငှားရမ်းမှု ဖန်တီး';
+
+  @override
+  String get loanTrackingCreateDescription => 'ဘယ်သူငှားယူသွားသည်နှင့် ဘယ်နေ့ ပြန်အပ်ရမည်ကို မှတ်တမ်းတင်ပါ။';
+
+  @override
+  String get loanTrackingCreateNoItemsTitle => 'အသုံးပြုနိုင်သော ပစ္စည်း မရှိပါ';
+
+  @override
+  String get loanTrackingCreateNoItemsMessage => 'ပစ္စည်းအားလုံး ငှားထားပြီး သို့မဟုတ် ပစ္စည်းမရှိသေးပါ။';
+
+  @override
+  String get loanTrackingCreateItemLabel => 'ပစ္စည်း';
+
+  @override
+  String get loanTrackingCreateBorrowerLabel => 'ငှားယူသူ အမည်';
+
+  @override
+  String get loanTrackingCreateBorrowerHint => 'ဥပမာ - Aung Aung';
+
+  @override
+  String get loanTrackingCreateContactLabel => 'ဆက်သွယ်ရန် (မဖြည့်လည်းရ)';
+
+  @override
+  String get loanTrackingCreateContactHint => 'ဖုန်း၊ အီးမေးလ် သို့မဟုတ် @username';
+
+  @override
+  String get loanTrackingCreateNotesLabel => 'မှတ်စု (မဖြည့်လည်းရ)';
+
+  @override
+  String get loanTrackingCreateNotesHint => 'ဒီငှားရမ်းမှုအတွက် အသေးစိတ်';
+
+  @override
+  String get loanTrackingCreateSubmitting => 'ဖန်တီးနေသည်...';
+
+  @override
+  String get loanTrackingCreateAction => 'ငှားရမ်းမှု ဖန်တီး';
+
+  @override
+  String get loanTrackingLoadingItems => 'ပစ္စည်းများ တင်နေသည်...';
+
+  @override
+  String loanTrackingLoadItemsFailed(String error) {
+    return 'ပစ္စည်းများ တင်မရပါ: $error';
+  }
+
+  @override
+  String get loanTrackingBorrowerRequired => 'ငှားယူသူ အမည် မဖြစ်မနေလိုအပ်သည်။';
+
+  @override
+  String get loanTrackingCreateSuccess => 'ငှားရမ်းမှု အောင်မြင်စွာ ဖန်တီးပြီးပါပြီ။';
+
+  @override
+  String loanTrackingCreateFailed(String error) {
+    return 'ငှားရမ်းမှု ဖန်တီးမရပါ: $error';
+  }
+
+  @override
+  String get loanTrackingNoDueDate => 'ပြန်အပ်ရမည့်နေ့ မသတ်မှတ်ထားပါ';
+
+  @override
+  String get loanTrackingPickDateAction => 'ရွေးမည်';
+
+  @override
+  String get loanTrackingClearDateAction => 'ရှင်းမည်';
+
+  @override
+  String get loanTrackingDueDateLabel => 'ပြန်အပ်ရမည့်နေ့';
+
+  @override
+  String get authTitleAccount => 'အကောင့်';
+
+  @override
+  String get authCreateAccountHeading => 'အကောင့် ဖန်တီးရန်';
+
+  @override
+  String get authSignInHeading => 'ဝင်မည်';
+
+  @override
+  String get authCreateAccountDescription => 'စက်များအကြား စုစည်းမှုများကို sync လုပ်ရန် အကောင့်တစ်ခု ဖန်တီးပါ။';
+
+  @override
+  String get authSignInDescription => 'Cloud sync နှင့် အကောင့်ဆိုင်ရာ လုပ်ဆောင်ချက်များအသုံးပြုရန် ဝင်ပါ။';
+
+  @override
+  String get authSignInChoice => 'ဝင်မည်';
+
+  @override
+  String get authRegisterChoice => 'မှတ်ပုံတင်မည်';
+
+  @override
+  String get authEmailLabel => 'အီးမေးလ်';
+
+  @override
+  String get authEmailHint => 'you@example.com';
+
+  @override
+  String get authEmailRequiredError => 'အီးမေးလ် မဖြစ်မနေလိုအပ်သည်။';
+
+  @override
+  String get authEmailInvalidError => 'မှန်ကန်သော အီးမေးလ် ထည့်ပါ။';
+
+  @override
+  String get authPasswordLabel => 'လျှို့ဝှက်နံပါတ်';
+
+  @override
+  String get authPasswordHint => 'အနည်းဆုံး ၈ လုံး၊ A-Z, a-z, 0-9';
+
+  @override
+  String get authPasswordRequiredError => 'လျှို့ဝှက်နံပါတ် မဖြစ်မနေလိုအပ်သည်။';
+
+  @override
+  String get authPasswordLengthError => 'လျှို့ဝှက်နံပါတ်မှာ အနည်းဆုံး ၈ လုံး ရှိရမည်။';
+
+  @override
+  String get authPasswordPolicyError => 'လျှို့ဝှက်နံပါတ်တွင် စာလုံးကြီး၊ စာလုံးသေးနှင့် ဂဏန်း ပါဝင်ရမည်။';
+
+  @override
+  String get authDisplayNameLabel => 'ပြသမည့်အမည် (မဖြည့်လည်းရ)';
+
+  @override
+  String get authDisplayNameHint => 'သင့်ကို ဘယ်လိုခေါ်မလဲ?';
+
+  @override
+  String get authCreateAccountAction => 'အကောင့်ဖန်တီးမည်';
+
+  @override
+  String get authNotNowAction => 'အခုမလုပ်တော့';
+
+  @override
+  String get authUnavailableMessage => 'ယခု အတည်ပြုဝင်ရောက်မှု မရနိုင်သေးပါ။';
+
+  @override
+  String get authRegisterSuccess => 'အကောင့် ဖန်တီးပြီး ဝင်ရောက်ပြီးပါပြီ။';
+
+  @override
+  String get authSignInSuccess => 'ဝင်ရောက်မှု အောင်မြင်သည်။';
+
+  @override
+  String authSignInFailed(String error) {
+    return 'ဝင်ရောက်မှု မအောင်မြင်ပါ: $error';
+  }
+
+  @override
+  String get authSignedOut => 'ထွက်ပြီးပါပြီ။';
+
+  @override
+  String get authFinalConfirmationTitle => 'နောက်ဆုံးအတည်ပြုချက်';
+
+  @override
+  String get authFinalConfirmationMessage => 'အကောင့်ဖျက်ရန် တောင်းဆိုချက်ကို ယခု ပို့မလား? ဒီစက်တွင် ချက်ချင်း ထွက်သွားပါမည်။';
+
+  @override
+  String get authBackAction => 'နောက်သို့';
+
+  @override
+  String get authSubmitRequestAction => 'တောင်းဆိုချက် ပို့မည်';
+
+  @override
+  String get authDeletionRequestSubmitted => 'အကောင့်ဖျက်ရန် တောင်းဆိုချက် ပို့ပြီးပါပြီ။ သင့်ကို ထွက်ပေးလိုက်ပါပြီ။';
+
+  @override
+  String get authDeletionEndpointMissing => 'ဖျက်ရန် တောင်းဆို endpoint ကို backend တွင် မသတ်မှတ်ရသေးပါ။';
+
+  @override
+  String get authDeletionImpactDialogTitle => 'အကောင့်ဖျက်ရန် တောင်းဆိုမီ';
+
+  @override
+  String get authDeletionImpactReviewPrompt => 'သက်ရောက်မှုကို သေချာစွာ စစ်ဆေးပါ။';
+
+  @override
+  String get authIrreversibleRequestTitle => 'ပြန်မယူနိုင်သော တောင်းဆိုချက်';
+
+  @override
+  String get authImpactLineSessionRevoked => 'တောင်းဆိုပြီးချင်း သင့်အကောင့် session ကို ပိတ်ပါမည်။';
+
+  @override
+  String get authImpactLineCloudDataDeleted => 'ဒီအကောင့်နှင့်ချိတ်ဆက်ထားသော sync cloud ဒေတာများကို လုပ်ဆောင်နေစဉ် အပြီးအပိုင် ဖျက်နိုင်ပါသည်။';
+
+  @override
+  String get authImpactLineCannotRestore => 'ဖျက်ပြီးသော အကောင့်ဒေတာကို လုပ်ဆောင်ပြီးနောက် ပြန်မရနိုင်ပါ။';
+
+  @override
+  String get authUnderstandAction => 'နားလည်ပါသည်';
+
+  @override
+  String get authPasswordPolicySuffix => 'အင်္ဂလိပ်ကီးဘုတ် စာလုံးများနှင့် ဂဏန်းများ (A-Z, a-z, 0-9) ကို အသုံးပြုပါ။';
+
+  @override
+  String get authAccountConnected => 'အကောင့် ချိတ်ဆက်ပြီး';
+
+  @override
+  String get authSignedInReadySubtitle => 'ဝင်ထားပြီး Cloud sync အတွက် အဆင်သင့်';
+
+  @override
+  String get authActiveStatus => 'အသုံးပြုနေ';
+
+  @override
+  String get authSessionDetailsTitle => 'Session အသေးစိတ်';
+
+  @override
+  String get authUserIdLabel => 'User ID';
+
+  @override
+  String get authDeviceIdLabel => 'Device ID';
+
+  @override
+  String get authUnknownValue => 'မသိ';
+
+  @override
+  String get authDeletionNoticeTitle => 'အကောင့်ဖျက်ရန် အသိပေးချက်';
+
+  @override
+  String get authDeletionNoticeSubtitle => 'ဖျက်ရန် တောင်းဆိုချက်သည် လုပ်ဆောင်ပြီးပါက ပြန်မရနိုင်ပါ။';
+
+  @override
+  String get authDeletionNoticeLineProfileSessions => 'အကောင့်ပရိုဖိုင်နှင့် active session များကို cloud access မှ ဖယ်ရှားပါမည်။';
+
+  @override
+  String get authDeletionNoticeLineSyncedData => 'Sync လုပ်ထားသော collections, items, tags နှင့် loans များကို အပြီးအပိုင် ဖျက်နိုင်ပါသည်။';
+
+  @override
+  String get authRequestDeletionAction => 'အကောင့်ဖျက်ရန် တောင်းဆို';
+
+  @override
+  String get authSignOutAction => 'ထွက်မည်';
+
+  @override
+  String get authDoneAction => 'ပြီးပါပြီ';
+
+  @override
+  String get authHeaderCreateTitle => 'သင့်အကောင့် ဖန်တီးပါ';
+
+  @override
+  String get authHeaderWelcomeTitle => 'ပြန်လည်ကြိုဆိုပါသည်';
+
+  @override
+  String get authHeaderCreateSubtitle => 'အကောင့်မဖွင့်လည်း ရပါသည်၊ သို့သော် cloud sync နှင့် စက်အများအပြား အသုံးပြုရန် လိုအပ်ပါသည်။';
+
+  @override
+  String get authHeaderSignInSubtitle => 'Cloud sync နှင့် အကောင့်အခြေပြု လုပ်ဆောင်ချက်များ အသုံးပြုရန် ဝင်ပါ။';
+
+  @override
+  String get authUnavailableTitle => 'အတည်ပြုဝင်ရောက်မှု မရနိုင်ပါ';
 }

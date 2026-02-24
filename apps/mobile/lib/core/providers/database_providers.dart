@@ -21,3 +21,9 @@ ItemDao itemDao(Ref ref) {
   final database = ref.watch(appDatabaseProvider);
   return database.itemDao;
 }
+
+@riverpod
+LoanDao loanDao(Ref ref) {
+  final database = ref.watch(appDatabaseProvider);
+  return database.loanDao;
+}
